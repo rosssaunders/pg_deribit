@@ -29,11 +29,11 @@ comment on column deribit.private_reset_mmp_response.jsonrpc is 'The JSON-RPC ve
 comment on column deribit.private_reset_mmp_response.result is 'Result of method execution. ok in case of success';
 
 create or replace function deribit.private_reset_mmp(params deribit.private_reset_mmp_request)
-returns record
+returns deribit.private_reset_mmp_response
 language plpgsql
 as $$
 declare
-	ret record;
+	ret deribit.private_reset_mmp_response;
 begin
 	with request as (
 		select json_build_object(
@@ -46,7 +46,7 @@ begin
 	auth as (
 		select
 			'Authorization' as key,
-			'Basic ' || encode(('<CLIENT_ID>' || ':' || '<CLIENT_TOKEN>')::bytea, 'base64') as value
+			'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
 	),
 	url as (
 		select format('%s%s', base_url, end_point) as url
@@ -76,7 +76,6 @@ begin
 		) as response
 	)
 	select
-		exec.*,
 		i.*
 	into
 		ret

@@ -111,25 +111,24 @@ comment on column deribit.private_get_user_trades_by_instrument_trade.trade_seq 
 comment on column deribit.private_get_user_trades_by_instrument_trade.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
 create type deribit.private_get_user_trades_by_instrument_result as (
-	has_more boolean
+	has_more boolean,
+	trades deribit.private_get_user_trades_by_instrument_trade[]
 );
-
 
 create type deribit.private_get_user_trades_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_user_trades_by_instrument_result,
-	trades deribit.private_get_user_trades_by_instrument_trade[]
+	result deribit.private_get_user_trades_by_instrument_result
 );
 comment on column deribit.private_get_user_trades_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_user_trades_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 create or replace function deribit.private_get_user_trades_by_instrument(params deribit.private_get_user_trades_by_instrument_request)
-returns record
+returns deribit.private_get_user_trades_by_instrument_response
 language plpgsql
 as $$
 declare
-	ret record;
+	ret deribit.private_get_user_trades_by_instrument_response;
 begin
 	with request as (
 		select json_build_object(
@@ -142,7 +141,7 @@ begin
 	auth as (
 		select
 			'Authorization' as key,
-			'Basic ' || encode(('<CLIENT_ID>' || ':' || '<CLIENT_TOKEN>')::bytea, 'base64') as value
+			'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
 	),
 	url as (
 		select format('%s%s', base_url, end_point) as url
@@ -172,7 +171,6 @@ begin
 		) as response
 	)
 	select
-		exec.*,
 		i.*
 	into
 		ret

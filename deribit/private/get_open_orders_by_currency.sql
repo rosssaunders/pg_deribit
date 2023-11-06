@@ -121,11 +121,11 @@ comment on column deribit.private_get_open_orders_by_currency_response.id is 'Th
 comment on column deribit.private_get_open_orders_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 create or replace function deribit.private_get_open_orders_by_currency(params deribit.private_get_open_orders_by_currency_request)
-returns record
+returns deribit.private_get_open_orders_by_currency_response
 language plpgsql
 as $$
 declare
-	ret record;
+	ret deribit.private_get_open_orders_by_currency_response;
 begin
 	with request as (
 		select json_build_object(
@@ -138,7 +138,7 @@ begin
 	auth as (
 		select
 			'Authorization' as key,
-			'Basic ' || encode(('<CLIENT_ID>' || ':' || '<CLIENT_TOKEN>')::bytea, 'base64') as value
+			'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
 	),
 	url as (
 		select format('%s%s', base_url, end_point) as url
@@ -168,7 +168,6 @@ begin
 		) as response
 	)
 	select
-		exec.*,
 		i.*
 	into
 		ret
