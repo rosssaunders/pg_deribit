@@ -27,6 +27,7 @@ class Field:
 @dataclass
 class Type:
     name: str
+    is_primitive: bool
     fields: List[Field]
     enums: List[Enum]
 

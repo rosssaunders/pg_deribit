@@ -30,7 +30,7 @@ create or replace function deribit.private_cancel_all_by_currency(
 	type deribit.private_cancel_all_by_currency_request_type default null,
 	detailed boolean default null
 )
-returns deribit.private_cancel_all_by_currency_response
+returns float
 language plpgsql
 as $$
 declare

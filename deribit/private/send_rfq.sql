@@ -23,7 +23,7 @@ create or replace function deribit.private_send_rfq(
 	amount float default null,
 	side deribit.private_send_rfq_request_side default null
 )
-returns deribit.private_send_rfq_response
+returns text
 language plpgsql
 as $$
 declare

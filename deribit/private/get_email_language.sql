@@ -8,7 +8,7 @@ comment on column deribit.private_get_email_language_response.jsonrpc is 'The JS
 comment on column deribit.private_get_email_language_response.result is 'The abbreviation of the language';
 
 create or replace function deribit.private_get_email_language()
-returns deribit.private_get_email_language_response
+returns text
 language plpgsql
 as $$
 declare

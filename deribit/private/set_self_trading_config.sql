@@ -20,7 +20,7 @@ create or replace function deribit.private_set_self_trading_config(
 	mode deribit.private_set_self_trading_config_request_mode,
 	extended_to_subaccounts boolean
 )
-returns deribit.private_set_self_trading_config_response
+returns text
 language plpgsql
 as $$
 declare

@@ -18,7 +18,7 @@ create or replace function deribit.private_change_subaccount_name(
 	sid bigint,
 	name text
 )
-returns deribit.private_change_subaccount_name_response
+returns text
 language plpgsql
 as $$
 declare

@@ -15,7 +15,7 @@ comment on column deribit.private_set_announcement_as_read_request.announcement_
 create or replace function deribit.private_set_announcement_as_read(
 	announcement_id float
 )
-returns deribit.private_set_announcement_as_read_response
+returns text
 language plpgsql
 as $$
 declare

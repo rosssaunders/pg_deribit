@@ -8,7 +8,7 @@ comment on column deribit.private_enable_affiliate_program_response.jsonrpc is '
 comment on column deribit.private_enable_affiliate_program_response.result is 'Result of method execution. ok in case of success';
 
 create or replace function deribit.private_enable_affiliate_program()
-returns deribit.private_enable_affiliate_program_response
+returns text
 language plpgsql
 as $$
 declare

@@ -15,7 +15,7 @@ comment on column deribit.private_remove_api_key_request.id is '(Required) Id of
 create or replace function deribit.private_remove_api_key(
 	id bigint
 )
-returns deribit.private_remove_api_key_response
+returns text
 language plpgsql
 as $$
 declare

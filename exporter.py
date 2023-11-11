@@ -35,9 +35,3 @@ class Exporter:
             file.write(invoke_endpoint(self.schema, function))
             file.write('\n\n')
 
-            # fun = function
-            # if len(fun.endpoint.) > 0:
-            #     file.write(invoke_endpoint(self.schema, fun.parameters[0].type, function))
-            # else:
-            #     file.write(invoke_endpoint(self.schema, None, function))
-

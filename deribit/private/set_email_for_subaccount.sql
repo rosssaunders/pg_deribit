@@ -18,7 +18,7 @@ create or replace function deribit.private_set_email_for_subaccount(
 	sid bigint,
 	email text
 )
-returns deribit.private_set_email_for_subaccount_response
+returns text
 language plpgsql
 as $$
 declare

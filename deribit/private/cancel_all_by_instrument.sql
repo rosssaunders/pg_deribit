@@ -26,7 +26,7 @@ create or replace function deribit.private_cancel_all_by_instrument(
 	detailed boolean default null,
 	include_combos boolean default null
 )
-returns deribit.private_cancel_all_by_instrument_response
+returns float
 language plpgsql
 as $$
 declare

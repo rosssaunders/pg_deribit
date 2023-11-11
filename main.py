@@ -41,7 +41,7 @@ def request_table_to_type(endpoint: str, table) -> Type:
             field_type = FieldType(name=row[2], is_enum=False, is_class=False, is_array=False)
         fields.append(Field(name=row[0], type=field_type, required=row[1], comment=row[4]))
 
-    return Type(name=f'{type_name}', fields=fields, enums=enums)
+    return Type(name=f'{type_name}', fields=fields, enums=enums, is_primitive=False)
     # function.endpoint.request_type = Type(name=f'{type_name}', fields=fields, enums=enums)
     # ep.request_types.append(Type(name=f'{type_name}', fields=fields, enums=enums))
 
@@ -55,7 +55,7 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
     current_type = parent_type_name
     previous_type = current_type
-    types[current_type] = Type(name=current_type, fields=[], enums=[])
+    types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
     root_type = types[current_type]
     result_type = None
     for index, row in df.iterrows():
@@ -75,7 +75,9 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
             previous_type = current_type
             current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[])
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
+            if field_name == 'result':
+                result_type = types[current_type]
 
         elif row[1] == 'array of object':
             if p.singular_noun(field_name) is False:
@@ -87,33 +89,32 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             types[previous_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
             previous_type = current_type
             current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[])
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
+            if field_name == 'result':
+                result_type = types[current_type]
 
         else:
             type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
             types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
 
-        if field_name == 'result':
-            result_type = types[current_type]
-            continue
+            if field_name == 'result':
+                result_type = Type(name=type_name.name, fields=[], enums=[], is_primitive=True)
 
     return root_type, result_type, types.values()
-    # for type_name in types.values():
-    #     function.endpoint.response_types.append(type_name)
 
 
 def download_spec():
     url = "https://docs.deribit.com/"
     response = requests.get(url)
-    with open(f"deribit.html", 'w') as file:
+    with open(f"docs/deribit.html", 'w') as file:
         file.write(response.text)
 
 
 def main():
-    if not os.path.isfile(f"deribit.html"):
+    if not os.path.isfile(f"docs/deribit.html"):
         download_spec()
 
-    with open(f"deribit.html", 'r') as file:
+    with open(f"docs/deribit.html", 'r') as file:
         response_table = file.read()
 
     exporter = Exporter()
@@ -138,6 +139,9 @@ def main():
 
             file_name = '/'.join(sibling.text.split('/')[1:])
             if file_name == 'private/get_user_trades_by_order':
+                print(f'{file_name}: skipping due to invalid documentation')
+                continue
+            elif file_name == 'public/get_portfolio_margins':
                 print(f'{file_name}: skipping due to invalid documentation')
                 continue
             else:
@@ -166,30 +170,6 @@ def main():
                                 comment=comment.text,
                                 response_type=result_type
                                 )
-
-            # function = Function(name=file_name,
-            #                     endpoint=Endpoint(
-            #                         name=file_name,
-            #                         path=sibling.text,
-            #                         request_type=Type,
-            #                         response_type=None,
-            #                         request_types=[],
-            #                         response_types=[]),
-            #                     comment='',
-            #                     response_type=Type(name=file_name, fields=[], enums=[])
-            #                     )
-
-            #function.parent_type_name = url_to_type_name(sibling.text)
-            # func = Function(
-            #     name=parent_type_name,
-            #     comment=comment.text,
-            #     response_type=function.response_types[0])
-
-            #if len(ep.request_types) > 0:
-            #    function.parameters.append(Parameter(name='params', type=ep.request_types[0], comment=''))
-            # else:
-            #     func.parameters.append(Parameter(name='params', type=None, comment=''))
-            # ep.functions.append(func)
 
             # export to a file
             exporter.export(function)

@@ -17,7 +17,7 @@ comment on column deribit.private_reset_mmp_request.index_name is '(Required) In
 create or replace function deribit.private_reset_mmp(
 	index_name deribit.private_reset_mmp_request_index_name
 )
-returns deribit.private_reset_mmp_response
+returns text
 language plpgsql
 as $$
 declare

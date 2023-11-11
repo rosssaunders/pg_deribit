@@ -98,9 +98,15 @@ def invoke_endpoint(schema: str, function: Function) -> str:
         res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in function.endpoint.request_type.fields)
         res += "\n"
     res += f""")"""
-    res += f"""
+    if function.response_type.is_primitive:
+        res += f"""
+returns {convert_type_postgres(schema, function.response_type.name, FieldType(name=function.response_type.name, is_enum=False, is_class=False, is_array=False))}
+"""
+    else:
+        res += f"""
 returns {schema}.{function.response_type.name}
-language plpgsql
+"""
+    res += """language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;"""

@@ -20,7 +20,7 @@ create or replace function deribit.private_toggle_subaccount_login(
 	sid bigint,
 	state deribit.private_toggle_subaccount_login_request_state
 )
-returns deribit.private_toggle_subaccount_login_response
+returns text
 language plpgsql
 as $$
 declare

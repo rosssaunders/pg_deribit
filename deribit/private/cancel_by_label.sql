@@ -20,7 +20,7 @@ create or replace function deribit.private_cancel_by_label(
 	label text,
 	currency deribit.private_cancel_by_label_request_currency default null
 )
-returns deribit.private_cancel_by_label_response
+returns float
 language plpgsql
 as $$
 declare

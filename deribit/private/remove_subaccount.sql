@@ -15,7 +15,7 @@ comment on column deribit.private_remove_subaccount_request.subaccount_id is '(R
 create or replace function deribit.private_remove_subaccount(
 	subaccount_id bigint
 )
-returns deribit.private_remove_subaccount_response
+returns text
 language plpgsql
 as $$
 declare

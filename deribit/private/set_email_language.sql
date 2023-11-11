@@ -15,7 +15,7 @@ comment on column deribit.private_set_email_language_request.language is '(Requi
 create or replace function deribit.private_set_email_language(
 	language text
 )
-returns deribit.private_set_email_language_response
+returns text
 language plpgsql
 as $$
 declare

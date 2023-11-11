@@ -28,7 +28,7 @@ create or replace function deribit.private_cancel_all_by_kind_or_type(
 	type deribit.private_cancel_all_by_kind_or_type_request_type default null,
 	detailed boolean default null
 )
-returns deribit.private_cancel_all_by_kind_or_type_response
+returns float
 language plpgsql
 as $$
 declare

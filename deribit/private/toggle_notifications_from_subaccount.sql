@@ -18,7 +18,7 @@ create or replace function deribit.private_toggle_notifications_from_subaccount(
 	sid bigint,
 	state boolean
 )
-returns deribit.private_toggle_notifications_from_subaccount_response
+returns text
 language plpgsql
 as $$
 declare
