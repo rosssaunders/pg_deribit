@@ -30,15 +30,15 @@ comment on column deribit.private_get_settlement_history_by_instrument_response_
 comment on column deribit.private_get_settlement_history_by_instrument_response_settlement.type is 'The type of settlement. settlement, delivery or bankruptcy.';
 
 create type deribit.private_get_settlement_history_by_instrument_response_result as (
-	continuation text
+	continuation text,
+	settlements deribit.private_get_settlement_history_by_instrument_response_settlement[]
 );
 comment on column deribit.private_get_settlement_history_by_instrument_response_result.continuation is 'Continuation token for pagination.';
 
 create type deribit.private_get_settlement_history_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_settlement_history_by_instrument_response_result,
-	settlements deribit.private_get_settlement_history_by_instrument_response_settlement[]
+	result deribit.private_get_settlement_history_by_instrument_response_result
 );
 comment on column deribit.private_get_settlement_history_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_settlement_history_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';

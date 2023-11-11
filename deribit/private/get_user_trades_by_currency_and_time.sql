@@ -66,15 +66,15 @@ comment on column deribit.private_get_user_trades_by_currency_and_time_response_
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
 create type deribit.private_get_user_trades_by_currency_and_time_response_result as (
-	has_more boolean
+	has_more boolean,
+	trades deribit.private_get_user_trades_by_currency_and_time_response_trade[]
 );
 
 
 create type deribit.private_get_user_trades_by_currency_and_time_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_user_trades_by_currency_and_time_response_result,
-	trades deribit.private_get_user_trades_by_currency_and_time_response_trade[]
+	result deribit.private_get_user_trades_by_currency_and_time_response_result
 );
 comment on column deribit.private_get_user_trades_by_currency_and_time_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response.jsonrpc is 'The JSON-RPC version (2.0)';

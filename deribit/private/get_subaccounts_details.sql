@@ -90,7 +90,8 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
 	web boolean,
 	creation_timestamp bigint,
 	average_price float,
-	advanced text
+	advanced text,
+	positions deribit.private_get_subaccounts_details_response_position[]
 );
 comment on column deribit.private_get_subaccounts_details_response_open_order.reject_post_only is 'true if order has reject_post_only flag (field is present only when post_only is true)';
 comment on column deribit.private_get_subaccounts_details_response_open_order.label is 'User defined label (up to 64 characters)';
@@ -133,15 +134,14 @@ comment on column deribit.private_get_subaccounts_details_response_open_order.av
 comment on column deribit.private_get_subaccounts_details_response_open_order.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
 create type deribit.private_get_subaccounts_details_response_result as (
-	positions deribit.private_get_subaccounts_details_response_position[]
+	open_orders deribit.private_get_subaccounts_details_response_open_order[]
 );
 
 
 create type deribit.private_get_subaccounts_details_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_subaccounts_details_response_result[],
-	open_orders deribit.private_get_subaccounts_details_response_open_order[]
+	result deribit.private_get_subaccounts_details_response_result[]
 );
 comment on column deribit.private_get_subaccounts_details_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_subaccounts_details_response.jsonrpc is 'The JSON-RPC version (2.0)';

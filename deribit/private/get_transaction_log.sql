@@ -61,15 +61,15 @@ comment on column deribit.private_get_transaction_log_response_log.id is 'Unique
 comment on column deribit.private_get_transaction_log_response_log.info is 'Additional information regarding transaction. Strongly dependent on the log entry type';
 
 create type deribit.private_get_transaction_log_response_result as (
-	continuation bigint
+	continuation bigint,
+	logs deribit.private_get_transaction_log_response_log[]
 );
 comment on column deribit.private_get_transaction_log_response_result.continuation is 'Continuation token for pagination. NULL when no continuation.';
 
 create type deribit.private_get_transaction_log_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_transaction_log_response_result,
-	logs deribit.private_get_transaction_log_response_log[]
+	result deribit.private_get_transaction_log_response_result
 );
 comment on column deribit.private_get_transaction_log_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_transaction_log_response.jsonrpc is 'The JSON-RPC version (2.0)';

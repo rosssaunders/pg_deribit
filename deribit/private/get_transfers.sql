@@ -20,15 +20,15 @@ comment on column deribit.private_get_transfers_response_datum.type is 'Type of 
 comment on column deribit.private_get_transfers_response_datum.updated_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.private_get_transfers_response_result as (
-	count bigint
+	count bigint,
+	data deribit.private_get_transfers_response_datum[]
 );
 comment on column deribit.private_get_transfers_response_result.count is 'Total number of results available';
 
 create type deribit.private_get_transfers_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_transfers_response_result,
-	data deribit.private_get_transfers_response_datum[]
+	result deribit.private_get_transfers_response_result
 );
 comment on column deribit.private_get_transfers_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_transfers_response.jsonrpc is 'The JSON-RPC version (2.0)';

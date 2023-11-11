@@ -67,7 +67,7 @@ comment on column deribit.private_get_user_trades_by_instrument_response_trade.u
 
 create type deribit.private_get_user_trades_by_instrument_response_result as (
 	has_more boolean,
-    trades deribit.private_get_user_trades_by_instrument_response_trade[]
+	trades deribit.private_get_user_trades_by_instrument_response_trade[]
 );
 
 create type deribit.private_get_user_trades_by_instrument_response as (

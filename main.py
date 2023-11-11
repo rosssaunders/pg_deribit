@@ -54,7 +54,7 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
     types: Dict[str, Type] = dict()
 
     current_type = parent_type_name
-    previous_type = current_type
+
     types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
     root_type = types[current_type]
     result_type = None
@@ -73,32 +73,33 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             new_parent_type_name = f'{parent_type_name}_{field_name}'
             field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=False)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
-            previous_type = current_type
+
             current_type = new_parent_type_name
             types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
             if field_name == 'result':
                 result_type = types[current_type]
+            continue
 
-        elif row[1] == 'array of object':
+        if row[1] == 'array of object':
             if p.singular_noun(field_name) is False:
                 new_parent_type_name = f"{parent_type_name}_{field_name}"
             else:
                 new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
 
             field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=True)
-            types[previous_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
-            previous_type = current_type
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+
             current_type = new_parent_type_name
             types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
             if field_name == 'result':
                 result_type = types[current_type]
+            continue
 
-        else:
-            type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
-            types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
+        type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
+        types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
 
-            if field_name == 'result':
-                result_type = Type(name=type_name.name, fields=[], enums=[], is_primitive=True)
+        if field_name == 'result':
+            result_type = Type(name=type_name.name, fields=[], enums=[], is_primitive=True)
 
     return root_type, result_type, types.values()
 

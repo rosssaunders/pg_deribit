@@ -153,7 +153,8 @@ create type deribit.private_get_account_summary_response_result as (
 	self_trading_reject_mode text,
 	futures_session_rpl float,
 	session_upl float,
-	fee_balance float
+	fee_balance float,
+	fees deribit.private_get_account_summary_response_fee[]
 );
 comment on column deribit.private_get_account_summary_response_result.maintenance_margin is 'The maintenance margin.';
 comment on column deribit.private_get_account_summary_response_result.delta_total is 'The sum of position deltas';
@@ -163,16 +164,15 @@ comment on column deribit.private_get_account_summary_response_result.self_tradi
 comment on column deribit.private_get_account_summary_response_result.futures_session_rpl is 'Futures session realized profit and Loss';
 comment on column deribit.private_get_account_summary_response_result.session_upl is 'Session unrealized profit and loss';
 comment on column deribit.private_get_account_summary_response_result.fee_balance is 'The account''s fee balance (it can be used to pay for fees)';
+comment on column deribit.private_get_account_summary_response_result.fees is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
 
 create type deribit.private_get_account_summary_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_account_summary_response_result,
-	fees deribit.private_get_account_summary_response_fee[]
+	result deribit.private_get_account_summary_response_result
 );
 comment on column deribit.private_get_account_summary_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_account_summary_response.jsonrpc is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_get_account_summary_response.fees is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
 
 create type deribit.private_get_account_summary_request_currency as enum ('BTC', 'ETH', 'USDC');
 
