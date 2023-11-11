@@ -1,60 +1,3 @@
-create type deribit.private_get_user_trades_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_user_trades_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
-
-create type deribit.private_get_user_trades_by_currency_request_sorting as enum ('asc', 'desc', 'default');
-
-create type deribit.private_get_user_trades_by_currency_request as (
-	currency deribit.private_get_user_trades_by_currency_request_currency,
-	kind deribit.private_get_user_trades_by_currency_request_kind,
-	start_id text,
-	end_id text,
-	count bigint,
-	start_timestamp bigint,
-	end_timestamp bigint,
-	sorting deribit.private_get_user_trades_by_currency_request_sorting,
-	subaccount_id bigint
-);
-comment on column deribit.private_get_user_trades_by_currency_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_user_trades_by_currency_request.kind is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
-comment on column deribit.private_get_user_trades_by_currency_request.start_id is 'The ID of the first trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
-comment on column deribit.private_get_user_trades_by_currency_request.end_id is 'The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
-comment on column deribit.private_get_user_trades_by_currency_request.count is 'Number of requested items, default - 10';
-comment on column deribit.private_get_user_trades_by_currency_request.start_timestamp is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
-comment on column deribit.private_get_user_trades_by_currency_request.end_timestamp is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_currency_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_currency_request.subaccount_id is 'The user id for the subaccount';
-
-create or replace function deribit.private_get_user_trades_by_currency_request_builder(
-	currency deribit.private_get_user_trades_by_currency_request_currency,
-	kind deribit.private_get_user_trades_by_currency_request_kind default null,
-	start_id text default null,
-	end_id text default null,
-	count bigint default null,
-	start_timestamp bigint default null,
-	end_timestamp bigint default null,
-	sorting deribit.private_get_user_trades_by_currency_request_sorting default null,
-	subaccount_id bigint default null
-)
-returns deribit.private_get_user_trades_by_currency_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		kind,
-		start_id,
-		end_id,
-		count,
-		start_timestamp,
-		end_timestamp,
-		sorting,
-		subaccount_id
-	)::deribit.private_get_user_trades_by_currency_request;
-end;
-$$;
-
-
 create type deribit.private_get_user_trades_by_currency_trade as (
 	advanced text,
 	amount float,
@@ -136,17 +79,67 @@ create type deribit.private_get_user_trades_by_currency_response as (
 comment on column deribit.private_get_user_trades_by_currency_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_user_trades_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_user_trades_by_currency(params deribit.private_get_user_trades_by_currency_request)
+create type deribit.private_get_user_trades_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_user_trades_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
+
+create type deribit.private_get_user_trades_by_currency_request_sorting as enum ('asc', 'desc', 'default');
+
+create type deribit.private_get_user_trades_by_currency_request as (
+	currency deribit.private_get_user_trades_by_currency_request_currency,
+	kind deribit.private_get_user_trades_by_currency_request_kind,
+	start_id text,
+	end_id text,
+	count bigint,
+	start_timestamp bigint,
+	end_timestamp bigint,
+	sorting deribit.private_get_user_trades_by_currency_request_sorting,
+	subaccount_id bigint
+);
+comment on column deribit.private_get_user_trades_by_currency_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_user_trades_by_currency_request.kind is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
+comment on column deribit.private_get_user_trades_by_currency_request.start_id is 'The ID of the first trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
+comment on column deribit.private_get_user_trades_by_currency_request.end_id is 'The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
+comment on column deribit.private_get_user_trades_by_currency_request.count is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_currency_request.start_timestamp is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
+comment on column deribit.private_get_user_trades_by_currency_request.end_timestamp is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
+comment on column deribit.private_get_user_trades_by_currency_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
+comment on column deribit.private_get_user_trades_by_currency_request.subaccount_id is 'The user id for the subaccount';
+
+create or replace function deribit.private_get_user_trades_by_currency(
+	currency deribit.private_get_user_trades_by_currency_request_currency,
+	kind deribit.private_get_user_trades_by_currency_request_kind default null,
+	start_id text default null,
+	end_id text default null,
+	count bigint default null,
+	start_timestamp bigint default null,
+	end_timestamp bigint default null,
+	sorting deribit.private_get_user_trades_by_currency_request_sorting default null,
+	subaccount_id bigint default null
+)
 returns deribit.private_get_user_trades_by_currency_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_user_trades_by_currency_response;
+	_request deribit.private_get_user_trades_by_currency_request;
+	_response deribit.private_get_user_trades_by_currency_response;
 begin
+	_request := row(
+		currency,
+		kind,
+		start_id,
+		end_id,
+		count,
+		start_timestamp,
+		end_timestamp,
+		sorting,
+		subaccount_id
+	)::deribit.private_get_user_trades_by_currency_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_user_trades_by_currency',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -184,12 +177,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_user_trades_by_currency_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_user_trades_by_currency is 'Retrieve the latest user trades that have occurred for instruments in a specific currency symbol. To read subaccount trades, use subaccount_id parameter.';

@@ -1,38 +1,3 @@
-create type deribit.private_get_order_history_by_instrument_request as (
-	instrument_name text,
-	count bigint,
-	"offset" bigint,
-	include_old boolean,
-	include_unfilled boolean
-);
-comment on column deribit.private_get_order_history_by_instrument_request.instrument_name is '(Required) Instrument name';
-comment on column deribit.private_get_order_history_by_instrument_request.count is 'Number of requested items, default - 20';
-comment on column deribit.private_get_order_history_by_instrument_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.private_get_order_history_by_instrument_request.include_old is 'Include in result orders older than 2 days, default - false';
-comment on column deribit.private_get_order_history_by_instrument_request.include_unfilled is 'Include in result fully unfilled closed orders, default - false';
-
-create or replace function deribit.private_get_order_history_by_instrument_request_builder(
-	instrument_name text,
-	count bigint default null,
-	"offset" bigint default null,
-	include_old boolean default null,
-	include_unfilled boolean default null
-)
-returns deribit.private_get_order_history_by_instrument_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		count,
-		"offset",
-		include_old,
-		include_unfilled
-	)::deribit.private_get_order_history_by_instrument_request;
-end;
-$$;
-
-
 create type deribit.private_get_order_history_by_instrument_False as (
 	reject_post_only boolean,
 	label text,
@@ -122,17 +87,45 @@ create type deribit.private_get_order_history_by_instrument_response as (
 comment on column deribit.private_get_order_history_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_history_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_order_history_by_instrument(params deribit.private_get_order_history_by_instrument_request)
+create type deribit.private_get_order_history_by_instrument_request as (
+	instrument_name text,
+	count bigint,
+	"offset" bigint,
+	include_old boolean,
+	include_unfilled boolean
+);
+comment on column deribit.private_get_order_history_by_instrument_request.instrument_name is '(Required) Instrument name';
+comment on column deribit.private_get_order_history_by_instrument_request.count is 'Number of requested items, default - 20';
+comment on column deribit.private_get_order_history_by_instrument_request."offset" is 'The offset for pagination, default - 0';
+comment on column deribit.private_get_order_history_by_instrument_request.include_old is 'Include in result orders older than 2 days, default - false';
+comment on column deribit.private_get_order_history_by_instrument_request.include_unfilled is 'Include in result fully unfilled closed orders, default - false';
+
+create or replace function deribit.private_get_order_history_by_instrument(
+	instrument_name text,
+	count bigint default null,
+	"offset" bigint default null,
+	include_old boolean default null,
+	include_unfilled boolean default null
+)
 returns deribit.private_get_order_history_by_instrument_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_order_history_by_instrument_response;
+	_request deribit.private_get_order_history_by_instrument_request;
+	_response deribit.private_get_order_history_by_instrument_response;
 begin
+	_request := row(
+		instrument_name,
+		count,
+		"offset",
+		include_old,
+		include_unfilled
+	)::deribit.private_get_order_history_by_instrument_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_order_history_by_instrument',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -170,12 +163,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_order_history_by_instrument_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_order_history_by_instrument is 'Retrieves history of orders that have been partially or fully filled.';

@@ -1,28 +1,3 @@
-create type deribit.private_get_open_orders_by_instrument_request_type as enum ('all', 'limit', 'trigger_all', 'stop_all', 'stop_limit', 'stop_market', 'take_all', 'take_limit', 'take_market', 'trailing_all', 'trailing_stop');
-
-create type deribit.private_get_open_orders_by_instrument_request as (
-	instrument_name text,
-	type deribit.private_get_open_orders_by_instrument_request_type
-);
-comment on column deribit.private_get_open_orders_by_instrument_request.instrument_name is '(Required) Instrument name';
-comment on column deribit.private_get_open_orders_by_instrument_request.type is 'Order type, default - all';
-
-create or replace function deribit.private_get_open_orders_by_instrument_request_builder(
-	instrument_name text,
-	type deribit.private_get_open_orders_by_instrument_request_type default null
-)
-returns deribit.private_get_open_orders_by_instrument_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		type
-	)::deribit.private_get_open_orders_by_instrument_request;
-end;
-$$;
-
-
 create type deribit.private_get_open_orders_by_instrument_False as (
 	reject_post_only boolean,
 	label text,
@@ -112,17 +87,35 @@ create type deribit.private_get_open_orders_by_instrument_response as (
 comment on column deribit.private_get_open_orders_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_open_orders_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_open_orders_by_instrument(params deribit.private_get_open_orders_by_instrument_request)
+create type deribit.private_get_open_orders_by_instrument_request_type as enum ('all', 'limit', 'trigger_all', 'stop_all', 'stop_limit', 'stop_market', 'take_all', 'take_limit', 'take_market', 'trailing_all', 'trailing_stop');
+
+create type deribit.private_get_open_orders_by_instrument_request as (
+	instrument_name text,
+	type deribit.private_get_open_orders_by_instrument_request_type
+);
+comment on column deribit.private_get_open_orders_by_instrument_request.instrument_name is '(Required) Instrument name';
+comment on column deribit.private_get_open_orders_by_instrument_request.type is 'Order type, default - all';
+
+create or replace function deribit.private_get_open_orders_by_instrument(
+	instrument_name text,
+	type deribit.private_get_open_orders_by_instrument_request_type default null
+)
 returns deribit.private_get_open_orders_by_instrument_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_open_orders_by_instrument_response;
+	_request deribit.private_get_open_orders_by_instrument_request;
+	_response deribit.private_get_open_orders_by_instrument_response;
 begin
+	_request := row(
+		instrument_name,
+		type
+	)::deribit.private_get_open_orders_by_instrument_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_open_orders_by_instrument',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -160,12 +153,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_open_orders_by_instrument_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_open_orders_by_instrument is 'Retrieves list of user''s open orders within given Instrument.';

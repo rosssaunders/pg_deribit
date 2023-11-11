@@ -1,28 +1,3 @@
-create type deribit.private_cancel_by_label_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_cancel_by_label_request as (
-	label text,
-	currency deribit.private_cancel_by_label_request_currency
-);
-comment on column deribit.private_cancel_by_label_request.label is '(Required) user defined label for the order (maximum 64 characters)';
-comment on column deribit.private_cancel_by_label_request.currency is 'The currency symbol';
-
-create or replace function deribit.private_cancel_by_label_request_builder(
-	label text,
-	currency deribit.private_cancel_by_label_request_currency default null
-)
-returns deribit.private_cancel_by_label_request
-language plpgsql
-as $$
-begin
-	return row(
-		label,
-		currency
-	)::deribit.private_cancel_by_label_request;
-end;
-$$;
-
-
 create type deribit.private_cancel_by_label_response as (
 	id bigint,
 	jsonrpc text,
@@ -32,17 +7,35 @@ comment on column deribit.private_cancel_by_label_response.id is 'The id that wa
 comment on column deribit.private_cancel_by_label_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_cancel_by_label_response.result is 'Total number of successfully cancelled orders';
 
-create or replace function deribit.private_cancel_by_label(params deribit.private_cancel_by_label_request)
+create type deribit.private_cancel_by_label_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_cancel_by_label_request as (
+	label text,
+	currency deribit.private_cancel_by_label_request_currency
+);
+comment on column deribit.private_cancel_by_label_request.label is '(Required) user defined label for the order (maximum 64 characters)';
+comment on column deribit.private_cancel_by_label_request.currency is 'The currency symbol';
+
+create or replace function deribit.private_cancel_by_label(
+	label text,
+	currency deribit.private_cancel_by_label_request_currency default null
+)
 returns deribit.private_cancel_by_label_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_cancel_by_label_response;
+	_request deribit.private_cancel_by_label_request;
+	_response deribit.private_cancel_by_label_response;
 begin
+	_request := row(
+		label,
+		currency
+	)::deribit.private_cancel_by_label_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/cancel_by_label',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -80,12 +73,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_cancel_by_label_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_cancel_by_label is 'Cancels orders by label. All user''s orders (trigger orders too), with given label are canceled in all currencies or in one given currency (in this case currency queue is used) ';

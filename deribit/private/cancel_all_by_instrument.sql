@@ -1,3 +1,12 @@
+create type deribit.private_cancel_all_by_instrument_response as (
+	id bigint,
+	jsonrpc text,
+	result float
+);
+comment on column deribit.private_cancel_all_by_instrument_response.id is 'The id that was sent in the request';
+comment on column deribit.private_cancel_all_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_cancel_all_by_instrument_response.result is 'Total number of successfully cancelled orders';
+
 create type deribit.private_cancel_all_by_instrument_request_type as enum ('all', 'limit', 'trigger_all', 'stop', 'take', 'trailing_stop');
 
 create type deribit.private_cancel_all_by_instrument_request as (
@@ -11,46 +20,30 @@ comment on column deribit.private_cancel_all_by_instrument_request.type is 'Orde
 comment on column deribit.private_cancel_all_by_instrument_request.detailed is 'When detailed is set to true output format is changed. See description. Default: false';
 comment on column deribit.private_cancel_all_by_instrument_request.include_combos is 'When set to true orders in combo instruments affecting given position will also be cancelled. Default: false';
 
-create or replace function deribit.private_cancel_all_by_instrument_request_builder(
+create or replace function deribit.private_cancel_all_by_instrument(
 	instrument_name text,
 	type deribit.private_cancel_all_by_instrument_request_type default null,
 	detailed boolean default null,
 	include_combos boolean default null
 )
-returns deribit.private_cancel_all_by_instrument_request
+returns deribit.private_cancel_all_by_instrument_response
 language plpgsql
 as $$
+declare
+	_request deribit.private_cancel_all_by_instrument_request;
+	_response deribit.private_cancel_all_by_instrument_response;
 begin
-	return row(
+	_request := row(
 		instrument_name,
 		type,
 		detailed,
 		include_combos
 	)::deribit.private_cancel_all_by_instrument_request;
-end;
-$$;
 
-
-create type deribit.private_cancel_all_by_instrument_response as (
-	id bigint,
-	jsonrpc text,
-	result float
-);
-comment on column deribit.private_cancel_all_by_instrument_response.id is 'The id that was sent in the request';
-comment on column deribit.private_cancel_all_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_cancel_all_by_instrument_response.result is 'Total number of successfully cancelled orders';
-
-create or replace function deribit.private_cancel_all_by_instrument(params deribit.private_cancel_all_by_instrument_request)
-returns deribit.private_cancel_all_by_instrument_response
-language plpgsql
-as $$
-declare
-	ret deribit.private_cancel_all_by_instrument_response;
-begin
 	with request as (
 		select json_build_object(
 			'method', '/private/cancel_all_by_instrument',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -88,12 +81,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_cancel_all_by_instrument_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_cancel_all_by_instrument is 'Cancels all orders by instrument, optionally filtered by order type.';

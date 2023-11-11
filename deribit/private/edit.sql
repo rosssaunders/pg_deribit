@@ -1,64 +1,3 @@
-create type deribit.private_edit_request_advanced as enum ('usd', 'implv');
-
-create type deribit.private_edit_request as (
-	order_id text,
-	amount float,
-	price float,
-	post_only boolean,
-	reduce_only boolean,
-	reject_post_only boolean,
-	advanced deribit.private_edit_request_advanced,
-	trigger_price float,
-	trigger_offset float,
-	mmp boolean,
-	valid_until bigint
-);
-comment on column deribit.private_edit_request.order_id is '(Required) The order id';
-comment on column deribit.private_edit_request.amount is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For linear futures it is underlying base currency coin. For options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH';
-comment on column deribit.private_edit_request.price is 'The order price in base currency. When editing an option order with advanced=usd, the field price should be the option price value in USD. When editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
-comment on column deribit.private_edit_request.post_only is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type). Only valid in combination with time_in_force="good_til_cancelled"';
-comment on column deribit.private_edit_request.reduce_only is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
-comment on column deribit.private_edit_request.reject_post_only is 'If an order is considered post-only and this field is set to true then the order is put to order book unmodified or request is rejected. Only valid in combination with "post_only" set to true';
-comment on column deribit.private_edit_request.advanced is 'Advanced option order type. If you have posted an advanced option order, it is necessary to re-supply this parameter when editing it (Only for options)';
-comment on column deribit.private_edit_request.trigger_price is 'Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)';
-comment on column deribit.private_edit_request.trigger_offset is 'The maximum deviation from the price peak beyond which the order will be triggered';
-comment on column deribit.private_edit_request.mmp is 'Order MMP flag, only for order_type ''limit''';
-comment on column deribit.private_edit_request.valid_until is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
-
-create or replace function deribit.private_edit_request_builder(
-	order_id text,
-	amount float,
-	price float default null,
-	post_only boolean default null,
-	reduce_only boolean default null,
-	reject_post_only boolean default null,
-	advanced deribit.private_edit_request_advanced default null,
-	trigger_price float default null,
-	trigger_offset float default null,
-	mmp boolean default null,
-	valid_until bigint default null
-)
-returns deribit.private_edit_request
-language plpgsql
-as $$
-begin
-	return row(
-		order_id,
-		amount,
-		price,
-		post_only,
-		reduce_only,
-		reject_post_only,
-		advanced,
-		trigger_price,
-		trigger_offset,
-		mmp,
-		valid_until
-	)::deribit.private_edit_request;
-end;
-$$;
-
-
 create type deribit.private_edit_trade as (
 	advanced text,
 	amount float,
@@ -221,17 +160,71 @@ create type deribit.private_edit_response as (
 comment on column deribit.private_edit_response.id is 'The id that was sent in the request';
 comment on column deribit.private_edit_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_edit(params deribit.private_edit_request)
+create type deribit.private_edit_request_advanced as enum ('usd', 'implv');
+
+create type deribit.private_edit_request as (
+	order_id text,
+	amount float,
+	price float,
+	post_only boolean,
+	reduce_only boolean,
+	reject_post_only boolean,
+	advanced deribit.private_edit_request_advanced,
+	trigger_price float,
+	trigger_offset float,
+	mmp boolean,
+	valid_until bigint
+);
+comment on column deribit.private_edit_request.order_id is '(Required) The order id';
+comment on column deribit.private_edit_request.amount is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For linear futures it is underlying base currency coin. For options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH';
+comment on column deribit.private_edit_request.price is 'The order price in base currency. When editing an option order with advanced=usd, the field price should be the option price value in USD. When editing an option order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
+comment on column deribit.private_edit_request.post_only is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below or above the spread (accordingly to the original order type). Only valid in combination with time_in_force="good_til_cancelled"';
+comment on column deribit.private_edit_request.reduce_only is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
+comment on column deribit.private_edit_request.reject_post_only is 'If an order is considered post-only and this field is set to true then the order is put to order book unmodified or request is rejected. Only valid in combination with "post_only" set to true';
+comment on column deribit.private_edit_request.advanced is 'Advanced option order type. If you have posted an advanced option order, it is necessary to re-supply this parameter when editing it (Only for options)';
+comment on column deribit.private_edit_request.trigger_price is 'Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)';
+comment on column deribit.private_edit_request.trigger_offset is 'The maximum deviation from the price peak beyond which the order will be triggered';
+comment on column deribit.private_edit_request.mmp is 'Order MMP flag, only for order_type ''limit''';
+comment on column deribit.private_edit_request.valid_until is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
+
+create or replace function deribit.private_edit(
+	order_id text,
+	amount float,
+	price float default null,
+	post_only boolean default null,
+	reduce_only boolean default null,
+	reject_post_only boolean default null,
+	advanced deribit.private_edit_request_advanced default null,
+	trigger_price float default null,
+	trigger_offset float default null,
+	mmp boolean default null,
+	valid_until bigint default null
+)
 returns deribit.private_edit_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_edit_response;
+	_request deribit.private_edit_request;
+	_response deribit.private_edit_response;
 begin
+	_request := row(
+		order_id,
+		amount,
+		price,
+		post_only,
+		reduce_only,
+		reject_post_only,
+		advanced,
+		trigger_price,
+		trigger_offset,
+		mmp,
+		valid_until
+	)::deribit.private_edit_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/edit',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -269,12 +262,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_edit_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_edit is 'Change price, amount and/or other properties of an order.';

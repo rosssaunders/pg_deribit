@@ -1,90 +1,3 @@
-create type deribit.private_buy_request_type as enum ('limit', 'stop_limit', 'take_limit', 'market', 'stop_market', 'take_market', 'market_limit', 'trailing_stop');
-
-create type deribit.private_buy_request_time_in_force as enum ('good_til_cancelled', 'good_til_day', 'fill_or_kill', 'immediate_or_cancel');
-
-create type deribit.private_buy_request_trigger as enum ('index_price', 'mark_price', 'last_price');
-
-create type deribit.private_buy_request_advanced as enum ('usd', 'implv');
-
-create type deribit.private_buy_request as (
-	instrument_name text,
-	amount float,
-	type deribit.private_buy_request_type,
-	label text,
-	price float,
-	time_in_force deribit.private_buy_request_time_in_force,
-	max_show float,
-	post_only boolean,
-	reject_post_only boolean,
-	reduce_only boolean,
-	trigger_price float,
-	trigger_offset float,
-	trigger deribit.private_buy_request_trigger,
-	advanced deribit.private_buy_request_advanced,
-	mmp boolean,
-	valid_until bigint
-);
-comment on column deribit.private_buy_request.instrument_name is '(Required) Instrument name';
-comment on column deribit.private_buy_request.amount is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For linear futures it is underlying base currency coin. For options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH';
-comment on column deribit.private_buy_request.type is 'The order type, default: "limit"';
-comment on column deribit.private_buy_request.label is 'user defined label for the order (maximum 64 characters)';
-comment on column deribit.private_buy_request.price is 'The order price in base currency (Only for limit and stop_limit orders) When adding order with advanced=usd, the field price should be the option price value in USD. When adding order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
-comment on column deribit.private_buy_request.time_in_force is 'Specifies how long the order remains in effect. Default "good_til_cancelled" "good_til_cancelled" - unfilled order remains in order book until cancelled "good_til_day" - unfilled order remains in order book till the end of the trading session "fill_or_kill" - execute a transaction immediately and completely or not at all "immediate_or_cancel" - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled';
-comment on column deribit.private_buy_request.max_show is 'Maximum amount within an order to be shown to other customers, 0 for invisible order';
-comment on column deribit.private_buy_request.post_only is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force="good_til_cancelled"';
-comment on column deribit.private_buy_request.reject_post_only is 'If an order is considered post-only and this field is set to true then the order is put to order book unmodified or request is rejected. Only valid in combination with "post_only" set to true';
-comment on column deribit.private_buy_request.reduce_only is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
-comment on column deribit.private_buy_request.trigger_price is 'Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)';
-comment on column deribit.private_buy_request.trigger_offset is 'The maximum deviation from the price peak beyond which the order will be triggered';
-comment on column deribit.private_buy_request.trigger is 'Defines the trigger type. Required for "Stop-Loss", "Take-Profit" and "Trailing" trigger orders';
-comment on column deribit.private_buy_request.advanced is 'Advanced option order type. (Only for options)';
-comment on column deribit.private_buy_request.mmp is 'Order MMP flag, only for order_type ''limit''';
-comment on column deribit.private_buy_request.valid_until is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
-
-create or replace function deribit.private_buy_request_builder(
-	instrument_name text,
-	amount float,
-	type deribit.private_buy_request_type default null,
-	label text default null,
-	price float default null,
-	time_in_force deribit.private_buy_request_time_in_force default null,
-	max_show float default null,
-	post_only boolean default null,
-	reject_post_only boolean default null,
-	reduce_only boolean default null,
-	trigger_price float default null,
-	trigger_offset float default null,
-	trigger deribit.private_buy_request_trigger default null,
-	advanced deribit.private_buy_request_advanced default null,
-	mmp boolean default null,
-	valid_until bigint default null
-)
-returns deribit.private_buy_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		amount,
-		type,
-		label,
-		price,
-		time_in_force,
-		max_show,
-		post_only,
-		reject_post_only,
-		reduce_only,
-		trigger_price,
-		trigger_offset,
-		trigger,
-		advanced,
-		mmp,
-		valid_until
-	)::deribit.private_buy_request;
-end;
-$$;
-
-
 create type deribit.private_buy_trade as (
 	advanced text,
 	amount float,
@@ -247,17 +160,97 @@ create type deribit.private_buy_response as (
 comment on column deribit.private_buy_response.id is 'The id that was sent in the request';
 comment on column deribit.private_buy_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_buy(params deribit.private_buy_request)
+create type deribit.private_buy_request_type as enum ('limit', 'stop_limit', 'take_limit', 'market', 'stop_market', 'take_market', 'market_limit', 'trailing_stop');
+
+create type deribit.private_buy_request_time_in_force as enum ('good_til_cancelled', 'good_til_day', 'fill_or_kill', 'immediate_or_cancel');
+
+create type deribit.private_buy_request_trigger as enum ('index_price', 'mark_price', 'last_price');
+
+create type deribit.private_buy_request_advanced as enum ('usd', 'implv');
+
+create type deribit.private_buy_request as (
+	instrument_name text,
+	amount float,
+	type deribit.private_buy_request_type,
+	label text,
+	price float,
+	time_in_force deribit.private_buy_request_time_in_force,
+	max_show float,
+	post_only boolean,
+	reject_post_only boolean,
+	reduce_only boolean,
+	trigger_price float,
+	trigger_offset float,
+	trigger deribit.private_buy_request_trigger,
+	advanced deribit.private_buy_request_advanced,
+	mmp boolean,
+	valid_until bigint
+);
+comment on column deribit.private_buy_request.instrument_name is '(Required) Instrument name';
+comment on column deribit.private_buy_request.amount is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For linear futures it is underlying base currency coin. For options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH';
+comment on column deribit.private_buy_request.type is 'The order type, default: "limit"';
+comment on column deribit.private_buy_request.label is 'user defined label for the order (maximum 64 characters)';
+comment on column deribit.private_buy_request.price is 'The order price in base currency (Only for limit and stop_limit orders) When adding order with advanced=usd, the field price should be the option price value in USD. When adding order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
+comment on column deribit.private_buy_request.time_in_force is 'Specifies how long the order remains in effect. Default "good_til_cancelled" "good_til_cancelled" - unfilled order remains in order book until cancelled "good_til_day" - unfilled order remains in order book till the end of the trading session "fill_or_kill" - execute a transaction immediately and completely or not at all "immediate_or_cancel" - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled';
+comment on column deribit.private_buy_request.max_show is 'Maximum amount within an order to be shown to other customers, 0 for invisible order';
+comment on column deribit.private_buy_request.post_only is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force="good_til_cancelled"';
+comment on column deribit.private_buy_request.reject_post_only is 'If an order is considered post-only and this field is set to true then the order is put to order book unmodified or request is rejected. Only valid in combination with "post_only" set to true';
+comment on column deribit.private_buy_request.reduce_only is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
+comment on column deribit.private_buy_request.trigger_price is 'Trigger price, required for trigger orders only (Stop-loss or Take-profit orders)';
+comment on column deribit.private_buy_request.trigger_offset is 'The maximum deviation from the price peak beyond which the order will be triggered';
+comment on column deribit.private_buy_request.trigger is 'Defines the trigger type. Required for "Stop-Loss", "Take-Profit" and "Trailing" trigger orders';
+comment on column deribit.private_buy_request.advanced is 'Advanced option order type. (Only for options)';
+comment on column deribit.private_buy_request.mmp is 'Order MMP flag, only for order_type ''limit''';
+comment on column deribit.private_buy_request.valid_until is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
+
+create or replace function deribit.private_buy(
+	instrument_name text,
+	amount float,
+	type deribit.private_buy_request_type default null,
+	label text default null,
+	price float default null,
+	time_in_force deribit.private_buy_request_time_in_force default null,
+	max_show float default null,
+	post_only boolean default null,
+	reject_post_only boolean default null,
+	reduce_only boolean default null,
+	trigger_price float default null,
+	trigger_offset float default null,
+	trigger deribit.private_buy_request_trigger default null,
+	advanced deribit.private_buy_request_advanced default null,
+	mmp boolean default null,
+	valid_until bigint default null
+)
 returns deribit.private_buy_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_buy_response;
+	_request deribit.private_buy_request;
+	_response deribit.private_buy_response;
 begin
+	_request := row(
+		instrument_name,
+		amount,
+		type,
+		label,
+		price,
+		time_in_force,
+		max_show,
+		post_only,
+		reject_post_only,
+		reduce_only,
+		trigger_price,
+		trigger_offset,
+		trigger,
+		advanced,
+		mmp,
+		valid_until
+	)::deribit.private_buy_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/buy',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -295,12 +288,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_buy_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_buy is 'Places a buy order for an instrument.';

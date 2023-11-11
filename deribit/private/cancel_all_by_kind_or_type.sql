@@ -1,3 +1,12 @@
+create type deribit.private_cancel_all_by_kind_or_type_response as (
+	id bigint,
+	jsonrpc text,
+	result float
+);
+comment on column deribit.private_cancel_all_by_kind_or_type_response.id is 'The id that was sent in the request';
+comment on column deribit.private_cancel_all_by_kind_or_type_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_cancel_all_by_kind_or_type_response.result is 'Total number of successfully cancelled orders';
+
 create type deribit.private_cancel_all_by_kind_or_type_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
 
 create type deribit.private_cancel_all_by_kind_or_type_request_type as enum ('all', 'limit', 'trigger_all', 'stop', 'take', 'trailing_stop');
@@ -13,46 +22,30 @@ comment on column deribit.private_cancel_all_by_kind_or_type_request.kind is 'In
 comment on column deribit.private_cancel_all_by_kind_or_type_request.type is 'Order type - limit, stop, take, trigger_all or all, default - all';
 comment on column deribit.private_cancel_all_by_kind_or_type_request.detailed is 'When detailed is set to true output format is changed. See description. Default: false';
 
-create or replace function deribit.private_cancel_all_by_kind_or_type_request_builder(
+create or replace function deribit.private_cancel_all_by_kind_or_type(
 	currency UNKNOWN - string or array of strings,
 	kind deribit.private_cancel_all_by_kind_or_type_request_kind default null,
 	type deribit.private_cancel_all_by_kind_or_type_request_type default null,
 	detailed boolean default null
 )
-returns deribit.private_cancel_all_by_kind_or_type_request
+returns deribit.private_cancel_all_by_kind_or_type_response
 language plpgsql
 as $$
+declare
+	_request deribit.private_cancel_all_by_kind_or_type_request;
+	_response deribit.private_cancel_all_by_kind_or_type_response;
 begin
-	return row(
+	_request := row(
 		currency,
 		kind,
 		type,
 		detailed
 	)::deribit.private_cancel_all_by_kind_or_type_request;
-end;
-$$;
 
-
-create type deribit.private_cancel_all_by_kind_or_type_response as (
-	id bigint,
-	jsonrpc text,
-	result float
-);
-comment on column deribit.private_cancel_all_by_kind_or_type_response.id is 'The id that was sent in the request';
-comment on column deribit.private_cancel_all_by_kind_or_type_response.jsonrpc is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_cancel_all_by_kind_or_type_response.result is 'Total number of successfully cancelled orders';
-
-create or replace function deribit.private_cancel_all_by_kind_or_type(params deribit.private_cancel_all_by_kind_or_type_request)
-returns deribit.private_cancel_all_by_kind_or_type_response
-language plpgsql
-as $$
-declare
-	ret deribit.private_cancel_all_by_kind_or_type_response;
-begin
 	with request as (
 		select json_build_object(
 			'method', '/private/cancel_all_by_kind_or_type',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -90,12 +83,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_cancel_all_by_kind_or_type_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_cancel_all_by_kind_or_type is 'Cancels all orders in currency(currencies), optionally filtered by instrument kind and/or order type.';

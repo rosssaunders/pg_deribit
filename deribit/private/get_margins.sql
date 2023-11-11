@@ -1,30 +1,3 @@
-create type deribit.private_get_margins_request as (
-	instrument_name text,
-	amount float,
-	price float
-);
-comment on column deribit.private_get_margins_request.instrument_name is '(Required) Instrument name';
-comment on column deribit.private_get_margins_request.amount is '(Required) Amount, integer for future, float for option. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
-comment on column deribit.private_get_margins_request.price is '(Required) Price';
-
-create or replace function deribit.private_get_margins_request_builder(
-	instrument_name text,
-	amount float,
-	price float
-)
-returns deribit.private_get_margins_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		amount,
-		price
-	)::deribit.private_get_margins_request;
-end;
-$$;
-
-
 create type deribit.private_get_margins_result as (
 	buy float,
 	max_price float,
@@ -44,17 +17,37 @@ create type deribit.private_get_margins_response as (
 comment on column deribit.private_get_margins_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_margins_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_margins(params deribit.private_get_margins_request)
+create type deribit.private_get_margins_request as (
+	instrument_name text,
+	amount float,
+	price float
+);
+comment on column deribit.private_get_margins_request.instrument_name is '(Required) Instrument name';
+comment on column deribit.private_get_margins_request.amount is '(Required) Amount, integer for future, float for option. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.private_get_margins_request.price is '(Required) Price';
+
+create or replace function deribit.private_get_margins(
+	instrument_name text,
+	amount float,
+	price float
+)
 returns deribit.private_get_margins_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_margins_response;
+	_request deribit.private_get_margins_request;
+	_response deribit.private_get_margins_response;
 begin
+	_request := row(
+		instrument_name,
+		amount,
+		price
+	)::deribit.private_get_margins_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_margins',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -92,12 +85,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_margins_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_margins is 'Get margins for given instrument, amount and price.';

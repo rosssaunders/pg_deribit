@@ -1,46 +1,3 @@
-create type deribit.private_get_order_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_order_history_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
-
-create type deribit.private_get_order_history_by_currency_request as (
-	currency deribit.private_get_order_history_by_currency_request_currency,
-	kind deribit.private_get_order_history_by_currency_request_kind,
-	count bigint,
-	"offset" bigint,
-	include_old boolean,
-	include_unfilled boolean
-);
-comment on column deribit.private_get_order_history_by_currency_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_order_history_by_currency_request.kind is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
-comment on column deribit.private_get_order_history_by_currency_request.count is 'Number of requested items, default - 20';
-comment on column deribit.private_get_order_history_by_currency_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.private_get_order_history_by_currency_request.include_old is 'Include in result orders older than 2 days, default - false';
-comment on column deribit.private_get_order_history_by_currency_request.include_unfilled is 'Include in result fully unfilled closed orders, default - false';
-
-create or replace function deribit.private_get_order_history_by_currency_request_builder(
-	currency deribit.private_get_order_history_by_currency_request_currency,
-	kind deribit.private_get_order_history_by_currency_request_kind default null,
-	count bigint default null,
-	"offset" bigint default null,
-	include_old boolean default null,
-	include_unfilled boolean default null
-)
-returns deribit.private_get_order_history_by_currency_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		kind,
-		count,
-		"offset",
-		include_old,
-		include_unfilled
-	)::deribit.private_get_order_history_by_currency_request;
-end;
-$$;
-
-
 create type deribit.private_get_order_history_by_currency_False as (
 	reject_post_only boolean,
 	label text,
@@ -130,17 +87,53 @@ create type deribit.private_get_order_history_by_currency_response as (
 comment on column deribit.private_get_order_history_by_currency_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_history_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_order_history_by_currency(params deribit.private_get_order_history_by_currency_request)
+create type deribit.private_get_order_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_order_history_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
+
+create type deribit.private_get_order_history_by_currency_request as (
+	currency deribit.private_get_order_history_by_currency_request_currency,
+	kind deribit.private_get_order_history_by_currency_request_kind,
+	count bigint,
+	"offset" bigint,
+	include_old boolean,
+	include_unfilled boolean
+);
+comment on column deribit.private_get_order_history_by_currency_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_order_history_by_currency_request.kind is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
+comment on column deribit.private_get_order_history_by_currency_request.count is 'Number of requested items, default - 20';
+comment on column deribit.private_get_order_history_by_currency_request."offset" is 'The offset for pagination, default - 0';
+comment on column deribit.private_get_order_history_by_currency_request.include_old is 'Include in result orders older than 2 days, default - false';
+comment on column deribit.private_get_order_history_by_currency_request.include_unfilled is 'Include in result fully unfilled closed orders, default - false';
+
+create or replace function deribit.private_get_order_history_by_currency(
+	currency deribit.private_get_order_history_by_currency_request_currency,
+	kind deribit.private_get_order_history_by_currency_request_kind default null,
+	count bigint default null,
+	"offset" bigint default null,
+	include_old boolean default null,
+	include_unfilled boolean default null
+)
 returns deribit.private_get_order_history_by_currency_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_order_history_by_currency_response;
+	_request deribit.private_get_order_history_by_currency_request;
+	_response deribit.private_get_order_history_by_currency_response;
 begin
+	_request := row(
+		currency,
+		kind,
+		count,
+		"offset",
+		include_old,
+		include_unfilled
+	)::deribit.private_get_order_history_by_currency_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_order_history_by_currency',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -178,12 +171,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_order_history_by_currency_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_order_history_by_currency is 'Retrieves history of orders that have been partially or fully filled.';

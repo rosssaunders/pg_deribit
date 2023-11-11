@@ -1,36 +1,3 @@
-create type deribit.private_get_open_orders_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_open_orders_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo');
-
-create type deribit.private_get_open_orders_by_currency_request_type as enum ('all', 'limit', 'trigger_all', 'stop_all', 'stop_limit', 'stop_market', 'take_all', 'take_limit', 'take_market', 'trailing_all', 'trailing_stop');
-
-create type deribit.private_get_open_orders_by_currency_request as (
-	currency deribit.private_get_open_orders_by_currency_request_currency,
-	kind deribit.private_get_open_orders_by_currency_request_kind,
-	type deribit.private_get_open_orders_by_currency_request_type
-);
-comment on column deribit.private_get_open_orders_by_currency_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_open_orders_by_currency_request.kind is 'Instrument kind, if not provided instruments of all kinds are considered';
-comment on column deribit.private_get_open_orders_by_currency_request.type is 'Order type, default - all';
-
-create or replace function deribit.private_get_open_orders_by_currency_request_builder(
-	currency deribit.private_get_open_orders_by_currency_request_currency,
-	kind deribit.private_get_open_orders_by_currency_request_kind default null,
-	type deribit.private_get_open_orders_by_currency_request_type default null
-)
-returns deribit.private_get_open_orders_by_currency_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		kind,
-		type
-	)::deribit.private_get_open_orders_by_currency_request;
-end;
-$$;
-
-
 create type deribit.private_get_open_orders_by_currency_False as (
 	reject_post_only boolean,
 	label text,
@@ -120,17 +87,43 @@ create type deribit.private_get_open_orders_by_currency_response as (
 comment on column deribit.private_get_open_orders_by_currency_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_open_orders_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_open_orders_by_currency(params deribit.private_get_open_orders_by_currency_request)
+create type deribit.private_get_open_orders_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_open_orders_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo');
+
+create type deribit.private_get_open_orders_by_currency_request_type as enum ('all', 'limit', 'trigger_all', 'stop_all', 'stop_limit', 'stop_market', 'take_all', 'take_limit', 'take_market', 'trailing_all', 'trailing_stop');
+
+create type deribit.private_get_open_orders_by_currency_request as (
+	currency deribit.private_get_open_orders_by_currency_request_currency,
+	kind deribit.private_get_open_orders_by_currency_request_kind,
+	type deribit.private_get_open_orders_by_currency_request_type
+);
+comment on column deribit.private_get_open_orders_by_currency_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_open_orders_by_currency_request.kind is 'Instrument kind, if not provided instruments of all kinds are considered';
+comment on column deribit.private_get_open_orders_by_currency_request.type is 'Order type, default - all';
+
+create or replace function deribit.private_get_open_orders_by_currency(
+	currency deribit.private_get_open_orders_by_currency_request_currency,
+	kind deribit.private_get_open_orders_by_currency_request_kind default null,
+	type deribit.private_get_open_orders_by_currency_request_type default null
+)
 returns deribit.private_get_open_orders_by_currency_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_open_orders_by_currency_response;
+	_request deribit.private_get_open_orders_by_currency_request;
+	_response deribit.private_get_open_orders_by_currency_response;
 begin
+	_request := row(
+		currency,
+		kind,
+		type
+	)::deribit.private_get_open_orders_by_currency_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_open_orders_by_currency',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -168,12 +161,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_open_orders_by_currency_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_open_orders_by_currency is 'Retrieves list of user''s open orders.';

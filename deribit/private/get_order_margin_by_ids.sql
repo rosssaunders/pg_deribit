@@ -1,22 +1,3 @@
-create type deribit.private_get_order_margin_by_ids_request as (
-	ids text[]
-);
-comment on column deribit.private_get_order_margin_by_ids_request.ids is '(Required) Ids of orders';
-
-create or replace function deribit.private_get_order_margin_by_ids_request_builder(
-	ids text[]
-)
-returns deribit.private_get_order_margin_by_ids_request
-language plpgsql
-as $$
-begin
-	return row(
-		ids
-	)::deribit.private_get_order_margin_by_ids_request;
-end;
-$$;
-
-
 create type deribit.private_get_order_margin_by_ids_False as (
 	initial_margin float,
 	initial_margin_currency text,
@@ -34,17 +15,29 @@ create type deribit.private_get_order_margin_by_ids_response as (
 comment on column deribit.private_get_order_margin_by_ids_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_margin_by_ids_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_order_margin_by_ids(params deribit.private_get_order_margin_by_ids_request)
+create type deribit.private_get_order_margin_by_ids_request as (
+	ids text[]
+);
+comment on column deribit.private_get_order_margin_by_ids_request.ids is '(Required) Ids of orders';
+
+create or replace function deribit.private_get_order_margin_by_ids(
+	ids text[]
+)
 returns deribit.private_get_order_margin_by_ids_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_order_margin_by_ids_response;
+	_request deribit.private_get_order_margin_by_ids_request;
+	_response deribit.private_get_order_margin_by_ids_response;
 begin
+	_request := row(
+		ids
+	)::deribit.private_get_order_margin_by_ids_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_order_margin_by_ids',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -82,12 +75,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_order_margin_by_ids_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_order_margin_by_ids is 'Retrieves initial margins of given orders';

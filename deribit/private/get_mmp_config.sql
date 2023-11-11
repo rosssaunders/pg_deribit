@@ -1,24 +1,3 @@
-create type deribit.private_get_mmp_config_request_index_name as enum ('btc_usd', 'eth_usd', 'btc_usdc', 'eth_usdc', 'ada_usdc', 'algo_usdc', 'avax_usdc', 'bch_usdc', 'bnb_usdc', 'doge_usdc', 'dot_usdc', 'link_usdc', 'ltc_usdc', 'luna_usdc', 'matic_usdc', 'mshib_usdc', 'near_usdc', 'shib_usdc', 'trx_usdc', 'uni_usdc', 'xrp_usdc', 'btcdvol_usdc', 'ethdvol_usdc');
-
-create type deribit.private_get_mmp_config_request as (
-	index_name deribit.private_get_mmp_config_request_index_name
-);
-comment on column deribit.private_get_mmp_config_request.index_name is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
-
-create or replace function deribit.private_get_mmp_config_request_builder(
-	index_name deribit.private_get_mmp_config_request_index_name default null
-)
-returns deribit.private_get_mmp_config_request
-language plpgsql
-as $$
-begin
-	return row(
-		index_name
-	)::deribit.private_get_mmp_config_request;
-end;
-$$;
-
-
 create type deribit.private_get_mmp_config_False as (
 	delta_limit float,
 	frozen_time bigint,
@@ -40,17 +19,31 @@ create type deribit.private_get_mmp_config_response as (
 comment on column deribit.private_get_mmp_config_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_mmp_config_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_mmp_config(params deribit.private_get_mmp_config_request)
+create type deribit.private_get_mmp_config_request_index_name as enum ('btc_usd', 'eth_usd', 'btc_usdc', 'eth_usdc', 'ada_usdc', 'algo_usdc', 'avax_usdc', 'bch_usdc', 'bnb_usdc', 'doge_usdc', 'dot_usdc', 'link_usdc', 'ltc_usdc', 'luna_usdc', 'matic_usdc', 'mshib_usdc', 'near_usdc', 'shib_usdc', 'trx_usdc', 'uni_usdc', 'xrp_usdc', 'btcdvol_usdc', 'ethdvol_usdc');
+
+create type deribit.private_get_mmp_config_request as (
+	index_name deribit.private_get_mmp_config_request_index_name
+);
+comment on column deribit.private_get_mmp_config_request.index_name is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
+
+create or replace function deribit.private_get_mmp_config(
+	index_name deribit.private_get_mmp_config_request_index_name default null
+)
 returns deribit.private_get_mmp_config_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_mmp_config_response;
+	_request deribit.private_get_mmp_config_request;
+	_response deribit.private_get_mmp_config_response;
 begin
+	_request := row(
+		index_name
+	)::deribit.private_get_mmp_config_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_mmp_config',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -88,12 +81,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_mmp_config_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_mmp_config is 'Get MMP configuration for an index, if the parameter is not provided, a list of all MMP configurations is returned. Empty list means no MMP configuration.';

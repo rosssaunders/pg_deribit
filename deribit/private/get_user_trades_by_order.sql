@@ -1,28 +1,3 @@
-create type deribit.private_get_user_trades_by_order_request_sorting as enum ('asc', 'desc', 'default');
-
-create type deribit.private_get_user_trades_by_order_request as (
-	order_id text,
-	sorting deribit.private_get_user_trades_by_order_request_sorting
-);
-comment on column deribit.private_get_user_trades_by_order_request.order_id is '(Required) The order id';
-comment on column deribit.private_get_user_trades_by_order_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-
-create or replace function deribit.private_get_user_trades_by_order_request_builder(
-	order_id text,
-	sorting deribit.private_get_user_trades_by_order_request_sorting default null
-)
-returns deribit.private_get_user_trades_by_order_request
-language plpgsql
-as $$
-begin
-	return row(
-		order_id,
-		sorting
-	)::deribit.private_get_user_trades_by_order_request;
-end;
-$$;
-
-
 create type deribit.private_get_user_trades_by_order_response as (
 	id bigint,
 	jsonrpc text,
@@ -94,17 +69,35 @@ comment on column deribit.private_get_user_trades_by_order_response.trade_id is 
 comment on column deribit.private_get_user_trades_by_order_response.trade_seq is 'The sequence number of the trade within instrument';
 comment on column deribit.private_get_user_trades_by_order_response.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
-create or replace function deribit.private_get_user_trades_by_order(params deribit.private_get_user_trades_by_order_request)
+create type deribit.private_get_user_trades_by_order_request_sorting as enum ('asc', 'desc', 'default');
+
+create type deribit.private_get_user_trades_by_order_request as (
+	order_id text,
+	sorting deribit.private_get_user_trades_by_order_request_sorting
+);
+comment on column deribit.private_get_user_trades_by_order_request.order_id is '(Required) The order id';
+comment on column deribit.private_get_user_trades_by_order_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
+
+create or replace function deribit.private_get_user_trades_by_order(
+	order_id text,
+	sorting deribit.private_get_user_trades_by_order_request_sorting default null
+)
 returns deribit.private_get_user_trades_by_order_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_user_trades_by_order_response;
+	_request deribit.private_get_user_trades_by_order_request;
+	_response deribit.private_get_user_trades_by_order_response;
 begin
+	_request := row(
+		order_id,
+		sorting
+	)::deribit.private_get_user_trades_by_order_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_user_trades_by_order',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -142,12 +135,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_user_trades_by_order_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_user_trades_by_order is 'Retrieve the list of user trades that was created for given order';

@@ -1,36 +1,3 @@
-create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_trigger_order_history_request as (
-	currency deribit.private_get_trigger_order_history_request_currency,
-	instrument_name text,
-	count bigint,
-	continuation text
-);
-comment on column deribit.private_get_trigger_order_history_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_trigger_order_history_request.instrument_name is 'Instrument name';
-comment on column deribit.private_get_trigger_order_history_request.count is 'Number of requested items, default - 20';
-comment on column deribit.private_get_trigger_order_history_request.continuation is 'Continuation token for pagination';
-
-create or replace function deribit.private_get_trigger_order_history_request_builder(
-	currency deribit.private_get_trigger_order_history_request_currency,
-	instrument_name text default null,
-	count bigint default null,
-	continuation text default null
-)
-returns deribit.private_get_trigger_order_history_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		instrument_name,
-		count,
-		continuation
-	)::deribit.private_get_trigger_order_history_request;
-end;
-$$;
-
-
 create type deribit.private_get_trigger_order_history_entry as (
 	amount float,
 	direction text,
@@ -82,17 +49,43 @@ create type deribit.private_get_trigger_order_history_response as (
 comment on column deribit.private_get_trigger_order_history_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_trigger_order_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_trigger_order_history(params deribit.private_get_trigger_order_history_request)
+create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_trigger_order_history_request as (
+	currency deribit.private_get_trigger_order_history_request_currency,
+	instrument_name text,
+	count bigint,
+	continuation text
+);
+comment on column deribit.private_get_trigger_order_history_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_trigger_order_history_request.instrument_name is 'Instrument name';
+comment on column deribit.private_get_trigger_order_history_request.count is 'Number of requested items, default - 20';
+comment on column deribit.private_get_trigger_order_history_request.continuation is 'Continuation token for pagination';
+
+create or replace function deribit.private_get_trigger_order_history(
+	currency deribit.private_get_trigger_order_history_request_currency,
+	instrument_name text default null,
+	count bigint default null,
+	continuation text default null
+)
 returns deribit.private_get_trigger_order_history_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_trigger_order_history_response;
+	_request deribit.private_get_trigger_order_history_request;
+	_response deribit.private_get_trigger_order_history_response;
 begin
+	_request := row(
+		currency,
+		instrument_name,
+		count,
+		continuation
+	)::deribit.private_get_trigger_order_history_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_trigger_order_history',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -130,12 +123,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_trigger_order_history_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_trigger_order_history is 'Retrieves detailed log of the user''s trigger orders.';

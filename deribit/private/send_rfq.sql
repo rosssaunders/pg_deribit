@@ -1,3 +1,12 @@
+create type deribit.private_send_rfq_response as (
+	id bigint,
+	jsonrpc text,
+	result text
+);
+comment on column deribit.private_send_rfq_response.id is 'The id that was sent in the request';
+comment on column deribit.private_send_rfq_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_send_rfq_response.result is 'Result of method execution. ok in case of success';
+
 create type deribit.private_send_rfq_request_side as enum ('buy', 'sell');
 
 create type deribit.private_send_rfq_request as (
@@ -9,44 +18,28 @@ comment on column deribit.private_send_rfq_request.instrument_name is '(Required
 comment on column deribit.private_send_rfq_request.amount is 'Amount';
 comment on column deribit.private_send_rfq_request.side is 'Side - buy or sell';
 
-create or replace function deribit.private_send_rfq_request_builder(
+create or replace function deribit.private_send_rfq(
 	instrument_name text,
 	amount float default null,
 	side deribit.private_send_rfq_request_side default null
 )
-returns deribit.private_send_rfq_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		amount,
-		side
-	)::deribit.private_send_rfq_request;
-end;
-$$;
-
-
-create type deribit.private_send_rfq_response as (
-	id bigint,
-	jsonrpc text,
-	result text
-);
-comment on column deribit.private_send_rfq_response.id is 'The id that was sent in the request';
-comment on column deribit.private_send_rfq_response.jsonrpc is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_send_rfq_response.result is 'Result of method execution. ok in case of success';
-
-create or replace function deribit.private_send_rfq(params deribit.private_send_rfq_request)
 returns deribit.private_send_rfq_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_send_rfq_response;
+	_request deribit.private_send_rfq_request;
+	_response deribit.private_send_rfq_response;
 begin
+	_request := row(
+		instrument_name,
+		amount,
+		side
+	)::deribit.private_send_rfq_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/send_rfq',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -84,12 +77,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_send_rfq_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_send_rfq is 'Sends RFQ on a given instrument.';

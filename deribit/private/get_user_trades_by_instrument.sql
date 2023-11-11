@@ -1,48 +1,3 @@
-create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('asc', 'desc', 'default');
-
-create type deribit.private_get_user_trades_by_instrument_request as (
-	instrument_name text,
-	start_seq bigint,
-	end_seq bigint,
-	count bigint,
-	start_timestamp bigint,
-	end_timestamp bigint,
-	sorting deribit.private_get_user_trades_by_instrument_request_sorting
-);
-comment on column deribit.private_get_user_trades_by_instrument_request.instrument_name is '(Required) Instrument name';
-comment on column deribit.private_get_user_trades_by_instrument_request.start_seq is 'The sequence number of the first trade to be returned';
-comment on column deribit.private_get_user_trades_by_instrument_request.end_seq is 'The sequence number of the last trade to be returned';
-comment on column deribit.private_get_user_trades_by_instrument_request.count is 'Number of requested items, default - 10';
-comment on column deribit.private_get_user_trades_by_instrument_request.start_timestamp is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
-comment on column deribit.private_get_user_trades_by_instrument_request.end_timestamp is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_instrument_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-
-create or replace function deribit.private_get_user_trades_by_instrument_request_builder(
-	instrument_name text,
-	start_seq bigint default null,
-	end_seq bigint default null,
-	count bigint default null,
-	start_timestamp bigint default null,
-	end_timestamp bigint default null,
-	sorting deribit.private_get_user_trades_by_instrument_request_sorting default null
-)
-returns deribit.private_get_user_trades_by_instrument_request
-language plpgsql
-as $$
-begin
-	return row(
-		instrument_name,
-		start_seq,
-		end_seq,
-		count,
-		start_timestamp,
-		end_timestamp,
-		sorting
-	)::deribit.private_get_user_trades_by_instrument_request;
-end;
-$$;
-
-
 create type deribit.private_get_user_trades_by_instrument_trade as (
 	advanced text,
 	amount float,
@@ -111,29 +66,68 @@ comment on column deribit.private_get_user_trades_by_instrument_trade.trade_seq 
 comment on column deribit.private_get_user_trades_by_instrument_trade.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
 create type deribit.private_get_user_trades_by_instrument_result as (
-	has_more boolean,
-	trades deribit.private_get_user_trades_by_instrument_trade[]
+	has_more boolean
 );
+
 
 create type deribit.private_get_user_trades_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
-	result deribit.private_get_user_trades_by_instrument_result
+	result deribit.private_get_user_trades_by_instrument_result,
+	trades deribit.private_get_user_trades_by_instrument_trade[]
 );
 comment on column deribit.private_get_user_trades_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_user_trades_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_user_trades_by_instrument(params deribit.private_get_user_trades_by_instrument_request)
+create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('asc', 'desc', 'default');
+
+create type deribit.private_get_user_trades_by_instrument_request as (
+	instrument_name text,
+	start_seq bigint,
+	end_seq bigint,
+	count bigint,
+	start_timestamp bigint,
+	end_timestamp bigint,
+	sorting deribit.private_get_user_trades_by_instrument_request_sorting
+);
+comment on column deribit.private_get_user_trades_by_instrument_request.instrument_name is '(Required) Instrument name';
+comment on column deribit.private_get_user_trades_by_instrument_request.start_seq is 'The sequence number of the first trade to be returned';
+comment on column deribit.private_get_user_trades_by_instrument_request.end_seq is 'The sequence number of the last trade to be returned';
+comment on column deribit.private_get_user_trades_by_instrument_request.count is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_instrument_request.start_timestamp is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
+comment on column deribit.private_get_user_trades_by_instrument_request.end_timestamp is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
+comment on column deribit.private_get_user_trades_by_instrument_request.sorting is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
+
+create or replace function deribit.private_get_user_trades_by_instrument(
+	instrument_name text,
+	start_seq bigint default null,
+	end_seq bigint default null,
+	count bigint default null,
+	start_timestamp bigint default null,
+	end_timestamp bigint default null,
+	sorting deribit.private_get_user_trades_by_instrument_request_sorting default null
+)
 returns deribit.private_get_user_trades_by_instrument_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_user_trades_by_instrument_response;
+	_request deribit.private_get_user_trades_by_instrument_request;
+	_response deribit.private_get_user_trades_by_instrument_response;
 begin
+	_request := row(
+		instrument_name,
+		start_seq,
+		end_seq,
+		count,
+		start_timestamp,
+		end_timestamp,
+		sorting
+	)::deribit.private_get_user_trades_by_instrument_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_user_trades_by_instrument',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -171,12 +165,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_user_trades_by_instrument_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_user_trades_by_instrument is 'Retrieve the latest user trades that have occurred for a specific instrument.';

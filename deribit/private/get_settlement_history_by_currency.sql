@@ -1,42 +1,3 @@
-create type deribit.private_get_settlement_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_settlement_history_by_currency_request_type as enum ('settlement', 'delivery', 'bankruptcy');
-
-create type deribit.private_get_settlement_history_by_currency_request as (
-	currency deribit.private_get_settlement_history_by_currency_request_currency,
-	type deribit.private_get_settlement_history_by_currency_request_type,
-	count bigint,
-	continuation text,
-	search_start_timestamp bigint
-);
-comment on column deribit.private_get_settlement_history_by_currency_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_settlement_history_by_currency_request.type is 'Settlement type';
-comment on column deribit.private_get_settlement_history_by_currency_request.count is 'Number of requested items, default - 20';
-comment on column deribit.private_get_settlement_history_by_currency_request.continuation is 'Continuation token for pagination';
-comment on column deribit.private_get_settlement_history_by_currency_request.search_start_timestamp is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
-
-create or replace function deribit.private_get_settlement_history_by_currency_request_builder(
-	currency deribit.private_get_settlement_history_by_currency_request_currency,
-	type deribit.private_get_settlement_history_by_currency_request_type default null,
-	count bigint default null,
-	continuation text default null,
-	search_start_timestamp bigint default null
-)
-returns deribit.private_get_settlement_history_by_currency_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		type,
-		count,
-		continuation,
-		search_start_timestamp
-	)::deribit.private_get_settlement_history_by_currency_request;
-end;
-$$;
-
-
 create type deribit.private_get_settlement_history_by_currency_settlement as (
 	funded float,
 	funding float,
@@ -82,17 +43,49 @@ create type deribit.private_get_settlement_history_by_currency_response as (
 comment on column deribit.private_get_settlement_history_by_currency_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_settlement_history_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_settlement_history_by_currency(params deribit.private_get_settlement_history_by_currency_request)
+create type deribit.private_get_settlement_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_settlement_history_by_currency_request_type as enum ('settlement', 'delivery', 'bankruptcy');
+
+create type deribit.private_get_settlement_history_by_currency_request as (
+	currency deribit.private_get_settlement_history_by_currency_request_currency,
+	type deribit.private_get_settlement_history_by_currency_request_type,
+	count bigint,
+	continuation text,
+	search_start_timestamp bigint
+);
+comment on column deribit.private_get_settlement_history_by_currency_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_settlement_history_by_currency_request.type is 'Settlement type';
+comment on column deribit.private_get_settlement_history_by_currency_request.count is 'Number of requested items, default - 20';
+comment on column deribit.private_get_settlement_history_by_currency_request.continuation is 'Continuation token for pagination';
+comment on column deribit.private_get_settlement_history_by_currency_request.search_start_timestamp is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
+
+create or replace function deribit.private_get_settlement_history_by_currency(
+	currency deribit.private_get_settlement_history_by_currency_request_currency,
+	type deribit.private_get_settlement_history_by_currency_request_type default null,
+	count bigint default null,
+	continuation text default null,
+	search_start_timestamp bigint default null
+)
 returns deribit.private_get_settlement_history_by_currency_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_settlement_history_by_currency_response;
+	_request deribit.private_get_settlement_history_by_currency_request;
+	_response deribit.private_get_settlement_history_by_currency_response;
 begin
+	_request := row(
+		currency,
+		type,
+		count,
+		continuation,
+		search_start_timestamp
+	)::deribit.private_get_settlement_history_by_currency_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_settlement_history_by_currency',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -130,12 +123,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_settlement_history_by_currency_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_settlement_history_by_currency is 'Retrieves settlement, delivery and bankruptcy events that have affected your account.';

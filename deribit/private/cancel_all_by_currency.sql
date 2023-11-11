@@ -1,3 +1,12 @@
+create type deribit.private_cancel_all_by_currency_response as (
+	id bigint,
+	jsonrpc text,
+	result float
+);
+comment on column deribit.private_cancel_all_by_currency_response.id is 'The id that was sent in the request';
+comment on column deribit.private_cancel_all_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_cancel_all_by_currency_response.result is 'Total number of successfully cancelled orders';
+
 create type deribit.private_cancel_all_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 create type deribit.private_cancel_all_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
@@ -15,46 +24,30 @@ comment on column deribit.private_cancel_all_by_currency_request.kind is 'Instru
 comment on column deribit.private_cancel_all_by_currency_request.type is 'Order type - limit, stop, take, trigger_all or all, default - all';
 comment on column deribit.private_cancel_all_by_currency_request.detailed is 'When detailed is set to true output format is changed. See description. Default: false';
 
-create or replace function deribit.private_cancel_all_by_currency_request_builder(
+create or replace function deribit.private_cancel_all_by_currency(
 	currency deribit.private_cancel_all_by_currency_request_currency,
 	kind deribit.private_cancel_all_by_currency_request_kind default null,
 	type deribit.private_cancel_all_by_currency_request_type default null,
 	detailed boolean default null
 )
-returns deribit.private_cancel_all_by_currency_request
+returns deribit.private_cancel_all_by_currency_response
 language plpgsql
 as $$
+declare
+	_request deribit.private_cancel_all_by_currency_request;
+	_response deribit.private_cancel_all_by_currency_response;
 begin
-	return row(
+	_request := row(
 		currency,
 		kind,
 		type,
 		detailed
 	)::deribit.private_cancel_all_by_currency_request;
-end;
-$$;
 
-
-create type deribit.private_cancel_all_by_currency_response as (
-	id bigint,
-	jsonrpc text,
-	result float
-);
-comment on column deribit.private_cancel_all_by_currency_response.id is 'The id that was sent in the request';
-comment on column deribit.private_cancel_all_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_cancel_all_by_currency_response.result is 'Total number of successfully cancelled orders';
-
-create or replace function deribit.private_cancel_all_by_currency(params deribit.private_cancel_all_by_currency_request)
-returns deribit.private_cancel_all_by_currency_response
-language plpgsql
-as $$
-declare
-	ret deribit.private_cancel_all_by_currency_response;
-begin
 	with request as (
 		select json_build_object(
 			'method', '/private/cancel_all_by_currency',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -92,12 +85,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_cancel_all_by_currency_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_cancel_all_by_currency is 'Cancels all orders by currency, optionally filtered by instrument kind and/or order type.';

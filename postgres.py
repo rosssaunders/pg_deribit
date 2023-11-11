@@ -1,5 +1,5 @@
 # converts from the documented type to the postgres type
-from models import Enum, Type, FieldType, Function, Field
+from models import Enum, Field, FieldType, Function, Type
 
 
 def escape_postgres_keyword(keyword):
@@ -90,36 +90,24 @@ def default_to_null(field: Field) -> str:
     else:
         return ' default null'
 
-
-def type_to_request_builder(schema: str, type: Type) -> str:
-    res = f"create or replace function {schema}.{type.name}_builder(\n"
-    res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, type.name, f.type)}{default_to_null(f)}' for f in type.fields)
+def invoke_endpoint(schema: str, request_type: Type, function: Function) -> str:
+    res = f"create or replace function {schema}.{function.name}(\n"
+    res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, request_type.name, f.type)}{default_to_null(f)}' for f in request_type.fields)
     res += f"\n)\n"
-    res += f"returns {schema}.{type.name}\n"
-    res += f"language plpgsql\n"
-    res += f"as $$\n"
-    res += f"begin\n"
-    res += f"\treturn row(\n"
-    res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in type.fields)
-    res += f"\n\t)::{schema}.{type.name};\n"
-    res += f"end;\n"
-    res += f"$$;\n"
-
-    return res
-
-
-def invoke_endpoint(schema: str, function: Function) -> str:
-    res = f"create or replace function {schema}.{function.name}(params {schema}.{function.parameters[0].type.name})\n"
     res += f"returns {schema}.{function.response_type.name}\n"
     res += f"language plpgsql\n"
     res += f"as $$\n"
     res += f"declare\n"
-    res += f"\tret {schema}.{function.response_type.name};\n"
+    res += f"\t_request {schema}.{request_type.name};\n"
+    res += f"\t_response {schema}.{function.response_type.name};\n"
     res += f"begin\n"
+    res += f"\t_request := row(\n"
+    res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in request_type.fields)
+    res += f"\n\t)::{schema}.{request_type.name};\n\n"
     res += f"\twith request as (\n"
     res += f"\t\tselect json_build_object(\n"
     res += f"\t\t\t'method', '{function.path}',\n"
-    res += f"\t\t\t'params', jsonb_strip_nulls(to_jsonb(params)),\n"
+    res += f"\t\t\t'params', jsonb_strip_nulls(to_jsonb(_request)),\n"
     res += f"\t\t\t'jsonrpc', '2.0',\n"
     res += f"\t\t\t'id', 3\n"
     res += f"\t\t) as request\n"
@@ -157,12 +145,14 @@ def invoke_endpoint(schema: str, function: Function) -> str:
     res += f"\t\t) as response\n"
     res += f"\t)\n"
     res += f"\tselect\n"
-    res += f"\t\ti.*\n"
+    res += f"\t\ti.id,\n"
+    res += f"\t\ti.jsonrpc,\n"
+    res += f"\t\ti.result\n"
     res += f"\tinto\n"
-    res += f"\t\tret\n"
+    res += f"\t\t_response\n"
     res += f"\tfrom exec\n"
-    res += f"\tcross join lateral jsonb_populate_record(null::{schema}.{function.response_type.name}, convert_from(body, 'utf-8')::jsonb) i;\n"
-    res += f"\treturn ret;\n"
+    res += f"\tcross join lateral jsonb_populate_record(null::{schema}.{function.response_type.name}, convert_from(body, 'utf-8')::jsonb) i;\n\n"
+    res += f"\treturn _response;\n"
     res += f"end;\n"
     res += f"$$;\n"
 

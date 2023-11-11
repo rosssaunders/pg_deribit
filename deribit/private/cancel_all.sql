@@ -1,22 +1,3 @@
-create type deribit.private_cancel_all_request as (
-	detailed boolean
-);
-comment on column deribit.private_cancel_all_request.detailed is 'When detailed is set to true output format is changed. See description. Default: false';
-
-create or replace function deribit.private_cancel_all_request_builder(
-	detailed boolean default null
-)
-returns deribit.private_cancel_all_request
-language plpgsql
-as $$
-begin
-	return row(
-		detailed
-	)::deribit.private_cancel_all_request;
-end;
-$$;
-
-
 create type deribit.private_cancel_all_response as (
 	id bigint,
 	jsonrpc text,
@@ -26,17 +7,29 @@ comment on column deribit.private_cancel_all_response.id is 'The id that was sen
 comment on column deribit.private_cancel_all_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_cancel_all_response.result is 'Total number of successfully cancelled orders';
 
-create or replace function deribit.private_cancel_all(params deribit.private_cancel_all_request)
+create type deribit.private_cancel_all_request as (
+	detailed boolean
+);
+comment on column deribit.private_cancel_all_request.detailed is 'When detailed is set to true output format is changed. See description. Default: false';
+
+create or replace function deribit.private_cancel_all(
+	detailed boolean default null
+)
 returns deribit.private_cancel_all_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_cancel_all_response;
+	_request deribit.private_cancel_all_request;
+	_response deribit.private_cancel_all_response;
 begin
+	_request := row(
+		detailed
+	)::deribit.private_cancel_all_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/cancel_all',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -74,12 +67,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_cancel_all_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_cancel_all is 'This method cancels all users orders and trigger orders within all currencies and instrument kinds.';

@@ -1,28 +1,3 @@
-create type deribit.private_get_order_state_by_label_request_currency as enum ('BTC', 'ETH', 'USDC');
-
-create type deribit.private_get_order_state_by_label_request as (
-	currency deribit.private_get_order_state_by_label_request_currency,
-	label text
-);
-comment on column deribit.private_get_order_state_by_label_request.currency is '(Required) The currency symbol';
-comment on column deribit.private_get_order_state_by_label_request.label is 'user defined label for the order (maximum 64 characters)';
-
-create or replace function deribit.private_get_order_state_by_label_request_builder(
-	currency deribit.private_get_order_state_by_label_request_currency,
-	label text default null
-)
-returns deribit.private_get_order_state_by_label_request
-language plpgsql
-as $$
-begin
-	return row(
-		currency,
-		label
-	)::deribit.private_get_order_state_by_label_request;
-end;
-$$;
-
-
 create type deribit.private_get_order_state_by_label_False as (
 	reject_post_only boolean,
 	label text,
@@ -112,17 +87,35 @@ create type deribit.private_get_order_state_by_label_response as (
 comment on column deribit.private_get_order_state_by_label_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_state_by_label_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create or replace function deribit.private_get_order_state_by_label(params deribit.private_get_order_state_by_label_request)
+create type deribit.private_get_order_state_by_label_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_order_state_by_label_request as (
+	currency deribit.private_get_order_state_by_label_request_currency,
+	label text
+);
+comment on column deribit.private_get_order_state_by_label_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_order_state_by_label_request.label is 'user defined label for the order (maximum 64 characters)';
+
+create or replace function deribit.private_get_order_state_by_label(
+	currency deribit.private_get_order_state_by_label_request_currency,
+	label text default null
+)
 returns deribit.private_get_order_state_by_label_response
 language plpgsql
 as $$
 declare
-	ret deribit.private_get_order_state_by_label_response;
+	_request deribit.private_get_order_state_by_label_request;
+	_response deribit.private_get_order_state_by_label_response;
 begin
+	_request := row(
+		currency,
+		label
+	)::deribit.private_get_order_state_by_label_request;
+
 	with request as (
 		select json_build_object(
 			'method', '/private/get_order_state_by_label',
-			'params', jsonb_strip_nulls(to_jsonb(params)),
+			'params', jsonb_strip_nulls(to_jsonb(_request)),
 			'jsonrpc', '2.0',
 			'id', 3
 		) as request
@@ -160,12 +153,15 @@ begin
 		) as response
 	)
 	select
-		i.*
+		i.id,
+		i.jsonrpc,
+		i.result
 	into
-		ret
+		_response
 	from exec
 	cross join lateral jsonb_populate_record(null::deribit.private_get_order_state_by_label_response, convert_from(body, 'utf-8')::jsonb) i;
-	return ret;
+
+	return _response;
 end;
 $$;
 comment on function deribit.private_get_order_state_by_label is 'Retrieve the state of recent orders with a given label.';
