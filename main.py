@@ -25,8 +25,8 @@ def url_to_type_name(end_point):
     return '_'.join(items[1:])
 
 
-def request_table_to_type(endpoint: str, table, ep: Endpoint):
-    type_name = url_to_type_name(endpoint)
+def request_table_to_type(endpoint: str, table) -> Type:
+    type_name = f"{url_to_type_name(endpoint)}_request"
 
     df = pd.read_html(str(table), )[0]
 
@@ -41,19 +41,23 @@ def request_table_to_type(endpoint: str, table, ep: Endpoint):
             field_type = FieldType(name=row[2], is_enum=False, is_class=False, is_array=False)
         fields.append(Field(name=row[0], type=field_type, required=row[1], comment=row[4]))
 
-    ep.request_types.append(Type(name=f'{type_name}_request', fields=fields, enums=enums))
+    return Type(name=f'{type_name}', fields=fields, enums=enums)
+    # function.endpoint.request_type = Type(name=f'{type_name}', fields=fields, enums=enums)
+    # ep.request_types.append(Type(name=f'{type_name}', fields=fields, enums=enums))
 
 
-def response_table_to_type(end_point: str, table, ep: Endpoint):
-    parent_type_name = url_to_type_name(end_point)
+def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
+    parent_type_name = f"{url_to_type_name(end_point)}_response"
 
     df = pd.read_html(str(table), )[0]
 
     types: Dict[str, Type] = dict()
 
-    current_type = f"{parent_type_name}_response"
+    current_type = parent_type_name
     previous_type = current_type
     types[current_type] = Type(name=current_type, fields=[], enums=[])
+    root_type = types[current_type]
+    result_type = None
     for index, row in df.iterrows():
         if pd.isna(row[0]):
             continue
@@ -72,23 +76,30 @@ def response_table_to_type(end_point: str, table, ep: Endpoint):
             previous_type = current_type
             current_type = new_parent_type_name
             types[current_type] = Type(name=current_type, fields=[], enums=[])
-            continue
 
-        if row[1] == 'array of object':
-            new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
+        elif row[1] == 'array of object':
+            if p.singular_noun(field_name) is False:
+                new_parent_type_name = f"{parent_type_name}_{field_name}"
+            else:
+                new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
+
             field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=True)
             types[previous_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
             previous_type = current_type
             current_type = new_parent_type_name
             types[current_type] = Type(name=current_type, fields=[], enums=[])
+
+        else:
+            type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
+            types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
+
+        if field_name == 'result':
+            result_type = types[current_type]
             continue
 
-        field_name = strip_field_name(str(row[0]))
-        type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
-        types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
-
-    for type_name in types.values():
-        ep.response_types.append(type_name)
+    return root_type, result_type, types.values()
+    # for type_name in types.values():
+    #     function.endpoint.response_types.append(type_name)
 
 
 def download_spec():
@@ -103,48 +114,85 @@ def main():
         download_spec()
 
     with open(f"deribit.html", 'r') as file:
-        response = file.read()
+        response_table = file.read()
 
     exporter = Exporter()
     exporter.set_schema('deribit')
 
     exporter.setup()
 
-    soup = BeautifulSoup(response, "html.parser")
-    h1_tag = soup.find('h1', text='Trading')
+    soup = BeautifulSoup(response_table, "html.parser")
 
-    for sibling in h1_tag.find_next_siblings():
-        if sibling.name == 'h1':
-            break
+    sections = ['Account management', 'Trading', 'Wallet']
 
-        if sibling.name != 'h2':
-            continue
+    for section in sections:
 
-        file_name = '/'.join(sibling.text.split('/')[1:])
-        print(file_name)
+        h1_tag = soup.find('h1', text=section)
 
-        ep = Endpoint(name=file_name, request_types=[], response_types=[], functions=[])
+        for sibling in h1_tag.find_next_siblings():
+            if sibling.name == 'h1':
+                break
 
-        arguments = sibling.find_next_sibling('table')
-        request_table_to_type(sibling.text, arguments, ep)
+            if sibling.name != 'h2':
+                continue
 
-        response = arguments.find_next_sibling('table')
-        response_table_to_type(sibling.text, response, ep)
+            file_name = '/'.join(sibling.text.split('/')[1:])
+            if file_name == 'private/get_user_trades_by_order':
+                print(f'{file_name}: skipping due to invalid documentation')
+                continue
+            else:
+                print(f'{file_name}: processing')
 
-        comment = sibling.find_next_sibling('p')
-        parent_type_name = url_to_type_name(sibling.text)
-        func = Function(
-            name=parent_type_name,
-            path=sibling.text,
-            is_private=True,
-            comment=comment.text,
-            parameters=[],
-            response_type=ep.response_types[0])
-        func.parameters.append(Parameter(name='params', type=ep.request_types[0], comment=''))
-        ep.functions.append(func)
+            parameters_section = sibling.find_next_sibling('h3', text='Parameters')
+            request_type = None
+            if parameters_section.nextSibling.nextSibling.name == 'p':
+                print('Method has no parameters')
+            else:
+                parameters_table = parameters_section.find_next_sibling('table')
+                request_type = request_table_to_type(sibling.text, parameters_table)
 
-        # export to a file
-        exporter.export(ep)
+            response_section = sibling.find_next_sibling('h3', text='Response')
+            response_table = response_section.find_next_sibling('table')
+            root_type, result_type, all_types = response_table_to_type(sibling.text, response_table)
+
+            comment = sibling.find_next_sibling('p')
+            function = Function(name=url_to_type_name(sibling.text),
+                                endpoint=Endpoint(
+                                    name=file_name,
+                                    path=sibling.text,
+                                    request_type=request_type,
+                                    response_type=root_type,
+                                    response_types=all_types),
+                                comment=comment.text,
+                                response_type=result_type
+                                )
+
+            # function = Function(name=file_name,
+            #                     endpoint=Endpoint(
+            #                         name=file_name,
+            #                         path=sibling.text,
+            #                         request_type=Type,
+            #                         response_type=None,
+            #                         request_types=[],
+            #                         response_types=[]),
+            #                     comment='',
+            #                     response_type=Type(name=file_name, fields=[], enums=[])
+            #                     )
+
+            #function.parent_type_name = url_to_type_name(sibling.text)
+            # func = Function(
+            #     name=parent_type_name,
+            #     comment=comment.text,
+            #     response_type=function.response_types[0])
+
+            #if len(ep.request_types) > 0:
+            #    function.parameters.append(Parameter(name='params', type=ep.request_types[0], comment=''))
+            # else:
+            #     func.parameters.append(Parameter(name='params', type=None, comment=''))
+            # ep.functions.append(func)
+
+            # export to a file
+            exporter.export(function)
 
 
 if __name__ == '__main__':

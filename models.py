@@ -39,18 +39,20 @@ class Parameter:
 
 
 @dataclass
-class Function:
+class Endpoint:
     name: str
     path: str
-    is_private: bool
-    comment: str
-    parameters: List[Parameter]
-    response_type: Type
+    request_type: Type  # The type of the request
+    response_type: Type  # The main type to deserialize to
+    response_types: List[Type]  # All the types
 
 
 @dataclass
-class Endpoint:
+class Function:
     name: str
-    request_types: List[Type]
-    response_types: List[Type]
-    functions: List[Function]
+    endpoint: Endpoint
+    # is_private: bool
+    comment: str
+    # parameters: List[Parameter]
+    response_type: Type
+

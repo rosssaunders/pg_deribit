@@ -14,7 +14,7 @@ def escape_postgres_keyword(keyword):
         'new', 'not', 'null', 'of', 'off', 'offset', 'old', 'on', 'only', 'or', 'order',
         'placing', 'primary', 'references', 'returning', 'select', 'session_user',
         'some', 'symmetric', 'table', 'then', 'to', 'trailing', 'true', 'union', 'unique',
-        'user', 'using', 'variadic', 'when', 'where', 'window', 'with'
+        'user', 'using', 'variadic', 'when', 'where', 'window', 'with', 'interval'
     ]
 
     # If the keyword is a reserved keyword, return it wrapped in double quotes
@@ -66,7 +66,7 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
 
 
 def escape_comment(comment: str) -> str:
-    return comment.replace("'", "''")
+    return str(comment).replace("'", "''")
 
 
 def enum_to_type(schema: str, parent_type: str, enum: Enum) -> str:
@@ -90,74 +90,102 @@ def default_to_null(field: Field) -> str:
     else:
         return ' default null'
 
-def invoke_endpoint(schema: str, request_type: Type, function: Function) -> str:
-    res = f"create or replace function {schema}.{function.name}(\n"
-    res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, request_type.name, f.type)}{default_to_null(f)}' for f in request_type.fields)
-    res += f"\n)\n"
-    res += f"returns {schema}.{function.response_type.name}\n"
-    res += f"language plpgsql\n"
-    res += f"as $$\n"
-    res += f"declare\n"
-    res += f"\t_request {schema}.{request_type.name};\n"
-    res += f"\t_response {schema}.{function.response_type.name};\n"
-    res += f"begin\n"
-    res += f"\t_request := row(\n"
-    res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in request_type.fields)
-    res += f"\n\t)::{schema}.{request_type.name};\n\n"
-    res += f"\twith request as (\n"
-    res += f"\t\tselect json_build_object(\n"
-    res += f"\t\t\t'method', '{function.path}',\n"
-    res += f"\t\t\t'params', jsonb_strip_nulls(to_jsonb(_request)),\n"
-    res += f"\t\t\t'jsonrpc', '2.0',\n"
-    res += f"\t\t\t'id', 3\n"
-    res += f"\t\t) as request\n"
-    res += f"\t),\n"
-    res += f"\tauth as (\n"
-    res += f"\t\tselect\n"
-    res += f"\t\t\t'Authorization' as key,\n"
-    res += f"\t\t\t'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value\n"
-    res += f"\t),\n"
-    res += f"\turl as (\n"
-    res += f"\t\tselect format('%s%s', base_url, end_point) as url\n"
-    res += f"\t\tfrom\n"
-    res += f"\t\t(\n"
-    res += f"\t\t\tselect\n"
-    res += f"\t\t\t\t'https://test.deribit.com/api/v2' as base_url,\n"
-    res += f"\t\t\t\t'{function.path}' as end_point\n"
-    res += f"\t\t) as a\n"
-    res += f"\t),\n"
-    res += f"\texec as (\n"
-    res += f"\t\tselect\n"
-    res += f"\t\t\tversion,\n"
-    res += f"\t\t\tstatus,\n"
-    res += f"\t\t\theaders,\n"
-    res += f"\t\t\tbody,\n"
-    res += f"\t\t\terror\n"
-    res += f"\t\tfrom request\n"
-    res += f"\t\tcross join auth\n"
-    res += f"\t\tcross join url\n"
-    res += f"\t\tcross join omni_httpc.http_execute(\n"
-    res += f"\t\t\tomni_httpc.http_request(\n"
-    res += f"\t\t\t\tmethod := 'POST',\n"
-    res += f"\t\t\t\turl := url.url,\n"
-    res += f"\t\t\t\tbody := request.request::text::bytea,\n"
-    res += f"\t\t\t\theaders := array[row (auth.key, auth.value)::omni_http.http_header])\n"
-    res += f"\t\t) as response\n"
-    res += f"\t)\n"
-    res += f"\tselect\n"
-    res += f"\t\ti.id,\n"
-    res += f"\t\ti.jsonrpc,\n"
-    res += f"\t\ti.result\n"
-    res += f"\tinto\n"
-    res += f"\t\t_response\n"
-    res += f"\tfrom exec\n"
-    res += f"\tcross join lateral jsonb_populate_record(null::{schema}.{function.response_type.name}, convert_from(body, 'utf-8')::jsonb) i;\n\n"
-    res += f"\treturn _response;\n"
-    res += f"end;\n"
-    res += f"$$;\n"
 
-    res += f"comment on function {schema}.{function.name} is \'{escape_comment(function.comment)}\';"
+def invoke_endpoint(schema: str, function: Function) -> str:
+    res = f"""create or replace function {schema}.{function.name}("""
+    if function.endpoint.request_type is not None:
+        res += "\n"
+        res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in function.endpoint.request_type.fields)
+        res += "\n"
+    res += f""")"""
+    res += f"""
+returns {schema}.{function.response_type.name}
+language plpgsql
+as $$
+declare
+    _http_response omni_httpc.http_response;"""
+    if function.endpoint.request_type is not None:
+        res += f"\n\t_request {schema}.{function.endpoint.request_type.name};"
+
+    res += """
+    _error_response deribit.error_response;
+begin
+    """
+    if function.endpoint.request_type is not None:
+        res += """_request := row(
+"""
+        res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
+        res += f"""
+    )::{schema}.{function.endpoint.request_type.name};
+"""
+
+    res += f"""
+    with request as (
+        select json_build_object(
+            'method', '{function.endpoint.path}',
+            """
+    if function.endpoint.request_type is None:
+        res += f"""'params', null,"""
+    else:
+        res += """'params', jsonb_strip_nulls(to_jsonb(_request)),"""
+
+    res += f"""
+            'jsonrpc', '2.0',
+            'id', nextval('deribit.jsonrpc_identifier'::regclass)
+        ) as request
+    ),
+    auth as (
+        select
+            'Authorization' as key,
+            'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
+    ),
+    url as (
+        select format('%s%s', base_url, end_point) as url
+        from
+        (
+            select
+                'https://test.deribit.com/api/v2' as base_url,
+                '{function.endpoint.path}' as end_point
+        ) as a
+    )
+    select
+        version,
+        status,
+        headers,
+        body,
+        error
+    into _http_response
+    from request
+    cross join auth
+    cross join url
+    cross join omni_httpc.http_execute(
+        omni_httpc.http_request(
+            method := 'POST',
+            url := url.url,
+            body := request.request::text::bytea,
+            headers := array[row (auth.key, auth.value)::omni_http.http_header])
+    ) as response
+    limit 1;
+    
+    if _http_response.status < 200 or _http_response.status >= 300 then
+        _error_response := jsonb_populate_record(null::deribit.error_response, convert_from(_http_response.body, 'utf-8')::jsonb);
+
+        raise exception using
+            message = (_error_response.error).code::text,
+            detail = coalesce((_error_response.error).message, 'Unknown') ||
+             case
+                when (_error_response.error).data is null then ''
+                 else ':' || (_error_response.error).data
+             end;
+    end if;
+    
+    return (jsonb_populate_record(
+        null::{schema}.{function.endpoint.response_type.name}, 
+        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+
+end;
+$$;
+
+comment on function {schema}.{function.name} is \'{escape_comment(function.comment)}\';"""
 
     return res
-
-

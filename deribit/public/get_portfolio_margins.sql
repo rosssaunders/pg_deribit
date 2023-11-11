@@ -1,0 +1,102 @@
+create type deribit.public_get_portfolio_margins_response_result as (
+
+);
+
+
+create type deribit.public_get_portfolio_margins_response as (
+	id bigint,
+	jsonrpc text,
+	result deribit.public_get_portfolio_margins_response_result
+);
+comment on column deribit.public_get_portfolio_margins_response.id is 'The id that was sent in the request';
+comment on column deribit.public_get_portfolio_margins_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.public_get_portfolio_margins_response.result is 'PM details';
+
+create type deribit.public_get_portfolio_margins_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.public_get_portfolio_margins_request as (
+	currency deribit.public_get_portfolio_margins_request_currency,
+	simulated_positions UNKNOWN - object
+);
+comment on column deribit.public_get_portfolio_margins_request.currency is '(Required) The currency symbol';
+comment on column deribit.public_get_portfolio_margins_request.simulated_positions is 'Object with positions in following form: {InstrumentName1: Position1, InstrumentName2: Position2...}, for example {"BTC-PERPETUAL": -1000.0} (or corresponding URI-encoding for GET). For futures in USD, for options in base currency.';
+
+create or replace function deribit.public_get_portfolio_margins(
+	currency deribit.public_get_portfolio_margins_request_currency,
+	simulated_positions UNKNOWN - object default null
+)
+returns deribit.public_get_portfolio_margins_response_result
+language plpgsql
+as $$
+declare
+    _http_response omni_httpc.http_response;
+	_request deribit.public_get_portfolio_margins_request;
+    _error_response deribit.error_response;
+begin
+    _request := row(
+		currency,
+		simulated_positions
+    )::deribit.public_get_portfolio_margins_request;
+
+    with request as (
+        select json_build_object(
+            'method', '/public/get_portfolio_margins',
+            'params', jsonb_strip_nulls(to_jsonb(_request)),
+            'jsonrpc', '2.0',
+            'id', nextval('deribit.jsonrpc_identifier'::regclass)
+        ) as request
+    ),
+    auth as (
+        select
+            'Authorization' as key,
+            'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
+    ),
+    url as (
+        select format('%s%s', base_url, end_point) as url
+        from
+        (
+            select
+                'https://test.deribit.com/api/v2' as base_url,
+                '/public/get_portfolio_margins' as end_point
+        ) as a
+    )
+    select
+        version,
+        status,
+        headers,
+        body,
+        error
+    into _http_response
+    from request
+    cross join auth
+    cross join url
+    cross join omni_httpc.http_execute(
+        omni_httpc.http_request(
+            method := 'POST',
+            url := url.url,
+            body := request.request::text::bytea,
+            headers := array[row (auth.key, auth.value)::omni_http.http_header])
+    ) as response
+    limit 1;
+    
+    if _http_response.status < 200 or _http_response.status >= 300 then
+        _error_response := jsonb_populate_record(null::deribit.error_response, convert_from(_http_response.body, 'utf-8')::jsonb);
+
+        raise exception using
+            message = (_error_response.error).code::text,
+            detail = coalesce((_error_response.error).message, 'Unknown') ||
+             case
+                when (_error_response.error).data is null then ''
+                 else ':' || (_error_response.error).data
+             end;
+    end if;
+    
+    return (jsonb_populate_record(
+        null::deribit.public_get_portfolio_margins_response, 
+        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+
+end;
+$$;
+
+comment on function deribit.public_get_portfolio_margins is 'Public version of the method calculates portfolio margin info for simulated position. For concrete user position, the private version of the method must be used. The public version of the request has special restricted rate limit (not more than once per a second for the IP).';
+

@@ -1,5 +1,5 @@
 import os
-from models import Endpoint
+from models import Function
 from postgres import enum_to_type, type_to_type, invoke_endpoint
 
 
@@ -16,22 +16,28 @@ class Exporter:
         os.makedirs(f"{self.schema}/private", exist_ok=True)
         os.makedirs(f"{self.schema}/public", exist_ok=True)
 
-    def export(self, end_point: Endpoint):
+    def export(self, function: Function):
 
-        with open(f"{self.schema}/{end_point.name}.sql", 'w') as file:
+        with open(f"{self.schema}/{function.endpoint.name}.sql", 'w') as file:
 
-            for tpe in reversed(end_point.response_types):
+            for tpe in reversed(function.endpoint.response_types):
                 file.write(type_to_type(self.schema, tpe))
                 file.write('\n\n')
 
-            for tpe in end_point.request_types:
-                for enum in tpe.enums:
-                    file.write(enum_to_type(self.schema, tpe.name, enum))
+            if function.endpoint.request_type is not None:
+                for enum in function.endpoint.request_type.enums:
+                    file.write(enum_to_type(self.schema, function.endpoint.request_type.name, enum))
                     file.write('\n\n')
 
-                file.write(type_to_type(self.schema, tpe))
+                file.write(type_to_type(self.schema, function.endpoint.request_type))
                 file.write('\n\n')
 
-            for fun in end_point.functions:
-                file.write(invoke_endpoint(self.schema, fun.parameters[0].type, fun))
-                file.write('\n\n')
+            file.write(invoke_endpoint(self.schema, function))
+            file.write('\n\n')
+
+            # fun = function
+            # if len(fun.endpoint.) > 0:
+            #     file.write(invoke_endpoint(self.schema, fun.parameters[0].type, function))
+            # else:
+            #     file.write(invoke_endpoint(self.schema, None, function))
+
