@@ -88,7 +88,7 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
 
             current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True)
             if field_name == 'result':
                 result_type = types[current_type]
             continue
@@ -96,8 +96,11 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
         if row[1] == 'array of string':
             field_type = FieldType(name='string', is_enum=False, is_class=False, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
-        elif row[1] == 'object or string':
+        elif row[1] == 'object or string':  # TODO - sum type here
             field_type = FieldType(name='string', is_enum=False, is_class=False, is_array=False)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+        elif row[1] == 'array of [price, amount]':
+            field_type = FieldType(name='number', is_enum=False, is_class=False, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
         else:
             type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
@@ -130,7 +133,7 @@ def main():
 
     soup = BeautifulSoup(response_table, "html.parser")
 
-    sections = ['Account management', 'Trading', 'Wallet']
+    sections = ['Market data']  # ['Account management', 'Trading', 'Wallet']
 
     for section in sections:
 

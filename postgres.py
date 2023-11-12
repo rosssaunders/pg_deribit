@@ -106,6 +106,10 @@ def invoke_endpoint(schema: str, function: Function) -> str:
         res += f"""
 returns {convert_type_postgres(schema, function.response_type.name, FieldType(name=function.response_type.name, is_enum=False, is_class=False, is_array=False))}
 """
+    elif function.response_type.is_array:
+        res += f"""
+returns setof {schema}.{function.response_type.name}
+"""
     else:
         res += f"""
 returns {schema}.{function.response_type.name}
@@ -131,15 +135,26 @@ begin
 """
     else:
         res += f"""
-    _http_response:= (select deribit.jsonrpc_request('{function.endpoint.path}', null));
+    _http_response:= (select deribit.jsonrpc_request('{function.endpoint.path}', null::text));
 """
-
-    res += f"""
+    if function.response_type.is_array:
+        res += f"""
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::{schema}.{function.endpoint.response_type.name},
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result)).*
+    );
+"""
+    else:
+        res += f"""
     return (jsonb_populate_record(
         null::{schema}.{function.endpoint.response_type.name}, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+"""
 
-end
+    res += f"""end
 $$;
 
 comment on function {schema}.{function.name} is \'{escape_comment(function.comment)}\';"""

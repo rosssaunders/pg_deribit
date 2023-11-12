@@ -30,6 +30,7 @@ class Type:
     is_primitive: bool
     fields: List[Field]
     enums: List[Enum]
+    is_array: bool = False
 
 
 @dataclass

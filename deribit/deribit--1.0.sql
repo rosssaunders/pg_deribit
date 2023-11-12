@@ -34,12 +34,22 @@ declare
 begin
 
     with jsonrpc as (
-        select json_build_object(
-            'method', url,
-            'params', case when request is distinct from null then jsonb_strip_nulls(to_jsonb(request)) end,
-            'jsonrpc', '2.0',
-            'id', nextval('deribit.jsonrpc_identifier'::regclass)
-        ) as payload
+        select
+            case
+                when request is distinct from null then
+                    json_build_object(
+                            'method', url,
+                            'params', jsonb_strip_nulls(to_jsonb(request)),
+                            'jsonrpc', '2.0',
+                            'id', nextval('deribit.jsonrpc_identifier'::regclass)
+                    )
+                else
+                    json_build_object(
+                            'method', url,
+                            'jsonrpc', '2.0',
+                            'id', nextval('deribit.jsonrpc_identifier'::regclass)
+                    )
+            end as payload
     ),
     auth as (
         select
@@ -91,39 +101,7 @@ begin
     end;
 $$;
 
-comment on function deribit.jsonrpc_request is 'Deribit extension internal function.';
-
-drop function if exists deribit.jsonrpc_request_test(text, deribit.private_buy_request);
-drop function if exists deribit.jsonrpc_request_test(text, anyelement);
-
-create or replace function deribit.jsonrpc_request_test(url text, _request deribit.private_buy_request)
-returns json
-language plpgsql
-as $$
-begin
-    return case when _request is distinct from null then json_strip_nulls(to_json(_request)) end;
-    return case when _request is null then json_strip_nulls(to_json(_request)) end;
-end
-$$;
 
 
-select deribit.jsonrpc_request_test('/private/buy', null);
 
-select deribit.jsonrpc_request_test('/private/buy', row(
-		'ETH-PERPETUAL',
-		10,
-		'market',
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null,
-		null
-    )::deribit.private_buy_request);
+
