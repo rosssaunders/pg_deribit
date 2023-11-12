@@ -49,6 +49,8 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
         return 'text'
     elif field_type.name == 'string':
         return 'text'
+    elif field_type.name == 'text':
+        return 'text'
     elif field_type.name == 'float':
         return 'float'
     elif field_type.name == 'number':
@@ -59,6 +61,8 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
         return 'bigint'
     elif field_type.name == 'boolean':
         return 'boolean'
+    elif field_type.name == 'object':
+        return 'jsonb'
     elif field_type.name == 'array':
         return 'text[]'
     else:
@@ -108,13 +112,12 @@ returns {schema}.{function.response_type.name}
 """
     res += """language plpgsql
 as $$
-declare
-    _http_response omni_httpc.http_response;"""
+declare"""
     if function.endpoint.request_type is not None:
         res += f"\n\t_request {schema}.{function.endpoint.request_type.name};"
 
     res += """
-    _error_response deribit.error_response;
+    _http_response omni_httpc.http_response;
 begin
     """
     if function.endpoint.request_type is not None:
@@ -123,73 +126,20 @@ begin
         res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
         res += f"""
     )::{schema}.{function.endpoint.request_type.name};
+    
+    _http_response := (select deribit.jsonrpc_request('{function.endpoint.path}', _request));
+"""
+    else:
+        res += f"""
+    _http_response:= (select deribit.jsonrpc_request('{function.endpoint.path}', null));
 """
 
     res += f"""
-    with request as (
-        select json_build_object(
-            'method', '{function.endpoint.path}',
-            """
-    if function.endpoint.request_type is None:
-        res += f"""'params', null,"""
-    else:
-        res += """'params', jsonb_strip_nulls(to_jsonb(_request)),"""
-
-    res += f"""
-            'jsonrpc', '2.0',
-            'id', nextval('deribit.jsonrpc_identifier'::regclass)
-        ) as request
-    ),
-    auth as (
-        select
-            'Authorization' as key,
-            'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64') as value
-    ),
-    url as (
-        select format('%s%s', base_url, end_point) as url
-        from
-        (
-            select
-                'https://test.deribit.com/api/v2' as base_url,
-                '{function.endpoint.path}' as end_point
-        ) as a
-    )
-    select
-        version,
-        status,
-        headers,
-        body,
-        error
-    into _http_response
-    from request
-    cross join auth
-    cross join url
-    cross join omni_httpc.http_execute(
-        omni_httpc.http_request(
-            method := 'POST',
-            url := url.url,
-            body := request.request::text::bytea,
-            headers := array[row (auth.key, auth.value)::omni_http.http_header])
-    ) as response
-    limit 1;
-    
-    if _http_response.status < 200 or _http_response.status >= 300 then
-        _error_response := jsonb_populate_record(null::deribit.error_response, convert_from(_http_response.body, 'utf-8')::jsonb);
-
-        raise exception using
-            message = (_error_response.error).code::text,
-            detail = coalesce((_error_response.error).message, 'Unknown') ||
-             case
-                when (_error_response.error).data is null then ''
-                 else ':' || (_error_response.error).data
-             end;
-    end if;
-    
     return (jsonb_populate_record(
         null::{schema}.{function.endpoint.response_type.name}, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
 
-end;
+end
 $$;
 
 comment on function {schema}.{function.name} is \'{escape_comment(function.comment)}\';"""

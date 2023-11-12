@@ -42,8 +42,6 @@ def request_table_to_type(endpoint: str, table) -> Type:
         fields.append(Field(name=row[0], type=field_type, required=row[1], comment=row[4]))
 
     return Type(name=f'{type_name}', fields=fields, enums=enums, is_primitive=False)
-    # function.endpoint.request_type = Type(name=f'{type_name}', fields=fields, enums=enums)
-    # ep.request_types.append(Type(name=f'{type_name}', fields=fields, enums=enums))
 
 
 def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
@@ -95,8 +93,15 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
                 result_type = types[current_type]
             continue
 
-        type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
-        types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
+        if row[1] == 'array of string':
+            field_type = FieldType(name='string', is_enum=False, is_class=False, is_array=True)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+        elif row[1] == 'object or string':
+            field_type = FieldType(name='string', is_enum=False, is_class=False, is_array=False)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+        else:
+            type_name = FieldType(name=row[1], is_enum=False, is_class=False, is_array=False)
+            types[current_type].fields.append(Field(name=field_name, type=type_name, comment=comment, required=False))
 
         if field_name == 'result':
             result_type = Type(name=type_name.name, fields=[], enums=[], is_primitive=True)
