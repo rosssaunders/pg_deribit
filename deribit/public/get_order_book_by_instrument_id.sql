@@ -1,0 +1,124 @@
+create type deribit.public_get_order_book_by_instrument_id_response_stats as (
+	high float,
+	low float,
+	price_change float,
+	volume float,
+	volume_usd float,
+	timestamp bigint,
+	underlying_index float,
+	underlying_price float
+);
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.high is 'Highest price during 24h';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.low is 'Lowest price during 24h';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.price_change is '24-hour price change expressed as a percentage, null if there weren''t any trades';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.volume is 'Volume during last 24h in base currency';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.volume_usd is 'Volume in usd (futures only)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.underlying_index is 'Name of the underlying future, or index_price (options only)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_stats.underlying_price is 'Underlying price for implied volatility calculations (options only)';
+
+create type deribit.public_get_order_book_by_instrument_id_response_greeks as (
+	delta float,
+	gamma float,
+	rho float,
+	theta float,
+	vega float,
+	index_price float,
+	instrument_name text,
+	interest_rate float,
+	last_price float,
+	mark_iv float,
+	mark_price float,
+	max_price float,
+	min_price float,
+	open_interest float,
+	settlement_price float,
+	state text,
+	stats deribit.public_get_order_book_by_instrument_id_response_stats
+);
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.delta is '(Only for option) The delta value for the option';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.gamma is '(Only for option) The gamma value for the option';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.rho is '(Only for option) The rho value for the option';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.theta is '(Only for option) The theta value for the option';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.vega is '(Only for option) The vega value for the option';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.index_price is 'Current index price';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.instrument_name is 'Unique instrument identifier';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.interest_rate is 'Interest rate used in implied volatility calculations (options only)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.last_price is 'The price for the last trade';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.mark_iv is '(Only for option) implied volatility for mark price';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.mark_price is 'The mark price for the instrument';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.max_price is 'The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.min_price is 'The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.open_interest is 'The total amount of outstanding contracts in the corresponding amount units. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.settlement_price is 'Optional (not added for spot). The settlement price for the instrument. Only when state = open';
+comment on column deribit.public_get_order_book_by_instrument_id_response_greeks.state is 'The state of the order book. Possible values are open and closed.';
+
+create type deribit.public_get_order_book_by_instrument_id_response_result as (
+	ask_iv float,
+	asks float[],
+	best_ask_amount float,
+	best_ask_price float,
+	best_bid_amount float,
+	best_bid_price float,
+	bid_iv float,
+	bids float[],
+	current_funding float,
+	delivery_price float,
+	funding_8h float,
+	greeks deribit.public_get_order_book_by_instrument_id_response_greeks
+);
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.ask_iv is '(Only for option) implied volatility for best ask';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.asks is 'List of asks';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.best_ask_amount is 'It represents the requested order size of all best asks';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.best_ask_price is 'The current best ask price, null if there aren''t any asks';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.best_bid_amount is 'It represents the requested order size of all best bids';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.best_bid_price is 'The current best bid price, null if there aren''t any bids';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.bid_iv is '(Only for option) implied volatility for best bid';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.bids is 'List of bids';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.current_funding is 'Current funding (perpetual only)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.delivery_price is 'The settlement price for the instrument. Only when state = closed';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.funding_8h is 'Funding 8h (perpetual only)';
+comment on column deribit.public_get_order_book_by_instrument_id_response_result.greeks is 'Only for options';
+
+create type deribit.public_get_order_book_by_instrument_id_response as (
+	id bigint,
+	jsonrpc text,
+	result deribit.public_get_order_book_by_instrument_id_response_result
+);
+comment on column deribit.public_get_order_book_by_instrument_id_response.id is 'The id that was sent in the request';
+comment on column deribit.public_get_order_book_by_instrument_id_response.jsonrpc is 'The JSON-RPC version (2.0)';
+
+create type deribit.public_get_order_book_by_instrument_id_request_depth as enum ('1', '5', '10', '20', '50', '100', '1000', '10000');
+
+create type deribit.public_get_order_book_by_instrument_id_request as (
+	instrument_id bigint,
+	depth deribit.public_get_order_book_by_instrument_id_request_depth
+);
+comment on column deribit.public_get_order_book_by_instrument_id_request.instrument_id is '(Required) The instrument ID for which to retrieve the order book, see public/get_instruments to obtain instrument IDs.';
+comment on column deribit.public_get_order_book_by_instrument_id_request.depth is 'The number of entries to return for bids and asks.';
+
+create or replace function deribit.public_get_order_book_by_instrument_id(
+	instrument_id bigint,
+	depth deribit.public_get_order_book_by_instrument_id_request_depth default null
+)
+returns deribit.public_get_order_book_by_instrument_id_response_result
+language plpgsql
+as $$
+declare
+	_request deribit.public_get_order_book_by_instrument_id_request;
+    _http_response omni_httpc.http_response;
+begin
+    _request := row(
+		instrument_id,
+		depth
+    )::deribit.public_get_order_book_by_instrument_id_request;
+    
+    _http_response := (select deribit.jsonrpc_request('/public/get_order_book_by_instrument_id', _request));
+
+    return (jsonb_populate_record(
+        null::deribit.public_get_order_book_by_instrument_id_response, 
+        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+end
+$$;
+
+comment on function deribit.public_get_order_book_by_instrument_id is 'Retrieves the order book, along with other market values for a given instrument ID.';

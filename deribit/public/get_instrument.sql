@@ -1,0 +1,110 @@
+create type deribit.public_get_instrument_response_tick_size_steps as (
+	above_price float,
+	tick_size float
+);
+comment on column deribit.public_get_instrument_response_tick_size_steps.above_price is 'The price from which the increased tick size applies';
+comment on column deribit.public_get_instrument_response_tick_size_steps.tick_size is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+
+create type deribit.public_get_instrument_response_result as (
+	base_currency text,
+	block_trade_commission float,
+	block_trade_min_trade_amount float,
+	block_trade_tick_size float,
+	contract_size bigint,
+	counter_currency text,
+	creation_timestamp bigint,
+	expiration_timestamp bigint,
+	future_type text,
+	instrument_id bigint,
+	instrument_name text,
+	is_active boolean,
+	kind text,
+	maker_commission float,
+	max_leverage bigint,
+	max_liquidation_commission float,
+	min_trade_amount float,
+	option_type text,
+	price_index text,
+	quote_currency text,
+	rfq boolean,
+	settlement_currency text,
+	settlement_period text,
+	strike float,
+	taker_commission float,
+	tick_size float,
+	tick_size_steps deribit.public_get_instrument_response_tick_size_steps
+);
+comment on column deribit.public_get_instrument_response_result.base_currency is 'The underlying currency being traded.';
+comment on column deribit.public_get_instrument_response_result.block_trade_commission is 'Block Trade commission for instrument.';
+comment on column deribit.public_get_instrument_response_result.block_trade_min_trade_amount is 'Minimum amount for block trading.';
+comment on column deribit.public_get_instrument_response_result.block_trade_tick_size is 'Specifies minimal price change for block trading.';
+comment on column deribit.public_get_instrument_response_result.contract_size is 'Contract size for instrument.';
+comment on column deribit.public_get_instrument_response_result.counter_currency is 'Counter currency for the instrument.';
+comment on column deribit.public_get_instrument_response_result.creation_timestamp is 'The time when the instrument was first created (milliseconds since the UNIX epoch).';
+comment on column deribit.public_get_instrument_response_result.expiration_timestamp is 'The time when the instrument will expire (milliseconds since the UNIX epoch).';
+comment on column deribit.public_get_instrument_response_result.future_type is 'Future type (only for futures).';
+comment on column deribit.public_get_instrument_response_result.instrument_id is 'Instrument ID';
+comment on column deribit.public_get_instrument_response_result.instrument_name is 'Unique instrument identifier';
+comment on column deribit.public_get_instrument_response_result.is_active is 'Indicates if the instrument can currently be traded.';
+comment on column deribit.public_get_instrument_response_result.kind is 'Instrument kind: "future", "option", "spot", "future_combo", "option_combo"';
+comment on column deribit.public_get_instrument_response_result.maker_commission is 'Maker commission for instrument.';
+comment on column deribit.public_get_instrument_response_result.max_leverage is 'Maximal leverage for instrument (only for futures).';
+comment on column deribit.public_get_instrument_response_result.max_liquidation_commission is 'Maximal liquidation trade commission for instrument (only for futures).';
+comment on column deribit.public_get_instrument_response_result.min_trade_amount is 'Minimum amount for trading. For perpetual and futures - in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.public_get_instrument_response_result.option_type is 'The option type (only for options).';
+comment on column deribit.public_get_instrument_response_result.price_index is 'Name of price index that is used for this instrument';
+comment on column deribit.public_get_instrument_response_result.quote_currency is 'The currency in which the instrument prices are quoted.';
+comment on column deribit.public_get_instrument_response_result.rfq is 'Whether or not RFQ is active on the instrument.';
+comment on column deribit.public_get_instrument_response_result.settlement_currency is 'Optional (not added for spot). Settlement currency for the instrument.';
+comment on column deribit.public_get_instrument_response_result.settlement_period is 'Optional (not added for spot). The settlement period.';
+comment on column deribit.public_get_instrument_response_result.strike is 'The strike value (only for options).';
+comment on column deribit.public_get_instrument_response_result.taker_commission is 'Taker commission for instrument.';
+comment on column deribit.public_get_instrument_response_result.tick_size is 'Specifies minimal price change and, as follows, the number of decimal places for instrument prices.';
+
+create type deribit.public_get_instrument_response as (
+	id bigint,
+	jsonrpc text,
+	result deribit.public_get_instrument_response_result
+);
+comment on column deribit.public_get_instrument_response.id is 'The id that was sent in the request';
+comment on column deribit.public_get_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
+
+create type deribit.public_get_instrument_request as (
+	instrument_name text
+);
+comment on column deribit.public_get_instrument_request.instrument_name is '(Required) Instrument name';
+
+create or replace function deribit.public_get_instrument(
+	instrument_name text
+)
+returns deribit.public_get_instrument_response_result
+language plpgsql
+as $$
+declare
+	_request deribit.public_get_instrument_request;
+    _http_response omni_httpc.http_response;
+begin
+    _request := row(
+		instrument_name
+    )::deribit.public_get_instrument_request;
+    
+    _http_response := (select deribit.jsonrpc_request('/public/get_instrument', row(
+		'ETH-PERPETUAL'
+    )::deribit.public_get_instrument_request));
+
+    return (jsonb_populate_record(
+        null::deribit.public_get_instrument_response, 
+        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+end
+$$;
+
+comment on function deribit.public_get_instrument is 'Retrieves information about instrument';
+
+select *
+from deribit.public_get_instrument('BTC-PERPETUAL');
+
+
+
+select convert_from((deribit.jsonrpc_request('/public/get_instrument', row(
+		'ETH-PERPETUAL'
+    )::deribit.public_get_instrument_request)).body, 'utf-8')::jsonb;
