@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_open_orders_by_label', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_open_orders_by_label_response_result as (
 	reject_post_only boolean,
 	label text,
@@ -100,7 +104,7 @@ create or replace function deribit.private_get_open_orders_by_label(
 	currency deribit.private_get_open_orders_by_label_request_currency,
 	label text default null
 )
-returns deribit.private_get_open_orders_by_label_response_result
+returns setof deribit.private_get_open_orders_by_label_response_result
 language plpgsql
 as $$
 declare
@@ -112,12 +116,15 @@ begin
 		label
     )::deribit.private_get_open_orders_by_label_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_open_orders_by_label', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_label', _request);
 
-    return (jsonb_populate_record(
-        null::deribit.private_get_open_orders_by_label_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_get_open_orders_by_label_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 

@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_instrument', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_instrument_response_tick_size_steps as (
 	above_price float,
 	tick_size float
@@ -88,9 +92,7 @@ begin
 		instrument_name
     )::deribit.public_get_instrument_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_instrument', row(
-		'ETH-PERPETUAL'
-    )::deribit.public_get_instrument_request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_instrument', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_instrument_response, 
@@ -100,11 +102,3 @@ $$;
 
 comment on function deribit.public_get_instrument is 'Retrieves information about instrument';
 
-select *
-from deribit.public_get_instrument('BTC-PERPETUAL');
-
-
-
-select convert_from((deribit.jsonrpc_request('/public/get_instrument', row(
-		'ETH-PERPETUAL'
-    )::deribit.public_get_instrument_request)).body, 'utf-8')::jsonb;

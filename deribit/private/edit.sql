@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/edit', now(), 0, '0 secs'::interval);
+
 create type deribit.private_edit_response_trade as (
 	advanced text,
 	amount float,
@@ -221,12 +225,11 @@ begin
 		valid_until
     )::deribit.private_edit_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/edit', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/edit', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_edit_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

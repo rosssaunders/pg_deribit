@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_index_price', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_index_price_response_result as (
 	estimated_delivery_price float,
 	index_price float
@@ -34,7 +38,7 @@ begin
 		index_name
     )::deribit.public_get_index_price_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_index_price', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_index_price', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_index_price_response, 

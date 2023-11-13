@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_funding_chart_data', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_funding_chart_data_response_datum as (
 	index_price float,
 	interest_8h float,
@@ -48,7 +52,7 @@ begin
 		length
     )::deribit.public_get_funding_chart_data_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_funding_chart_data', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_funding_chart_data', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_funding_chart_data_response, 

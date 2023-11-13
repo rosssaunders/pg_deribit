@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/enable_affiliate_program', now(), 0, '0 secs'::interval);
+
 create type deribit.private_enable_affiliate_program_response as (
 	id bigint,
 	jsonrpc text,
@@ -15,12 +19,11 @@ declare
     _http_response omni_httpc.http_response;
 begin
     
-    _http_response:= (select deribit.jsonrpc_request('/private/enable_affiliate_program', null));
+    _http_response:= deribit.internal_jsonrpc_request('/private/enable_affiliate_program');
 
     return (jsonb_populate_record(
         null::deribit.private_enable_affiliate_program_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_position', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_position_response_result as (
 	average_price float,
 	average_price_usd float,
@@ -78,12 +82,11 @@ begin
 		instrument_name
     )::deribit.private_get_position_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_position', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_position', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_get_position_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

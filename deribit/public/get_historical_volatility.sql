@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_historical_volatility', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_historical_volatility_response as (
 	id bigint,
 	jsonrpc text,
@@ -27,7 +31,7 @@ begin
 		currency
     )::deribit.public_get_historical_volatility_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_historical_volatility', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_historical_volatility', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_historical_volatility_response, 

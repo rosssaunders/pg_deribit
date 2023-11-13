@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_last_settlements_by_currency', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_last_settlements_by_currency_response_settlement as (
 	funded float,
 	funding float,
@@ -82,7 +86,7 @@ begin
 		search_start_timestamp
     )::deribit.public_get_last_settlements_by_currency_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_last_settlements_by_currency', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_currency', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_last_settlements_by_currency_response, 

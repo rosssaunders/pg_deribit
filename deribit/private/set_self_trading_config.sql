@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/set_self_trading_config', now(), 0, '0 secs'::interval);
+
 create type deribit.private_set_self_trading_config_response as (
 	id bigint,
 	jsonrpc text,
@@ -32,12 +36,11 @@ begin
 		extended_to_subaccounts
     )::deribit.private_set_self_trading_config_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/set_self_trading_config', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/set_self_trading_config', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_set_self_trading_config_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

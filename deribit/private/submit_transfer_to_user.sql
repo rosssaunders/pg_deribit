@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/submit_transfer_to_user', now(), 0, '0 secs'::interval);
+
 create type deribit.private_submit_transfer_to_user_response_result as (
 	amount float,
 	created_timestamp bigint,
@@ -56,12 +60,11 @@ begin
 		destination
     )::deribit.private_submit_transfer_to_user_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/submit_transfer_to_user', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/submit_transfer_to_user', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_submit_transfer_to_user_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

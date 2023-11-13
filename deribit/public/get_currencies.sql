@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_currencies', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_currencies_response_withdrawal_priority as (
 	name text,
 	value float
@@ -38,22 +42,17 @@ declare
     _http_response omni_httpc.http_response;
 begin
     
-    _http_response:= (select deribit.jsonrpc_request('/public/get_currencies', null::text));
+    _http_response:= deribit.internal_jsonrpc_request('/public/get_currencies');
 
     return query (
         select (unnest
              ((jsonb_populate_record(
                         null::deribit.public_get_currencies_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 end
 $$;
 
 comment on function deribit.public_get_currencies is 'Retrieves all cryptocurrencies supported by the API.';
 
-select *
-from deribit.public_get_currencies();
-
-select *
-from deribit.public_get_instrument('ETH-PERPETUAL');

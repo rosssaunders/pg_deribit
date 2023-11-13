@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_trade_volumes', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_trade_volumes_response_result as (
 	calls_volume float,
 	calls_volume_30d float,
@@ -54,14 +58,14 @@ begin
 		extended
     )::deribit.public_get_trade_volumes_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_trade_volumes', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_trade_volumes', _request);
 
     return query (
         select (unnest
              ((jsonb_populate_record(
                         null::deribit.public_get_trade_volumes_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 end
 $$;

@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_order_book_by_instrument_id', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_order_book_by_instrument_id_response_stats as (
 	high float,
 	low float,
@@ -113,7 +117,7 @@ begin
 		depth
     )::deribit.public_get_order_book_by_instrument_id_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_order_book_by_instrument_id', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_order_book_by_instrument_id', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_order_book_by_instrument_id_response, 
@@ -122,3 +126,4 @@ end
 $$;
 
 comment on function deribit.public_get_order_book_by_instrument_id is 'Retrieves the order book, along with other market values for a given instrument ID.';
+

@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_current_deposit_address', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_current_deposit_address_response_result as (
 	address text,
 	creation_timestamp bigint,
@@ -39,12 +43,11 @@ begin
 		currency
     )::deribit.private_get_current_deposit_address_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_current_deposit_address', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_current_deposit_address', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_get_current_deposit_address_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

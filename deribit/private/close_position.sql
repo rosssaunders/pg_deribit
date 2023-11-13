@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/close_position', now(), 0, '0 secs'::interval);
+
 create type deribit.private_close_position_response_trade as (
 	advanced text,
 	amount float,
@@ -189,12 +193,11 @@ begin
 		price
     )::deribit.private_close_position_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/close_position', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/close_position', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_close_position_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

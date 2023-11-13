@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_instruments', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_instruments_response_tick_size_steps as (
 	above_price float,
 	tick_size float
@@ -100,14 +104,14 @@ begin
 		expired
     )::deribit.public_get_instruments_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_instruments', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_instruments', _request);
 
     return query (
         select (unnest
              ((jsonb_populate_record(
                         null::deribit.public_get_instruments_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 end
 $$;

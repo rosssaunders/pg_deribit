@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_transfers', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_transfers_response_datum as (
 	amount float,
 	created_timestamp bigint,
@@ -62,12 +66,11 @@ begin
 		"offset"
     )::deribit.private_get_transfers_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_transfers', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_transfers', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_get_transfers_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

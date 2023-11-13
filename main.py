@@ -133,7 +133,7 @@ def main():
 
     soup = BeautifulSoup(response_table, "html.parser")
 
-    sections = ['Market data']  # ['Account management', 'Trading', 'Wallet']
+    sections = ['Market data', 'Account management', 'Trading', 'Wallet']
 
     for section in sections:
 

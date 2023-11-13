@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/toggle_portfolio_margining', now(), 0, '0 secs'::interval);
+
 create type deribit.private_toggle_portfolio_margining_response_old_state as (
 	available_balance float,
 	initial_margin_rate float,
@@ -47,7 +51,7 @@ create or replace function deribit.private_toggle_portfolio_margining(
 	enabled boolean,
 	dry_run boolean default null
 )
-returns deribit.private_toggle_portfolio_margining_response_result
+returns setof deribit.private_toggle_portfolio_margining_response_result
 language plpgsql
 as $$
 declare
@@ -60,12 +64,15 @@ begin
 		dry_run
     )::deribit.private_toggle_portfolio_margining_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/toggle_portfolio_margining', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/toggle_portfolio_margining', _request);
 
-    return (jsonb_populate_record(
-        null::deribit.private_toggle_portfolio_margining_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_toggle_portfolio_margining_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 

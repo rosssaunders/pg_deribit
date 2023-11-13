@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/send_rfq', now(), 0, '0 secs'::interval);
+
 create type deribit.private_send_rfq_response as (
 	id bigint,
 	jsonrpc text,
@@ -36,12 +40,11 @@ begin
 		side
     )::deribit.private_send_rfq_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/send_rfq', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/send_rfq', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_send_rfq_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

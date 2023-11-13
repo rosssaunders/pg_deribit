@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_account_summary', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_account_summary_response_options_theta_map as (
 	creation_timestamp bigint,
 	available_withdrawal_funds float,
@@ -203,12 +207,11 @@ begin
 		extended
     )::deribit.private_get_account_summary_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_account_summary', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_account_summary', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_get_account_summary_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

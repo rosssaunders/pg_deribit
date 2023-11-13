@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_volatility_index_data', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_volatility_index_data_response_result as (
 	continuation bigint,
 	data text[]
@@ -49,7 +53,7 @@ begin
 		resolution
     )::deribit.public_get_volatility_index_data_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_volatility_index_data', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_volatility_index_data', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_volatility_index_data_response, 

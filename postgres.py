@@ -131,11 +131,11 @@ begin
         res += f"""
     )::{schema}.{function.endpoint.request_type.name};
     
-    _http_response := (select deribit.jsonrpc_request('{function.endpoint.path}', _request));
+    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}', _request);
 """
     else:
         res += f"""
-    _http_response:= (select deribit.jsonrpc_request('{function.endpoint.path}', null::text));
+    _http_response:= deribit.internal_jsonrpc_request('{function.endpoint.path}');
 """
     if function.response_type.is_array:
         res += f"""
@@ -144,7 +144,7 @@ begin
              ((jsonb_populate_record(
                         null::{schema}.{function.endpoint.response_type.name},
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 """
     else:

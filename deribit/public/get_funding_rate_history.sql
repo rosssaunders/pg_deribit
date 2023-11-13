@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_funding_rate_history', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_funding_rate_history_response_result as (
 	index_price float,
 	interest_1h float,
@@ -46,14 +50,14 @@ begin
 		end_timestamp
     )::deribit.public_get_funding_rate_history_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_funding_rate_history', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_funding_rate_history', _request);
 
     return query (
         select (unnest
              ((jsonb_populate_record(
                         null::deribit.public_get_funding_rate_history_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 end
 $$;

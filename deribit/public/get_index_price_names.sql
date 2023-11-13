@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_index_price_names', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_index_price_names_response as (
 	id bigint,
 	jsonrpc text,
@@ -14,7 +18,7 @@ declare
     _http_response omni_httpc.http_response;
 begin
     
-    _http_response:= (select deribit.jsonrpc_request('/public/get_index_price_names', null::text));
+    _http_response:= deribit.internal_jsonrpc_request('/public/get_index_price_names');
 
     return (jsonb_populate_record(
         null::deribit.public_get_index_price_names_response, 

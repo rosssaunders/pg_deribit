@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_new_announcements', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_new_announcements_response_result as (
 	body text,
 	confirmation boolean,
@@ -22,19 +26,22 @@ comment on column deribit.private_get_new_announcements_response.id is 'The id t
 comment on column deribit.private_get_new_announcements_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 create or replace function deribit.private_get_new_announcements()
-returns deribit.private_get_new_announcements_response_result
+returns setof deribit.private_get_new_announcements_response_result
 language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;
 begin
     
-    _http_response:= (select deribit.jsonrpc_request('/private/get_new_announcements', null));
+    _http_response:= deribit.internal_jsonrpc_request('/private/get_new_announcements');
 
-    return (jsonb_populate_record(
-        null::deribit.private_get_new_announcements_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_get_new_announcements_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 

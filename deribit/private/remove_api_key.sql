@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/remove_api_key', now(), 0, '0 secs'::interval);
+
 create type deribit.private_remove_api_key_response as (
 	id bigint,
 	jsonrpc text,
@@ -26,12 +30,11 @@ begin
 		id
     )::deribit.private_remove_api_key_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/remove_api_key', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/remove_api_key', _request);
 
     return (jsonb_populate_record(
         null::deribit.private_remove_api_key_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
 end
 $$;
 

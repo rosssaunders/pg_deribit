@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_subaccounts_details', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_subaccounts_details_response_position as (
 	average_price float,
 	average_price_usd float,
@@ -159,7 +163,7 @@ create or replace function deribit.private_get_subaccounts_details(
 	currency deribit.private_get_subaccounts_details_request_currency,
 	with_open_orders boolean default null
 )
-returns deribit.private_get_subaccounts_details_response_result
+returns setof deribit.private_get_subaccounts_details_response_result
 language plpgsql
 as $$
 declare
@@ -171,12 +175,15 @@ begin
 		with_open_orders
     )::deribit.private_get_subaccounts_details_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_subaccounts_details', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_subaccounts_details', _request);
 
-    return (jsonb_populate_record(
-        null::deribit.private_get_subaccounts_details_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_get_subaccounts_details_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 

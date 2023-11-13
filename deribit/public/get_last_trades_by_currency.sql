@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_last_trades_by_currency', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_last_trades_by_currency_response_trade as (
 	amount float,
 	block_trade_id text,
@@ -96,7 +100,7 @@ begin
 		sorting
     )::deribit.public_get_last_trades_by_currency_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_last_trades_by_currency', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_last_trades_by_currency', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_last_trades_by_currency_response, 

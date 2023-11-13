@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_book_summary_by_instrument', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_book_summary_by_instrument_response_result as (
 	ask_price float,
 	base_currency text,
@@ -72,14 +76,14 @@ begin
 		instrument_name
     )::deribit.public_get_book_summary_by_instrument_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_book_summary_by_instrument', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument', _request);
 
     return query (
         select (unnest
              ((jsonb_populate_record(
                         null::deribit.public_get_book_summary_by_instrument_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)).*
+             ).result))
     );
 end
 $$;

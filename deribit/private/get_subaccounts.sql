@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/get_subaccounts', now(), 0, '0 secs'::interval);
+
 create type deribit.private_get_subaccounts_response_eth as (
 	available_funds float,
 	available_withdrawal_funds float,
@@ -71,7 +75,7 @@ comment on column deribit.private_get_subaccounts_request.with_portfolio is 'nan
 create or replace function deribit.private_get_subaccounts(
 	with_portfolio boolean default null
 )
-returns deribit.private_get_subaccounts_response_result
+returns setof deribit.private_get_subaccounts_response_result
 language plpgsql
 as $$
 declare
@@ -82,12 +86,15 @@ begin
 		with_portfolio
     )::deribit.private_get_subaccounts_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/get_subaccounts', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/get_subaccounts', _request);
 
-    return (jsonb_populate_record(
-        null::deribit.private_get_subaccounts_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_get_subaccounts_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 

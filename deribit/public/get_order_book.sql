@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_order_book', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_order_book_response_stats as (
 	high float,
 	low float,
@@ -113,7 +117,7 @@ begin
 		depth
     )::deribit.public_get_order_book_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_order_book', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_order_book', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_order_book_response, 

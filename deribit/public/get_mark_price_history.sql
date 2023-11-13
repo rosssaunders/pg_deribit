@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('public/get_mark_price_history', now(), 0, '0 secs'::interval);
+
 create type deribit.public_get_mark_price_history_response as (
 	id bigint,
 	jsonrpc text,
@@ -34,7 +38,7 @@ begin
 		end_timestamp
     )::deribit.public_get_mark_price_history_request;
     
-    _http_response := (select deribit.jsonrpc_request('/public/get_mark_price_history', _request));
+    _http_response := deribit.internal_jsonrpc_request('/public/get_mark_price_history', _request);
 
     return (jsonb_populate_record(
         null::deribit.public_get_mark_price_history_response, 

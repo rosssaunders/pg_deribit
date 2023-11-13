@@ -1,3 +1,7 @@
+insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
+values 
+('private/set_mmp_config', now(), 0, '0 secs'::interval);
+
 create type deribit.private_set_mmp_config_response_result as (
 	delta_limit float,
 	frozen_time bigint,
@@ -41,7 +45,7 @@ create or replace function deribit.private_set_mmp_config(
 	quantity_limit float default null,
 	delta_limit float default null
 )
-returns deribit.private_set_mmp_config_response_result
+returns setof deribit.private_set_mmp_config_response_result
 language plpgsql
 as $$
 declare
@@ -56,12 +60,15 @@ begin
 		delta_limit
     )::deribit.private_set_mmp_config_request;
     
-    _http_response := (select deribit.jsonrpc_request('/private/set_mmp_config', _request));
+    _http_response := deribit.internal_jsonrpc_request('/private/set_mmp_config', _request);
 
-    return (jsonb_populate_record(
-        null::deribit.private_set_mmp_config_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-
+    return query (
+        select (unnest
+             ((jsonb_populate_record(
+                        null::deribit.private_set_mmp_config_response,
+                        convert_from(_http_response.body, 'utf-8')::jsonb)
+             ).result))
+    );
 end
 $$;
 
