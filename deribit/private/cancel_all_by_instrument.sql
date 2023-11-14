@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/cancel_all_by_instrument', now(), 0, '0 secs'::interval);
+('private/cancel_all_by_instrument', null, 0, '0 secs'::interval);
 
 create type deribit.private_cancel_all_by_instrument_response as (
 	id bigint,

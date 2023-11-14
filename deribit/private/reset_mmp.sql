@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/reset_mmp', now(), 0, '0 secs'::interval);
+('private/reset_mmp', null, 0, '0 secs'::interval);
 
 create type deribit.private_reset_mmp_response as (
 	id bigint,

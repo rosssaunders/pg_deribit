@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/cancel_withdrawal', now(), 0, '0 secs'::interval);
+('private/cancel_withdrawal', null, 0, '0 secs'::interval);
 
 create type deribit.private_cancel_withdrawal_response_result as (
 	address text,

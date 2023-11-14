@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_trigger_order_history', now(), 0, '0 secs'::interval);
+('private/get_trigger_order_history', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_trigger_order_history_response_entry as (
 	amount float,

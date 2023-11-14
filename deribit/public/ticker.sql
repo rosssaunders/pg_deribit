@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/ticker', now(), 0, '0 secs'::interval);
+('public/ticker', null, 0, '0 secs'::interval);
 
 create type deribit.public_ticker_response_stats as (
 	high float,

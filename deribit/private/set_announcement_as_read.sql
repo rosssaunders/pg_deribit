@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/set_announcement_as_read', now(), 0, '0 secs'::interval);
+('private/set_announcement_as_read', null, 0, '0 secs'::interval);
 
 create type deribit.private_set_announcement_as_read_response as (
 	id bigint,

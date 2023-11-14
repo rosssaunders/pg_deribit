@@ -20,7 +20,21 @@ create type deribit.internal_error_response as (
 
 create sequence deribit.internal_jsonrpc_identifier;
 
-create table deribit.internal_endpoint_rate_limit (key text primary key, last_call timestamptz, calls int, time_waiting interval);
+create table deribit.internal_endpoint_rate_limit (
+    key text primary key,
+    last_call timestamptz null,
+    calls int not null default 0,
+    time_waiting interval not null default '0 seconds',
+    limit_per_second int not null default '0'
+);
+
+create table deribit.internal_archive (
+    id bigint not null,
+    created_at timestamptz not null default now(),
+    url text not null,
+    request jsonb not null,
+    response jsonb not null
+);
 
 select pg_catalog.pg_extension_config_dump('deribit.internal_endpoint_rate_limit', '');
 
@@ -63,16 +77,27 @@ returns omni_httpc.http_response
 language plpgsql
 as $$
 declare
+    _http_request omni_httpc.http_request;
     _http_response omni_httpc.http_response;
 	_error_response deribit.internal_error_response;
     _request_payload jsonb;
+    _id bigint;
 begin
+    _id := nextval('deribit.internal_jsonrpc_identifier'::regclass);
+
     _request_payload := json_build_object(
                         'method', url::text,
                         'jsonrpc', '2.0',
                         'params', jsonb_strip_nulls(to_jsonb(request)),
-                        'id', nextval('deribit.internal_jsonrpc_identifier'::regclass)
+                        'id', _id
                         ) as payload;
+
+    _http_request := omni_httpc.http_request(
+            method := 'POST',
+            url := deribit.internal_url_endpoint(url),
+            body := _request_payload::text::bytea,
+            headers := array[deribit.internal_build_auth_headers()]
+    );
 
     select
         version,
@@ -81,13 +106,7 @@ begin
         body,
         error
     into _http_response
-    from omni_httpc.http_execute(
-        omni_httpc.http_request(
-            method := 'POST',
-            url := deribit.internal_url_endpoint(url),
-            body := _request_payload::text::bytea,
-            headers := array[deribit.internal_build_auth_headers()]
-    )) as response
+    from omni_httpc.http_execute(_http_request) as response
     limit 1;
 
     if _http_response.status < 200 or _http_response.status >= 300 then
@@ -101,6 +120,9 @@ begin
                  else ':' || (_error_response.error).data
              end;
     end if;
+
+    insert into deribit.internal_archive(id, url, request, response)
+    values (_id, url, _request_payload, to_json(_http_response));
 
     return _http_response;
 

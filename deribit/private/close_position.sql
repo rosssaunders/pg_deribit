@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/close_position', now(), 0, '0 secs'::interval);
+('private/close_position', null, 0, '0 secs'::interval);
 
 create type deribit.private_close_position_response_trade as (
 	advanced text,

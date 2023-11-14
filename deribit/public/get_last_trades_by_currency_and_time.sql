@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_last_trades_by_currency_and_time', now(), 0, '0 secs'::interval);
+('public/get_last_trades_by_currency_and_time', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_last_trades_by_currency_and_time_response_trade as (
 	amount float,

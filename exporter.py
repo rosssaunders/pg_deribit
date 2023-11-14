@@ -22,7 +22,7 @@ class Exporter:
 
             file.write(f"""insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('{function.endpoint.name}', now(), 0, '0 secs'::interval);""")
+('{function.endpoint.name}', null, 0, '0 secs'::interval);""")
             file.write('\n\n')
 
             for tpe in reversed(function.endpoint.response_types):

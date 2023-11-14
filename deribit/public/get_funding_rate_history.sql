@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_funding_rate_history', now(), 0, '0 secs'::interval);
+('public/get_funding_rate_history', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_funding_rate_history_response_result as (
 	index_price float,

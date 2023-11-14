@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/toggle_subaccount_login', now(), 0, '0 secs'::interval);
+('private/toggle_subaccount_login', null, 0, '0 secs'::interval);
 
 create type deribit.private_toggle_subaccount_login_response as (
 	id bigint,

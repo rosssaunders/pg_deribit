@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/enable_affiliate_program', now(), 0, '0 secs'::interval);
+('private/enable_affiliate_program', null, 0, '0 secs'::interval);
 
 create type deribit.private_enable_affiliate_program_response as (
 	id bigint,

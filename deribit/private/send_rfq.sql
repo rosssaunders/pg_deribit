@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/send_rfq', now(), 0, '0 secs'::interval);
+('private/send_rfq', null, 0, '0 secs'::interval);
 
 create type deribit.private_send_rfq_response as (
 	id bigint,

@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/disable_api_key', now(), 0, '0 secs'::interval);
+('private/disable_api_key', null, 0, '0 secs'::interval);
 
 create type deribit.private_disable_api_key_response_result as (
 	client_id text,

@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_currencies', now(), 0, '0 secs'::interval);
+('public/get_currencies', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_currencies_response_withdrawal_priority as (
 	name text,

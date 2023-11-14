@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_book_summary_by_currency', now(), 0, '0 secs'::interval);
+('public/get_book_summary_by_currency', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_book_summary_by_currency_response_result as (
 	ask_price float,

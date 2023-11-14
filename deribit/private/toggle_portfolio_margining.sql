@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/toggle_portfolio_margining', now(), 0, '0 secs'::interval);
+('private/toggle_portfolio_margining', null, 0, '0 secs'::interval);
 
 create type deribit.private_toggle_portfolio_margining_response_old_state as (
 	available_balance float,

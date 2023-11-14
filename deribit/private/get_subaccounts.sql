@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_subaccounts', now(), 0, '0 secs'::interval);
+('private/get_subaccounts', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_subaccounts_response_eth as (
 	available_funds float,

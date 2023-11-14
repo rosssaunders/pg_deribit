@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_current_deposit_address', now(), 0, '0 secs'::interval);
+('private/get_current_deposit_address', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_current_deposit_address_response_result as (
 	address text,

@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/cancel', now(), 0, '0 secs'::interval);
+('private/cancel', null, 0, '0 secs'::interval);
 
 create type deribit.private_cancel_response_result as (
 	reject_post_only boolean,

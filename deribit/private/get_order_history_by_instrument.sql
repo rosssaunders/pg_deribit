@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_order_history_by_instrument', now(), 0, '0 secs'::interval);
+('private/get_order_history_by_instrument', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_order_history_by_instrument_response_result as (
 	reject_post_only boolean,

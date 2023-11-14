@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_index_price_names', now(), 0, '0 secs'::interval);
+('public/get_index_price_names', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_index_price_names_response as (
 	id bigint,

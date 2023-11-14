@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_access_log', now(), 0, '0 secs'::interval);
+('private/get_access_log', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_access_log_response_result as (
 	city text,

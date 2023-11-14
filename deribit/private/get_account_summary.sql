@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/get_account_summary', now(), 0, '0 secs'::interval);
+('private/get_account_summary', null, 0, '0 secs'::interval);
 
 create type deribit.private_get_account_summary_response_options_theta_map as (
 	creation_timestamp bigint,

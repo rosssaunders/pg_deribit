@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/edit_by_label', now(), 0, '0 secs'::interval);
+('private/edit_by_label', null, 0, '0 secs'::interval);
 
 create type deribit.private_edit_by_label_response_trade as (
 	advanced text,

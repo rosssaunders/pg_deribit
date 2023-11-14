@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/submit_transfer_to_user', now(), 0, '0 secs'::interval);
+('private/submit_transfer_to_user', null, 0, '0 secs'::interval);
 
 create type deribit.private_submit_transfer_to_user_response_result as (
 	amount float,

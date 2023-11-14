@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_mark_price_history', now(), 0, '0 secs'::interval);
+('public/get_mark_price_history', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_mark_price_history_response as (
 	id bigint,

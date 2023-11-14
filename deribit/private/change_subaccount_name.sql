@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('private/change_subaccount_name', now(), 0, '0 secs'::interval);
+('private/change_subaccount_name', null, 0, '0 secs'::interval);
 
 create type deribit.private_change_subaccount_name_response as (
 	id bigint,

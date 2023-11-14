@@ -1,6 +1,6 @@
 insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
 values 
-('public/get_instrument', now(), 0, '0 secs'::interval);
+('public/get_instrument', null, 0, '0 secs'::interval);
 
 create type deribit.public_get_instrument_response_tick_size_steps as (
 	above_price float,
