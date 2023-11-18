@@ -1,0 +1,30 @@
+create or replace function deribit.private_create_api_key(
+	max_scope text,
+	name text default null,
+	public_key text default null,
+	enabled_features text[] default null
+)
+returns deribit.private_create_api_key_response_result
+language plpgsql
+as $$
+declare
+	_request deribit.private_create_api_key_request;
+    _http_response omni_httpc.http_response;
+begin
+    _request := row(
+		max_scope,
+		name,
+		public_key,
+		enabled_features
+    )::deribit.private_create_api_key_request;
+    
+    _http_response := deribit.internal_jsonrpc_request('/private/create_api_key', _request);
+
+    return (jsonb_populate_record(
+        null::deribit.private_create_api_key_response, 
+        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
+end
+$$;
+
+comment on function deribit.private_create_api_key is 'Creates new api key with given scope. Important notes';
+

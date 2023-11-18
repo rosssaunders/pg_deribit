@@ -1,0 +1,38 @@
+create type deribit.private_change_api_key_name_response_result as (
+	client_id text,
+	client_secret text,
+	"default" boolean,
+	enabled boolean,
+	enabled_features text[],
+	id bigint,
+	max_scope text,
+	name text,
+	public_key text,
+	timestamp bigint
+);
+comment on column deribit.private_change_api_key_name_response_result.client_id is 'Client identifier used for authentication';
+comment on column deribit.private_change_api_key_name_response_result.client_secret is 'Client secret or MD5 fingerprint of public key used for authentication';
+comment on column deribit.private_change_api_key_name_response_result."default" is 'Informs whether this api key is default (field is deprecated and will be removed in the future)';
+comment on column deribit.private_change_api_key_name_response_result.enabled is 'Informs whether api key is enabled and can be used for authentication';
+comment on column deribit.private_change_api_key_name_response_result.enabled_features is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key';
+comment on column deribit.private_change_api_key_name_response_result.id is 'key identifier';
+comment on column deribit.private_change_api_key_name_response_result.max_scope is 'Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope';
+comment on column deribit.private_change_api_key_name_response_result.name is 'Api key name that can be displayed in transaction log';
+comment on column deribit.private_change_api_key_name_response_result.public_key is 'PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)';
+comment on column deribit.private_change_api_key_name_response_result.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
+
+create type deribit.private_change_api_key_name_response as (
+	id bigint,
+	jsonrpc text,
+	result deribit.private_change_api_key_name_response_result
+);
+comment on column deribit.private_change_api_key_name_response.id is 'The id that was sent in the request';
+comment on column deribit.private_change_api_key_name_response.jsonrpc is 'The JSON-RPC version (2.0)';
+
+create type deribit.private_change_api_key_name_request as (
+	id bigint,
+	name text
+);
+comment on column deribit.private_change_api_key_name_request.id is '(Required) Id of key';
+comment on column deribit.private_change_api_key_name_request.name is '(Required) Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)';
+

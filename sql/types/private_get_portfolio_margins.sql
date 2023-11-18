@@ -1,0 +1,25 @@
+create type deribit.private_get_portfolio_margins_response_result as (
+
+);
+
+
+create type deribit.private_get_portfolio_margins_response as (
+	id bigint,
+	jsonrpc text,
+	result deribit.private_get_portfolio_margins_response_result
+);
+comment on column deribit.private_get_portfolio_margins_response.id is 'The id that was sent in the request';
+comment on column deribit.private_get_portfolio_margins_response.jsonrpc is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_get_portfolio_margins_response.result is 'PM details';
+
+create type deribit.private_get_portfolio_margins_request_currency as enum ('BTC', 'ETH', 'USDC');
+
+create type deribit.private_get_portfolio_margins_request as (
+	currency deribit.private_get_portfolio_margins_request_currency,
+	add_positions boolean,
+	simulated_positions jsonb
+);
+comment on column deribit.private_get_portfolio_margins_request.currency is '(Required) The currency symbol';
+comment on column deribit.private_get_portfolio_margins_request.add_positions is 'If true, adds simulated positions to current positions, otherwise uses only simulated positions. By default true';
+comment on column deribit.private_get_portfolio_margins_request.simulated_positions is 'Object with positions in following form: {InstrumentName1: Position1, InstrumentName2: Position2...}, for example {"BTC-PERPETUAL": -1000.0} (or corresponding URI-encoding for GET). For futures in USD, for options in base currency.';
+

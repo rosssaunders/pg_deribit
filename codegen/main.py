@@ -154,11 +154,11 @@ def main():
             if sibling.name != 'h2':
                 continue
 
-            file_name = '/'.join(sibling.text.split('/')[1:])
-            if file_name == 'private/get_user_trades_by_order':
+            file_name = '_'.join(sibling.text.split('/')[1:])
+            if file_name == 'private_get_user_trades_by_order':
                 print(f'{file_name}: skipping due to invalid documentation')
                 continue
-            elif file_name == 'public/get_portfolio_margins':
+            elif file_name == 'public_get_portfolio_margins':
                 print(f'{file_name}: skipping due to invalid documentation')
                 continue
             else:

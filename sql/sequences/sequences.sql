@@ -1,0 +1,1 @@
+create sequence deribit.internal_jsonrpc_identifier;
