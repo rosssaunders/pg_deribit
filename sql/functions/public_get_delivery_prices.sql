@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_delivery_prices', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_delivery_prices');
+
     return (jsonb_populate_record(
         null::deribit.public_get_delivery_prices_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

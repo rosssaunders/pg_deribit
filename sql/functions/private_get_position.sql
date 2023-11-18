@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_position', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/get_position');
+
     return (jsonb_populate_record(
         null::deribit.private_get_position_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_self_trading_config', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/set_self_trading_config');
+
     return (jsonb_populate_record(
         null::deribit.private_set_self_trading_config_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

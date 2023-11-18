@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/submit_transfer_to_user', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/submit_transfer_to_user');
+
     return (jsonb_populate_record(
         null::deribit.private_submit_transfer_to_user_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

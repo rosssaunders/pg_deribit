@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_contract_size', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_contract_size');
+
     return (jsonb_populate_record(
         null::deribit.public_get_contract_size_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

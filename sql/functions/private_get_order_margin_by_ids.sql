@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_order_margin_by_ids', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/get_order_margin_by_ids');
+
     return query (
         select *
 		from unnest(

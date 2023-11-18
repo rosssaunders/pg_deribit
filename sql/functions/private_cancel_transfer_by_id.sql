@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/cancel_transfer_by_id', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/cancel_transfer_by_id');
+
     return (jsonb_populate_record(
         null::deribit.private_cancel_transfer_by_id_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

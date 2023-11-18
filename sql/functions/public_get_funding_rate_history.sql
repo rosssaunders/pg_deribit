@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_funding_rate_history', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_history');
+
     return query (
         select *
 		from unnest(

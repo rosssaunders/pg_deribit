@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_current_deposit_address', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/get_current_deposit_address');
+
     return (jsonb_populate_record(
         null::deribit.private_get_current_deposit_address_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

@@ -8,6 +8,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/create_subaccount', null::text);
 
+    perform deribit.matching_engine_request_log_call('/private/create_subaccount');
+
     return (jsonb_populate_record(
         null::deribit.private_create_subaccount_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

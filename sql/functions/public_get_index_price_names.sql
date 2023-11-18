@@ -8,6 +8,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_index_price_names', null::text);
 
+    perform deribit.matching_engine_request_log_call('/public/get_index_price_names');
+
     return (jsonb_populate_record(
         null::deribit.public_get_index_price_names_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

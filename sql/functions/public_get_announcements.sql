@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_announcements', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_announcements');
+
     return query (
         select *
 		from unnest(

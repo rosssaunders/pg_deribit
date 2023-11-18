@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_instruments', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_instruments');
+
     return query (
         select *
 		from unnest(

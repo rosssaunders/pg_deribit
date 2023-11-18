@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_trade_volumes', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_trade_volumes');
+
     return query (
         select *
 		from unnest(

@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/send_rfq', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/send_rfq');
+
     return (jsonb_populate_record(
         null::deribit.private_send_rfq_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

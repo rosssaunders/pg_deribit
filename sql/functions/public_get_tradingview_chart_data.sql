@@ -20,6 +20,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_tradingview_chart_data', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_tradingview_chart_data');
+
     return (jsonb_populate_record(
         null::deribit.public_get_tradingview_chart_data_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

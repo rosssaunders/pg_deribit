@@ -34,6 +34,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/edit', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/edit');
+
     return (jsonb_populate_record(
         null::deribit.private_edit_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

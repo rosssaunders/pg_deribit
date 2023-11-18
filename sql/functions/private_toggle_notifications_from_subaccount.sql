@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/toggle_notifications_from_subaccount', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/toggle_notifications_from_subaccount');
+
     return (jsonb_populate_record(
         null::deribit.private_toggle_notifications_from_subaccount_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

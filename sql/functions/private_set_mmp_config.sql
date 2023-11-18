@@ -22,6 +22,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_mmp_config', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/set_mmp_config');
+
     return query (
         select *
 		from unnest(

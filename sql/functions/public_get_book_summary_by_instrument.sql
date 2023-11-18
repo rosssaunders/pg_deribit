@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_book_summary_by_instrument');
+
     return query (
         select *
 		from unnest(

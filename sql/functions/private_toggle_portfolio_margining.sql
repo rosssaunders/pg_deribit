@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/toggle_portfolio_margining', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/toggle_portfolio_margining');
+
     return query (
         select *
 		from unnest(

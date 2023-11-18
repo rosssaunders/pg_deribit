@@ -137,6 +137,12 @@ begin
         res += f"""
     _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}', null::text);
 """
+
+    # invoke the rate limiter
+    res += f"""
+    perform deribit.matching_engine_request_log_call('{function.endpoint.path}');
+"""
+
     if function.response_type.is_array:
         res += f"""
     return query (

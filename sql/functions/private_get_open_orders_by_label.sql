@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_label', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/get_open_orders_by_label');
+
     return query (
         select *
 		from unnest(

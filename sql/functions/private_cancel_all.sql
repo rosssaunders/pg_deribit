@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/cancel_all', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/cancel_all');
+
     return (jsonb_populate_record(
         null::deribit.private_cancel_all_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

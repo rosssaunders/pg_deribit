@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_mark_price_history', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_mark_price_history');
+
     return (jsonb_populate_record(
         null::deribit.public_get_mark_price_history_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

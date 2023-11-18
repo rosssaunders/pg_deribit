@@ -8,6 +8,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_new_announcements', null::text);
 
+    perform deribit.matching_engine_request_log_call('/private/get_new_announcements');
+
     return query (
         select *
 		from unnest(

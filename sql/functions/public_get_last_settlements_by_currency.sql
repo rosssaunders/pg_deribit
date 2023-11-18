@@ -22,6 +22,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_currency', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_last_settlements_by_currency');
+
     return (jsonb_populate_record(
         null::deribit.public_get_last_settlements_by_currency_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/reset_mmp', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/reset_mmp');
+
     return (jsonb_populate_record(
         null::deribit.private_reset_mmp_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

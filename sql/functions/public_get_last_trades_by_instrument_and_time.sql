@@ -22,6 +22,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_last_trades_by_instrument_and_time', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_last_trades_by_instrument_and_time');
+
     return (jsonb_populate_record(
         null::deribit.public_get_last_trades_by_instrument_and_time_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

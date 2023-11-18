@@ -14,6 +14,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_supported_index_names', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_supported_index_names');
+
     return (jsonb_populate_record(
         null::deribit.public_get_supported_index_names_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

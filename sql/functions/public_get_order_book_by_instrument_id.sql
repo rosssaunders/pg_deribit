@@ -16,6 +16,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_order_book_by_instrument_id', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_order_book_by_instrument_id');
+
     return (jsonb_populate_record(
         null::deribit.public_get_order_book_by_instrument_id_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;

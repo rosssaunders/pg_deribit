@@ -8,6 +8,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/list_api_keys', null::text);
 
+    perform deribit.matching_engine_request_log_call('/private/list_api_keys');
+
     return query (
         select *
 		from unnest(

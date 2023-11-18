@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_currency', _request);
 
+    perform deribit.matching_engine_request_log_call('/private/get_open_orders_by_currency');
+
     return query (
         select *
 		from unnest(

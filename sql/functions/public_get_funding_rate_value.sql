@@ -18,6 +18,8 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_funding_rate_value', _request);
 
+    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_value');
+
     return (jsonb_populate_record(
         null::deribit.public_get_funding_rate_value_response, 
         convert_from(_http_response.body, 'utf-8')::jsonb)).result;
