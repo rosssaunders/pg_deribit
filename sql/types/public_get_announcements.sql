@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_announcements_response_result cascade;
 create type deribit.public_get_announcements_response_result as (
 	body text,
 	confirmation boolean,
@@ -13,6 +14,7 @@ comment on column deribit.public_get_announcements_response_result.important is 
 comment on column deribit.public_get_announcements_response_result.publication_timestamp is 'The timestamp (milliseconds since the Unix epoch) of announcement publication';
 comment on column deribit.public_get_announcements_response_result.title is 'The title of the announcement';
 
+drop type if exists deribit.public_get_announcements_response cascade;
 create type deribit.public_get_announcements_response as (
 	id bigint,
 	jsonrpc text,
@@ -21,6 +23,7 @@ create type deribit.public_get_announcements_response as (
 comment on column deribit.public_get_announcements_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_announcements_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.public_get_announcements_request cascade;
 create type deribit.public_get_announcements_request as (
 	start_timestamp bigint,
 	count bigint

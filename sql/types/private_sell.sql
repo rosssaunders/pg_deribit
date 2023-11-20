@@ -1,3 +1,4 @@
+drop type if exists deribit.private_sell_response_trade cascade;
 create type deribit.private_sell_response_trade as (
 	advanced text,
 	amount float,
@@ -12,7 +13,7 @@ create type deribit.private_sell_response_trade as (
 	instrument_name text,
 	iv float,
 	label text,
-	legs text[],
+	legs UNKNOWN - array,
 	liquidation text,
 	liquidity text,
 	mark_price float,
@@ -65,6 +66,7 @@ comment on column deribit.private_sell_response_trade.trade_id is 'Unique (per c
 comment on column deribit.private_sell_response_trade.trade_seq is 'The sequence number of the trade within instrument';
 comment on column deribit.private_sell_response_trade.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
+drop type if exists deribit.private_sell_response_order cascade;
 create type deribit.private_sell_response_order as (
 	reject_post_only boolean,
 	label text,
@@ -147,11 +149,13 @@ comment on column deribit.private_sell_response_order.creation_timestamp is 'The
 comment on column deribit.private_sell_response_order.average_price is 'Average fill price of the order';
 comment on column deribit.private_sell_response_order.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
+drop type if exists deribit.private_sell_response_result cascade;
 create type deribit.private_sell_response_result as (
 	"order" deribit.private_sell_response_order
 );
 
 
+drop type if exists deribit.private_sell_response cascade;
 create type deribit.private_sell_response as (
 	id bigint,
 	jsonrpc text,
@@ -160,14 +164,19 @@ create type deribit.private_sell_response as (
 comment on column deribit.private_sell_response.id is 'The id that was sent in the request';
 comment on column deribit.private_sell_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_sell_request_type as enum ('limit', 'stop_limit', 'take_limit', 'market', 'stop_market', 'take_market', 'market_limit', 'trailing_stop');
+drop type if exists deribit.private_sell_request_type cascade;
+create type deribit.private_sell_request_type as enum ('stop_limit', 'stop_market', 'trailing_stop', 'take_market', 'market', 'take_limit', 'market_limit', 'limit');
 
-create type deribit.private_sell_request_time_in_force as enum ('good_til_cancelled', 'good_til_day', 'fill_or_kill', 'immediate_or_cancel');
+drop type if exists deribit.private_sell_request_time_in_force cascade;
+create type deribit.private_sell_request_time_in_force as enum ('fill_or_kill', 'immediate_or_cancel', 'good_til_day', 'good_til_cancelled');
 
-create type deribit.private_sell_request_trigger as enum ('index_price', 'mark_price', 'last_price');
+drop type if exists deribit.private_sell_request_trigger cascade;
+create type deribit.private_sell_request_trigger as enum ('last_price', 'index_price', 'mark_price');
 
+drop type if exists deribit.private_sell_request_advanced cascade;
 create type deribit.private_sell_request_advanced as enum ('usd', 'implv');
 
+drop type if exists deribit.private_sell_request cascade;
 create type deribit.private_sell_request as (
 	instrument_name text,
 	amount float,

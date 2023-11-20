@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_email_language_response cascade;
 create type deribit.private_get_email_language_response as (
 	id bigint,
 	jsonrpc text,

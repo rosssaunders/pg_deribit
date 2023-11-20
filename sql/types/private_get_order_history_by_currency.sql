@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_order_history_by_currency_response_result cascade;
 create type deribit.private_get_order_history_by_currency_response_result as (
 	reject_post_only boolean,
 	label text,
@@ -79,6 +80,7 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result.average_price is 'Average fill price of the order';
 comment on column deribit.private_get_order_history_by_currency_response_result.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
+drop type if exists deribit.private_get_order_history_by_currency_response cascade;
 create type deribit.private_get_order_history_by_currency_response as (
 	id bigint,
 	jsonrpc text,
@@ -87,10 +89,13 @@ create type deribit.private_get_order_history_by_currency_response as (
 comment on column deribit.private_get_order_history_by_currency_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_history_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_order_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_order_history_by_currency_request_currency cascade;
+create type deribit.private_get_order_history_by_currency_request_currency as enum ('USDC', 'ETH', 'BTC');
 
-create type deribit.private_get_order_history_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
+drop type if exists deribit.private_get_order_history_by_currency_request_kind cascade;
+create type deribit.private_get_order_history_by_currency_request_kind as enum ('option', 'future_combo', 'combo', 'option_combo', 'spot', 'future', 'any');
 
+drop type if exists deribit.private_get_order_history_by_currency_request cascade;
 create type deribit.private_get_order_history_by_currency_request as (
 	currency deribit.private_get_order_history_by_currency_request_currency,
 	kind deribit.private_get_order_history_by_currency_request_kind,

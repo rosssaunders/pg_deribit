@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_trigger_order_history_response_entry cascade;
 create type deribit.private_get_trigger_order_history_response_entry as (
 	amount float,
 	direction text,
@@ -35,12 +36,14 @@ comment on column deribit.private_get_trigger_order_history_response_entry.trigg
 comment on column deribit.private_get_trigger_order_history_response_entry.trigger_order_id is 'Id of the user order used for the trigger-order reference before triggering';
 comment on column deribit.private_get_trigger_order_history_response_entry.trigger_price is 'Trigger price (Only for future trigger orders)';
 
+drop type if exists deribit.private_get_trigger_order_history_response_result cascade;
 create type deribit.private_get_trigger_order_history_response_result as (
 	continuation text,
 	entries deribit.private_get_trigger_order_history_response_entry[]
 );
 comment on column deribit.private_get_trigger_order_history_response_result.continuation is 'Continuation token for pagination.';
 
+drop type if exists deribit.private_get_trigger_order_history_response cascade;
 create type deribit.private_get_trigger_order_history_response as (
 	id bigint,
 	jsonrpc text,
@@ -49,8 +52,10 @@ create type deribit.private_get_trigger_order_history_response as (
 comment on column deribit.private_get_trigger_order_history_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_trigger_order_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_trigger_order_history_request_currency cascade;
+create type deribit.private_get_trigger_order_history_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_trigger_order_history_request cascade;
 create type deribit.private_get_trigger_order_history_request as (
 	currency deribit.private_get_trigger_order_history_request_currency,
 	instrument_name text,

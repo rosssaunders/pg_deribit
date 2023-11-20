@@ -1,3 +1,4 @@
+drop function if exists deribit.private_cancel_all_by_kind_or_type;
 create or replace function deribit.private_cancel_all_by_kind_or_type(
 	currency UNKNOWN - string or array of strings,
 	kind deribit.private_cancel_all_by_kind_or_type_request_kind default null,
@@ -11,7 +12,10 @@ declare
 	_request deribit.private_cancel_all_by_kind_or_type_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/cancel_all_by_kind_or_type');
+    
+_request := row(
 		currency,
 		kind,
 		type,
@@ -19,8 +23,6 @@ begin
     )::deribit.private_cancel_all_by_kind_or_type_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/cancel_all_by_kind_or_type', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/cancel_all_by_kind_or_type');
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_all_by_kind_or_type_response, 

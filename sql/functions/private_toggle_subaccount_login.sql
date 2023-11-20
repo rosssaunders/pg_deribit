@@ -1,3 +1,4 @@
+drop function if exists deribit.private_toggle_subaccount_login;
 create or replace function deribit.private_toggle_subaccount_login(
 	sid bigint,
 	state deribit.private_toggle_subaccount_login_request_state
@@ -9,14 +10,15 @@ declare
 	_request deribit.private_toggle_subaccount_login_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/toggle_subaccount_login');
+    
+_request := row(
 		sid,
 		state
     )::deribit.private_toggle_subaccount_login_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/toggle_subaccount_login', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/toggle_subaccount_login');
 
     return (jsonb_populate_record(
         null::deribit.private_toggle_subaccount_login_response, 

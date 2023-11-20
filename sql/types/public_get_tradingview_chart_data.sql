@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_tradingview_chart_data_response_result cascade;
 create type deribit.public_get_tradingview_chart_data_response_result as (
 	close UNKNOWN - array of number,
 	cost UNKNOWN - array of number,
@@ -17,6 +18,7 @@ comment on column deribit.public_get_tradingview_chart_data_response_result.stat
 comment on column deribit.public_get_tradingview_chart_data_response_result.ticks is 'Values of the time axis given in milliseconds since UNIX epoch';
 comment on column deribit.public_get_tradingview_chart_data_response_result.volume is 'List of volume bars (in base currency, one per candle)';
 
+drop type if exists deribit.public_get_tradingview_chart_data_response cascade;
 create type deribit.public_get_tradingview_chart_data_response as (
 	id bigint,
 	jsonrpc text,
@@ -25,8 +27,10 @@ create type deribit.public_get_tradingview_chart_data_response as (
 comment on column deribit.public_get_tradingview_chart_data_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_tradingview_chart_data_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('1', '3', '5', '10', '15', '30', '60', '120', '180', '360', '720', '1D');
+drop type if exists deribit.public_get_tradingview_chart_data_request_resolution cascade;
+create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('720', '120', '10', '1D', '5', '360', '180', '3', '1', '30', '15', '60');
 
+drop type if exists deribit.public_get_tradingview_chart_data_request cascade;
 create type deribit.public_get_tradingview_chart_data_request as (
 	instrument_name text,
 	start_timestamp bigint,

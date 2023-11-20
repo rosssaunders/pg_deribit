@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_access_log_response_result cascade;
 create type deribit.private_get_access_log_response_result as (
 	city text,
 	country text,
@@ -15,6 +16,7 @@ comment on column deribit.private_get_access_log_response_result.ip is 'IP addre
 comment on column deribit.private_get_access_log_response_result.log is 'Action description, values: changed_email - email was changed; changed_password - password was changed; disabled_tfa - TFA was disabled; enabled_tfa - TFA was enabled, success - successful login; failure - login failure; enabled_subaccount_login - login was enabled for subaccount (in data - subaccount uid); disabled_subaccount_login - login was disabled for subbaccount (in data - subbacount uid);new_api_key - API key was created (in data key client id); removed_api_key - API key was removed (in data key client id); changed_scope - scope of API key was changed (in data key client id); changed_whitelist - whitelist of API key was edited (in data key client id); disabled_api_key - API key was disabled (in data key client id); enabled_api_key - API key was enabled (in data key client id); reset_api_key - API key was reset (in data key client id)';
 comment on column deribit.private_get_access_log_response_result.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_get_access_log_response cascade;
 create type deribit.private_get_access_log_response as (
 	id bigint,
 	jsonrpc text,
@@ -23,6 +25,7 @@ create type deribit.private_get_access_log_response as (
 comment on column deribit.private_get_access_log_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_access_log_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_access_log_request cascade;
 create type deribit.private_get_access_log_request as (
 	"offset" bigint,
 	count bigint

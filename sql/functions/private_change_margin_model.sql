@@ -1,3 +1,4 @@
+drop function if exists deribit.private_change_margin_model;
 create or replace function deribit.private_change_margin_model(
 	user_id bigint default null,
 	margin_model deribit.private_change_margin_model_request_margin_model,
@@ -10,7 +11,10 @@ declare
 	_request deribit.private_change_margin_model_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/change_margin_model');
+    
+_request := row(
 		user_id,
 		margin_model,
 		dry_run
@@ -18,15 +22,11 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/change_margin_model', _request);
 
-    perform deribit.matching_engine_request_log_call('/private/change_margin_model');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.private_change_margin_model_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

@@ -1,3 +1,4 @@
+drop function if exists deribit.public_get_funding_rate_value;
 create or replace function deribit.public_get_funding_rate_value(
 	instrument_name text,
 	start_timestamp bigint,
@@ -10,15 +11,16 @@ declare
 	_request deribit.public_get_funding_rate_value_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_value');
+    
+_request := row(
 		instrument_name,
 		start_timestamp,
 		end_timestamp
     )::deribit.public_get_funding_rate_value_request;
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_funding_rate_value', _request);
-
-    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_value');
 
     return (jsonb_populate_record(
         null::deribit.public_get_funding_rate_value_response, 

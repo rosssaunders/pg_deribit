@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_funding_rate_history_response_result cascade;
 create type deribit.public_get_funding_rate_history_response_result as (
 	index_price float,
 	interest_1h float,
@@ -11,6 +12,7 @@ comment on column deribit.public_get_funding_rate_history_response_result.intere
 comment on column deribit.public_get_funding_rate_history_response_result.prev_index_price is 'Price in base currency';
 comment on column deribit.public_get_funding_rate_history_response_result.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.public_get_funding_rate_history_response cascade;
 create type deribit.public_get_funding_rate_history_response as (
 	id bigint,
 	jsonrpc text,
@@ -19,6 +21,7 @@ create type deribit.public_get_funding_rate_history_response as (
 comment on column deribit.public_get_funding_rate_history_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_funding_rate_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.public_get_funding_rate_history_request cascade;
 create type deribit.public_get_funding_rate_history_request as (
 	instrument_name text,
 	start_timestamp bigint,

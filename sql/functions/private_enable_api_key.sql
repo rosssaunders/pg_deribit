@@ -1,3 +1,4 @@
+drop function if exists deribit.private_enable_api_key;
 create or replace function deribit.private_enable_api_key(
 	id bigint
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_enable_api_key_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/enable_api_key');
+    
+_request := row(
 		id
     )::deribit.private_enable_api_key_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/enable_api_key', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/enable_api_key');
 
     return (jsonb_populate_record(
         null::deribit.private_enable_api_key_response, 

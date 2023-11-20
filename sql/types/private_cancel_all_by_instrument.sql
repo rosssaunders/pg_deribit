@@ -1,3 +1,4 @@
+drop type if exists deribit.private_cancel_all_by_instrument_response cascade;
 create type deribit.private_cancel_all_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,8 +8,10 @@ comment on column deribit.private_cancel_all_by_instrument_response.id is 'The i
 comment on column deribit.private_cancel_all_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_cancel_all_by_instrument_response.result is 'Total number of successfully cancelled orders';
 
-create type deribit.private_cancel_all_by_instrument_request_type as enum ('all', 'limit', 'trigger_all', 'stop', 'take', 'trailing_stop');
+drop type if exists deribit.private_cancel_all_by_instrument_request_type cascade;
+create type deribit.private_cancel_all_by_instrument_request_type as enum ('trigger_all', 'trailing_stop', 'stop', 'take', 'all', 'limit');
 
+drop type if exists deribit.private_cancel_all_by_instrument_request cascade;
 create type deribit.private_cancel_all_by_instrument_request as (
 	instrument_name text,
 	type deribit.private_cancel_all_by_instrument_request_type,

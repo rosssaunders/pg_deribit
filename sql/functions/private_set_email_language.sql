@@ -1,3 +1,4 @@
+drop function if exists deribit.private_set_email_language;
 create or replace function deribit.private_set_email_language(
 	language text
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_set_email_language_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/set_email_language');
+    
+_request := row(
 		language
     )::deribit.private_set_email_language_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_email_language', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/set_email_language');
 
     return (jsonb_populate_record(
         null::deribit.private_set_email_language_response, 

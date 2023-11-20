@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_position_response_result cascade;
 create type deribit.private_get_position_response_result as (
 	average_price float,
 	average_price_usd float,
@@ -51,6 +52,7 @@ comment on column deribit.private_get_position_response_result.theta is 'Only fo
 comment on column deribit.private_get_position_response_result.total_profit_loss is 'Profit or loss from position';
 comment on column deribit.private_get_position_response_result.vega is 'Only for options, Vega parameter';
 
+drop type if exists deribit.private_get_position_response cascade;
 create type deribit.private_get_position_response as (
 	id bigint,
 	jsonrpc text,
@@ -59,6 +61,7 @@ create type deribit.private_get_position_response as (
 comment on column deribit.private_get_position_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_position_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_position_request cascade;
 create type deribit.private_get_position_request as (
 	instrument_name text
 );

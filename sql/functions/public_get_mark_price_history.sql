@@ -1,24 +1,26 @@
+drop function if exists deribit.public_get_mark_price_history;
 create or replace function deribit.public_get_mark_price_history(
 	instrument_name text,
 	start_timestamp bigint,
 	end_timestamp bigint
 )
-returns text[]
+returns UNKNOWN - array
 language plpgsql
 as $$
 declare
 	_request deribit.public_get_mark_price_history_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_mark_price_history');
+    
+_request := row(
 		instrument_name,
 		start_timestamp,
 		end_timestamp
     )::deribit.public_get_mark_price_history_request;
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_mark_price_history', _request);
-
-    perform deribit.matching_engine_request_log_call('/public/get_mark_price_history');
 
     return (jsonb_populate_record(
         null::deribit.public_get_mark_price_history_response, 

@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_transfers_response_datum cascade;
 create type deribit.private_get_transfers_response_datum as (
 	amount float,
 	created_timestamp bigint,
@@ -19,12 +20,14 @@ comment on column deribit.private_get_transfers_response_datum.state is 'Transfe
 comment on column deribit.private_get_transfers_response_datum.type is 'Type of transfer: user - sent to user, subaccount - sent to subaccount';
 comment on column deribit.private_get_transfers_response_datum.updated_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_get_transfers_response_result cascade;
 create type deribit.private_get_transfers_response_result as (
 	count bigint,
 	data deribit.private_get_transfers_response_datum[]
 );
 comment on column deribit.private_get_transfers_response_result.count is 'Total number of results available';
 
+drop type if exists deribit.private_get_transfers_response cascade;
 create type deribit.private_get_transfers_response as (
 	id bigint,
 	jsonrpc text,
@@ -33,8 +36,10 @@ create type deribit.private_get_transfers_response as (
 comment on column deribit.private_get_transfers_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_transfers_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_transfers_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_transfers_request_currency cascade;
+create type deribit.private_get_transfers_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_transfers_request cascade;
 create type deribit.private_get_transfers_request as (
 	currency deribit.private_get_transfers_request_currency,
 	count bigint,

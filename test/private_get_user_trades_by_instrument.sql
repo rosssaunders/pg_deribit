@@ -1,22 +1,32 @@
-with recursive trades as (
-    select a.*
-    from deribit.private_get_user_trades_by_instrument(
-          instrument_name := 'ETH-PERPETUAL',
-          count := 1,
-          start_timestamp := 0,
-          sorting := 'asc'
-       ) a
-    union all
-    select b.*
-    from trades t
-    cross join deribit.private_get_user_trades_by_instrument(
-          instrument_name := 'ETH-PERPETUAL',
-          sorting := 'asc',
-          count := 100,
-          start_seq := (select max(v.trade_seq) from unnest((t).trades) v) + 1
-             ) b
-    where t.has_more
-)
-select (a.t).*
-from (select unnest((t).trades) as t
-      from trades t) a;
+create or replace function deribit.test_private_get_user_trades_by_instrument()
+returns setof text
+language plpgsql
+as $$
+declare
+    _expected deribit.private_get_user_trades_by_instrument_response_result;
+    
+	_instrument_name text;
+	_start_seq bigint = null;
+	_end_seq bigint = null;
+	_count bigint = null;
+	_start_timestamp bigint = null;
+	_end_timestamp bigint = null;
+	_sorting deribit.private_get_user_trades_by_instrument_request_sorting = null;
+
+begin
+    _expected := deribit.private_get_user_trades_by_instrument(
+		instrument_name := _instrument_name,
+		start_seq := _start_seq,
+		end_seq := _end_seq,
+		count := _count,
+		start_timestamp := _start_timestamp,
+		end_timestamp := _end_timestamp,
+		sorting := _sorting
+    );
+    
+    return query (
+        select results_eq(_result, _expected)
+    );
+end
+$$;
+

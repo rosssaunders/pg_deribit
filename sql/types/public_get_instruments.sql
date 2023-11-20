@@ -1,16 +1,18 @@
-create type deribit.public_get_instruments_response_tick_size_steps as (
+drop type if exists deribit.public_get_instruments_response_tick_size_step cascade;
+create type deribit.public_get_instruments_response_tick_size_step as (
 	above_price float,
 	tick_size float
 );
-comment on column deribit.public_get_instruments_response_tick_size_steps.above_price is 'The price from which the increased tick size applies';
-comment on column deribit.public_get_instruments_response_tick_size_steps.tick_size is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+comment on column deribit.public_get_instruments_response_tick_size_step.above_price is 'The price from which the increased tick size applies';
+comment on column deribit.public_get_instruments_response_tick_size_step.tick_size is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
 
+drop type if exists deribit.public_get_instruments_response_result cascade;
 create type deribit.public_get_instruments_response_result as (
 	base_currency text,
 	block_trade_commission float,
 	block_trade_min_trade_amount float,
 	block_trade_tick_size float,
-	contract_size bigint,
+	contract_size float,
 	counter_currency text,
 	creation_timestamp bigint,
 	expiration_timestamp bigint,
@@ -32,7 +34,7 @@ create type deribit.public_get_instruments_response_result as (
 	strike float,
 	taker_commission float,
 	tick_size float,
-	tick_size_steps deribit.public_get_instruments_response_tick_size_steps
+	tick_size_steps deribit.public_get_instruments_response_tick_size_step[]
 );
 comment on column deribit.public_get_instruments_response_result.base_currency is 'The underlying currency being traded.';
 comment on column deribit.public_get_instruments_response_result.block_trade_commission is 'Block Trade commission for instrument.';
@@ -61,6 +63,7 @@ comment on column deribit.public_get_instruments_response_result.strike is 'The 
 comment on column deribit.public_get_instruments_response_result.taker_commission is 'Taker commission for instrument.';
 comment on column deribit.public_get_instruments_response_result.tick_size is 'Specifies minimal price change and, as follows, the number of decimal places for instrument prices.';
 
+drop type if exists deribit.public_get_instruments_response cascade;
 create type deribit.public_get_instruments_response as (
 	id bigint,
 	jsonrpc text,
@@ -69,10 +72,13 @@ create type deribit.public_get_instruments_response as (
 comment on column deribit.public_get_instruments_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_instruments_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.public_get_instruments_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.public_get_instruments_request_currency cascade;
+create type deribit.public_get_instruments_request_currency as enum ('USDC', 'ETH', 'BTC');
 
-create type deribit.public_get_instruments_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo');
+drop type if exists deribit.public_get_instruments_request_kind cascade;
+create type deribit.public_get_instruments_request_kind as enum ('option', 'future_combo', 'option_combo', 'spot', 'future');
 
+drop type if exists deribit.public_get_instruments_request cascade;
 create type deribit.public_get_instruments_request as (
 	currency deribit.public_get_instruments_request_currency,
 	kind deribit.public_get_instruments_request_kind,

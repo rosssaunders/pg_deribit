@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_transaction_log;
 create or replace function deribit.private_get_transaction_log(
 	currency deribit.private_get_transaction_log_request_currency,
 	start_timestamp bigint,
@@ -13,7 +14,10 @@ declare
 	_request deribit.private_get_transaction_log_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_transaction_log');
+    
+_request := row(
 		currency,
 		start_timestamp,
 		end_timestamp,
@@ -23,8 +27,6 @@ begin
     )::deribit.private_get_transaction_log_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_transaction_log', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/get_transaction_log');
 
     return (jsonb_populate_record(
         null::deribit.private_get_transaction_log_response, 

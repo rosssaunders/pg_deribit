@@ -1,3 +1,4 @@
+drop type if exists deribit.public_ticker_response_stats cascade;
 create type deribit.public_ticker_response_stats as (
 	high float,
 	low float,
@@ -17,6 +18,7 @@ comment on column deribit.public_ticker_response_stats.timestamp is 'The timesta
 comment on column deribit.public_ticker_response_stats.underlying_index is 'Name of the underlying future, or index_price (options only)';
 comment on column deribit.public_ticker_response_stats.underlying_price is 'Underlying price for implied volatility calculations (options only)';
 
+drop type if exists deribit.public_ticker_response_greeks cascade;
 create type deribit.public_ticker_response_greeks as (
 	delta float,
 	gamma float,
@@ -55,6 +57,7 @@ comment on column deribit.public_ticker_response_greeks.open_interest is 'The to
 comment on column deribit.public_ticker_response_greeks.settlement_price is 'Optional (not added for spot). The settlement price for the instrument. Only when state = open';
 comment on column deribit.public_ticker_response_greeks.state is 'The state of the order book. Possible values are open and closed.';
 
+drop type if exists deribit.public_ticker_response_result cascade;
 create type deribit.public_ticker_response_result as (
 	ask_iv float,
 	best_ask_amount float,
@@ -80,6 +83,7 @@ comment on column deribit.public_ticker_response_result.estimated_delivery_price
 comment on column deribit.public_ticker_response_result.funding_8h is 'Funding 8h (perpetual only)';
 comment on column deribit.public_ticker_response_result.greeks is 'Only for options';
 
+drop type if exists deribit.public_ticker_response cascade;
 create type deribit.public_ticker_response as (
 	id bigint,
 	jsonrpc text,
@@ -88,6 +92,7 @@ create type deribit.public_ticker_response as (
 comment on column deribit.public_ticker_response.id is 'The id that was sent in the request';
 comment on column deribit.public_ticker_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.public_ticker_request cascade;
 create type deribit.public_ticker_request as (
 	instrument_name text
 );

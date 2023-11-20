@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_user_trades_by_instrument;
 create or replace function deribit.private_get_user_trades_by_instrument(
 	instrument_name text,
 	start_seq bigint default null,
@@ -14,7 +15,10 @@ declare
 	_request deribit.private_get_user_trades_by_instrument_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_user_trades_by_instrument');
+    
+_request := row(
 		instrument_name,
 		start_seq,
 		end_seq,
@@ -25,8 +29,6 @@ begin
     )::deribit.private_get_user_trades_by_instrument_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_instrument', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/get_user_trades_by_instrument');
 
     return (jsonb_populate_record(
         null::deribit.private_get_user_trades_by_instrument_response, 

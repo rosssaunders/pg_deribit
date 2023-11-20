@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_portfolio_margins;
 create or replace function deribit.private_get_portfolio_margins(
 	currency deribit.private_get_portfolio_margins_request_currency,
 	add_positions boolean default null,
@@ -10,15 +11,16 @@ declare
 	_request deribit.private_get_portfolio_margins_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_portfolio_margins');
+    
+_request := row(
 		currency,
 		add_positions,
 		simulated_positions
     )::deribit.private_get_portfolio_margins_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_portfolio_margins', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/get_portfolio_margins');
 
     return (jsonb_populate_record(
         null::deribit.private_get_portfolio_margins_response, 

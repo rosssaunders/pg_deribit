@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_withdrawals_response_datum cascade;
 create type deribit.private_get_withdrawals_response_datum as (
 	address text,
 	amount float,
@@ -23,12 +24,14 @@ comment on column deribit.private_get_withdrawals_response_datum.state is 'Withd
 comment on column deribit.private_get_withdrawals_response_datum.transaction_id is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_withdrawals_response_datum.updated_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_get_withdrawals_response_result cascade;
 create type deribit.private_get_withdrawals_response_result as (
 	count bigint,
 	data deribit.private_get_withdrawals_response_datum[]
 );
 comment on column deribit.private_get_withdrawals_response_result.count is 'Total number of results available';
 
+drop type if exists deribit.private_get_withdrawals_response cascade;
 create type deribit.private_get_withdrawals_response as (
 	id bigint,
 	jsonrpc text,
@@ -37,8 +40,10 @@ create type deribit.private_get_withdrawals_response as (
 comment on column deribit.private_get_withdrawals_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_withdrawals_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_withdrawals_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_withdrawals_request_currency cascade;
+create type deribit.private_get_withdrawals_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_withdrawals_request cascade;
 create type deribit.private_get_withdrawals_request as (
 	currency deribit.private_get_withdrawals_request_currency,
 	count bigint,

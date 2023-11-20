@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_margins_response_result cascade;
 create type deribit.private_get_margins_response_result as (
 	buy float,
 	max_price float,
@@ -9,6 +10,7 @@ comment on column deribit.private_get_margins_response_result.max_price is 'The 
 comment on column deribit.private_get_margins_response_result.min_price is 'The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.';
 comment on column deribit.private_get_margins_response_result.sell is 'Margin when selling';
 
+drop type if exists deribit.private_get_margins_response cascade;
 create type deribit.private_get_margins_response as (
 	id bigint,
 	jsonrpc text,
@@ -17,6 +19,7 @@ create type deribit.private_get_margins_response as (
 comment on column deribit.private_get_margins_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_margins_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_margins_request cascade;
 create type deribit.private_get_margins_request as (
 	instrument_name text,
 	amount float,

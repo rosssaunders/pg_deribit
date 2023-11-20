@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_user_locks_response_result cascade;
 create type deribit.private_get_user_locks_response_result as (
 	currency text,
 	enabled boolean,
@@ -7,6 +8,7 @@ comment on column deribit.private_get_user_locks_response_result.currency is 'Cu
 comment on column deribit.private_get_user_locks_response_result.enabled is 'Value is set to ''true'' when user account is locked in currency';
 comment on column deribit.private_get_user_locks_response_result.message is 'Optional information for user why his account is locked';
 
+drop type if exists deribit.private_get_user_locks_response cascade;
 create type deribit.private_get_user_locks_response as (
 	id bigint,
 	jsonrpc text,

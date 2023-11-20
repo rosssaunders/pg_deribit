@@ -1,3 +1,4 @@
+drop type if exists deribit.private_cancel_transfer_by_id_response_result cascade;
 create type deribit.private_cancel_transfer_by_id_response_result as (
 	amount float,
 	created_timestamp bigint,
@@ -19,6 +20,7 @@ comment on column deribit.private_cancel_transfer_by_id_response_result.state is
 comment on column deribit.private_cancel_transfer_by_id_response_result.type is 'Type of transfer: user - sent to user, subaccount - sent to subaccount';
 comment on column deribit.private_cancel_transfer_by_id_response_result.updated_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_cancel_transfer_by_id_response cascade;
 create type deribit.private_cancel_transfer_by_id_response as (
 	id bigint,
 	jsonrpc text,
@@ -27,8 +29,10 @@ create type deribit.private_cancel_transfer_by_id_response as (
 comment on column deribit.private_cancel_transfer_by_id_response.id is 'The id that was sent in the request';
 comment on column deribit.private_cancel_transfer_by_id_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_cancel_transfer_by_id_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_cancel_transfer_by_id_request_currency cascade;
+create type deribit.private_cancel_transfer_by_id_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_cancel_transfer_by_id_request cascade;
 create type deribit.private_cancel_transfer_by_id_request as (
 	currency deribit.private_cancel_transfer_by_id_request_currency,
 	id bigint

@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_index_price_names_response cascade;
 create type deribit.public_get_index_price_names_response as (
 	id bigint,
 	jsonrpc text,

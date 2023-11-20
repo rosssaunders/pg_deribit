@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_last_trades_by_instrument_and_time_response_trade cascade;
 create type deribit.public_get_last_trades_by_instrument_and_time_response_trade as (
 	amount float,
 	block_trade_id text,
@@ -29,12 +30,14 @@ comment on column deribit.public_get_last_trades_by_instrument_and_time_response
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade.trade_id is 'Unique (per currency) trade identifier';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade.trade_seq is 'The sequence number of the trade within instrument';
 
+drop type if exists deribit.public_get_last_trades_by_instrument_and_time_response_result cascade;
 create type deribit.public_get_last_trades_by_instrument_and_time_response_result as (
 	has_more boolean,
 	trades deribit.public_get_last_trades_by_instrument_and_time_response_trade[]
 );
 
 
+drop type if exists deribit.public_get_last_trades_by_instrument_and_time_response cascade;
 create type deribit.public_get_last_trades_by_instrument_and_time_response as (
 	id bigint,
 	jsonrpc text,
@@ -43,8 +46,10 @@ create type deribit.public_get_last_trades_by_instrument_and_time_response as (
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.public_get_last_trades_by_instrument_and_time_request_sorting as enum ('asc', 'desc', 'default');
+drop type if exists deribit.public_get_last_trades_by_instrument_and_time_request_sorting cascade;
+create type deribit.public_get_last_trades_by_instrument_and_time_request_sorting as enum ('default', 'asc', 'desc');
 
+drop type if exists deribit.public_get_last_trades_by_instrument_and_time_request cascade;
 create type deribit.public_get_last_trades_by_instrument_and_time_request as (
 	instrument_name text,
 	start_timestamp bigint,

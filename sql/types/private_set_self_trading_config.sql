@@ -1,3 +1,4 @@
+drop type if exists deribit.private_set_self_trading_config_response cascade;
 create type deribit.private_set_self_trading_config_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,8 +8,10 @@ comment on column deribit.private_set_self_trading_config_response.id is 'The id
 comment on column deribit.private_set_self_trading_config_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_set_self_trading_config_response.result is 'Result of method execution. ok in case of success';
 
-create type deribit.private_set_self_trading_config_request_mode as enum ('reject_taker', 'cancel_maker');
+drop type if exists deribit.private_set_self_trading_config_request_mode cascade;
+create type deribit.private_set_self_trading_config_request_mode as enum ('cancel_maker', 'reject_taker');
 
+drop type if exists deribit.private_set_self_trading_config_request cascade;
 create type deribit.private_set_self_trading_config_request as (
 	mode deribit.private_set_self_trading_config_request_mode,
 	extended_to_subaccounts boolean

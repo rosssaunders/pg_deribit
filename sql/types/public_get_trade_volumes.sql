@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_trade_volumes_response_result cascade;
 create type deribit.public_get_trade_volumes_response_result as (
 	calls_volume float,
 	calls_volume_30d float,
@@ -27,6 +28,7 @@ comment on column deribit.public_get_trade_volumes_response_result.spot_volume i
 comment on column deribit.public_get_trade_volumes_response_result.spot_volume_30d is 'Total 30d trade for spot.';
 comment on column deribit.public_get_trade_volumes_response_result.spot_volume_7d is 'Total 7d trade for spot.';
 
+drop type if exists deribit.public_get_trade_volumes_response cascade;
 create type deribit.public_get_trade_volumes_response as (
 	id bigint,
 	jsonrpc text,
@@ -35,6 +37,7 @@ create type deribit.public_get_trade_volumes_response as (
 comment on column deribit.public_get_trade_volumes_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_trade_volumes_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.public_get_trade_volumes_request cascade;
 create type deribit.public_get_trade_volumes_request as (
 	extended boolean
 );

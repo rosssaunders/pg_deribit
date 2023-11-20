@@ -1,3 +1,4 @@
+drop function if exists deribit.private_cancel_all;
 create or replace function deribit.private_cancel_all(
 	detailed boolean default null
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_cancel_all_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/cancel_all');
+    
+_request := row(
 		detailed
     )::deribit.private_cancel_all_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/cancel_all', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/cancel_all');
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_all_response, 

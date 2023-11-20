@@ -1,3 +1,4 @@
+drop type if exists deribit.private_change_subaccount_name_response cascade;
 create type deribit.private_change_subaccount_name_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,6 +8,7 @@ comment on column deribit.private_change_subaccount_name_response.id is 'The id 
 comment on column deribit.private_change_subaccount_name_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_change_subaccount_name_response.result is 'Result of method execution. ok in case of success';
 
+drop type if exists deribit.private_change_subaccount_name_request cascade;
 create type deribit.private_change_subaccount_name_request as (
 	sid bigint,
 	name text

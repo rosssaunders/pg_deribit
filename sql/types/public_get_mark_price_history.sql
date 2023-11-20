@@ -1,12 +1,14 @@
+drop type if exists deribit.public_get_mark_price_history_response cascade;
 create type deribit.public_get_mark_price_history_response as (
 	id bigint,
 	jsonrpc text,
-	result text[]
+	result UNKNOWN - array
 );
 comment on column deribit.public_get_mark_price_history_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_mark_price_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.public_get_mark_price_history_response.result is 'Markprice history values as an array of arrays with 2 values each. The inner values correspond to the timestamp in ms and the markprice itself.';
 
+drop type if exists deribit.public_get_mark_price_history_request cascade;
 create type deribit.public_get_mark_price_history_request as (
 	instrument_name text,
 	start_timestamp bigint,

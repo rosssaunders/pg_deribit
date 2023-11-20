@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_new_announcements_response_result cascade;
 create type deribit.private_get_new_announcements_response_result as (
 	body text,
 	confirmation boolean,
@@ -13,6 +14,7 @@ comment on column deribit.private_get_new_announcements_response_result.importan
 comment on column deribit.private_get_new_announcements_response_result.publication_timestamp is 'The timestamp (milliseconds since the Unix epoch) of announcement publication';
 comment on column deribit.private_get_new_announcements_response_result.title is 'The title of the announcement';
 
+drop type if exists deribit.private_get_new_announcements_response cascade;
 create type deribit.private_get_new_announcements_response as (
 	id bigint,
 	jsonrpc text,

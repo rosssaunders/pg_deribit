@@ -1,3 +1,4 @@
+drop function if exists deribit.private_set_announcement_as_read;
 create or replace function deribit.private_set_announcement_as_read(
 	announcement_id float
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_set_announcement_as_read_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/set_announcement_as_read');
+    
+_request := row(
 		announcement_id
     )::deribit.private_set_announcement_as_read_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_announcement_as_read', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/set_announcement_as_read');
 
     return (jsonb_populate_record(
         null::deribit.private_set_announcement_as_read_response, 

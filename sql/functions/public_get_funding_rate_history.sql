@@ -1,3 +1,4 @@
+drop function if exists deribit.public_get_funding_rate_history;
 create or replace function deribit.public_get_funding_rate_history(
 	instrument_name text,
 	start_timestamp bigint,
@@ -10,7 +11,10 @@ declare
 	_request deribit.public_get_funding_rate_history_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_history');
+    
+_request := row(
 		instrument_name,
 		start_timestamp,
 		end_timestamp
@@ -18,15 +22,11 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_funding_rate_history', _request);
 
-    perform deribit.matching_engine_request_log_call('/public/get_funding_rate_history');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.public_get_funding_rate_history_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

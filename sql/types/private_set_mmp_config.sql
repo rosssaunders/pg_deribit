@@ -1,3 +1,4 @@
+drop type if exists deribit.private_set_mmp_config_response_result cascade;
 create type deribit.private_set_mmp_config_response_result as (
 	delta_limit float,
 	frozen_time bigint,
@@ -11,6 +12,7 @@ comment on column deribit.private_set_mmp_config_response_result.index_name is '
 comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_set_mmp_config_response_result.quantity_limit is 'Quantity limit';
 
+drop type if exists deribit.private_set_mmp_config_response cascade;
 create type deribit.private_set_mmp_config_response as (
 	id bigint,
 	jsonrpc text,
@@ -19,8 +21,10 @@ create type deribit.private_set_mmp_config_response as (
 comment on column deribit.private_set_mmp_config_response.id is 'The id that was sent in the request';
 comment on column deribit.private_set_mmp_config_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_set_mmp_config_request_index_name as enum ('btc_usd', 'eth_usd', 'btc_usdc', 'eth_usdc', 'ada_usdc', 'algo_usdc', 'avax_usdc', 'bch_usdc', 'bnb_usdc', 'doge_usdc', 'dot_usdc', 'link_usdc', 'ltc_usdc', 'luna_usdc', 'matic_usdc', 'mshib_usdc', 'near_usdc', 'shib_usdc', 'trx_usdc', 'uni_usdc', 'xrp_usdc', 'btcdvol_usdc', 'ethdvol_usdc');
+drop type if exists deribit.private_set_mmp_config_request_index_name cascade;
+create type deribit.private_set_mmp_config_request_index_name as enum ('ethdvol_usdc', 'btc_usdc', 'algo_usdc', 'btcdvol_usdc', 'link_usdc', 'eth_usdc', 'bch_usdc', 'btc_usd', 'matic_usdc', 'near_usdc', 'trx_usdc', 'xrp_usdc', 'mshib_usdc', 'dot_usdc', 'bnb_usdc', 'avax_usdc', 'ltc_usdc', 'shib_usdc', 'eth_usd', 'luna_usdc', 'doge_usdc', 'uni_usdc', 'ada_usdc');
 
+drop type if exists deribit.private_set_mmp_config_request cascade;
 create type deribit.private_set_mmp_config_request as (
 	index_name deribit.private_set_mmp_config_request_index_name,
 	"interval" bigint,

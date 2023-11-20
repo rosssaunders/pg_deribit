@@ -1,5 +1,5 @@
 select (t."order").order_id
-from generate_series(1, 50) s
+from generate_series(1, 10) s
 left join lateral deribit.private_buy('ETH-PERPETUAL', s.s, 'market') t on true;
 
 -- select (t."order").order_id

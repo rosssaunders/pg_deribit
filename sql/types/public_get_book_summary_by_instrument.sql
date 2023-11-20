@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_book_summary_by_instrument_response_result cascade;
 create type deribit.public_get_book_summary_by_instrument_response_result as (
 	ask_price float,
 	base_currency text,
@@ -45,6 +46,7 @@ comment on column deribit.public_get_book_summary_by_instrument_response_result.
 comment on column deribit.public_get_book_summary_by_instrument_response_result.volume_notional is 'Volume in quote currency (futures and spots only)';
 comment on column deribit.public_get_book_summary_by_instrument_response_result.volume_usd is 'Volume in USD';
 
+drop type if exists deribit.public_get_book_summary_by_instrument_response cascade;
 create type deribit.public_get_book_summary_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
@@ -53,6 +55,7 @@ create type deribit.public_get_book_summary_by_instrument_response as (
 comment on column deribit.public_get_book_summary_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_book_summary_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.public_get_book_summary_by_instrument_request cascade;
 create type deribit.public_get_book_summary_by_instrument_request as (
 	instrument_name text
 );

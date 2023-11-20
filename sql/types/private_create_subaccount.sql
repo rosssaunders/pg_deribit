@@ -1,3 +1,4 @@
+drop type if exists deribit.private_create_subaccount_response_eth cascade;
 create type deribit.private_create_subaccount_response_eth as (
 	available_funds float,
 	available_withdrawal_funds float,
@@ -19,6 +20,7 @@ comment on column deribit.private_create_subaccount_response_eth.system_name is 
 comment on column deribit.private_create_subaccount_response_eth.type is 'Account type';
 comment on column deribit.private_create_subaccount_response_eth.username is 'Account name (given by user)';
 
+drop type if exists deribit.private_create_subaccount_response_btc cascade;
 create type deribit.private_create_subaccount_response_btc as (
 	available_funds float,
 	available_withdrawal_funds float,
@@ -32,11 +34,13 @@ create type deribit.private_create_subaccount_response_btc as (
 );
 
 
+drop type if exists deribit.private_create_subaccount_response_portfolio cascade;
 create type deribit.private_create_subaccount_response_portfolio as (
 	btc deribit.private_create_subaccount_response_btc
 );
 
 
+drop type if exists deribit.private_create_subaccount_response_result cascade;
 create type deribit.private_create_subaccount_response_result as (
 	email text,
 	id bigint,
@@ -49,6 +53,7 @@ comment on column deribit.private_create_subaccount_response_result.id is 'Subac
 comment on column deribit.private_create_subaccount_response_result.is_password is 'true when password for the subaccount has been configured';
 comment on column deribit.private_create_subaccount_response_result.login_enabled is 'Informs whether login to the subaccount is enabled';
 
+drop type if exists deribit.private_create_subaccount_response cascade;
 create type deribit.private_create_subaccount_response as (
 	id bigint,
 	jsonrpc text,

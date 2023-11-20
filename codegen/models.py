@@ -11,33 +11,33 @@ class Enum:
 @dataclass
 class FieldType:
     name: str
-    is_enum: bool
-    is_class: bool
-    is_array: bool
+    is_enum: bool = False
+    is_class: bool = False
+    is_array: bool = False
 
 
 @dataclass
 class Field:
     name: str
     type: FieldType
-    comment: str
-    required: bool
+    comment: str = ""
+    required: bool = False
 
 
 @dataclass
 class Type:
     name: str
-    is_primitive: bool
     fields: List[Field]
     enums: List[Enum]
     is_array: bool = False
+    is_primitive: bool = False
 
 
 @dataclass
 class Parameter:
     name: str
     type: Type
-    comment: str
+    comment: str = ""
 
 
 @dataclass

@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_affiliate_program_info_response_received cascade;
 create type deribit.private_get_affiliate_program_info_response_received as (
 	btc float,
 	eth float
@@ -5,6 +6,7 @@ create type deribit.private_get_affiliate_program_info_response_received as (
 comment on column deribit.private_get_affiliate_program_info_response_received.btc is 'Total payout received in BTC';
 comment on column deribit.private_get_affiliate_program_info_response_received.eth is 'Total payout received in ETH';
 
+drop type if exists deribit.private_get_affiliate_program_info_response_result cascade;
 create type deribit.private_get_affiliate_program_info_response_result as (
 	is_enabled boolean,
 	link text,
@@ -15,6 +17,7 @@ comment on column deribit.private_get_affiliate_program_info_response_result.is_
 comment on column deribit.private_get_affiliate_program_info_response_result.link is 'Affliate link';
 comment on column deribit.private_get_affiliate_program_info_response_result.number_of_affiliates is 'Number of affiliates';
 
+drop type if exists deribit.private_get_affiliate_program_info_response cascade;
 create type deribit.private_get_affiliate_program_info_response as (
 	id bigint,
 	jsonrpc text,

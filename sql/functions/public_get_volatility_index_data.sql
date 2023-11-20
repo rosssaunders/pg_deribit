@@ -1,3 +1,4 @@
+drop function if exists deribit.public_get_volatility_index_data;
 create or replace function deribit.public_get_volatility_index_data(
 	currency deribit.public_get_volatility_index_data_request_currency,
 	start_timestamp bigint,
@@ -11,7 +12,10 @@ declare
 	_request deribit.public_get_volatility_index_data_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_volatility_index_data');
+    
+_request := row(
 		currency,
 		start_timestamp,
 		end_timestamp,
@@ -19,8 +23,6 @@ begin
     )::deribit.public_get_volatility_index_data_request;
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_volatility_index_data', _request);
-
-    perform deribit.matching_engine_request_log_call('/public/get_volatility_index_data');
 
     return (jsonb_populate_record(
         null::deribit.public_get_volatility_index_data_response, 

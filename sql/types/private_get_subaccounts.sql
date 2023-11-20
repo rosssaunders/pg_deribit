@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_subaccounts_response_eth cascade;
 create type deribit.private_get_subaccounts_response_eth as (
 	available_funds float,
 	available_withdrawal_funds float,
@@ -10,7 +11,7 @@ create type deribit.private_get_subaccounts_response_eth as (
 	proof_id text,
 	proof_id_signature text,
 	receive_notifications boolean,
-	security_keys_assignments text[],
+	security_keys_assignments UNKNOWN - array,
 	security_keys_enabled boolean,
 	system_name text,
 	type text,
@@ -23,6 +24,7 @@ comment on column deribit.private_get_subaccounts_response_eth.security_keys_ass
 comment on column deribit.private_get_subaccounts_response_eth.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
 comment on column deribit.private_get_subaccounts_response_eth.system_name is 'System generated user nickname';
 
+drop type if exists deribit.private_get_subaccounts_response_btc cascade;
 create type deribit.private_get_subaccounts_response_btc as (
 	available_funds float,
 	available_withdrawal_funds float,
@@ -36,11 +38,13 @@ create type deribit.private_get_subaccounts_response_btc as (
 );
 
 
+drop type if exists deribit.private_get_subaccounts_response_portfolio cascade;
 create type deribit.private_get_subaccounts_response_portfolio as (
 	btc deribit.private_get_subaccounts_response_btc
 );
 
 
+drop type if exists deribit.private_get_subaccounts_response_result cascade;
 create type deribit.private_get_subaccounts_response_result as (
 	email text,
 	id bigint,
@@ -55,6 +59,7 @@ comment on column deribit.private_get_subaccounts_response_result.is_password is
 comment on column deribit.private_get_subaccounts_response_result.login_enabled is 'Informs whether login to the subaccount is enabled';
 comment on column deribit.private_get_subaccounts_response_result.not_confirmed_email is 'New email address that has not yet been confirmed. This field is only included if with_portfolio == true.';
 
+drop type if exists deribit.private_get_subaccounts_response cascade;
 create type deribit.private_get_subaccounts_response as (
 	id bigint,
 	jsonrpc text,
@@ -63,6 +68,7 @@ create type deribit.private_get_subaccounts_response as (
 comment on column deribit.private_get_subaccounts_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_subaccounts_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_subaccounts_request cascade;
 create type deribit.private_get_subaccounts_request as (
 	with_portfolio boolean
 );

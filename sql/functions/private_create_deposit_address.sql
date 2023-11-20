@@ -1,3 +1,4 @@
+drop function if exists deribit.private_create_deposit_address;
 create or replace function deribit.private_create_deposit_address(
 	currency deribit.private_create_deposit_address_request_currency
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_create_deposit_address_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/create_deposit_address');
+    
+_request := row(
 		currency
     )::deribit.private_create_deposit_address_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/create_deposit_address', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/create_deposit_address');
 
     return (jsonb_populate_record(
         null::deribit.private_create_deposit_address_response, 

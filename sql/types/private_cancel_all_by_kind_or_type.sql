@@ -1,3 +1,4 @@
+drop type if exists deribit.private_cancel_all_by_kind_or_type_response cascade;
 create type deribit.private_cancel_all_by_kind_or_type_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,10 +8,13 @@ comment on column deribit.private_cancel_all_by_kind_or_type_response.id is 'The
 comment on column deribit.private_cancel_all_by_kind_or_type_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_cancel_all_by_kind_or_type_response.result is 'Total number of successfully cancelled orders';
 
-create type deribit.private_cancel_all_by_kind_or_type_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
+drop type if exists deribit.private_cancel_all_by_kind_or_type_request_kind cascade;
+create type deribit.private_cancel_all_by_kind_or_type_request_kind as enum ('option', 'future_combo', 'combo', 'option_combo', 'spot', 'future', 'any');
 
-create type deribit.private_cancel_all_by_kind_or_type_request_type as enum ('all', 'limit', 'trigger_all', 'stop', 'take', 'trailing_stop');
+drop type if exists deribit.private_cancel_all_by_kind_or_type_request_type cascade;
+create type deribit.private_cancel_all_by_kind_or_type_request_type as enum ('trigger_all', 'trailing_stop', 'stop', 'take', 'all', 'limit');
 
+drop type if exists deribit.private_cancel_all_by_kind_or_type_request cascade;
 create type deribit.private_cancel_all_by_kind_or_type_request as (
 	currency UNKNOWN - string or array of strings,
 	kind deribit.private_cancel_all_by_kind_or_type_request_kind,

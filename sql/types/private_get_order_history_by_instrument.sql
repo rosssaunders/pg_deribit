@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_order_history_by_instrument_response_result cascade;
 create type deribit.private_get_order_history_by_instrument_response_result as (
 	reject_post_only boolean,
 	label text,
@@ -79,6 +80,7 @@ comment on column deribit.private_get_order_history_by_instrument_response_resul
 comment on column deribit.private_get_order_history_by_instrument_response_result.average_price is 'Average fill price of the order';
 comment on column deribit.private_get_order_history_by_instrument_response_result.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
+drop type if exists deribit.private_get_order_history_by_instrument_response cascade;
 create type deribit.private_get_order_history_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
@@ -87,6 +89,7 @@ create type deribit.private_get_order_history_by_instrument_response as (
 comment on column deribit.private_get_order_history_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_history_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_order_history_by_instrument_request cascade;
 create type deribit.private_get_order_history_by_instrument_request as (
 	instrument_name text,
 	count bigint,

@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_account_summary_response_options_theta_map cascade;
 create type deribit.private_get_account_summary_response_options_theta_map as (
 	creation_timestamp bigint,
 	available_withdrawal_funds float,
@@ -9,6 +10,7 @@ comment on column deribit.private_get_account_summary_response_options_theta_map
 comment on column deribit.private_get_account_summary_response_options_theta_map.equity is 'The account''s current equity';
 comment on column deribit.private_get_account_summary_response_options_theta_map.options_gamma is 'Options summary gamma';
 
+drop type if exists deribit.private_get_account_summary_response_options_vega_map cascade;
 create type deribit.private_get_account_summary_response_options_vega_map as (
 	balance float,
 	mmp_enabled boolean,
@@ -34,6 +36,7 @@ comment on column deribit.private_get_account_summary_response_options_vega_map.
 comment on column deribit.private_get_account_summary_response_options_vega_map.margin_balance is 'The account''s margin balance';
 comment on column deribit.private_get_account_summary_response_options_vega_map.options_theta_map is 'Map of options'' thetas per index';
 
+drop type if exists deribit.private_get_account_summary_response_options_gamma_map cascade;
 create type deribit.private_get_account_summary_response_options_gamma_map as (
 	futures_pl float,
 	currency text,
@@ -79,6 +82,7 @@ comment on column deribit.private_get_account_summary_response_options_gamma_map
 comment on column deribit.private_get_account_summary_response_options_gamma_map.options_pl is 'Options profit and Loss';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.options_vega_map is 'Map of options'' vegas per index';
 
+drop type if exists deribit.private_get_account_summary_response_perpetuals cascade;
 create type deribit.private_get_account_summary_response_perpetuals as (
 	burst bigint,
 	rate bigint,
@@ -92,6 +96,7 @@ comment on column deribit.private_get_account_summary_response_perpetuals.type i
 comment on column deribit.private_get_account_summary_response_perpetuals.initial_margin is 'The account''s initial margin';
 comment on column deribit.private_get_account_summary_response_perpetuals.options_gamma_map is 'Map of options'' gammas per index';
 
+drop type if exists deribit.private_get_account_summary_response_options cascade;
 create type deribit.private_get_account_summary_response_options as (
 	burst bigint,
 	rate bigint,
@@ -101,6 +106,7 @@ comment on column deribit.private_get_account_summary_response_options.burst is 
 comment on column deribit.private_get_account_summary_response_options.rate is 'Number of options related matching engine requests per second allowed for user';
 comment on column deribit.private_get_account_summary_response_options.perpetuals is 'Field not included if limits for perpetuals are not set.';
 
+drop type if exists deribit.private_get_account_summary_response_non_matching_engine cascade;
 create type deribit.private_get_account_summary_response_non_matching_engine as (
 	burst bigint,
 	rate bigint,
@@ -110,6 +116,7 @@ comment on column deribit.private_get_account_summary_response_non_matching_engi
 comment on column deribit.private_get_account_summary_response_non_matching_engine.rate is 'Number of non matching engine requests per second allowed for user';
 comment on column deribit.private_get_account_summary_response_non_matching_engine.options is 'Field not included if limits for options are not set.';
 
+drop type if exists deribit.private_get_account_summary_response_matching_engine cascade;
 create type deribit.private_get_account_summary_response_matching_engine as (
 	burst bigint,
 	rate bigint,
@@ -118,6 +125,7 @@ create type deribit.private_get_account_summary_response_matching_engine as (
 comment on column deribit.private_get_account_summary_response_matching_engine.burst is 'Maximal number of matching engine requests allowed for user in burst mode';
 comment on column deribit.private_get_account_summary_response_matching_engine.rate is 'Number of matching engine requests per second allowed for user';
 
+drop type if exists deribit.private_get_account_summary_response_futures cascade;
 create type deribit.private_get_account_summary_response_futures as (
 	burst bigint,
 	rate bigint,
@@ -126,11 +134,13 @@ create type deribit.private_get_account_summary_response_futures as (
 comment on column deribit.private_get_account_summary_response_futures.burst is 'Maximal number of futures related matching engine requests allowed for user in burst mode';
 comment on column deribit.private_get_account_summary_response_futures.rate is 'Number of futures related matching engine requests per second allowed for user';
 
+drop type if exists deribit.private_get_account_summary_response_limits cascade;
 create type deribit.private_get_account_summary_response_limits as (
 	futures deribit.private_get_account_summary_response_futures
 );
 comment on column deribit.private_get_account_summary_response_limits.futures is 'Field not included if limits for futures are not set.';
 
+drop type if exists deribit.private_get_account_summary_response_fee cascade;
 create type deribit.private_get_account_summary_response_fee as (
 	currency text,
 	fee_type text,
@@ -145,6 +155,7 @@ comment on column deribit.private_get_account_summary_response_fee.instrument_ty
 comment on column deribit.private_get_account_summary_response_fee.maker_fee is 'User fee as a maker';
 comment on column deribit.private_get_account_summary_response_fee.taker_fee is 'User fee as a taker';
 
+drop type if exists deribit.private_get_account_summary_response_result cascade;
 create type deribit.private_get_account_summary_response_result as (
 	maintenance_margin float,
 	delta_total float,
@@ -166,6 +177,7 @@ comment on column deribit.private_get_account_summary_response_result.session_up
 comment on column deribit.private_get_account_summary_response_result.fee_balance is 'The account''s fee balance (it can be used to pay for fees)';
 comment on column deribit.private_get_account_summary_response_result.fees is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
 
+drop type if exists deribit.private_get_account_summary_response cascade;
 create type deribit.private_get_account_summary_response as (
 	id bigint,
 	jsonrpc text,
@@ -174,8 +186,10 @@ create type deribit.private_get_account_summary_response as (
 comment on column deribit.private_get_account_summary_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_account_summary_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_account_summary_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_account_summary_request_currency cascade;
+create type deribit.private_get_account_summary_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_account_summary_request cascade;
 create type deribit.private_get_account_summary_request as (
 	currency deribit.private_get_account_summary_request_currency,
 	subaccount_id bigint,

@@ -1,3 +1,4 @@
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_response_trade cascade;
 create type deribit.public_get_last_trades_by_currency_and_time_response_trade as (
 	amount float,
 	block_trade_id text,
@@ -29,12 +30,14 @@ comment on column deribit.public_get_last_trades_by_currency_and_time_response_t
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade.trade_id is 'Unique (per currency) trade identifier';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade.trade_seq is 'The sequence number of the trade within instrument';
 
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_response_result cascade;
 create type deribit.public_get_last_trades_by_currency_and_time_response_result as (
 	has_more boolean,
 	trades deribit.public_get_last_trades_by_currency_and_time_response_trade[]
 );
 
 
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_response cascade;
 create type deribit.public_get_last_trades_by_currency_and_time_response as (
 	id bigint,
 	jsonrpc text,
@@ -43,12 +46,16 @@ create type deribit.public_get_last_trades_by_currency_and_time_response as (
 comment on column deribit.public_get_last_trades_by_currency_and_time_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.public_get_last_trades_by_currency_and_time_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_request_currency cascade;
+create type deribit.public_get_last_trades_by_currency_and_time_request_currency as enum ('USDC', 'ETH', 'BTC');
 
-create type deribit.public_get_last_trades_by_currency_and_time_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'combo', 'any');
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_request_kind cascade;
+create type deribit.public_get_last_trades_by_currency_and_time_request_kind as enum ('option', 'future_combo', 'combo', 'option_combo', 'spot', 'future', 'any');
 
-create type deribit.public_get_last_trades_by_currency_and_time_request_sorting as enum ('asc', 'desc', 'default');
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_request_sorting cascade;
+create type deribit.public_get_last_trades_by_currency_and_time_request_sorting as enum ('default', 'asc', 'desc');
 
+drop type if exists deribit.public_get_last_trades_by_currency_and_time_request cascade;
 create type deribit.public_get_last_trades_by_currency_and_time_request as (
 	currency deribit.public_get_last_trades_by_currency_and_time_request_currency,
 	kind deribit.public_get_last_trades_by_currency_and_time_request_kind,

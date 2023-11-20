@@ -1,3 +1,4 @@
+drop type if exists deribit.private_list_api_keys_response_result cascade;
 create type deribit.private_list_api_keys_response_result as (
 	client_id text,
 	client_secret text,
@@ -21,6 +22,7 @@ comment on column deribit.private_list_api_keys_response_result.name is 'Api key
 comment on column deribit.private_list_api_keys_response_result.public_key is 'PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)';
 comment on column deribit.private_list_api_keys_response_result.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_list_api_keys_response cascade;
 create type deribit.private_list_api_keys_response as (
 	id bigint,
 	jsonrpc text,

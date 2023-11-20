@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_order_margin_by_ids_response_result cascade;
 create type deribit.private_get_order_margin_by_ids_response_result as (
 	initial_margin float,
 	initial_margin_currency text,
@@ -7,6 +8,7 @@ comment on column deribit.private_get_order_margin_by_ids_response_result.initia
 comment on column deribit.private_get_order_margin_by_ids_response_result.initial_margin_currency is 'Currency of initial margin';
 comment on column deribit.private_get_order_margin_by_ids_response_result.order_id is 'Unique order identifier';
 
+drop type if exists deribit.private_get_order_margin_by_ids_response cascade;
 create type deribit.private_get_order_margin_by_ids_response as (
 	id bigint,
 	jsonrpc text,
@@ -15,8 +17,9 @@ create type deribit.private_get_order_margin_by_ids_response as (
 comment on column deribit.private_get_order_margin_by_ids_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_order_margin_by_ids_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_get_order_margin_by_ids_request cascade;
 create type deribit.private_get_order_margin_by_ids_request as (
-	ids text[]
+	ids UNKNOWN - array
 );
 comment on column deribit.private_get_order_margin_by_ids_request.ids is '(Required) Ids of orders';
 

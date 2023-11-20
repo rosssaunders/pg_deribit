@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_positions;
 create or replace function deribit.private_get_positions(
 	currency deribit.private_get_positions_request_currency,
 	kind deribit.private_get_positions_request_kind default null,
@@ -10,7 +11,10 @@ declare
 	_request deribit.private_get_positions_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_positions');
+    
+_request := row(
 		currency,
 		kind,
 		subaccount_id
@@ -18,15 +22,11 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_positions', _request);
 
-    perform deribit.matching_engine_request_log_call('/private/get_positions');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.private_get_positions_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

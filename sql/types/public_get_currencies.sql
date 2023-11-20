@@ -1,9 +1,11 @@
+drop type if exists deribit.public_get_currencies_response_withdrawal_priority cascade;
 create type deribit.public_get_currencies_response_withdrawal_priority as (
 	name text,
 	value float
 );
 
 
+drop type if exists deribit.public_get_currencies_response_result cascade;
 create type deribit.public_get_currencies_response_result as (
 	coin_type text,
 	currency text,
@@ -22,6 +24,7 @@ comment on column deribit.public_get_currencies_response_result.min_confirmation
 comment on column deribit.public_get_currencies_response_result.min_withdrawal_fee is 'The minimum transaction fee paid for withdrawals';
 comment on column deribit.public_get_currencies_response_result.withdrawal_fee is 'The total transaction fee paid for withdrawals';
 
+drop type if exists deribit.public_get_currencies_response cascade;
 create type deribit.public_get_currencies_response as (
 	id bigint,
 	jsonrpc text,

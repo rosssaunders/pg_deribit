@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_subaccounts;
 create or replace function deribit.private_get_subaccounts(
 	with_portfolio boolean default null
 )
@@ -8,21 +9,20 @@ declare
 	_request deribit.private_get_subaccounts_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_subaccounts');
+    
+_request := row(
 		with_portfolio
     )::deribit.private_get_subaccounts_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_subaccounts', _request);
 
-    perform deribit.matching_engine_request_log_call('/private/get_subaccounts');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.private_get_subaccounts_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

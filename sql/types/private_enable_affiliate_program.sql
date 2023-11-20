@@ -1,3 +1,4 @@
+drop type if exists deribit.private_enable_affiliate_program_response cascade;
 create type deribit.private_enable_affiliate_program_response as (
 	id bigint,
 	jsonrpc text,

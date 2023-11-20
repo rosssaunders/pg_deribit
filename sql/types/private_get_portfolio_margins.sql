@@ -1,8 +1,10 @@
+drop type if exists deribit.private_get_portfolio_margins_response_result cascade;
 create type deribit.private_get_portfolio_margins_response_result as (
 
 );
 
 
+drop type if exists deribit.private_get_portfolio_margins_response cascade;
 create type deribit.private_get_portfolio_margins_response as (
 	id bigint,
 	jsonrpc text,
@@ -12,8 +14,10 @@ comment on column deribit.private_get_portfolio_margins_response.id is 'The id t
 comment on column deribit.private_get_portfolio_margins_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_get_portfolio_margins_response.result is 'PM details';
 
-create type deribit.private_get_portfolio_margins_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_portfolio_margins_request_currency cascade;
+create type deribit.private_get_portfolio_margins_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_portfolio_margins_request cascade;
 create type deribit.private_get_portfolio_margins_request as (
 	currency deribit.private_get_portfolio_margins_request_currency,
 	add_positions boolean,

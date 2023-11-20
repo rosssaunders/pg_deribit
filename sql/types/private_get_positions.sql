@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_positions_response_result cascade;
 create type deribit.private_get_positions_response_result as (
 	average_price float,
 	average_price_usd float,
@@ -51,6 +52,7 @@ comment on column deribit.private_get_positions_response_result.theta is 'Only f
 comment on column deribit.private_get_positions_response_result.total_profit_loss is 'Profit or loss from position';
 comment on column deribit.private_get_positions_response_result.vega is 'Only for options, Vega parameter';
 
+drop type if exists deribit.private_get_positions_response cascade;
 create type deribit.private_get_positions_response as (
 	id bigint,
 	jsonrpc text,
@@ -59,10 +61,13 @@ create type deribit.private_get_positions_response as (
 comment on column deribit.private_get_positions_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_positions_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_positions_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_positions_request_currency cascade;
+create type deribit.private_get_positions_request_currency as enum ('USDC', 'ETH', 'BTC');
 
-create type deribit.private_get_positions_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo');
+drop type if exists deribit.private_get_positions_request_kind cascade;
+create type deribit.private_get_positions_request_kind as enum ('option', 'future_combo', 'option_combo', 'spot', 'future');
 
+drop type if exists deribit.private_get_positions_request cascade;
 create type deribit.private_get_positions_request as (
 	currency deribit.private_get_positions_request_currency,
 	kind deribit.private_get_positions_request_kind,

@@ -1,6 +1,6 @@
 import os
 from models import Function
-from postgres import enum_to_type, type_to_type, invoke_endpoint
+from postgres import enum_to_type, type_to_type, invoke_endpoint, test_endpoint
 
 
 class Exporter:
@@ -45,4 +45,9 @@ on conflict do nothing;""")
         with open(os.path.join(script_dir, f"../sql/functions/{function.endpoint.name}.sql"), 'w') as file:
 
             file.write(invoke_endpoint(self.schema, function))
+            file.write('\n\n')
+
+        with open(os.path.join(script_dir, f"../test/all_functions.sql"), 'a') as file:
+
+            file.write(test_endpoint(self.schema, function))
             file.write('\n\n')

@@ -1,3 +1,4 @@
+drop function if exists deribit.private_remove_subaccount;
 create or replace function deribit.private_remove_subaccount(
 	subaccount_id bigint
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_remove_subaccount_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/remove_subaccount');
+    
+_request := row(
 		subaccount_id
     )::deribit.private_remove_subaccount_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/remove_subaccount', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/remove_subaccount');
 
     return (jsonb_populate_record(
         null::deribit.private_remove_subaccount_response, 

@@ -1,3 +1,4 @@
+drop type if exists deribit.private_change_api_key_name_response_result cascade;
 create type deribit.private_change_api_key_name_response_result as (
 	client_id text,
 	client_secret text,
@@ -21,6 +22,7 @@ comment on column deribit.private_change_api_key_name_response_result.name is 'A
 comment on column deribit.private_change_api_key_name_response_result.public_key is 'PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)';
 comment on column deribit.private_change_api_key_name_response_result.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 
+drop type if exists deribit.private_change_api_key_name_response cascade;
 create type deribit.private_change_api_key_name_response as (
 	id bigint,
 	jsonrpc text,
@@ -29,6 +31,7 @@ create type deribit.private_change_api_key_name_response as (
 comment on column deribit.private_change_api_key_name_response.id is 'The id that was sent in the request';
 comment on column deribit.private_change_api_key_name_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_change_api_key_name_request cascade;
 create type deribit.private_change_api_key_name_request as (
 	id bigint,
 	name text

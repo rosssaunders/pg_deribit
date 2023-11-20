@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_settlement_history_by_instrument_response_settlement cascade;
 create type deribit.private_get_settlement_history_by_instrument_response_settlement as (
 	funded float,
 	funding float,
@@ -29,12 +30,14 @@ comment on column deribit.private_get_settlement_history_by_instrument_response_
 comment on column deribit.private_get_settlement_history_by_instrument_response_settlement.timestamp is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_settlement_history_by_instrument_response_settlement.type is 'The type of settlement. settlement, delivery or bankruptcy.';
 
+drop type if exists deribit.private_get_settlement_history_by_instrument_response_result cascade;
 create type deribit.private_get_settlement_history_by_instrument_response_result as (
 	continuation text,
 	settlements deribit.private_get_settlement_history_by_instrument_response_settlement[]
 );
 comment on column deribit.private_get_settlement_history_by_instrument_response_result.continuation is 'Continuation token for pagination.';
 
+drop type if exists deribit.private_get_settlement_history_by_instrument_response cascade;
 create type deribit.private_get_settlement_history_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
@@ -43,8 +46,10 @@ create type deribit.private_get_settlement_history_by_instrument_response as (
 comment on column deribit.private_get_settlement_history_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_settlement_history_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_settlement_history_by_instrument_request_type as enum ('settlement', 'delivery', 'bankruptcy');
+drop type if exists deribit.private_get_settlement_history_by_instrument_request_type cascade;
+create type deribit.private_get_settlement_history_by_instrument_request_type as enum ('settlement', 'bankruptcy', 'delivery');
 
+drop type if exists deribit.private_get_settlement_history_by_instrument_request cascade;
 create type deribit.private_get_settlement_history_by_instrument_request as (
 	instrument_name text,
 	type deribit.private_get_settlement_history_by_instrument_request_type,

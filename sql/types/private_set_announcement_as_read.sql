@@ -1,3 +1,4 @@
+drop type if exists deribit.private_set_announcement_as_read_response cascade;
 create type deribit.private_set_announcement_as_read_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,6 +8,7 @@ comment on column deribit.private_set_announcement_as_read_response.id is 'The i
 comment on column deribit.private_set_announcement_as_read_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_set_announcement_as_read_response.result is 'Result of method execution. ok in case of success';
 
+drop type if exists deribit.private_set_announcement_as_read_request cascade;
 create type deribit.private_set_announcement_as_read_request as (
 	announcement_id float
 );

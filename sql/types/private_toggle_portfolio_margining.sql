@@ -1,3 +1,4 @@
+drop type if exists deribit.private_toggle_portfolio_margining_response_old_state cascade;
 create type deribit.private_toggle_portfolio_margining_response_old_state as (
 	available_balance float,
 	initial_margin_rate float,
@@ -7,6 +8,7 @@ comment on column deribit.private_toggle_portfolio_margining_response_old_state.
 comment on column deribit.private_toggle_portfolio_margining_response_old_state.initial_margin_rate is 'Initial margin rate before change';
 comment on column deribit.private_toggle_portfolio_margining_response_old_state.maintenance_margin_rate is 'Maintenance margin rate before change';
 
+drop type if exists deribit.private_toggle_portfolio_margining_response_new_state cascade;
 create type deribit.private_toggle_portfolio_margining_response_new_state as (
 	available_balance float,
 	initial_margin_rate float,
@@ -18,6 +20,7 @@ comment on column deribit.private_toggle_portfolio_margining_response_new_state.
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.maintenance_margin_rate is 'Maintenance margin rate after change';
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.old_state is 'Represents portfolio state before change';
 
+drop type if exists deribit.private_toggle_portfolio_margining_response_result cascade;
 create type deribit.private_toggle_portfolio_margining_response_result as (
 	currency text,
 	new_state deribit.private_toggle_portfolio_margining_response_new_state
@@ -25,6 +28,7 @@ create type deribit.private_toggle_portfolio_margining_response_result as (
 comment on column deribit.private_toggle_portfolio_margining_response_result.currency is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_toggle_portfolio_margining_response_result.new_state is 'Represents portfolio state after change';
 
+drop type if exists deribit.private_toggle_portfolio_margining_response cascade;
 create type deribit.private_toggle_portfolio_margining_response as (
 	id bigint,
 	jsonrpc text,
@@ -33,6 +37,7 @@ create type deribit.private_toggle_portfolio_margining_response as (
 comment on column deribit.private_toggle_portfolio_margining_response.id is 'The id that was sent in the request';
 comment on column deribit.private_toggle_portfolio_margining_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
+drop type if exists deribit.private_toggle_portfolio_margining_request cascade;
 create type deribit.private_toggle_portfolio_margining_request as (
 	user_id bigint,
 	enabled boolean,

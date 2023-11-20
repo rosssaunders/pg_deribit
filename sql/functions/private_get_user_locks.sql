@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_user_locks;
 create or replace function deribit.private_get_user_locks()
 returns setof deribit.private_get_user_locks_response_result
 language plpgsql
@@ -6,17 +7,16 @@ declare
     _http_response omni_httpc.http_response;
 begin
     
+    perform deribit.matching_engine_request_log_call('/private/get_user_locks');
+    
+
     _http_response := deribit.internal_jsonrpc_request('/private/get_user_locks', null::text);
 
-    perform deribit.matching_engine_request_log_call('/private/get_user_locks');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.private_get_user_locks_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

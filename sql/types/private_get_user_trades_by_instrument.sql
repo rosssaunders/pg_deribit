@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_user_trades_by_instrument_response_trade cascade;
 create type deribit.private_get_user_trades_by_instrument_response_trade as (
 	advanced text,
 	amount float,
@@ -12,7 +13,7 @@ create type deribit.private_get_user_trades_by_instrument_response_trade as (
 	instrument_name text,
 	iv float,
 	label text,
-	legs text[],
+	legs UNKNOWN - array,
 	liquidation text,
 	liquidity text,
 	mark_price float,
@@ -65,12 +66,14 @@ comment on column deribit.private_get_user_trades_by_instrument_response_trade.t
 comment on column deribit.private_get_user_trades_by_instrument_response_trade.trade_seq is 'The sequence number of the trade within instrument';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade.underlying_price is 'Underlying price for implied volatility calculations (Options only)';
 
+drop type if exists deribit.private_get_user_trades_by_instrument_response_result cascade;
 create type deribit.private_get_user_trades_by_instrument_response_result as (
 	has_more boolean,
 	trades deribit.private_get_user_trades_by_instrument_response_trade[]
 );
 
 
+drop type if exists deribit.private_get_user_trades_by_instrument_response cascade;
 create type deribit.private_get_user_trades_by_instrument_response as (
 	id bigint,
 	jsonrpc text,
@@ -79,8 +82,10 @@ create type deribit.private_get_user_trades_by_instrument_response as (
 comment on column deribit.private_get_user_trades_by_instrument_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_user_trades_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('asc', 'desc', 'default');
+drop type if exists deribit.private_get_user_trades_by_instrument_request_sorting cascade;
+create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('default', 'asc', 'desc');
 
+drop type if exists deribit.private_get_user_trades_by_instrument_request cascade;
 create type deribit.private_get_user_trades_by_instrument_request as (
 	instrument_name text,
 	start_seq bigint,

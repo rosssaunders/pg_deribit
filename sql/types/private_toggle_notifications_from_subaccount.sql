@@ -1,3 +1,4 @@
+drop type if exists deribit.private_toggle_notifications_from_subaccount_response cascade;
 create type deribit.private_toggle_notifications_from_subaccount_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,6 +8,7 @@ comment on column deribit.private_toggle_notifications_from_subaccount_response.
 comment on column deribit.private_toggle_notifications_from_subaccount_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_toggle_notifications_from_subaccount_response.result is 'Result of method execution. ok in case of success';
 
+drop type if exists deribit.private_toggle_notifications_from_subaccount_request cascade;
 create type deribit.private_toggle_notifications_from_subaccount_request as (
 	sid bigint,
 	state boolean

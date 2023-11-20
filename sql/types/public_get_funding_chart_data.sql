@@ -23,7 +23,7 @@ create type deribit.public_get_funding_chart_data_response as (
 comment on column deribit.public_get_funding_chart_data_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_funding_chart_data_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.public_get_funding_chart_data_request_length as enum ('8h', '24h', '1m');
+create type deribit.public_get_funding_chart_data_request_length as enum ('8h', '1m', '24h');
 
 create type deribit.public_get_funding_chart_data_request as (
 	instrument_name text,

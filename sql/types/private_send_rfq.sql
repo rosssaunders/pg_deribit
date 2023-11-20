@@ -1,3 +1,4 @@
+drop type if exists deribit.private_send_rfq_response cascade;
 create type deribit.private_send_rfq_response as (
 	id bigint,
 	jsonrpc text,
@@ -7,8 +8,10 @@ comment on column deribit.private_send_rfq_response.id is 'The id that was sent 
 comment on column deribit.private_send_rfq_response.jsonrpc is 'The JSON-RPC version (2.0)';
 comment on column deribit.private_send_rfq_response.result is 'Result of method execution. ok in case of success';
 
-create type deribit.private_send_rfq_request_side as enum ('buy', 'sell');
+drop type if exists deribit.private_send_rfq_request_side cascade;
+create type deribit.private_send_rfq_request_side as enum ('sell', 'buy');
 
+drop type if exists deribit.private_send_rfq_request cascade;
 create type deribit.private_send_rfq_request as (
 	instrument_name text,
 	amount float,

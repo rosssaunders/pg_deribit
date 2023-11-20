@@ -1,3 +1,4 @@
+drop function if exists deribit.public_get_order_book_by_instrument_id;
 create or replace function deribit.public_get_order_book_by_instrument_id(
 	instrument_id bigint,
 	depth deribit.public_get_order_book_by_instrument_id_request_depth default null
@@ -9,14 +10,15 @@ declare
 	_request deribit.public_get_order_book_by_instrument_id_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_order_book_by_instrument_id');
+    
+_request := row(
 		instrument_id,
 		depth
     )::deribit.public_get_order_book_by_instrument_id_request;
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_order_book_by_instrument_id', _request);
-
-    perform deribit.matching_engine_request_log_call('/public/get_order_book_by_instrument_id');
 
     return (jsonb_populate_record(
         null::deribit.public_get_order_book_by_instrument_id_response, 

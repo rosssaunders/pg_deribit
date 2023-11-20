@@ -10,4 +10,4 @@ group by d1
 order by d1
 $$;
 
-comment on function deribit.unnest_2d_1d(anyarray) is 'Unnest a 2d array into a 1d array. Used for Order Books.';
+comment on function deribit.unnest_2d_1d(anyarray) is 'Unnest a 2d array into a 1d array. Used for Market Data.';

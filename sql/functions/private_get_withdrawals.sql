@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_withdrawals;
 create or replace function deribit.private_get_withdrawals(
 	currency deribit.private_get_withdrawals_request_currency,
 	count bigint default null,
@@ -10,15 +11,16 @@ declare
 	_request deribit.private_get_withdrawals_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_withdrawals');
+    
+_request := row(
 		currency,
 		count,
 		"offset"
     )::deribit.private_get_withdrawals_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_withdrawals', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/get_withdrawals');
 
     return (jsonb_populate_record(
         null::deribit.private_get_withdrawals_response, 

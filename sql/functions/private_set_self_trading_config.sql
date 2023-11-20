@@ -1,3 +1,4 @@
+drop function if exists deribit.private_set_self_trading_config;
 create or replace function deribit.private_set_self_trading_config(
 	mode deribit.private_set_self_trading_config_request_mode,
 	extended_to_subaccounts boolean
@@ -9,14 +10,15 @@ declare
 	_request deribit.private_set_self_trading_config_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/set_self_trading_config');
+    
+_request := row(
 		mode,
 		extended_to_subaccounts
     )::deribit.private_set_self_trading_config_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_self_trading_config', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/set_self_trading_config');
 
     return (jsonb_populate_record(
         null::deribit.private_set_self_trading_config_response, 

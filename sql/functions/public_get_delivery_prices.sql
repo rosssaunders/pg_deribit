@@ -1,3 +1,4 @@
+drop function if exists deribit.public_get_delivery_prices;
 create or replace function deribit.public_get_delivery_prices(
 	index_name deribit.public_get_delivery_prices_request_index_name,
 	"offset" bigint default null,
@@ -10,15 +11,16 @@ declare
 	_request deribit.public_get_delivery_prices_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/public/get_delivery_prices');
+    
+_request := row(
 		index_name,
 		"offset",
 		count
     )::deribit.public_get_delivery_prices_request;
     
     _http_response := deribit.internal_jsonrpc_request('/public/get_delivery_prices', _request);
-
-    perform deribit.matching_engine_request_log_call('/public/get_delivery_prices');
 
     return (jsonb_populate_record(
         null::deribit.public_get_delivery_prices_response, 

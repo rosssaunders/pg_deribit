@@ -1,3 +1,4 @@
+drop function if exists deribit.private_set_mmp_config;
 create or replace function deribit.private_set_mmp_config(
 	index_name deribit.private_set_mmp_config_request_index_name,
 	"interval" bigint,
@@ -12,7 +13,10 @@ declare
 	_request deribit.private_set_mmp_config_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/set_mmp_config');
+    
+_request := row(
 		index_name,
 		"interval",
 		frozen_time,
@@ -22,15 +26,11 @@ begin
     
     _http_response := deribit.internal_jsonrpc_request('/private/set_mmp_config', _request);
 
-    perform deribit.matching_engine_request_log_call('/private/set_mmp_config');
-
     return query (
-        select *
-		from unnest(
-             (jsonb_populate_record(
+        select (jsonb_populate_record(
                         null::deribit.private_set_mmp_config_response,
                         convert_from(_http_response.body, 'utf-8')::jsonb)
-             ).result)
+             ).result
     );
 end
 $$;

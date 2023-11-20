@@ -1,3 +1,4 @@
+drop type if exists deribit.private_get_subaccounts_details_response_position cascade;
 create type deribit.private_get_subaccounts_details_response_position as (
 	average_price float,
 	average_price_usd float,
@@ -51,6 +52,7 @@ comment on column deribit.private_get_subaccounts_details_response_position.tota
 comment on column deribit.private_get_subaccounts_details_response_position.vega is 'Only for options, Vega parameter';
 comment on column deribit.private_get_subaccounts_details_response_position.uid is 'Account/Subaccount identifier';
 
+drop type if exists deribit.private_get_subaccounts_details_response_open_order cascade;
 create type deribit.private_get_subaccounts_details_response_open_order as (
 	reject_post_only boolean,
 	label text,
@@ -133,11 +135,13 @@ comment on column deribit.private_get_subaccounts_details_response_open_order.cr
 comment on column deribit.private_get_subaccounts_details_response_open_order.average_price is 'Average fill price of the order';
 comment on column deribit.private_get_subaccounts_details_response_open_order.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
+drop type if exists deribit.private_get_subaccounts_details_response_result cascade;
 create type deribit.private_get_subaccounts_details_response_result as (
 	open_orders deribit.private_get_subaccounts_details_response_open_order[]
 );
 
 
+drop type if exists deribit.private_get_subaccounts_details_response cascade;
 create type deribit.private_get_subaccounts_details_response as (
 	id bigint,
 	jsonrpc text,
@@ -146,8 +150,10 @@ create type deribit.private_get_subaccounts_details_response as (
 comment on column deribit.private_get_subaccounts_details_response.id is 'The id that was sent in the request';
 comment on column deribit.private_get_subaccounts_details_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
-create type deribit.private_get_subaccounts_details_request_currency as enum ('BTC', 'ETH', 'USDC');
+drop type if exists deribit.private_get_subaccounts_details_request_currency cascade;
+create type deribit.private_get_subaccounts_details_request_currency as enum ('USDC', 'ETH', 'BTC');
 
+drop type if exists deribit.private_get_subaccounts_details_request cascade;
 create type deribit.private_get_subaccounts_details_request as (
 	currency deribit.private_get_subaccounts_details_request_currency,
 	with_open_orders boolean

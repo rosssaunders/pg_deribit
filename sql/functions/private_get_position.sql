@@ -1,3 +1,4 @@
+drop function if exists deribit.private_get_position;
 create or replace function deribit.private_get_position(
 	instrument_name text
 )
@@ -8,13 +9,14 @@ declare
 	_request deribit.private_get_position_request;
     _http_response omni_httpc.http_response;
 begin
-    _request := row(
+    
+    perform deribit.matching_engine_request_log_call('/private/get_position');
+    
+_request := row(
 		instrument_name
     )::deribit.private_get_position_request;
     
     _http_response := deribit.internal_jsonrpc_request('/private/get_position', _request);
-
-    perform deribit.matching_engine_request_log_call('/private/get_position');
 
     return (jsonb_populate_record(
         null::deribit.private_get_position_response, 
