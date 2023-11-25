@@ -29,12 +29,12 @@ def default_test_value(field: str) -> str:
         'extended_to_subaccounts': '',
         'state': 'false',
         'enabled': 'false',
-        'label': 'abcde',
+        'label': "'abcde'",
         'type': 'market',
         '"interval"': '1',
         'frozen_time': '1',
         'destination': '1',
-        'address': '123456'
+        'address': "'123456'"
     }
     return field_values.get(field, 'UNKNOWN')
 

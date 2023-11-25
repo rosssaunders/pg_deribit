@@ -24,7 +24,7 @@ from deribit.private_cancel_all_by_instrument(
 
 select * 
 from deribit.private_cancel_by_label(
-	label := abcde
+	label := 'abcde'
 );
 
 select * 
@@ -352,7 +352,7 @@ from deribit.private_toggle_subaccount_login(
 select * 
 from deribit.private_withdraw(
 	currency := 'BTC',
-	address := 123456,
+	address := '123456',
 	amount := 0.1::numeric
 );
 
