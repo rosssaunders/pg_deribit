@@ -1,17 +1,17 @@
 drop type if exists deribit.public_get_last_settlements_by_currency_response_settlement cascade;
 create type deribit.public_get_last_settlements_by_currency_response_settlement as (
-	funded float,
-	funding float,
-	index_price float,
+	funded double precision,
+	funding double precision,
+	index_price double precision,
 	instrument_name text,
-	mark_price float,
-	position float,
-	profit_loss float,
-	session_bankrupcy float,
-	session_profit_loss float,
-	session_tax float,
-	session_tax_rate float,
-	socialized float,
+	mark_price double precision,
+	position double precision,
+	profit_loss double precision,
+	session_bankrupcy double precision,
+	session_profit_loss double precision,
+	session_tax double precision,
+	session_tax_rate double precision,
+	socialized double precision,
 	timestamp bigint,
 	type text
 );
@@ -47,10 +47,10 @@ comment on column deribit.public_get_last_settlements_by_currency_response.id is
 comment on column deribit.public_get_last_settlements_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request_currency cascade;
-create type deribit.public_get_last_settlements_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.public_get_last_settlements_by_currency_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request_type cascade;
-create type deribit.public_get_last_settlements_by_currency_request_type as enum ('settlement', 'bankruptcy', 'delivery');
+create type deribit.public_get_last_settlements_by_currency_request_type as enum ('delivery', 'bankruptcy', 'settlement');
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request cascade;
 create type deribit.public_get_last_settlements_by_currency_request as (

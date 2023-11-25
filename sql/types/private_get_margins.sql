@@ -1,9 +1,9 @@
 drop type if exists deribit.private_get_margins_response_result cascade;
 create type deribit.private_get_margins_response_result as (
-	buy float,
-	max_price float,
-	min_price float,
-	sell float
+	buy double precision,
+	max_price double precision,
+	min_price double precision,
+	sell double precision
 );
 comment on column deribit.private_get_margins_response_result.buy is 'Margin when buying';
 comment on column deribit.private_get_margins_response_result.max_price is 'The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.';
@@ -22,8 +22,8 @@ comment on column deribit.private_get_margins_response.jsonrpc is 'The JSON-RPC 
 drop type if exists deribit.private_get_margins_request cascade;
 create type deribit.private_get_margins_request as (
 	instrument_name text,
-	amount float,
-	price float
+	amount double precision,
+	price double precision
 );
 comment on column deribit.private_get_margins_request.instrument_name is '(Required) Instrument name';
 comment on column deribit.private_get_margins_request.amount is '(Required) Amount, integer for future, float for option. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';

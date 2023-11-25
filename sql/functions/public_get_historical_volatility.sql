@@ -4,26 +4,37 @@ create or replace function deribit.public_get_historical_volatility(
 	currency deribit.public_get_historical_volatility_request_currency
 )
 returns setof deribit.public_get_historical_volatility_response_result
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.public_get_historical_volatility_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		currency
-    )::deribit.public_get_historical_volatility_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/public/get_historical_volatility'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return query (
+    with request as (
+        select row(
+			currency
+        )::deribit.public_get_historical_volatility_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/public/get_historical_volatility'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	, result as (
         select (jsonb_populate_record(
                         null::deribit.public_get_historical_volatility_response,
-                        convert_from(_http_response.body, 'utf-8')::jsonb)
+                        convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
-    );
-end
+        from http_response
+    )
+    , unnested as (
+        select deribit.unnest_2d_1d(x.x)
+        from result x(x)
+    )
+    select 
+		(b.x)[1]::bigint as timestamp,
+		(b.x)[2]::double precision as value
+    from unnested b(x)
 $$;
 
 comment on function deribit.public_get_historical_volatility is 'Provides information about historical volatility for given cryptocurrency.';

@@ -1,8 +1,8 @@
 drop type if exists deribit.private_toggle_portfolio_margining_response_old_state cascade;
 create type deribit.private_toggle_portfolio_margining_response_old_state as (
-	available_balance float,
-	initial_margin_rate float,
-	maintenance_margin_rate float
+	available_balance double precision,
+	initial_margin_rate double precision,
+	maintenance_margin_rate double precision
 );
 comment on column deribit.private_toggle_portfolio_margining_response_old_state.available_balance is 'Available balance before change';
 comment on column deribit.private_toggle_portfolio_margining_response_old_state.initial_margin_rate is 'Initial margin rate before change';
@@ -10,9 +10,9 @@ comment on column deribit.private_toggle_portfolio_margining_response_old_state.
 
 drop type if exists deribit.private_toggle_portfolio_margining_response_new_state cascade;
 create type deribit.private_toggle_portfolio_margining_response_new_state as (
-	available_balance float,
-	initial_margin_rate float,
-	maintenance_margin_rate float,
+	available_balance double precision,
+	initial_margin_rate double precision,
+	maintenance_margin_rate double precision,
 	old_state deribit.private_toggle_portfolio_margining_response_old_state
 );
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.available_balance is 'Available balance after change';

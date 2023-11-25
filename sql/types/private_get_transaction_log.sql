@@ -1,18 +1,18 @@
 drop type if exists deribit.private_get_transaction_log_response_info cascade;
 create type deribit.private_get_transaction_log_response_info as (
 	instrument_name text,
-	interest_pl float,
-	mark_price float,
+	interest_pl double precision,
+	mark_price double precision,
 	order_id text,
-	position float,
-	price float,
+	position double precision,
+	price double precision,
 	price_currency text,
 	profit_as_cashflow boolean,
-	session_rpl float,
-	session_upl float,
+	session_rpl double precision,
+	session_upl double precision,
 	side text,
 	timestamp bigint,
-	total_interest_pl float,
+	total_interest_pl double precision,
 	trade_id text,
 	type text,
 	user_id bigint,
@@ -42,13 +42,13 @@ comment on column deribit.private_get_transaction_log_response_info.username is 
 
 drop type if exists deribit.private_get_transaction_log_response_log cascade;
 create type deribit.private_get_transaction_log_response_log as (
-	amount float,
-	balance float,
-	cashflow float,
-	change float,
-	commission float,
+	amount double precision,
+	balance double precision,
+	cashflow double precision,
+	change double precision,
+	commission double precision,
 	currency text,
-	equity float,
+	equity double precision,
 	id bigint,
 	info deribit.private_get_transaction_log_response_info
 );
@@ -79,7 +79,7 @@ comment on column deribit.private_get_transaction_log_response.id is 'The id tha
 comment on column deribit.private_get_transaction_log_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_transaction_log_request_currency cascade;
-create type deribit.private_get_transaction_log_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_get_transaction_log_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_transaction_log_request cascade;
 create type deribit.private_get_transaction_log_request as (

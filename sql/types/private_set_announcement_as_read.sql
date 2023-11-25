@@ -10,7 +10,7 @@ comment on column deribit.private_set_announcement_as_read_response.result is 'R
 
 drop type if exists deribit.private_set_announcement_as_read_request cascade;
 create type deribit.private_set_announcement_as_read_request as (
-	announcement_id float
+	announcement_id double precision
 );
 comment on column deribit.private_set_announcement_as_read_request.announcement_id is '(Required) the ID of the announcement';
 

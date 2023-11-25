@@ -3,29 +3,29 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
 	reject_post_only boolean,
 	label text,
 	order_state text,
-	usd float,
-	implv float,
-	trigger_reference_price float,
+	usd double precision,
+	implv double precision,
+	trigger_reference_price double precision,
 	original_order_type text,
 	block_trade boolean,
-	trigger_price float,
+	trigger_price double precision,
 	api boolean,
 	mmp boolean,
 	trigger_order_id text,
 	cancel_reason text,
 	risk_reducing boolean,
-	filled_amount float,
+	filled_amount double precision,
 	instrument_name text,
-	max_show float,
+	max_show double precision,
 	app_name text,
 	mmp_cancelled boolean,
 	direction text,
 	last_update_timestamp bigint,
-	trigger_offset float,
+	trigger_offset double precision,
 	price text,
 	is_liquidation boolean,
 	reduce_only boolean,
-	amount float,
+	amount double precision,
 	post_only boolean,
 	mobile boolean,
 	triggered boolean,
@@ -37,7 +37,7 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
 	trigger text,
 	web boolean,
 	creation_timestamp bigint,
-	average_price float,
+	average_price double precision,
 	advanced text
 );
 comment on column deribit.private_get_open_orders_by_instrument_response_result.reject_post_only is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -90,7 +90,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response.id is '
 comment on column deribit.private_get_open_orders_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_open_orders_by_instrument_request_type cascade;
-create type deribit.private_get_open_orders_by_instrument_request_type as enum ('trigger_all', 'stop_all', 'trailing_all', 'stop_limit', 'all', 'trailing_stop', 'take_limit', 'take_market', 'stop_market', 'limit', 'take_all');
+create type deribit.private_get_open_orders_by_instrument_request_type as enum ('all', 'trigger_all', 'trailing_all', 'limit', 'stop_limit', 'stop_market', 'take_market', 'stop_all', 'take_limit', 'trailing_stop', 'take_all');
 
 drop type if exists deribit.private_get_open_orders_by_instrument_request cascade;
 create type deribit.private_get_open_orders_by_instrument_request as (

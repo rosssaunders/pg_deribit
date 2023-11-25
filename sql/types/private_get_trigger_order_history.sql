@@ -1,6 +1,6 @@
 drop type if exists deribit.private_get_trigger_order_history_response_entry cascade;
 create type deribit.private_get_trigger_order_history_response_entry as (
-	amount float,
+	amount double precision,
 	direction text,
 	instrument_name text,
 	label text,
@@ -9,14 +9,14 @@ create type deribit.private_get_trigger_order_history_response_entry as (
 	order_state text,
 	order_type text,
 	post_only boolean,
-	price float,
+	price double precision,
 	reduce_only boolean,
 	request text,
 	timestamp bigint,
 	trigger text,
-	trigger_offset float,
+	trigger_offset double precision,
 	trigger_order_id text,
-	trigger_price float
+	trigger_price double precision
 );
 comment on column deribit.private_get_trigger_order_history_response_entry.amount is 'It represents the requested order size. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
 comment on column deribit.private_get_trigger_order_history_response_entry.direction is 'Direction: buy, or sell';
@@ -53,7 +53,7 @@ comment on column deribit.private_get_trigger_order_history_response.id is 'The 
 comment on column deribit.private_get_trigger_order_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_trigger_order_history_request_currency cascade;
-create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_trigger_order_history_request cascade;
 create type deribit.private_get_trigger_order_history_request as (

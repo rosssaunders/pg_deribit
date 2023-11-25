@@ -1,13 +1,13 @@
 drop type if exists deribit.public_ticker_response_stats cascade;
 create type deribit.public_ticker_response_stats as (
-	high float,
-	low float,
-	price_change float,
-	volume float,
-	volume_usd float,
+	high double precision,
+	low double precision,
+	price_change double precision,
+	volume double precision,
+	volume_usd double precision,
 	timestamp bigint,
-	underlying_index float,
-	underlying_price float
+	underlying_index double precision,
+	underlying_price double precision
 );
 comment on column deribit.public_ticker_response_stats.high is 'Highest price during 24h';
 comment on column deribit.public_ticker_response_stats.low is 'Lowest price during 24h';
@@ -20,22 +20,22 @@ comment on column deribit.public_ticker_response_stats.underlying_price is 'Unde
 
 drop type if exists deribit.public_ticker_response_greeks cascade;
 create type deribit.public_ticker_response_greeks as (
-	delta float,
-	gamma float,
-	rho float,
-	theta float,
-	vega float,
-	index_price float,
+	delta double precision,
+	gamma double precision,
+	rho double precision,
+	theta double precision,
+	vega double precision,
+	index_price double precision,
 	instrument_name text,
-	interest_rate float,
-	interest_value float,
-	last_price float,
-	mark_iv float,
-	mark_price float,
-	max_price float,
-	min_price float,
-	open_interest float,
-	settlement_price float,
+	interest_rate double precision,
+	interest_value double precision,
+	last_price double precision,
+	mark_iv double precision,
+	mark_price double precision,
+	max_price double precision,
+	min_price double precision,
+	open_interest double precision,
+	settlement_price double precision,
 	state text,
 	stats deribit.public_ticker_response_stats
 );
@@ -59,16 +59,16 @@ comment on column deribit.public_ticker_response_greeks.state is 'The state of t
 
 drop type if exists deribit.public_ticker_response_result cascade;
 create type deribit.public_ticker_response_result as (
-	ask_iv float,
-	best_ask_amount float,
-	best_ask_price float,
-	best_bid_amount float,
-	best_bid_price float,
-	bid_iv float,
-	current_funding float,
-	delivery_price float,
-	estimated_delivery_price float,
-	funding_8h float,
+	ask_iv double precision,
+	best_ask_amount double precision,
+	best_ask_price double precision,
+	best_bid_amount double precision,
+	best_bid_price double precision,
+	bid_iv double precision,
+	current_funding double precision,
+	delivery_price double precision,
+	estimated_delivery_price double precision,
+	funding_8h double precision,
 	greeks deribit.public_ticker_response_greeks
 );
 comment on column deribit.public_ticker_response_result.ask_iv is '(Only for option) implied volatility for best ask';

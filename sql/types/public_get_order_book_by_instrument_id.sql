@@ -1,13 +1,13 @@
 drop type if exists deribit.public_get_order_book_by_instrument_id_response_stats cascade;
 create type deribit.public_get_order_book_by_instrument_id_response_stats as (
-	high float,
-	low float,
-	price_change float,
-	volume float,
-	volume_usd float,
+	high double precision,
+	low double precision,
+	price_change double precision,
+	volume double precision,
+	volume_usd double precision,
 	timestamp bigint,
-	underlying_index float,
-	underlying_price float
+	underlying_index double precision,
+	underlying_price double precision
 );
 comment on column deribit.public_get_order_book_by_instrument_id_response_stats.high is 'Highest price during 24h';
 comment on column deribit.public_get_order_book_by_instrument_id_response_stats.low is 'Lowest price during 24h';
@@ -20,21 +20,21 @@ comment on column deribit.public_get_order_book_by_instrument_id_response_stats.
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_response_greeks cascade;
 create type deribit.public_get_order_book_by_instrument_id_response_greeks as (
-	delta float,
-	gamma float,
-	rho float,
-	theta float,
-	vega float,
-	index_price float,
+	delta double precision,
+	gamma double precision,
+	rho double precision,
+	theta double precision,
+	vega double precision,
+	index_price double precision,
 	instrument_name text,
-	interest_rate float,
-	last_price float,
-	mark_iv float,
-	mark_price float,
-	max_price float,
-	min_price float,
-	open_interest float,
-	settlement_price float,
+	interest_rate double precision,
+	last_price double precision,
+	mark_iv double precision,
+	mark_price double precision,
+	max_price double precision,
+	min_price double precision,
+	open_interest double precision,
+	settlement_price double precision,
 	state text,
 	stats deribit.public_get_order_book_by_instrument_id_response_stats
 );
@@ -57,9 +57,9 @@ comment on column deribit.public_get_order_book_by_instrument_id_response_greeks
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_response_bid cascade;
 create type deribit.public_get_order_book_by_instrument_id_response_bid as (
-	current_funding float,
-	delivery_price float,
-	funding_8h float,
+	current_funding double precision,
+	delivery_price double precision,
+	funding_8h double precision,
 	greeks deribit.public_get_order_book_by_instrument_id_response_greeks
 );
 comment on column deribit.public_get_order_book_by_instrument_id_response_bid.current_funding is 'Current funding (perpetual only)';
@@ -69,12 +69,12 @@ comment on column deribit.public_get_order_book_by_instrument_id_response_bid.gr
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_response_ask cascade;
 create type deribit.public_get_order_book_by_instrument_id_response_ask as (
-	best_ask_amount float,
-	best_ask_price float,
-	best_bid_amount float,
-	best_bid_price float,
-	bid_iv float,
-	bids deribit.public_get_order_book_by_instrument_id_response_bid[]
+	best_ask_amount double precision,
+	best_ask_price double precision,
+	best_bid_amount double precision,
+	best_bid_price double precision,
+	bid_iv double precision,
+	bids double precision[][]
 );
 comment on column deribit.public_get_order_book_by_instrument_id_response_ask.best_ask_amount is 'It represents the requested order size of all best asks';
 comment on column deribit.public_get_order_book_by_instrument_id_response_ask.best_ask_price is 'The current best ask price, null if there aren''t any asks';
@@ -85,8 +85,8 @@ comment on column deribit.public_get_order_book_by_instrument_id_response_ask.bi
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_response_result cascade;
 create type deribit.public_get_order_book_by_instrument_id_response_result as (
-	ask_iv float,
-	asks deribit.public_get_order_book_by_instrument_id_response_ask[]
+	ask_iv double precision,
+	asks double precision[][]
 );
 comment on column deribit.public_get_order_book_by_instrument_id_response_result.ask_iv is '(Only for option) implied volatility for best ask';
 comment on column deribit.public_get_order_book_by_instrument_id_response_result.asks is 'List of asks';
@@ -101,7 +101,7 @@ comment on column deribit.public_get_order_book_by_instrument_id_response.id is 
 comment on column deribit.public_get_order_book_by_instrument_id_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_request_depth cascade;
-create type deribit.public_get_order_book_by_instrument_id_request_depth as enum ('20', '10', '10000', '50', '100', '5', '1', '1000');
+create type deribit.public_get_order_book_by_instrument_id_request_depth as enum ('100', '20', '1000', '10000', '5', '10', '50', '1');
 
 drop type if exists deribit.public_get_order_book_by_instrument_id_request cascade;
 create type deribit.public_get_order_book_by_instrument_id_request as (

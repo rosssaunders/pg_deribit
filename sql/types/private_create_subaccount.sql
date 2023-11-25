@@ -1,13 +1,13 @@
 drop type if exists deribit.private_create_subaccount_response_eth cascade;
 create type deribit.private_create_subaccount_response_eth as (
-	available_funds float,
-	available_withdrawal_funds float,
-	balance float,
+	available_funds double precision,
+	available_withdrawal_funds double precision,
+	balance double precision,
 	currency text,
-	equity float,
-	initial_margin float,
-	maintenance_margin float,
-	margin_balance float,
+	equity double precision,
+	initial_margin double precision,
+	maintenance_margin double precision,
+	margin_balance double precision,
 	receive_notifications boolean,
 	security_keys_enabled boolean,
 	system_name text,
@@ -22,14 +22,14 @@ comment on column deribit.private_create_subaccount_response_eth.username is 'Ac
 
 drop type if exists deribit.private_create_subaccount_response_btc cascade;
 create type deribit.private_create_subaccount_response_btc as (
-	available_funds float,
-	available_withdrawal_funds float,
-	balance float,
+	available_funds double precision,
+	available_withdrawal_funds double precision,
+	balance double precision,
 	currency text,
-	equity float,
-	initial_margin float,
-	maintenance_margin float,
-	margin_balance float,
+	equity double precision,
+	initial_margin double precision,
+	maintenance_margin double precision,
+	margin_balance double precision,
 	eth deribit.private_create_subaccount_response_eth
 );
 

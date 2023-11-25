@@ -2,14 +2,14 @@ drop type if exists deribit.private_buy_response_leg cascade;
 create type deribit.private_buy_response_leg as (
 	liquidation text,
 	liquidity text,
-	mark_price float,
+	mark_price double precision,
 	matching_id text,
 	mmp boolean,
 	order_id text,
 	order_type text,
 	post_only text,
-	price float,
-	profit_loss float,
+	price double precision,
+	profit_loss double precision,
 	reduce_only text,
 	risk_reducing boolean,
 	state text,
@@ -17,7 +17,7 @@ create type deribit.private_buy_response_leg as (
 	timestamp bigint,
 	trade_id text,
 	trade_seq bigint,
-	underlying_price float
+	underlying_price double precision
 );
 comment on column deribit.private_buy_response_leg.liquidation is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.private_buy_response_leg.liquidity is 'Describes what was role of users order: "M" when it was maker order, "T" when it was taker order';
@@ -41,17 +41,17 @@ comment on column deribit.private_buy_response_leg.underlying_price is 'Underlyi
 drop type if exists deribit.private_buy_response_trade cascade;
 create type deribit.private_buy_response_trade as (
 	advanced text,
-	amount float,
+	amount double precision,
 	api boolean,
 	block_trade_id text,
 	combo_id text,
-	combo_trade_id float,
+	combo_trade_id double precision,
 	direction text,
-	fee float,
+	fee double precision,
 	fee_currency text,
-	index_price float,
+	index_price double precision,
 	instrument_name text,
-	iv float,
+	iv double precision,
 	label text,
 	legs deribit.private_buy_response_leg[]
 );
@@ -75,29 +75,29 @@ create type deribit.private_buy_response_order as (
 	reject_post_only boolean,
 	label text,
 	order_state text,
-	usd float,
-	implv float,
-	trigger_reference_price float,
+	usd double precision,
+	implv double precision,
+	trigger_reference_price double precision,
 	original_order_type text,
 	block_trade boolean,
-	trigger_price float,
+	trigger_price double precision,
 	api boolean,
 	mmp boolean,
 	trigger_order_id text,
 	cancel_reason text,
 	risk_reducing boolean,
-	filled_amount float,
+	filled_amount double precision,
 	instrument_name text,
-	max_show float,
+	max_show double precision,
 	app_name text,
 	mmp_cancelled boolean,
 	direction text,
 	last_update_timestamp bigint,
-	trigger_offset float,
+	trigger_offset double precision,
 	price text,
 	is_liquidation boolean,
 	reduce_only boolean,
-	amount float,
+	amount double precision,
 	post_only boolean,
 	mobile boolean,
 	triggered boolean,
@@ -109,7 +109,7 @@ create type deribit.private_buy_response_order as (
 	trigger text,
 	web boolean,
 	creation_timestamp bigint,
-	average_price float,
+	average_price double precision,
 	advanced text,
 	trades deribit.private_buy_response_trade[]
 );
@@ -169,31 +169,31 @@ comment on column deribit.private_buy_response.id is 'The id that was sent in th
 comment on column deribit.private_buy_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_buy_request_type cascade;
-create type deribit.private_buy_request_type as enum ('stop_limit', 'trailing_stop', 'market', 'market_limit', 'take_limit', 'stop_market', 'limit', 'take_market');
+create type deribit.private_buy_request_type as enum ('market_limit', 'limit', 'stop_limit', 'market', 'take_market', 'stop_market', 'take_limit', 'trailing_stop');
 
 drop type if exists deribit.private_buy_request_time_in_force cascade;
-create type deribit.private_buy_request_time_in_force as enum ('fill_or_kill', 'good_til_day', 'good_til_cancelled', 'immediate_or_cancel');
+create type deribit.private_buy_request_time_in_force as enum ('fill_or_kill', 'immediate_or_cancel', 'good_til_day', 'good_til_cancelled');
 
 drop type if exists deribit.private_buy_request_trigger cascade;
-create type deribit.private_buy_request_trigger as enum ('last_price', 'index_price', 'mark_price');
+create type deribit.private_buy_request_trigger as enum ('last_price', 'mark_price', 'index_price');
 
 drop type if exists deribit.private_buy_request_advanced cascade;
-create type deribit.private_buy_request_advanced as enum ('implv', 'usd');
+create type deribit.private_buy_request_advanced as enum ('usd', 'implv');
 
 drop type if exists deribit.private_buy_request cascade;
 create type deribit.private_buy_request as (
 	instrument_name text,
-	amount float,
+	amount double precision,
 	type deribit.private_buy_request_type,
 	label text,
-	price float,
+	price double precision,
 	time_in_force deribit.private_buy_request_time_in_force,
-	max_show float,
+	max_show double precision,
 	post_only boolean,
 	reject_post_only boolean,
 	reduce_only boolean,
-	trigger_price float,
-	trigger_offset float,
+	trigger_price double precision,
+	trigger_offset double precision,
 	trigger deribit.private_buy_request_trigger,
 	advanced deribit.private_buy_request_advanced,
 	mmp boolean,

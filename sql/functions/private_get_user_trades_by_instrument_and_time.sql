@@ -8,27 +8,31 @@ create or replace function deribit.private_get_user_trades_by_instrument_and_tim
 	sorting deribit.private_get_user_trades_by_instrument_and_time_request_sorting default null
 )
 returns deribit.private_get_user_trades_by_instrument_and_time_response_result
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.private_get_user_trades_by_instrument_and_time_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		instrument_name,
-		start_timestamp,
-		end_timestamp,
-		count,
-		sorting
-    )::deribit.private_get_user_trades_by_instrument_and_time_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_instrument_and_time'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return (jsonb_populate_record(
+    with request as (
+        select row(
+			instrument_name,
+			start_timestamp,
+			end_timestamp,
+			count,
+			sorting
+        )::deribit.private_get_user_trades_by_instrument_and_time_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/private/get_user_trades_by_instrument_and_time'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	select (jsonb_populate_record(
         null::deribit.private_get_user_trades_by_instrument_and_time_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-end
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
 comment on function deribit.private_get_user_trades_by_instrument_and_time is 'Retrieve the latest user trades that have occurred for a specific instrument and within given time range.';

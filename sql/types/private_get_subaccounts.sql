@@ -10,14 +10,14 @@ comment on column deribit.private_get_subaccounts_response_security_keys_assignm
 
 drop type if exists deribit.private_get_subaccounts_response_eth cascade;
 create type deribit.private_get_subaccounts_response_eth as (
-	available_funds float,
-	available_withdrawal_funds float,
-	balance float,
+	available_funds double precision,
+	available_withdrawal_funds double precision,
+	balance double precision,
 	currency text,
-	equity float,
-	initial_margin float,
-	maintenance_margin float,
-	margin_balance float,
+	equity double precision,
+	initial_margin double precision,
+	maintenance_margin double precision,
+	margin_balance double precision,
 	proof_id text,
 	proof_id_signature text,
 	receive_notifications boolean,
@@ -30,14 +30,14 @@ comment on column deribit.private_get_subaccounts_response_eth.security_keys_ass
 
 drop type if exists deribit.private_get_subaccounts_response_btc cascade;
 create type deribit.private_get_subaccounts_response_btc as (
-	available_funds float,
-	available_withdrawal_funds float,
-	balance float,
+	available_funds double precision,
+	available_withdrawal_funds double precision,
+	balance double precision,
 	currency text,
-	equity float,
-	initial_margin float,
-	maintenance_margin float,
-	margin_balance float,
+	equity double precision,
+	initial_margin double precision,
+	maintenance_margin double precision,
+	margin_balance double precision,
 	eth deribit.private_get_subaccounts_response_eth
 );
 

@@ -1,13 +1,13 @@
 drop type if exists deribit.private_get_withdrawals_response_datum cascade;
 create type deribit.private_get_withdrawals_response_datum as (
 	address text,
-	amount float,
+	amount double precision,
 	confirmed_timestamp bigint,
 	created_timestamp bigint,
 	currency text,
-	fee float,
+	fee double precision,
 	id bigint,
-	priority float,
+	priority double precision,
 	state text,
 	transaction_id text,
 	updated_timestamp bigint
@@ -41,7 +41,7 @@ comment on column deribit.private_get_withdrawals_response.id is 'The id that wa
 comment on column deribit.private_get_withdrawals_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_withdrawals_request_currency cascade;
-create type deribit.private_get_withdrawals_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_get_withdrawals_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_withdrawals_request cascade;
 create type deribit.private_get_withdrawals_request as (

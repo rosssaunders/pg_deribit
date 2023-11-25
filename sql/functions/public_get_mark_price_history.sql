@@ -6,28 +6,38 @@ create or replace function deribit.public_get_mark_price_history(
 	end_timestamp bigint
 )
 returns setof deribit.public_get_mark_price_history_response_result
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.public_get_mark_price_history_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		instrument_name,
-		start_timestamp,
-		end_timestamp
-    )::deribit.public_get_mark_price_history_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/public/get_mark_price_history'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return query (
+    with request as (
+        select row(
+			instrument_name,
+			start_timestamp,
+			end_timestamp
+        )::deribit.public_get_mark_price_history_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/public/get_mark_price_history'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	, result as (
         select (jsonb_populate_record(
                         null::deribit.public_get_mark_price_history_response,
-                        convert_from(_http_response.body, 'utf-8')::jsonb)
+                        convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
-    );
-end
+        from http_response
+    )
+    select
+		a.b
+    from (
+        select (unnest(r.data)) b
+        from result r(data)
+    ) a
+    
 $$;
 
 comment on function deribit.public_get_mark_price_history is 'Public request for 5min history of markprice values for the instrument. For now the markprice history is available only for a subset of options which take part in the volatility index calculations. All other instruments, futures and perpetuals will return empty list.';

@@ -8,7 +8,7 @@ comment on column deribit.public_get_supported_index_names_response.id is 'The i
 comment on column deribit.public_get_supported_index_names_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_supported_index_names_request_type cascade;
-create type deribit.public_get_supported_index_names_request_type as enum ('derivative', 'all', 'spot');
+create type deribit.public_get_supported_index_names_request_type as enum ('all', 'spot', 'derivative');
 
 drop type if exists deribit.public_get_supported_index_names_request cascade;
 create type deribit.public_get_supported_index_names_request as (

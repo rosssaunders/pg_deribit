@@ -1,7 +1,7 @@
 drop type if exists deribit.private_get_affiliate_program_info_response_received cascade;
 create type deribit.private_get_affiliate_program_info_response_received as (
-	btc float,
-	eth float
+	btc double precision,
+	eth double precision
 );
 comment on column deribit.private_get_affiliate_program_info_response_received.btc is 'Total payout received in BTC';
 comment on column deribit.private_get_affiliate_program_info_response_received.eth is 'Total payout received in ETH';
@@ -10,7 +10,7 @@ drop type if exists deribit.private_get_affiliate_program_info_response_result c
 create type deribit.private_get_affiliate_program_info_response_result as (
 	is_enabled boolean,
 	link text,
-	number_of_affiliates float,
+	number_of_affiliates double precision,
 	received deribit.private_get_affiliate_program_info_response_received
 );
 comment on column deribit.private_get_affiliate_program_info_response_result.is_enabled is 'Status of affiliate program';

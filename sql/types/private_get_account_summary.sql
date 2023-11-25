@@ -1,9 +1,9 @@
 drop type if exists deribit.private_get_account_summary_response_options_theta_map cascade;
 create type deribit.private_get_account_summary_response_options_theta_map as (
 	creation_timestamp bigint,
-	available_withdrawal_funds float,
-	equity float,
-	options_gamma float
+	available_withdrawal_funds double precision,
+	equity double precision,
+	options_gamma double precision
 );
 comment on column deribit.private_get_account_summary_response_options_theta_map.creation_timestamp is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_options_theta_map.available_withdrawal_funds is 'The account''s available to withdrawal funds';
@@ -12,16 +12,16 @@ comment on column deribit.private_get_account_summary_response_options_theta_map
 
 drop type if exists deribit.private_get_account_summary_response_options_vega_map cascade;
 create type deribit.private_get_account_summary_response_options_vega_map as (
-	balance float,
+	balance double precision,
 	mmp_enabled boolean,
-	projected_initial_margin float,
+	projected_initial_margin double precision,
 	email text,
-	available_funds float,
-	spot_reserve float,
-	projected_delta_total float,
+	available_funds double precision,
+	spot_reserve double precision,
+	projected_delta_total double precision,
 	portfolio_margining_enabled boolean,
-	total_pl float,
-	margin_balance float,
+	total_pl double precision,
+	margin_balance double precision,
 	options_theta_map deribit.private_get_account_summary_response_options_theta_map
 );
 comment on column deribit.private_get_account_summary_response_options_vega_map.balance is 'The account''s balance';
@@ -38,26 +38,26 @@ comment on column deribit.private_get_account_summary_response_options_vega_map.
 
 drop type if exists deribit.private_get_account_summary_response_options_gamma_map cascade;
 create type deribit.private_get_account_summary_response_options_gamma_map as (
-	futures_pl float,
+	futures_pl double precision,
 	currency text,
-	options_value float,
+	options_value double precision,
 	security_keys_enabled boolean,
 	self_trading_extended_to_subaccounts text,
-	projected_maintenance_margin float,
-	options_vega float,
-	session_rpl float,
+	projected_maintenance_margin double precision,
+	options_vega double precision,
+	session_rpl double precision,
 	has_non_block_chain_equity boolean,
 	system_name text,
 	deposit_address text,
-	futures_session_upl float,
-	options_session_upl float,
+	futures_session_upl double precision,
+	options_session_upl double precision,
 	referrer_id text,
-	options_theta float,
+	options_theta double precision,
 	login_enabled boolean,
 	username text,
 	interuser_transfers_enabled boolean,
-	options_delta float,
-	options_pl float,
+	options_delta double precision,
+	options_pl double precision,
 	options_vega_map deribit.private_get_account_summary_response_options_vega_map
 );
 comment on column deribit.private_get_account_summary_response_options_gamma_map.futures_pl is 'Futures profit and Loss';
@@ -87,7 +87,7 @@ create type deribit.private_get_account_summary_response_perpetuals as (
 	burst bigint,
 	rate bigint,
 	type text,
-	initial_margin float,
+	initial_margin double precision,
 	options_gamma_map deribit.private_get_account_summary_response_options_gamma_map
 );
 comment on column deribit.private_get_account_summary_response_perpetuals.burst is 'Maximal number of perpetual related matching engine requests allowed for user in burst mode';
@@ -145,8 +145,8 @@ create type deribit.private_get_account_summary_response_fee as (
 	currency text,
 	fee_type text,
 	instrument_type text,
-	maker_fee float,
-	taker_fee float,
+	maker_fee double precision,
+	taker_fee double precision,
 	limits deribit.private_get_account_summary_response_limits
 );
 comment on column deribit.private_get_account_summary_response_fee.currency is 'The currency the fee applies to';
@@ -157,14 +157,14 @@ comment on column deribit.private_get_account_summary_response_fee.taker_fee is 
 
 drop type if exists deribit.private_get_account_summary_response_result cascade;
 create type deribit.private_get_account_summary_response_result as (
-	maintenance_margin float,
-	delta_total float,
+	maintenance_margin double precision,
+	delta_total double precision,
 	id bigint,
-	options_session_rpl float,
+	options_session_rpl double precision,
 	self_trading_reject_mode text,
-	futures_session_rpl float,
-	session_upl float,
-	fee_balance float,
+	futures_session_rpl double precision,
+	session_upl double precision,
+	fee_balance double precision,
 	fees deribit.private_get_account_summary_response_fee[]
 );
 comment on column deribit.private_get_account_summary_response_result.maintenance_margin is 'The maintenance margin.';
@@ -187,7 +187,7 @@ comment on column deribit.private_get_account_summary_response.id is 'The id tha
 comment on column deribit.private_get_account_summary_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_account_summary_request_currency cascade;
-create type deribit.private_get_account_summary_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_get_account_summary_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_account_summary_request cascade;
 create type deribit.private_get_account_summary_request as (

@@ -12,8 +12,8 @@ from typing import Dict, List
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from exporter import Exporter
-from models import Endpoint, Enum, Field, FieldType, Function, Parameter, Type
+from codegen.postgres.exporter import Exporter
+from codegen.models.models import Endpoint, Enum, Field, FieldType, Function, Type
 
 p = inflect.engine()
 
@@ -75,6 +75,9 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
         if field_name == 'tick_size_steps':
             row[1] = 'array of object'
 
+        # if field_name == 'data':
+        #     field_name = 'result'
+
         if row[1] == 'object':
             new_parent_type_name = f'{parent_type_name}_{field_name}'
             field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=False)
@@ -114,17 +117,35 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
             continue
 
+        if row[1] == 'array of number':
+            field_type = FieldType(name='number', is_enum=False, is_class=False, is_array=True)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+
+            if field_name == 'result':
+                response_type = Type(name='string', fields=[], enums=[], is_primitive=True, is_array=True)
+
+            continue
+
+        if row[1] == 'array of integer':
+            field_type = FieldType(name='integer', is_enum=False, is_class=False, is_array=True)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+
+            if field_name == 'result':
+                response_type = Type(name='string', fields=[], enums=[], is_primitive=True, is_array=True)
+
+            continue
+
         elif row[1] == 'array of [price, amount]':
             if p.singular_noun(field_name) is False:
                 new_parent_type_name = f"{parent_type_name}_{field_name}"
             else:
                 new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
 
-            field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=True)
+            field_type = FieldType(name="float[]", is_enum=False, is_class=True, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
 
             current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True)
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True, is_nested_array=True)
 
             if field_name == 'result':
                 response_type = types[current_type]
@@ -138,15 +159,15 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
                 new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
 
             # Add the field to the parent type
-            field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=True)
+            field_type = FieldType(name="float[]", is_enum=False, is_class=True, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
 
             # Create the new type
             current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_array=True)
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_array=True, is_nested_array=True)
 
             # Add the fields to the new type
-            types[current_type].fields.append(Field(name='timestamp', type=FieldType(name='timestamp')))
+            types[current_type].fields.append(Field(name='timestamp', type=FieldType(name='integer')))
             types[current_type].fields.append(Field(name='value', type=FieldType(name='number')))
 
             if field_name == 'result':

@@ -1,27 +1,27 @@
 drop type if exists deribit.public_get_book_summary_by_currency_response_result cascade;
 create type deribit.public_get_book_summary_by_currency_response_result as (
-	ask_price float,
+	ask_price double precision,
 	base_currency text,
-	bid_price float,
+	bid_price double precision,
 	creation_timestamp bigint,
-	current_funding float,
-	estimated_delivery_price float,
-	funding_8h float,
-	high float,
+	current_funding double precision,
+	estimated_delivery_price double precision,
+	funding_8h double precision,
+	high double precision,
 	instrument_name text,
-	interest_rate float,
-	last float,
-	low float,
-	mark_price float,
-	mid_price float,
-	open_interest float,
-	price_change float,
+	interest_rate double precision,
+	last double precision,
+	low double precision,
+	mark_price double precision,
+	mid_price double precision,
+	open_interest double precision,
+	price_change double precision,
 	quote_currency text,
 	underlying_index text,
-	underlying_price float,
-	volume float,
-	volume_notional float,
-	volume_usd float
+	underlying_price double precision,
+	volume double precision,
+	volume_notional double precision,
+	volume_usd double precision
 );
 comment on column deribit.public_get_book_summary_by_currency_response_result.ask_price is 'The current best ask price, null if there aren''t any asks';
 comment on column deribit.public_get_book_summary_by_currency_response_result.base_currency is 'Base currency';
@@ -56,10 +56,10 @@ comment on column deribit.public_get_book_summary_by_currency_response.id is 'Th
 comment on column deribit.public_get_book_summary_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_book_summary_by_currency_request_currency cascade;
-create type deribit.public_get_book_summary_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.public_get_book_summary_by_currency_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_book_summary_by_currency_request_kind cascade;
-create type deribit.public_get_book_summary_by_currency_request_kind as enum ('future_combo', 'option', 'future', 'option_combo', 'spot');
+create type deribit.public_get_book_summary_by_currency_request_kind as enum ('option', 'future', 'option_combo', 'spot', 'future_combo');
 
 drop type if exists deribit.public_get_book_summary_by_currency_request cascade;
 create type deribit.public_get_book_summary_by_currency_request as (

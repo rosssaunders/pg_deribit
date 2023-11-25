@@ -104,7 +104,7 @@ select deribit.unnest_2d_1d((
                 )::deribit.public_get_historical_volatility_request)).body, 'utf-8')::jsonb)
         )).result);
 
-create function derbit.unpack_vol_history(values double precision[][])
+create function deribit.unpack_vol_history(values double precision[][])
 returns setof deribit.vol3
 as
 $$

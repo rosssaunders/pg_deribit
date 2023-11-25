@@ -2,7 +2,7 @@ drop type if exists deribit.public_get_funding_rate_value_response cascade;
 create type deribit.public_get_funding_rate_value_response as (
 	id bigint,
 	jsonrpc text,
-	result float
+	result double precision
 );
 comment on column deribit.public_get_funding_rate_value_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_funding_rate_value_response.jsonrpc is 'The JSON-RPC version (2.0)';

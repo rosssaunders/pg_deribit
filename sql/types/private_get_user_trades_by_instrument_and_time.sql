@@ -2,14 +2,14 @@ drop type if exists deribit.private_get_user_trades_by_instrument_and_time_respo
 create type deribit.private_get_user_trades_by_instrument_and_time_response_leg as (
 	liquidation text,
 	liquidity text,
-	mark_price float,
+	mark_price double precision,
 	matching_id text,
 	mmp boolean,
 	order_id text,
 	order_type text,
 	post_only text,
-	price float,
-	profit_loss float,
+	price double precision,
+	profit_loss double precision,
 	reduce_only text,
 	risk_reducing boolean,
 	state text,
@@ -17,7 +17,7 @@ create type deribit.private_get_user_trades_by_instrument_and_time_response_leg 
 	timestamp bigint,
 	trade_id text,
 	trade_seq bigint,
-	underlying_price float
+	underlying_price double precision
 );
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_leg.liquidation is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_leg.liquidity is 'Describes what was role of users order: "M" when it was maker order, "T" when it was taker order';
@@ -41,17 +41,17 @@ comment on column deribit.private_get_user_trades_by_instrument_and_time_respons
 drop type if exists deribit.private_get_user_trades_by_instrument_and_time_response_trade cascade;
 create type deribit.private_get_user_trades_by_instrument_and_time_response_trade as (
 	advanced text,
-	amount float,
+	amount double precision,
 	api boolean,
 	block_trade_id text,
 	combo_id text,
-	combo_trade_id float,
+	combo_trade_id double precision,
 	direction text,
-	fee float,
+	fee double precision,
 	fee_currency text,
-	index_price float,
+	index_price double precision,
 	instrument_name text,
-	iv float,
+	iv double precision,
 	label text,
 	legs deribit.private_get_user_trades_by_instrument_and_time_response_leg[]
 );

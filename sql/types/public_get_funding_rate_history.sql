@@ -1,9 +1,9 @@
 drop type if exists deribit.public_get_funding_rate_history_response_result cascade;
 create type deribit.public_get_funding_rate_history_response_result as (
-	index_price float,
-	interest_1h float,
-	interest_8h float,
-	prev_index_price float,
+	index_price double precision,
+	interest_1h double precision,
+	interest_8h double precision,
+	prev_index_price double precision,
 	timestamp bigint
 );
 comment on column deribit.public_get_funding_rate_history_response_result.index_price is 'Price in base currency';

@@ -5,24 +5,28 @@ create or replace function deribit.private_set_email_for_subaccount(
 	email text
 )
 returns text
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.private_set_email_for_subaccount_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		sid,
-		email
-    )::deribit.private_set_email_for_subaccount_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/private/set_email_for_subaccount'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return (jsonb_populate_record(
+    with request as (
+        select row(
+			sid,
+			email
+        )::deribit.private_set_email_for_subaccount_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/private/set_email_for_subaccount'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	select (jsonb_populate_record(
         null::deribit.private_set_email_for_subaccount_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-end
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
 comment on function deribit.private_set_email_for_subaccount is 'Assign an email address to a subaccount. User will receive an email with confirmation link.';

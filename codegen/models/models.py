@@ -31,6 +31,9 @@ class Type:
     enums: List[Enum]
     is_array: bool = False
     is_primitive: bool = False
+    # If the field is an array of arrays and not an array of objects.
+    # If so we need to decompose it differently.
+    is_nested_array: bool = False
 
 
 @dataclass
@@ -49,12 +52,11 @@ class Endpoint:
     response_types: List[Type]  # All the types
     rate_limiter: str  # the name of the function to call to rate limit
 
+
 @dataclass
 class Function:
     name: str
     endpoint: Endpoint
-    # is_private: bool
     comment: str
-    # parameters: List[Parameter]
     response_type: Type
 

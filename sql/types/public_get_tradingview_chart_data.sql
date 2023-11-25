@@ -1,13 +1,13 @@
 drop type if exists deribit.public_get_tradingview_chart_data_response_result cascade;
 create type deribit.public_get_tradingview_chart_data_response_result as (
-	close UNKNOWN - array of number - False - False - False,
-	cost UNKNOWN - array of number - False - False - False,
-	high UNKNOWN - array of number - False - False - False,
-	low UNKNOWN - array of number - False - False - False,
-	open UNKNOWN - array of number - False - False - False,
+	close double precision[],
+	cost double precision[],
+	high double precision[],
+	low double precision[],
+	open double precision[],
 	status text,
-	ticks UNKNOWN - array of integer - False - False - False,
-	volume UNKNOWN - array of number - False - False - False
+	ticks bigint[],
+	volume double precision[]
 );
 comment on column deribit.public_get_tradingview_chart_data_response_result.close is 'List of prices at close (one per candle)';
 comment on column deribit.public_get_tradingview_chart_data_response_result.cost is 'List of cost bars (volume in quote currency, one per candle)';
@@ -28,7 +28,7 @@ comment on column deribit.public_get_tradingview_chart_data_response.id is 'The 
 comment on column deribit.public_get_tradingview_chart_data_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_tradingview_chart_data_request_resolution cascade;
-create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('1D', '10', '360', '3', '180', '30', '720', '5', '1', '15', '120', '60');
+create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('720', '15', '3', '120', '180', '5', '360', '30', '10', '1', '60', '1D');
 
 drop type if exists deribit.public_get_tradingview_chart_data_request cascade;
 create type deribit.public_get_tradingview_chart_data_request as (

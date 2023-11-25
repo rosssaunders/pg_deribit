@@ -1,6 +1,6 @@
 drop type if exists deribit.private_get_order_margin_by_ids_response_result cascade;
 create type deribit.private_get_order_margin_by_ids_response_result as (
-	initial_margin float,
+	initial_margin double precision,
 	initial_margin_currency text,
 	order_id text
 );

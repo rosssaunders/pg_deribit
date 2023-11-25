@@ -2,29 +2,33 @@ drop function if exists deribit.private_send_rfq;
 
 create or replace function deribit.private_send_rfq(
 	instrument_name text,
-	amount float default null,
+	amount double precision default null,
 	side deribit.private_send_rfq_request_side default null
 )
 returns text
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.private_send_rfq_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		instrument_name,
-		amount,
-		side
-    )::deribit.private_send_rfq_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/private/send_rfq'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return (jsonb_populate_record(
+    with request as (
+        select row(
+			instrument_name,
+			amount,
+			side
+        )::deribit.private_send_rfq_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/private/send_rfq'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	select (jsonb_populate_record(
         null::deribit.private_send_rfq_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-end
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
 comment on function deribit.private_send_rfq is 'Sends RFQ on a given instrument.';

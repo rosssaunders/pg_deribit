@@ -1,7 +1,7 @@
 drop type if exists deribit.public_get_instrument_response_tick_size_step cascade;
 create type deribit.public_get_instrument_response_tick_size_step as (
-	above_price float,
-	tick_size float
+	above_price double precision,
+	tick_size double precision
 );
 comment on column deribit.public_get_instrument_response_tick_size_step.above_price is 'The price from which the increased tick size applies';
 comment on column deribit.public_get_instrument_response_tick_size_step.tick_size is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
@@ -9,10 +9,10 @@ comment on column deribit.public_get_instrument_response_tick_size_step.tick_siz
 drop type if exists deribit.public_get_instrument_response_result cascade;
 create type deribit.public_get_instrument_response_result as (
 	base_currency text,
-	block_trade_commission float,
-	block_trade_min_trade_amount float,
-	block_trade_tick_size float,
-	contract_size float,
+	block_trade_commission double precision,
+	block_trade_min_trade_amount double precision,
+	block_trade_tick_size double precision,
+	contract_size double precision,
 	counter_currency text,
 	creation_timestamp bigint,
 	expiration_timestamp bigint,
@@ -21,19 +21,19 @@ create type deribit.public_get_instrument_response_result as (
 	instrument_name text,
 	is_active boolean,
 	kind text,
-	maker_commission float,
+	maker_commission double precision,
 	max_leverage bigint,
-	max_liquidation_commission float,
-	min_trade_amount float,
+	max_liquidation_commission double precision,
+	min_trade_amount double precision,
 	option_type text,
 	price_index text,
 	quote_currency text,
 	rfq boolean,
 	settlement_currency text,
 	settlement_period text,
-	strike float,
-	taker_commission float,
-	tick_size float,
+	strike double precision,
+	taker_commission double precision,
+	tick_size double precision,
 	tick_size_steps deribit.public_get_instrument_response_tick_size_step[]
 );
 comment on column deribit.public_get_instrument_response_result.base_currency is 'The underlying currency being traded.';

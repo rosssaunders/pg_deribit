@@ -6,27 +6,31 @@ create or replace function deribit.private_cancel_all_by_instrument(
 	detailed boolean default null,
 	include_combos boolean default null
 )
-returns float
-language plpgsql
+returns double precision
+language sql
 as $$
-declare
-	_request deribit.private_cancel_all_by_instrument_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		instrument_name,
-		type,
-		detailed,
-		include_combos
-    )::deribit.private_cancel_all_by_instrument_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel_all_by_instrument'::deribit.endpoint, _request, 'deribit.matching_engine_request_log_call'::name);
-
-    return (jsonb_populate_record(
+    with request as (
+        select row(
+			instrument_name,
+			type,
+			detailed,
+			include_combos
+        )::deribit.private_cancel_all_by_instrument_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/private/cancel_all_by_instrument'::deribit.endpoint, 
+            request.payload, 
+            'deribit.matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	select (jsonb_populate_record(
         null::deribit.private_cancel_all_by_instrument_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-end
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
 comment on function deribit.private_cancel_all_by_instrument is 'Cancels all orders by instrument, optionally filtered by order type.';

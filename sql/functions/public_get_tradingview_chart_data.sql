@@ -7,26 +7,30 @@ create or replace function deribit.public_get_tradingview_chart_data(
 	resolution deribit.public_get_tradingview_chart_data_request_resolution
 )
 returns deribit.public_get_tradingview_chart_data_response_result
-language plpgsql
+language sql
 as $$
-declare
-	_request deribit.public_get_tradingview_chart_data_request;
-    _http_response omni_httpc.http_response;
     
-begin
-	_request := row(
-		instrument_name,
-		start_timestamp,
-		end_timestamp,
-		resolution
-    )::deribit.public_get_tradingview_chart_data_request;
-    
-    _http_response := deribit.internal_jsonrpc_request('/public/get_tradingview_chart_data'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
-
-    return (jsonb_populate_record(
+    with request as (
+        select row(
+			instrument_name,
+			start_timestamp,
+			end_timestamp,
+			resolution
+        )::deribit.public_get_tradingview_chart_data_request as payload
+    )
+    , http_response as (
+        select deribit.internal_jsonrpc_request(
+            '/public/get_tradingview_chart_data'::deribit.endpoint, 
+            request.payload, 
+            'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+	select (jsonb_populate_record(
         null::deribit.public_get_tradingview_chart_data_response, 
-        convert_from(_http_response.body, 'utf-8')::jsonb)).result;
-end
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
 comment on function deribit.public_get_tradingview_chart_data is 'Publicly available market data used to generate a TradingView candle chart.';

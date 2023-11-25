@@ -2,7 +2,7 @@ drop type if exists deribit.public_get_announcements_response_result cascade;
 create type deribit.public_get_announcements_response_result as (
 	body text,
 	confirmation boolean,
-	id float,
+	id double precision,
 	important boolean,
 	publication_timestamp bigint,
 	title text

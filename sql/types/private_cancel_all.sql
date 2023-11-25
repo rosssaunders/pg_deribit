@@ -2,7 +2,7 @@ drop type if exists deribit.private_cancel_all_response cascade;
 create type deribit.private_cancel_all_response as (
 	id bigint,
 	jsonrpc text,
-	result float
+	result double precision
 );
 comment on column deribit.private_cancel_all_response.id is 'The id that was sent in the request';
 comment on column deribit.private_cancel_all_response.jsonrpc is 'The JSON-RPC version (2.0)';

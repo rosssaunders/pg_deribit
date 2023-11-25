@@ -1,8 +1,8 @@
 drop type if exists deribit.public_get_index_response_result cascade;
 create type deribit.public_get_index_response_result as (
-	BTC float,
-	ETH float,
-	edp float
+	BTC double precision,
+	ETH double precision,
+	edp double precision
 );
 comment on column deribit.public_get_index_response_result.BTC is 'The current index price for BTC-USD (only for selected currency == BTC)';
 comment on column deribit.public_get_index_response_result.ETH is 'The current index price for ETH-USD (only for selected currency == ETH)';
@@ -18,7 +18,7 @@ comment on column deribit.public_get_index_response.id is 'The id that was sent 
 comment on column deribit.public_get_index_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_index_request_currency cascade;
-create type deribit.public_get_index_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.public_get_index_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_index_request cascade;
 create type deribit.public_get_index_request as (

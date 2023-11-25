@@ -1,30 +1,30 @@
 drop type if exists deribit.private_get_positions_response_result cascade;
 create type deribit.private_get_positions_response_result as (
-	average_price float,
-	average_price_usd float,
-	delta float,
+	average_price double precision,
+	average_price_usd double precision,
+	delta double precision,
 	direction text,
-	estimated_liquidation_price float,
-	floating_profit_loss float,
-	floating_profit_loss_usd float,
-	gamma float,
-	index_price float,
-	initial_margin float,
+	estimated_liquidation_price double precision,
+	floating_profit_loss double precision,
+	floating_profit_loss_usd double precision,
+	gamma double precision,
+	index_price double precision,
+	initial_margin double precision,
 	instrument_name text,
-	interest_value float,
+	interest_value double precision,
 	kind text,
 	leverage bigint,
-	maintenance_margin float,
-	mark_price float,
-	open_orders_margin float,
-	realized_funding float,
-	realized_profit_loss float,
-	settlement_price float,
-	size float,
-	size_currency float,
-	theta float,
-	total_profit_loss float,
-	vega float
+	maintenance_margin double precision,
+	mark_price double precision,
+	open_orders_margin double precision,
+	realized_funding double precision,
+	realized_profit_loss double precision,
+	settlement_price double precision,
+	size double precision,
+	size_currency double precision,
+	theta double precision,
+	total_profit_loss double precision,
+	vega double precision
 );
 comment on column deribit.private_get_positions_response_result.average_price is 'Average price of trades that built this position';
 comment on column deribit.private_get_positions_response_result.average_price_usd is 'Only for options, average price in USD';
@@ -62,10 +62,10 @@ comment on column deribit.private_get_positions_response.id is 'The id that was 
 comment on column deribit.private_get_positions_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_positions_request_currency cascade;
-create type deribit.private_get_positions_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_get_positions_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_positions_request_kind cascade;
-create type deribit.private_get_positions_request_kind as enum ('future_combo', 'option', 'future', 'option_combo', 'spot');
+create type deribit.private_get_positions_request_kind as enum ('option', 'future', 'option_combo', 'spot', 'future_combo');
 
 drop type if exists deribit.private_get_positions_request cascade;
 create type deribit.private_get_positions_request as (

@@ -1,18 +1,18 @@
 drop type if exists deribit.public_get_trade_volumes_response_result cascade;
 create type deribit.public_get_trade_volumes_response_result as (
-	calls_volume float,
-	calls_volume_30d float,
-	calls_volume_7d float,
+	calls_volume double precision,
+	calls_volume_30d double precision,
+	calls_volume_7d double precision,
 	currency text,
-	futures_volume float,
-	futures_volume_30d float,
-	futures_volume_7d float,
-	puts_volume float,
-	puts_volume_30d float,
-	puts_volume_7d float,
-	spot_volume float,
-	spot_volume_30d float,
-	spot_volume_7d float
+	futures_volume double precision,
+	futures_volume_30d double precision,
+	futures_volume_7d double precision,
+	puts_volume double precision,
+	puts_volume_30d double precision,
+	puts_volume_7d double precision,
+	spot_volume double precision,
+	spot_volume_30d double precision,
+	spot_volume_7d double precision
 );
 comment on column deribit.public_get_trade_volumes_response_result.calls_volume is 'Total 24h trade volume for call options.';
 comment on column deribit.public_get_trade_volumes_response_result.calls_volume_30d is 'Total 30d trade volume for call options.';

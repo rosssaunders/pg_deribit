@@ -1,6 +1,6 @@
 drop type if exists deribit.public_get_contract_size_response_result cascade;
 create type deribit.public_get_contract_size_response_result as (
-	contract_size float
+	contract_size double precision
 );
 comment on column deribit.public_get_contract_size_response_result.contract_size is 'Contract size, for futures in USD, for options in base currency of the instrument (BTC, ETH, ...)';
 

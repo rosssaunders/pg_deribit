@@ -1,6 +1,6 @@
 drop type if exists deribit.private_submit_transfer_to_subaccount_response_result cascade;
 create type deribit.private_submit_transfer_to_subaccount_response_result as (
-	amount float,
+	amount double precision,
 	created_timestamp bigint,
 	currency text,
 	direction text,
@@ -30,12 +30,12 @@ comment on column deribit.private_submit_transfer_to_subaccount_response.id is '
 comment on column deribit.private_submit_transfer_to_subaccount_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_submit_transfer_to_subaccount_request_currency cascade;
-create type deribit.private_submit_transfer_to_subaccount_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.private_submit_transfer_to_subaccount_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_submit_transfer_to_subaccount_request cascade;
 create type deribit.private_submit_transfer_to_subaccount_request as (
 	currency deribit.private_submit_transfer_to_subaccount_request_currency,
-	amount float,
+	amount double precision,
 	destination bigint
 );
 comment on column deribit.private_submit_transfer_to_subaccount_request.currency is '(Required) The currency symbol';

@@ -1,10 +1,10 @@
 drop type if exists deribit.public_get_rfqs_response_result cascade;
 create type deribit.public_get_rfqs_response_result as (
-	amount float,
+	amount double precision,
 	instrument_name text,
 	last_rfq_timestamp bigint,
 	side text,
-	traded_volume float
+	traded_volume double precision
 );
 comment on column deribit.public_get_rfqs_response_result.amount is 'It represents the requested order size. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
 comment on column deribit.public_get_rfqs_response_result.instrument_name is 'Unique instrument identifier';
@@ -22,10 +22,10 @@ comment on column deribit.public_get_rfqs_response.id is 'The id that was sent i
 comment on column deribit.public_get_rfqs_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_rfqs_request_currency cascade;
-create type deribit.public_get_rfqs_request_currency as enum ('BTC', 'ETH', 'USDC');
+create type deribit.public_get_rfqs_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_rfqs_request_kind cascade;
-create type deribit.public_get_rfqs_request_kind as enum ('future_combo', 'option', 'future', 'option_combo', 'spot');
+create type deribit.public_get_rfqs_request_kind as enum ('option', 'future', 'option_combo', 'spot', 'future_combo');
 
 drop type if exists deribit.public_get_rfqs_request cascade;
 create type deribit.public_get_rfqs_request as (
