@@ -20,10 +20,13 @@ class Exporter:
             pass
         pass
 
+    def sort_functions(self, functions: [Function]):
+        return sorted(functions, key=lambda f: f.endpoint.name)
+
     def all(self, functions: [Function]):
         self.setup()
 
-        for function in functions:
+        for function in self.sort_functions(functions):
             self.export(function)
 
         with open(os.path.join(self.script_dir, f"../../sql/types/endpoints.sql"), 'w') as file:

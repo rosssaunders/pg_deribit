@@ -169,16 +169,16 @@ comment on column deribit.private_sell_response.id is 'The id that was sent in t
 comment on column deribit.private_sell_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_sell_request_type cascade;
-create type deribit.private_sell_request_type as enum ('stop_limit', 'take_limit', 'trailing_stop', 'limit', 'take_market', 'stop_market', 'market_limit', 'market');
+create type deribit.private_sell_request_type as enum ('limit', 'market', 'market_limit', 'stop_limit', 'stop_market', 'take_limit', 'take_market', 'trailing_stop');
 
 drop type if exists deribit.private_sell_request_time_in_force cascade;
-create type deribit.private_sell_request_time_in_force as enum ('fill_or_kill', 'immediate_or_cancel', 'good_til_cancelled', 'good_til_day');
+create type deribit.private_sell_request_time_in_force as enum ('fill_or_kill', 'good_til_cancelled', 'good_til_day', 'immediate_or_cancel');
 
 drop type if exists deribit.private_sell_request_trigger cascade;
-create type deribit.private_sell_request_trigger as enum ('mark_price', 'last_price', 'index_price');
+create type deribit.private_sell_request_trigger as enum ('index_price', 'last_price', 'mark_price');
 
 drop type if exists deribit.private_sell_request_advanced cascade;
-create type deribit.private_sell_request_advanced as enum ('usd', 'implv');
+create type deribit.private_sell_request_advanced as enum ('implv', 'usd');
 
 drop type if exists deribit.private_sell_request cascade;
 create type deribit.private_sell_request as (

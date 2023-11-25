@@ -38,7 +38,7 @@ comment on column deribit.private_change_margin_model_response.id is 'The id tha
 comment on column deribit.private_change_margin_model_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_change_margin_model_request_margin_model cascade;
-create type deribit.private_change_margin_model_request_margin_model as enum ('segregated_sm', 'cross_sm', 'legacy_pm', 'segregated_pm', 'cross_pm');
+create type deribit.private_change_margin_model_request_margin_model as enum ('cross_pm', 'cross_sm', 'legacy_pm', 'segregated_pm', 'segregated_sm');
 
 drop type if exists deribit.private_change_margin_model_request cascade;
 create type deribit.private_change_margin_model_request as (

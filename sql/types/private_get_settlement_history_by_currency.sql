@@ -47,10 +47,10 @@ comment on column deribit.private_get_settlement_history_by_currency_response.id
 comment on column deribit.private_get_settlement_history_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_settlement_history_by_currency_request_currency cascade;
-create type deribit.private_get_settlement_history_by_currency_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_get_settlement_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_get_settlement_history_by_currency_request_type cascade;
-create type deribit.private_get_settlement_history_by_currency_request_type as enum ('settlement', 'bankruptcy', 'delivery');
+create type deribit.private_get_settlement_history_by_currency_request_type as enum ('bankruptcy', 'delivery', 'settlement');
 
 drop type if exists deribit.private_get_settlement_history_by_currency_request cascade;
 create type deribit.private_get_settlement_history_by_currency_request as (

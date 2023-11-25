@@ -22,7 +22,7 @@ comment on column deribit.private_get_mmp_config_response.id is 'The id that was
 comment on column deribit.private_get_mmp_config_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_mmp_config_request_index_name cascade;
-create type deribit.private_get_mmp_config_request_index_name as enum ('dot_usdc', 'btc_usdc', 'shib_usdc', 'ada_usdc', 'bch_usdc', 'trx_usdc', 'mshib_usdc', 'btcdvol_usdc', 'bnb_usdc', 'eth_usd', 'matic_usdc', 'link_usdc', 'uni_usdc', 'xrp_usdc', 'btc_usd', 'eth_usdc', 'algo_usdc', 'near_usdc', 'luna_usdc', 'avax_usdc', 'ltc_usdc', 'ethdvol_usdc', 'doge_usdc');
+create type deribit.private_get_mmp_config_request_index_name as enum ('ada_usdc', 'algo_usdc', 'avax_usdc', 'bch_usdc', 'bnb_usdc', 'btc_usd', 'btc_usdc', 'btcdvol_usdc', 'doge_usdc', 'dot_usdc', 'eth_usd', 'eth_usdc', 'ethdvol_usdc', 'link_usdc', 'ltc_usdc', 'luna_usdc', 'matic_usdc', 'mshib_usdc', 'near_usdc', 'shib_usdc', 'trx_usdc', 'uni_usdc', 'xrp_usdc');
 
 drop type if exists deribit.private_get_mmp_config_request cascade;
 create type deribit.private_get_mmp_config_request as (

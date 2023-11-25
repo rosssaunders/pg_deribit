@@ -15,7 +15,7 @@ comment on column deribit.private_get_portfolio_margins_response.jsonrpc is 'The
 comment on column deribit.private_get_portfolio_margins_response.result is 'PM details';
 
 drop type if exists deribit.private_get_portfolio_margins_request_currency cascade;
-create type deribit.private_get_portfolio_margins_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_get_portfolio_margins_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_get_portfolio_margins_request cascade;
 create type deribit.private_get_portfolio_margins_request as (

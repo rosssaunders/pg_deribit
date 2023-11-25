@@ -87,7 +87,7 @@ comment on column deribit.private_get_user_trades_by_instrument_response.id is '
 comment on column deribit.private_get_user_trades_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_user_trades_by_instrument_request_sorting cascade;
-create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('default', 'desc', 'asc');
+create type deribit.private_get_user_trades_by_instrument_request_sorting as enum ('asc', 'default', 'desc');
 
 drop type if exists deribit.private_get_user_trades_by_instrument_request cascade;
 create type deribit.private_get_user_trades_by_instrument_request as (

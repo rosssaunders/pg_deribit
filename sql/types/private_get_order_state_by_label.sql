@@ -90,7 +90,7 @@ comment on column deribit.private_get_order_state_by_label_response.id is 'The i
 comment on column deribit.private_get_order_state_by_label_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_order_state_by_label_request_currency cascade;
-create type deribit.private_get_order_state_by_label_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_get_order_state_by_label_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_get_order_state_by_label_request cascade;
 create type deribit.private_get_order_state_by_label_request as (

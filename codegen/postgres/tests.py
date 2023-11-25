@@ -4,37 +4,43 @@ from codegen.postgres.postgres import convert_type_postgres
 
 
 def default_test_value(field: str) -> str:
-    if field == 'currency':
-        return f"'BTC'"
-    elif field == 'instrument_name':
-        return f"'BTC-PERPETUAL'"
-    elif field == 'amount':
-        return '0.1::numeric'
-    elif field == 'price':
-        return '10000::numeric'
-    elif field == 'index_name':
-        return f"'btc_usd'"
-    elif field == 'length':
-        return '100'
-    elif field == 'start_timestamp':
-        return '1700319764'
-    elif field == 'end_timestamp':
-        return '1700406164'
-    elif field == 'instrument_id':
-        return '124972'  # TODO
-    elif field == 'resolution':
-        return f"'1D'"  # TODO
-    elif field == 'order_id':
-        return '19025003696'
-
-    return 'UNKNOWN'
+    field_values = {
+        'currency': "'BTC'",
+        'instrument_name': "'BTC-PERPETUAL'",
+        'amount': '0.1::numeric',
+        'price': '10000::numeric',
+        'index_name': "'btc_usd'",
+        'length': '100',
+        'start_timestamp': '1700319764',
+        'end_timestamp': '1700406164',
+        'instrument_id': '124972',
+        'resolution': "'1D'",
+        'order_id': '19025003696',
+        'margin_model': "'cross_sm'",
+        'language': "'en'",
+        'id': '1',
+        'name': "'test'",
+        'announcement_id': "'1'",
+        'sid': '1',
+        'email': ""'test@email.com'"",
+        'max_scope': '',
+        'subaccount_id': '1',
+        'mode': '', # TODO
+        'extended_to_subaccounts': '',
+        'state': 'false',
+        'enabled': 'false',
+        'label': 'abcde',
+        'type': 'market',
+        '"interval"': '1',
+        'frozen_time': '1',
+        'destination': '1',
+        'address': '123456'
+    }
+    return field_values.get(field, 'UNKNOWN')
 
 
 def default_to_null_value(field: Field) -> str:
-    if field.required:
-        return ''
-    else:
-        return ' = null'
+    return '' if field.required else ' = null'
 
 
 def test_endpoint(schema: str, function: Function) -> str:

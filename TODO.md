@@ -1,5 +1,8 @@
 TODO:
 
+Testing files:
+- [ ] auto seed data
+
 Trading key encryption:
 - [ ] Implement key encryption for trading keys
 
@@ -12,3 +15,5 @@ Endpoints to implement:
 - [ ] private_create_api_key': 'unsupported request parameter',
 - [ ] private_get_order_margin_by_ids': 'unsupported request parameter',
 - [ ] public_get_funding_chart_data_response_datum
+- [ ] language enums - see https://docs.deribit.com/#private-set_email_language
+- 

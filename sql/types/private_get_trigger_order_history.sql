@@ -53,7 +53,7 @@ comment on column deribit.private_get_trigger_order_history_response.id is 'The 
 comment on column deribit.private_get_trigger_order_history_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_trigger_order_history_request_currency cascade;
-create type deribit.private_get_trigger_order_history_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_get_trigger_order_history_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_get_trigger_order_history_request cascade;
 create type deribit.private_get_trigger_order_history_request as (

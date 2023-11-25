@@ -9,7 +9,7 @@ comment on column deribit.private_reset_mmp_response.jsonrpc is 'The JSON-RPC ve
 comment on column deribit.private_reset_mmp_response.result is 'Result of method execution. ok in case of success';
 
 drop type if exists deribit.private_reset_mmp_request_index_name cascade;
-create type deribit.private_reset_mmp_request_index_name as enum ('dot_usdc', 'btc_usdc', 'shib_usdc', 'ada_usdc', 'bch_usdc', 'trx_usdc', 'mshib_usdc', 'btcdvol_usdc', 'bnb_usdc', 'eth_usd', 'matic_usdc', 'link_usdc', 'uni_usdc', 'xrp_usdc', 'btc_usd', 'eth_usdc', 'algo_usdc', 'near_usdc', 'luna_usdc', 'avax_usdc', 'ltc_usdc', 'ethdvol_usdc', 'doge_usdc');
+create type deribit.private_reset_mmp_request_index_name as enum ('ada_usdc', 'algo_usdc', 'avax_usdc', 'bch_usdc', 'bnb_usdc', 'btc_usd', 'btc_usdc', 'btcdvol_usdc', 'doge_usdc', 'dot_usdc', 'eth_usd', 'eth_usdc', 'ethdvol_usdc', 'link_usdc', 'ltc_usdc', 'luna_usdc', 'matic_usdc', 'mshib_usdc', 'near_usdc', 'shib_usdc', 'trx_usdc', 'uni_usdc', 'xrp_usdc');
 
 drop type if exists deribit.private_reset_mmp_request cascade;
 create type deribit.private_reset_mmp_request as (

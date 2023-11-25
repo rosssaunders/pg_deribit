@@ -9,13 +9,13 @@ comment on column deribit.private_cancel_all_by_currency_response.jsonrpc is 'Th
 comment on column deribit.private_cancel_all_by_currency_response.result is 'Total number of successfully cancelled orders';
 
 drop type if exists deribit.private_cancel_all_by_currency_request_currency cascade;
-create type deribit.private_cancel_all_by_currency_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_cancel_all_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_cancel_all_by_currency_request_kind cascade;
-create type deribit.private_cancel_all_by_currency_request_kind as enum ('future', 'option_combo', 'future_combo', 'combo', 'spot', 'option', 'any');
+create type deribit.private_cancel_all_by_currency_request_kind as enum ('any', 'combo', 'future', 'future_combo', 'option', 'option_combo', 'spot');
 
 drop type if exists deribit.private_cancel_all_by_currency_request_type cascade;
-create type deribit.private_cancel_all_by_currency_request_type as enum ('trigger_all', 'stop', 'limit', 'take', 'all', 'trailing_stop');
+create type deribit.private_cancel_all_by_currency_request_type as enum ('all', 'limit', 'stop', 'take', 'trailing_stop', 'trigger_all');
 
 drop type if exists deribit.private_cancel_all_by_currency_request cascade;
 create type deribit.private_cancel_all_by_currency_request as (

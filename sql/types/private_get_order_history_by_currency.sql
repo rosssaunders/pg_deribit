@@ -90,10 +90,10 @@ comment on column deribit.private_get_order_history_by_currency_response.id is '
 comment on column deribit.private_get_order_history_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_order_history_by_currency_request_currency cascade;
-create type deribit.private_get_order_history_by_currency_request_currency as enum ('ETH', 'BTC', 'USDC');
+create type deribit.private_get_order_history_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_get_order_history_by_currency_request_kind cascade;
-create type deribit.private_get_order_history_by_currency_request_kind as enum ('future', 'option_combo', 'future_combo', 'combo', 'spot', 'option', 'any');
+create type deribit.private_get_order_history_by_currency_request_kind as enum ('any', 'combo', 'future', 'future_combo', 'option', 'option_combo', 'spot');
 
 drop type if exists deribit.private_get_order_history_by_currency_request cascade;
 create type deribit.private_get_order_history_by_currency_request as (
