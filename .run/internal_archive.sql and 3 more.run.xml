@@ -2,8 +2,8 @@
   <configuration default="false" name="internal_archive.sql and 3 more" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
     <script-file value="$PROJECT_DIR$/sql/tables/internal_archive.sql" />
     <script-file value="$PROJECT_DIR$/sql/tables/internal_endpoint_rate_limit.sql" />
-    <script-file value="$PROJECT_DIR$/sql/tables/rate_limits.sql" />
-    <script-file value="$PROJECT_DIR$/sql/tables/secrets.sql" />
+    <script-file value="$PROJECT_DIR$/sql/tables/matching_engine_request_call_log.sql" />
+    <script-file value="$PROJECT_DIR$/sql/tables/keys.sql" />
     <script-mode>FILE</script-mode>
     <data-source id="0d93a228-c3bb-4bc1-9434-e330ec74ae0b" />
     <method v="2" />

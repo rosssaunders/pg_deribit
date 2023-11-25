@@ -7,6 +7,21 @@ select (t."order").order_id
 from generate_series(1, 10) s
 left join lateral deribit.private_buy('ETH-PERPETUAL', s.s, 'market') t on true;
 
+select (pb."order").*
+from deribit.private_buy('ETH-PERPETUAL', 10, 'market') pb;
+
+
+select decrypt_and_store_in_session('password12345');
+select current_setting('deribit.client_id');
+select current_setting('deribit.client_id');
+
+select (
+        'Authorization',
+        'Basic ' ||
+        encode(((select current_setting('deribit.client_id')) || ':' || (select current_setting('deribit.client_secret')))::bytea, 'base64')
+    )::omni_http.http_header;
+
+select deribit.internal_build_auth_headers();
 
 select *
 from deribit.internal_endpoint_rate_limit

@@ -4,7 +4,7 @@ language sql
 as $$
     select (
         'Authorization',
-        'Basic ' || encode(('rvAcPbEz' || ':' || 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA')::bytea, 'base64')
+        'Basic ' || encode(((select current_setting('deribit.client_id')) || ':' || (select current_setting('deribit.client_secret')))::bytea, 'base64')
     )::omni_http.http_header
     limit 1
 $$;
