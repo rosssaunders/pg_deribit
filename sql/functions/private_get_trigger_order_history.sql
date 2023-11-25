@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_trigger_order_history;
+
 create or replace function deribit.private_get_trigger_order_history(
 	currency deribit.private_get_trigger_order_history_request_currency,
 	instrument_name text default null,
@@ -11,18 +12,16 @@ as $$
 declare
 	_request deribit.private_get_trigger_order_history_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_trigger_order_history');
-    
-_request := row(
+	_request := row(
 		currency,
 		instrument_name,
 		count,
 		continuation
     )::deribit.private_get_trigger_order_history_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_trigger_order_history', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_trigger_order_history'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_trigger_order_history_response, 

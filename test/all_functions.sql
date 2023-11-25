@@ -318,10 +318,6 @@ from deribit.private_cancel_all_by_instrument(
 	instrument_name := 'BTC-PERPETUAL');
 
 select * 
-from deribit.private_cancel_all_by_kind_or_type(
-	currency := 'BTC');
-
-select * 
 from deribit.private_cancel_by_label(
 	label := UNKNOWN);
 

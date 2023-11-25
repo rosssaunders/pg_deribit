@@ -1,13 +1,4 @@
--- create or replace function deribit.internal_jsonrpc_request(url text)
--- returns omni_httpc.http_response
--- language plpgsql
--- as $$
--- begin
---     select deribit.internal_jsonrpc_request(url, null::text); --cast to text as a workaround for the anyelement
--- end
--- $$;
-
-create or replace function deribit.internal_jsonrpc_request(url text, request anyelement)
+create or replace function deribit.internal_jsonrpc_request(url deribit.endpoint, request anyelement, rate_limiter name)
 returns omni_httpc.http_response
 language plpgsql
 as $$
@@ -16,7 +7,6 @@ declare
     _http_response omni_httpc.http_response;
 	_error_response deribit.internal_error_response;
     _request_payload jsonb;
-    _rate_limit_delay float;
     _id bigint;
 begin
     _id := nextval('deribit.internal_jsonrpc_identifier'::regclass);
@@ -28,14 +18,7 @@ begin
                         'id', _id
                         ) as payload;
 
-    _rate_limit_delay := 0.25; --(select deribit.internal_rate_limit(url));
-
-    update deribit.internal_endpoint_rate_limit
-        set last_call = current_timestamp,
-            calls = calls + 1,
-            time_waiting = time_waiting + (select justify_interval(cast(_rate_limit_delay::text || ' seconds' AS interval)))
-        where key = url;
-    perform pg_sleep(_rate_limit_delay);
+    execute format('execute %I (%L)', rate_limiter, url);
 
     _http_request := omni_httpc.http_request(
             method := 'POST',

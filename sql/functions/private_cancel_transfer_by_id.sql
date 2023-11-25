@@ -1,4 +1,5 @@
 drop function if exists deribit.private_cancel_transfer_by_id;
+
 create or replace function deribit.private_cancel_transfer_by_id(
 	currency deribit.private_cancel_transfer_by_id_request_currency,
 	id bigint
@@ -9,16 +10,14 @@ as $$
 declare
 	_request deribit.private_cancel_transfer_by_id_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/cancel_transfer_by_id');
-    
-_request := row(
+	_request := row(
 		currency,
 		id
     )::deribit.private_cancel_transfer_by_id_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel_transfer_by_id', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/cancel_transfer_by_id'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_transfer_by_id_response, 

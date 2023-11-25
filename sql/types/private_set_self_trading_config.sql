@@ -9,7 +9,7 @@ comment on column deribit.private_set_self_trading_config_response.jsonrpc is 'T
 comment on column deribit.private_set_self_trading_config_response.result is 'Result of method execution. ok in case of success';
 
 drop type if exists deribit.private_set_self_trading_config_request_mode cascade;
-create type deribit.private_set_self_trading_config_request_mode as enum ('cancel_maker', 'reject_taker');
+create type deribit.private_set_self_trading_config_request_mode as enum ('reject_taker', 'cancel_maker');
 
 drop type if exists deribit.private_set_self_trading_config_request cascade;
 create type deribit.private_set_self_trading_config_request as (

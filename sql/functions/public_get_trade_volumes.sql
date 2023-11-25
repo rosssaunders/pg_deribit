@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_trade_volumes;
+
 create or replace function deribit.public_get_trade_volumes(
 	extended boolean default null
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.public_get_trade_volumes_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_trade_volumes');
-    
-_request := row(
+	_request := row(
 		extended
     )::deribit.public_get_trade_volumes_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_trade_volumes', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_trade_volumes'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

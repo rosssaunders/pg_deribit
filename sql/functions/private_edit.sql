@@ -1,4 +1,5 @@
 drop function if exists deribit.private_edit;
+
 create or replace function deribit.private_edit(
 	order_id text,
 	amount float,
@@ -18,11 +19,9 @@ as $$
 declare
 	_request deribit.private_edit_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/edit');
-    
-_request := row(
+	_request := row(
 		order_id,
 		amount,
 		price,
@@ -36,7 +35,7 @@ _request := row(
 		valid_until
     )::deribit.private_edit_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/edit', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/edit'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_edit_response, 

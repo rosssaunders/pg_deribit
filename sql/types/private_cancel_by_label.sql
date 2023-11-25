@@ -9,7 +9,7 @@ comment on column deribit.private_cancel_by_label_response.jsonrpc is 'The JSON-
 comment on column deribit.private_cancel_by_label_response.result is 'Total number of successfully cancelled orders';
 
 drop type if exists deribit.private_cancel_by_label_request_currency cascade;
-create type deribit.private_cancel_by_label_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.private_cancel_by_label_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_cancel_by_label_request cascade;
 create type deribit.private_cancel_by_label_request as (

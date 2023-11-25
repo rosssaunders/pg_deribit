@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_book_summary_by_instrument;
+
 create or replace function deribit.public_get_book_summary_by_instrument(
 	instrument_name text
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.public_get_book_summary_by_instrument_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_book_summary_by_instrument');
-    
-_request := row(
+	_request := row(
 		instrument_name
     )::deribit.public_get_book_summary_by_instrument_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

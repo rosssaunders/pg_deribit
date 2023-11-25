@@ -1,7 +1,13 @@
+drop type if exists deribit.public_get_volatility_index_data_response_datum cascade;
+create type deribit.public_get_volatility_index_data_response_datum as (
+
+);
+
+
 drop type if exists deribit.public_get_volatility_index_data_response_result cascade;
 create type deribit.public_get_volatility_index_data_response_result as (
 	continuation bigint,
-	data UNKNOWN - array
+	data deribit.public_get_volatility_index_data_response_datum[]
 );
 comment on column deribit.public_get_volatility_index_data_response_result.continuation is 'Continuation - to be used as the end_timestamp parameter on the next request. NULL when no continuation.';
 comment on column deribit.public_get_volatility_index_data_response_result.data is 'Candles as an array of arrays with 5 values each. The inner values correspond to the timestamp in ms, open, high, low, and close values of the volatility index correspondingly.';
@@ -17,10 +23,10 @@ comment on column deribit.public_get_volatility_index_data_response.jsonrpc is '
 comment on column deribit.public_get_volatility_index_data_response.result is 'Volatility index candles.';
 
 drop type if exists deribit.public_get_volatility_index_data_request_currency cascade;
-create type deribit.public_get_volatility_index_data_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.public_get_volatility_index_data_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_volatility_index_data_request_resolution cascade;
-create type deribit.public_get_volatility_index_data_request_resolution as enum ('43200', '1D', '1', '3600', '60');
+create type deribit.public_get_volatility_index_data_request_resolution as enum ('43200', '1D', '3600', '1', '60');
 
 drop type if exists deribit.public_get_volatility_index_data_request cascade;
 create type deribit.public_get_volatility_index_data_request as (

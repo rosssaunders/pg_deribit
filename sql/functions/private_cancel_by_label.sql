@@ -1,4 +1,5 @@
 drop function if exists deribit.private_cancel_by_label;
+
 create or replace function deribit.private_cancel_by_label(
 	label text,
 	currency deribit.private_cancel_by_label_request_currency default null
@@ -9,16 +10,14 @@ as $$
 declare
 	_request deribit.private_cancel_by_label_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/cancel_by_label');
-    
-_request := row(
+	_request := row(
 		label,
 		currency
     )::deribit.private_cancel_by_label_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel_by_label', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/cancel_by_label'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_by_label_response, 

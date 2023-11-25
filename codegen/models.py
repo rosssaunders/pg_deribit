@@ -47,7 +47,7 @@ class Endpoint:
     request_type: Type  # The type of the request
     response_type: Type  # The main type to deserialize to
     response_types: List[Type]  # All the types
-
+    rate_limiter: str  # the name of the function to call to rate limit
 
 @dataclass
 class Function:

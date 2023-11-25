@@ -19,7 +19,7 @@ comment on column deribit.private_get_order_margin_by_ids_response.jsonrpc is 'T
 
 drop type if exists deribit.private_get_order_margin_by_ids_request cascade;
 create type deribit.private_get_order_margin_by_ids_request as (
-	ids UNKNOWN - array
+	ids UNKNOWN - array - False - False - False
 );
 comment on column deribit.private_get_order_margin_by_ids_request.ids is '(Required) Ids of orders';
 

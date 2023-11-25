@@ -21,7 +21,7 @@ comment on column deribit.private_get_current_deposit_address_response.jsonrpc i
 comment on column deribit.private_get_current_deposit_address_response.result is 'Object if address is created, null otherwise';
 
 drop type if exists deribit.private_get_current_deposit_address_request_currency cascade;
-create type deribit.private_get_current_deposit_address_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.private_get_current_deposit_address_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_current_deposit_address_request cascade;
 create type deribit.private_get_current_deposit_address_request as (

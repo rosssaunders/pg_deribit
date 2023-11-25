@@ -34,10 +34,10 @@ comment on column deribit.private_withdraw_response.id is 'The id that was sent 
 comment on column deribit.private_withdraw_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_withdraw_request_currency cascade;
-create type deribit.private_withdraw_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.private_withdraw_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_withdraw_request_priority cascade;
-create type deribit.private_withdraw_request_priority as enum ('low', 'extreme_high', 'high', 'insane', 'very_high', 'mid', 'very_low');
+create type deribit.private_withdraw_request_priority as enum ('very_high', 'insane', 'extreme_high', 'low', 'high', 'very_low', 'mid');
 
 drop type if exists deribit.private_withdraw_request cascade;
 create type deribit.private_withdraw_request as (

@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_open_orders_by_instrument;
+
 create or replace function deribit.private_get_open_orders_by_instrument(
 	instrument_name text,
 	type deribit.private_get_open_orders_by_instrument_request_type default null
@@ -9,16 +10,14 @@ as $$
 declare
 	_request deribit.private_get_open_orders_by_instrument_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_open_orders_by_instrument');
-    
-_request := row(
+	_request := row(
 		instrument_name,
 		type
     )::deribit.private_get_open_orders_by_instrument_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_instrument', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_instrument'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

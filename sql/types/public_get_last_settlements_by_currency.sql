@@ -47,10 +47,10 @@ comment on column deribit.public_get_last_settlements_by_currency_response.id is
 comment on column deribit.public_get_last_settlements_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request_currency cascade;
-create type deribit.public_get_last_settlements_by_currency_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.public_get_last_settlements_by_currency_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request_type cascade;
-create type deribit.public_get_last_settlements_by_currency_request_type as enum ('settlement', 'bankruptcy', 'delivery');
+create type deribit.public_get_last_settlements_by_currency_request_type as enum ('delivery', 'settlement', 'bankruptcy');
 
 drop type if exists deribit.public_get_last_settlements_by_currency_request cascade;
 create type deribit.public_get_last_settlements_by_currency_request as (

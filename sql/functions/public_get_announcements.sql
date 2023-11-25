@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_announcements;
+
 create or replace function deribit.public_get_announcements(
 	start_timestamp bigint default null,
 	count bigint default null
@@ -9,16 +10,14 @@ as $$
 declare
 	_request deribit.public_get_announcements_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_announcements');
-    
-_request := row(
+	_request := row(
 		start_timestamp,
 		count
     )::deribit.public_get_announcements_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_announcements', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_announcements'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

@@ -1,4 +1,5 @@
 drop function if exists deribit.public_ticker;
+
 create or replace function deribit.public_ticker(
 	instrument_name text
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.public_ticker_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/ticker');
-    
-_request := row(
+	_request := row(
 		instrument_name
     )::deribit.public_ticker_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/ticker', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/ticker'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.public_ticker_response, 

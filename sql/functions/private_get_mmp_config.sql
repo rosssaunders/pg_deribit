@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_mmp_config;
+
 create or replace function deribit.private_get_mmp_config(
 	index_name deribit.private_get_mmp_config_request_index_name default null
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.private_get_mmp_config_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_mmp_config');
-    
-_request := row(
+	_request := row(
 		index_name
     )::deribit.private_get_mmp_config_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_mmp_config', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_mmp_config'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

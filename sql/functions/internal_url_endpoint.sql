@@ -1,4 +1,4 @@
-create or replace function deribit.internal_url_endpoint(url text)
+create or replace function deribit.internal_url_endpoint(url deribit.endpoint)
 returns text
 language sql
 as $$

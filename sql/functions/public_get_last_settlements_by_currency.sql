@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_last_settlements_by_currency;
+
 create or replace function deribit.public_get_last_settlements_by_currency(
 	currency deribit.public_get_last_settlements_by_currency_request_currency,
 	type deribit.public_get_last_settlements_by_currency_request_type default null,
@@ -12,11 +13,9 @@ as $$
 declare
 	_request deribit.public_get_last_settlements_by_currency_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_last_settlements_by_currency');
-    
-_request := row(
+	_request := row(
 		currency,
 		type,
 		count,
@@ -24,7 +23,7 @@ _request := row(
 		search_start_timestamp
     )::deribit.public_get_last_settlements_by_currency_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_currency', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_currency'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.public_get_last_settlements_by_currency_response, 

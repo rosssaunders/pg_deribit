@@ -1,4 +1,5 @@
 drop function if exists deribit.private_send_rfq;
+
 create or replace function deribit.private_send_rfq(
 	instrument_name text,
 	amount float default null,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.private_send_rfq_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/send_rfq');
-    
-_request := row(
+	_request := row(
 		instrument_name,
 		amount,
 		side
     )::deribit.private_send_rfq_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/send_rfq', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/send_rfq'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_send_rfq_response, 

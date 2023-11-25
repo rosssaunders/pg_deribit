@@ -1,16 +1,15 @@
 drop function if exists deribit.private_enable_affiliate_program;
+
 create or replace function deribit.private_enable_affiliate_program()
 returns text
 language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/enable_affiliate_program');
-    
 
-    _http_response := deribit.internal_jsonrpc_request('/private/enable_affiliate_program', null::text);
+    _http_response := deribit.internal_jsonrpc_request('/private/enable_affiliate_program'::deribit.endpoint, null::text, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_enable_affiliate_program_response, 

@@ -187,7 +187,7 @@ comment on column deribit.private_get_account_summary_response.id is 'The id tha
 comment on column deribit.private_get_account_summary_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_account_summary_request_currency cascade;
-create type deribit.private_get_account_summary_request_currency as enum ('USDC', 'ETH', 'BTC');
+create type deribit.private_get_account_summary_request_currency as enum ('BTC', 'USDC', 'ETH');
 
 drop type if exists deribit.private_get_account_summary_request cascade;
 create type deribit.private_get_account_summary_request as (

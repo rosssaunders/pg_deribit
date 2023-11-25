@@ -1,16 +1,15 @@
 drop function if exists deribit.private_create_subaccount;
+
 create or replace function deribit.private_create_subaccount()
 returns deribit.private_create_subaccount_response_result
 language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/create_subaccount');
-    
 
-    _http_response := deribit.internal_jsonrpc_request('/private/create_subaccount', null::text);
+    _http_response := deribit.internal_jsonrpc_request('/private/create_subaccount'::deribit.endpoint, null::text, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_create_subaccount_response, 

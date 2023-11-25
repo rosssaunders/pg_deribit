@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_supported_index_names;
+
 create or replace function deribit.public_get_supported_index_names(
 	type deribit.public_get_supported_index_names_request_type default null
 )
@@ -9,15 +10,13 @@ as $$
 declare
 	_request deribit.public_get_supported_index_names_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_supported_index_names');
-    
-_request := row(
+	_request := row(
 		type
     )::deribit.public_get_supported_index_names_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_supported_index_names', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_supported_index_names'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

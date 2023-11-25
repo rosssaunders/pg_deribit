@@ -9,7 +9,7 @@ comment on column deribit.private_send_rfq_response.jsonrpc is 'The JSON-RPC ver
 comment on column deribit.private_send_rfq_response.result is 'Result of method execution. ok in case of success';
 
 drop type if exists deribit.private_send_rfq_request_side cascade;
-create type deribit.private_send_rfq_request_side as enum ('sell', 'buy');
+create type deribit.private_send_rfq_request_side as enum ('buy', 'sell');
 
 drop type if exists deribit.private_send_rfq_request cascade;
 create type deribit.private_send_rfq_request as (

@@ -11,11 +11,11 @@ as $$
 declare
 	_request deribit.private_cancel_all_by_kind_or_type_request;
     _http_response omni_httpc.http_response;
-begin
     
+begin
     perform deribit.matching_engine_request_log_call('/private/cancel_all_by_kind_or_type');
     
-_request := row(
+	_request := row(
 		currency,
 		kind,
 		type,

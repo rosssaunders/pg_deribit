@@ -1,4 +1,5 @@
 drop function if exists deribit.private_cancel;
+
 create or replace function deribit.private_cancel(
 	order_id text
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.private_cancel_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/cancel');
-    
-_request := row(
+	_request := row(
 		order_id
     )::deribit.private_cancel_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/cancel'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_response, 

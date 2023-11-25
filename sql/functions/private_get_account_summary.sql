@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_account_summary;
+
 create or replace function deribit.private_get_account_summary(
 	currency deribit.private_get_account_summary_request_currency,
 	subaccount_id bigint default null,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.private_get_account_summary_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_account_summary');
-    
-_request := row(
+	_request := row(
 		currency,
 		subaccount_id,
 		extended
     )::deribit.private_get_account_summary_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_account_summary', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_account_summary'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_account_summary_response, 

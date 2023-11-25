@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_instruments;
+
 create or replace function deribit.public_get_instruments(
 	currency deribit.public_get_instruments_request_currency,
 	kind deribit.public_get_instruments_request_kind default null,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.public_get_instruments_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_instruments');
-    
-_request := row(
+	_request := row(
 		currency,
 		kind,
 		expired
     )::deribit.public_get_instruments_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_instruments', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_instruments'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

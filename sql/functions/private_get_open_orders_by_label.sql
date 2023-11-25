@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_open_orders_by_label;
+
 create or replace function deribit.private_get_open_orders_by_label(
 	currency deribit.private_get_open_orders_by_label_request_currency,
 	label text default null
@@ -9,16 +10,14 @@ as $$
 declare
 	_request deribit.private_get_open_orders_by_label_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_open_orders_by_label');
-    
-_request := row(
+	_request := row(
 		currency,
 		label
     )::deribit.private_get_open_orders_by_label_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_label', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_open_orders_by_label'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

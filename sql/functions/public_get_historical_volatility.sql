@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_historical_volatility;
+
 create or replace function deribit.public_get_historical_volatility(
 	currency deribit.public_get_historical_volatility_request_currency
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.public_get_historical_volatility_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_historical_volatility');
-    
-_request := row(
+	_request := row(
 		currency
     )::deribit.public_get_historical_volatility_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_historical_volatility', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_historical_volatility'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

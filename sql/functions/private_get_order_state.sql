@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_order_state;
+
 create or replace function deribit.private_get_order_state(
 	order_id text
 )
@@ -8,15 +9,13 @@ as $$
 declare
 	_request deribit.private_get_order_state_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_order_state');
-    
-_request := row(
+	_request := row(
 		order_id
     )::deribit.private_get_order_state_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_order_state', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_order_state'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_order_state_response, 

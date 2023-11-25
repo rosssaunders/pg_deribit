@@ -101,7 +101,7 @@ comment on column deribit.public_get_order_book_response.id is 'The id that was 
 comment on column deribit.public_get_order_book_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_order_book_request_depth cascade;
-create type deribit.public_get_order_book_request_depth as enum ('100', '1000', '10', '50', '5', '20', '10000', '1');
+create type deribit.public_get_order_book_request_depth as enum ('5', '100', '10', '50', '1000', '20', '10000', '1');
 
 drop type if exists deribit.public_get_order_book_request cascade;
 create type deribit.public_get_order_book_request as (

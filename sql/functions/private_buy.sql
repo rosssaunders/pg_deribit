@@ -1,4 +1,5 @@
 drop function if exists deribit.private_buy;
+
 create or replace function deribit.private_buy(
 	instrument_name text,
 	amount float,
@@ -23,11 +24,9 @@ as $$
 declare
 	_request deribit.private_buy_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/buy');
-    
-_request := row(
+	_request := row(
 		instrument_name,
 		amount,
 		type,
@@ -46,7 +45,7 @@ _request := row(
 		valid_until
     )::deribit.private_buy_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/buy', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/buy'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_buy_response, 

@@ -1,8 +1,14 @@
+drop type if exists deribit.public_get_mark_price_history_response_result cascade;
+create type deribit.public_get_mark_price_history_response_result as (
+
+);
+
+
 drop type if exists deribit.public_get_mark_price_history_response cascade;
 create type deribit.public_get_mark_price_history_response as (
 	id bigint,
 	jsonrpc text,
-	result UNKNOWN - array
+	result deribit.public_get_mark_price_history_response_result[]
 );
 comment on column deribit.public_get_mark_price_history_response.id is 'The id that was sent in the request';
 comment on column deribit.public_get_mark_price_history_response.jsonrpc is 'The JSON-RPC version (2.0)';

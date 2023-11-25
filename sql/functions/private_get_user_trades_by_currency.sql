@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_user_trades_by_currency;
+
 create or replace function deribit.private_get_user_trades_by_currency(
 	currency deribit.private_get_user_trades_by_currency_request_currency,
 	kind deribit.private_get_user_trades_by_currency_request_kind default null,
@@ -16,11 +17,9 @@ as $$
 declare
 	_request deribit.private_get_user_trades_by_currency_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_user_trades_by_currency');
-    
-_request := row(
+	_request := row(
 		currency,
 		kind,
 		start_id,
@@ -32,7 +31,7 @@ _request := row(
 		subaccount_id
     )::deribit.private_get_user_trades_by_currency_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_currency', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_currency'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_user_trades_by_currency_response, 

@@ -1,4 +1,5 @@
 drop function if exists deribit.private_close_position;
+
 create or replace function deribit.private_close_position(
 	instrument_name text,
 	type deribit.private_close_position_request_type,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.private_close_position_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/close_position');
-    
-_request := row(
+	_request := row(
 		instrument_name,
 		type,
 		price
     )::deribit.private_close_position_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/close_position', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/close_position'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_close_position_response, 

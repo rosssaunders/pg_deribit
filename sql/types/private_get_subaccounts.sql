@@ -1,3 +1,13 @@
+drop type if exists deribit.private_get_subaccounts_response_security_keys_assignment cascade;
+create type deribit.private_get_subaccounts_response_security_keys_assignment as (
+	security_keys_enabled boolean,
+	system_name text,
+	type text,
+	username text
+);
+comment on column deribit.private_get_subaccounts_response_security_keys_assignment.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
+comment on column deribit.private_get_subaccounts_response_security_keys_assignment.system_name is 'System generated user nickname';
+
 drop type if exists deribit.private_get_subaccounts_response_eth cascade;
 create type deribit.private_get_subaccounts_response_eth as (
 	available_funds float,
@@ -11,18 +21,12 @@ create type deribit.private_get_subaccounts_response_eth as (
 	proof_id text,
 	proof_id_signature text,
 	receive_notifications boolean,
-	security_keys_assignments UNKNOWN - array,
-	security_keys_enabled boolean,
-	system_name text,
-	type text,
-	username text
+	security_keys_assignments deribit.private_get_subaccounts_response_security_keys_assignment[]
 );
 comment on column deribit.private_get_subaccounts_response_eth.proof_id is 'hashed identifier used in the Proof Of Liability for the subaccount. This identifier allows you to find your entries in the Deribit Proof-Of-Reserves files. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
 comment on column deribit.private_get_subaccounts_response_eth.proof_id_signature is 'signature used as a base string for proof_id hash. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
 comment on column deribit.private_get_subaccounts_response_eth.receive_notifications is 'When true - receive all notification emails on the main email';
 comment on column deribit.private_get_subaccounts_response_eth.security_keys_assignments is 'Names of assignments with Security Keys assigned';
-comment on column deribit.private_get_subaccounts_response_eth.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
-comment on column deribit.private_get_subaccounts_response_eth.system_name is 'System generated user nickname';
 
 drop type if exists deribit.private_get_subaccounts_response_btc cascade;
 create type deribit.private_get_subaccounts_response_btc as (

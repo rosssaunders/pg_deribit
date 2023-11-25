@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_order_history_by_instrument;
+
 create or replace function deribit.private_get_order_history_by_instrument(
 	instrument_name text,
 	count bigint default null,
@@ -12,11 +13,9 @@ as $$
 declare
 	_request deribit.private_get_order_history_by_instrument_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_order_history_by_instrument');
-    
-_request := row(
+	_request := row(
 		instrument_name,
 		count,
 		"offset",
@@ -24,7 +23,7 @@ _request := row(
 		include_unfilled
     )::deribit.private_get_order_history_by_instrument_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_order_history_by_instrument', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_order_history_by_instrument'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

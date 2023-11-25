@@ -1,16 +1,15 @@
 drop function if exists deribit.private_list_api_keys;
+
 create or replace function deribit.private_list_api_keys()
 returns setof deribit.private_list_api_keys_response_result
 language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/list_api_keys');
-    
 
-    _http_response := deribit.internal_jsonrpc_request('/private/list_api_keys', null::text);
+    _http_response := deribit.internal_jsonrpc_request('/private/list_api_keys'::deribit.endpoint, null::text, 'private_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

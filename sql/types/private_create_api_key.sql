@@ -36,7 +36,7 @@ create type deribit.private_create_api_key_request as (
 	max_scope text,
 	name text,
 	public_key text,
-	enabled_features UNKNOWN - array
+	enabled_features UNKNOWN - array - False - False - False
 );
 comment on column deribit.private_create_api_key_request.max_scope is '(Required) Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope';
 comment on column deribit.private_create_api_key_request.name is 'Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)';

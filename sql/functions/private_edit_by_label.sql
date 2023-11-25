@@ -1,4 +1,5 @@
 drop function if exists deribit.private_edit_by_label;
+
 create or replace function deribit.private_edit_by_label(
 	label text default null,
 	instrument_name text,
@@ -18,11 +19,9 @@ as $$
 declare
 	_request deribit.private_edit_by_label_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/edit_by_label');
-    
-_request := row(
+	_request := row(
 		label,
 		instrument_name,
 		amount,
@@ -36,7 +35,7 @@ _request := row(
 		valid_until
     )::deribit.private_edit_by_label_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/edit_by_label', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/edit_by_label'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_edit_by_label_response, 

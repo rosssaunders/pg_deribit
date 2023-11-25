@@ -1,15 +1,19 @@
-import inflect
 import warnings
+
+import inflect
+
+from codegen.consts import excluded_urls, matching_engine_endpoints, sections
+
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
+import os
+from typing import Dict, List
+
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
-from typing import List
-from typing import Dict
 from exporter import Exporter
-from models import Enum, Type, Field, FieldType, Endpoint, Function, Parameter
-import os
+from models import Endpoint, Enum, Field, FieldType, Function, Parameter, Type
 
 p = inflect.engine()
 
@@ -84,7 +88,7 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
             continue
 
-        if row[1] == 'array of object':
+        if row[1] == 'array of object' or row[1] == 'array':
             if p.singular_noun(field_name) is False:
                 new_parent_type_name = f"{parent_type_name}_{field_name}"
             else:
@@ -179,6 +183,56 @@ def download_spec():
         file.write(response.text)
 
 
+def extract_function_from_section(sibling):
+    file_name = '_'.join(sibling.text.split('/')[1:])
+
+    # check if the url is excluded
+    if file_name in excluded_urls:
+        print(f'{file_name}: skipping due to {excluded_urls[file_name]}')
+        return
+
+    print(f'{file_name}: processing')
+
+    # if file_name != 'public_get_index_price_names':
+    #     continue
+
+    parameters_section = sibling.find_next_sibling('h3', text='Parameters')
+    request_type = None
+    if parameters_section.nextSibling.nextSibling.name == 'p':
+        print('Method has no parameters')
+    else:
+        parameters_table = parameters_section.find_next_sibling('table')
+        request_type = request_table_to_type(sibling.text, parameters_table)
+
+    response_section = sibling.find_next_sibling('h3', text='Response')
+    response_table = response_section.find_next_sibling('table')
+    root_type, response_type, all_types = response_table_to_type(sibling.text, response_table)
+
+    rate_limiter = None
+    if file_name in matching_engine_endpoints:
+        rate_limiter = 'matching_engine_request_log_call'
+    elif file_name.startswith('private'):
+        rate_limiter = 'private_request_log_call'
+    else:
+        rate_limiter = 'public_request_log_call'
+
+    comment = sibling.find_next_sibling('p')
+    function = Function(name=url_to_type_name(sibling.text),
+                        endpoint=Endpoint(
+                            name=file_name,
+                            path=sibling.text,
+                            request_type=request_type,
+                            response_type=root_type,
+                            response_types=all_types,
+                            rate_limiter=rate_limiter
+                        ),
+                        comment=comment.text,
+                        response_type=response_type
+                        )
+
+    return function
+
+
 def main():
     if not os.path.isfile(f"docs/deribit.html"):
         download_spec()
@@ -193,12 +247,8 @@ def main():
 
     soup = BeautifulSoup(response_table, "html.parser")
 
-    sections = ['Market data', 'Account management', 'Trading', 'Wallet']
-
-    #-- reset the test file
-    script_dir = os.path.dirname(__file__)
-    with open(os.path.join(script_dir, f"../test/all_functions.sql"), 'w') as file:
-        pass
+    # dict which contains all the excluded urls
+    functions = []
 
     for section in sections:
         h1_tag = soup.find('h1', text=section)
@@ -210,48 +260,11 @@ def main():
             if sibling.name != 'h2':
                 continue
 
-            file_name = '_'.join(sibling.text.split('/')[1:])
-            if file_name == 'private_get_user_trades_by_order':
-                print(f'{file_name}: skipping due to invalid documentation')
-                continue
-            elif file_name == 'public_get_portfolio_margins':
-                print(f'{file_name}: skipping due to invalid documentation')
-                continue
-            elif file_name == 'public_get_funding_chart_data':
-                print(f'{file_name}: skipping due to invalid documentation')
-                continue
-            else:
-                print(f'{file_name}: processing')
+            function = extract_function_from_section(sibling)
+            if function is not None:
+                functions.append(function)
 
-            # if file_name != 'public_get_index_price_names':
-            #     continue
-
-            parameters_section = sibling.find_next_sibling('h3', text='Parameters')
-            request_type = None
-            if parameters_section.nextSibling.nextSibling.name == 'p':
-                print('Method has no parameters')
-            else:
-                parameters_table = parameters_section.find_next_sibling('table')
-                request_type = request_table_to_type(sibling.text, parameters_table)
-
-            response_section = sibling.find_next_sibling('h3', text='Response')
-            response_table = response_section.find_next_sibling('table')
-            root_type, response_type, all_types = response_table_to_type(sibling.text, response_table)
-
-            comment = sibling.find_next_sibling('p')
-            function = Function(name=url_to_type_name(sibling.text),
-                                endpoint=Endpoint(
-                                    name=file_name,
-                                    path=sibling.text,
-                                    request_type=request_type,
-                                    response_type=root_type,
-                                    response_types=all_types),
-                                comment=comment.text,
-                                response_type=response_type
-                                )
-
-            # export to a file
-            exporter.export(function)
+    exporter.all(functions)
 
 
 if __name__ == '__main__':

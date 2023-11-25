@@ -1,4 +1,5 @@
 drop function if exists deribit.private_submit_transfer_to_subaccount;
+
 create or replace function deribit.private_submit_transfer_to_subaccount(
 	currency deribit.private_submit_transfer_to_subaccount_request_currency,
 	amount float,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.private_submit_transfer_to_subaccount_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/submit_transfer_to_subaccount');
-    
-_request := row(
+	_request := row(
 		currency,
 		amount,
 		destination
     )::deribit.private_submit_transfer_to_subaccount_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/submit_transfer_to_subaccount', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/submit_transfer_to_subaccount'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_submit_transfer_to_subaccount_response, 

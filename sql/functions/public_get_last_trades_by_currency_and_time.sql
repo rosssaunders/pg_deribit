@@ -1,4 +1,5 @@
 drop function if exists deribit.public_get_last_trades_by_currency_and_time;
+
 create or replace function deribit.public_get_last_trades_by_currency_and_time(
 	currency deribit.public_get_last_trades_by_currency_and_time_request_currency,
 	kind deribit.public_get_last_trades_by_currency_and_time_request_kind default null,
@@ -13,11 +14,9 @@ as $$
 declare
 	_request deribit.public_get_last_trades_by_currency_and_time_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_last_trades_by_currency_and_time');
-    
-_request := row(
+	_request := row(
 		currency,
 		kind,
 		start_timestamp,
@@ -26,7 +25,7 @@ _request := row(
 		sorting
     )::deribit.public_get_last_trades_by_currency_and_time_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_last_trades_by_currency_and_time', _request);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_last_trades_by_currency_and_time'::deribit.endpoint, _request, 'public_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.public_get_last_trades_by_currency_and_time_response, 

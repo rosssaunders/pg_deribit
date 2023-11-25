@@ -1,16 +1,15 @@
 drop function if exists deribit.public_get_currencies;
+
 create or replace function deribit.public_get_currencies()
 returns setof deribit.public_get_currencies_response_result
 language plpgsql
 as $$
 declare
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/public/get_currencies');
-    
 
-    _http_response := deribit.internal_jsonrpc_request('/public/get_currencies', null::text);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_currencies'::deribit.endpoint, null::text, 'public_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

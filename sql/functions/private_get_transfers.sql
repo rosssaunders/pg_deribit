@@ -1,4 +1,5 @@
 drop function if exists deribit.private_get_transfers;
+
 create or replace function deribit.private_get_transfers(
 	currency deribit.private_get_transfers_request_currency,
 	count bigint default null,
@@ -10,17 +11,15 @@ as $$
 declare
 	_request deribit.private_get_transfers_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/get_transfers');
-    
-_request := row(
+	_request := row(
 		currency,
 		count,
 		"offset"
     )::deribit.private_get_transfers_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_transfers', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_transfers'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_transfers_response, 

@@ -1,5 +1,5 @@
 drop function if exists deribit.matching_engine_request_log_call;
-create or replace function deribit.matching_engine_request_log_call(url text)
+create or replace function deribit.matching_engine_request_log_call(url deribit.endpoint)
 returns void
 language plpgsql
 as
@@ -30,9 +30,9 @@ begin
 
     update deribit.internal_endpoint_rate_limit
     set last_call = clock_timestamp(),
-        calls = calls + 1,
-        calls_rate_limited = calls_rate_limited + _has_delay,
-        time_waiting = time_waiting + make_interval(secs => _delay * _has_delay)
+        total_call_count = total_call_count + 1,
+        total_calls_rate_limited_count = total_calls_rate_limited_count + _has_delay,
+        total_rate_limiting_waiting = total_rate_limiting_waiting + make_interval(secs => _delay * _has_delay)
     where key = url;
 
     delete from deribit.matching_engine_request_call_log where call_timestamp < clock_timestamp() - _cleanup;

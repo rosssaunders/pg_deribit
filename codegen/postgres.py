@@ -65,7 +65,7 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
     elif field_type.name == 'timestamp':
         return 'timestamp'
     else:
-        return f"UNKNOWN - {field_type.name}"
+        return f"UNKNOWN - {field_type.name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
 
 
 def escape_comment(comment: str) -> str:
@@ -77,6 +77,7 @@ def enum_to_type(schema: str, parent_type: str, enum: Enum) -> str:
     enums = ', '.join(f'\'{e}\'' for e in enum.items)
     res += f"create type {schema}.{parent_type}_{enum.name} as enum ({enums});"
     return res
+
 
 def type_to_type(schema: str, type: Type) -> str:
     res = f"drop type if exists {schema}.{type.name} cascade;\n"
@@ -97,7 +98,7 @@ def default_to_null(field: Field) -> str:
 
 
 def invoke_endpoint(schema: str, function: Function) -> str:
-    res = f"""drop function if exists {schema}.{function.name};\n"""
+    res = f"""drop function if exists {schema}.{function.name};\n\n"""
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
         res += "\n"
@@ -138,27 +139,21 @@ declare"""
 
     res += """
     _http_response omni_httpc.http_response;
-begin
-    """
-
-    # invoke the rate limiter
-    res += f"""
-    perform deribit.matching_engine_request_log_call('{function.endpoint.path}');
     
+begin
 """
-
     if function.endpoint.request_type is not None:
-        res += """_request := row(
+        res += """\t_request := row(
 """
         res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
         res += f"""
     )::{schema}.{function.endpoint.request_type.name};
     
-    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}', _request);
+    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, _request, '{function.endpoint.rate_limiter}'::name);
 """
     else:
         res += f"""
-    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}', null::text);
+    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, null::text, '{function.endpoint.rate_limiter}'::name);
 """
 
     if function.response_type.is_array:
@@ -228,6 +223,7 @@ from {schema}.{function.name}("""
     res += f");"
 
     return res
+
 
 def test_endpoint_xunit(schema: str, function: Function) -> str:
     res = f"""create or replace function {schema}.test_{function.name}()

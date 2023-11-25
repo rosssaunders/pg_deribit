@@ -1,32 +1,42 @@
 import os
+
 from models import Function
-from postgres import enum_to_type, type_to_type, invoke_endpoint, test_endpoint
+from postgres import enum_to_type, invoke_endpoint, test_endpoint, type_to_type
 
 
 class Exporter:
 
     def __init__(self):
         self.schema = None
+        self.script_dir = os.path.dirname(__file__)
 
     def set_schema(self, schema: str):
         self.schema = schema
 
     def setup(self):
+        with open(os.path.join(self.script_dir, f"../test/all_functions.sql"), 'w') as file:
+            pass
         pass
-    #     os.makedirs(f"{self.schema}", exist_ok=True)
-    #     os.makedirs(f"{self.schema}/private", exist_ok=True)
-    #     os.makedirs(f"{self.schema}/public", exist_ok=True)
+
+    def all(self, functions: [Function]):
+        self.setup()
+
+        for function in functions:
+            self.export(function)
+
+        with open(os.path.join(self.script_dir, f"../sql/types/endpoints.sql"), 'w') as file:
+            file.write(f"drop type if exists deribit.endpoint cascade;\n")
+            file.write(f"create type deribit.endpoint as enum (\n")
+            file.write(f',\n'.join(f"\t'{function.endpoint.path}'" for function in functions))
+            file.write(f"\n);")
+
+        with open(os.path.join(self.script_dir, f"../sql/static/endpoints.sql"), 'w') as file:
+            file.write(f"""insert into deribit.internal_endpoint_rate_limit (key)\nvalues\n""")
+            file.write(f',\n'.join(f"\t('{function.endpoint.path}')" for function in functions))
+            file.write(';\n')
 
     def export(self, function: Function):
         script_dir = os.path.dirname(__file__)
-
-        with open(os.path.join(script_dir, f"../sql/static/{function.endpoint.name}.sql"), 'w') as file:
-
-            file.write(f"""insert into deribit.internal_endpoint_rate_limit (key, last_call, calls, time_waiting) 
-values 
-('{function.endpoint.path}', null, 0, '0 secs'::interval)
-on conflict do nothing;""")
-            file.write('\n\n')
 
         with open(os.path.join(script_dir, f"../sql/types/{function.endpoint.name}.sql"), 'w') as file:
 
@@ -43,11 +53,9 @@ on conflict do nothing;""")
                 file.write('\n\n')
 
         with open(os.path.join(script_dir, f"../sql/functions/{function.endpoint.name}.sql"), 'w') as file:
-
             file.write(invoke_endpoint(self.schema, function))
             file.write('\n\n')
 
         with open(os.path.join(script_dir, f"../test/all_functions.sql"), 'a') as file:
-
             file.write(test_endpoint(self.schema, function))
             file.write('\n\n')

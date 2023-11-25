@@ -1,4 +1,5 @@
 drop function if exists deribit.private_withdraw;
+
 create or replace function deribit.private_withdraw(
 	currency deribit.private_withdraw_request_currency,
 	address text,
@@ -11,18 +12,16 @@ as $$
 declare
 	_request deribit.private_withdraw_request;
     _http_response omni_httpc.http_response;
+    
 begin
-    
-    perform deribit.matching_engine_request_log_call('/private/withdraw');
-    
-_request := row(
+	_request := row(
 		currency,
 		address,
 		amount,
 		priority
     )::deribit.private_withdraw_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/withdraw', _request);
+    _http_response := deribit.internal_jsonrpc_request('/private/withdraw'::deribit.endpoint, _request, 'private_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_withdraw_response, 
