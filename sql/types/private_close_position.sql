@@ -169,7 +169,7 @@ comment on column deribit.private_close_position_response.id is 'The id that was
 comment on column deribit.private_close_position_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_close_position_request_type cascade;
-create type deribit.private_close_position_request_type as enum ('market', 'limit');
+create type deribit.private_close_position_request_type as enum ('limit', 'market');
 
 drop type if exists deribit.private_close_position_request cascade;
 create type deribit.private_close_position_request as (

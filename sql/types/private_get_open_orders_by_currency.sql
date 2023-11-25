@@ -90,13 +90,13 @@ comment on column deribit.private_get_open_orders_by_currency_response.id is 'Th
 comment on column deribit.private_get_open_orders_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_open_orders_by_currency_request_currency cascade;
-create type deribit.private_get_open_orders_by_currency_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_get_open_orders_by_currency_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.private_get_open_orders_by_currency_request_kind cascade;
-create type deribit.private_get_open_orders_by_currency_request_kind as enum ('option', 'future', 'option_combo', 'spot', 'future_combo');
+create type deribit.private_get_open_orders_by_currency_request_kind as enum ('future', 'option_combo', 'future_combo', 'spot', 'option');
 
 drop type if exists deribit.private_get_open_orders_by_currency_request_type cascade;
-create type deribit.private_get_open_orders_by_currency_request_type as enum ('all', 'trigger_all', 'trailing_all', 'limit', 'stop_limit', 'stop_market', 'take_market', 'stop_all', 'take_limit', 'trailing_stop', 'take_all');
+create type deribit.private_get_open_orders_by_currency_request_type as enum ('trigger_all', 'stop_limit', 'take_limit', 'take_all', 'limit', 'stop_all', 'take_market', 'stop_market', 'all', 'trailing_stop', 'trailing_all');
 
 drop type if exists deribit.private_get_open_orders_by_currency_request cascade;
 create type deribit.private_get_open_orders_by_currency_request as (

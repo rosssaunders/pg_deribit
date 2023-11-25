@@ -14,8 +14,7 @@ from deribit.public_get_contract_size(
 );
 
 select * 
-from deribit.public_get_currencies(
-);
+from deribit.public_get_currencies();
 
 select * 
 from deribit.public_get_delivery_prices(
@@ -25,18 +24,14 @@ from deribit.public_get_delivery_prices(
 select * 
 from deribit.public_get_funding_rate_history(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
 select * 
 from deribit.public_get_funding_rate_value(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
@@ -56,8 +51,7 @@ from deribit.public_get_index_price(
 );
 
 select * 
-from deribit.public_get_index_price_names(
-);
+from deribit.public_get_index_price_names();
 
 select * 
 from deribit.public_get_instrument(
@@ -87,9 +81,7 @@ from deribit.public_get_last_trades_by_currency(
 select * 
 from deribit.public_get_last_trades_by_currency_and_time(
 	currency := 'BTC',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
@@ -101,18 +93,14 @@ from deribit.public_get_last_trades_by_instrument(
 select * 
 from deribit.public_get_last_trades_by_instrument_and_time(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
 select * 
 from deribit.public_get_mark_price_history(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
@@ -123,7 +111,7 @@ from deribit.public_get_order_book(
 
 select * 
 from deribit.public_get_order_book_by_instrument_id(
-	instrument_id := 0
+	instrument_id := 124972
 );
 
 select * 
@@ -132,32 +120,24 @@ from deribit.public_get_rfqs(
 );
 
 select * 
-from deribit.public_get_supported_index_names(
-);
+from deribit.public_get_supported_index_names();
 
 select * 
-from deribit.public_get_trade_volumes(
-);
+from deribit.public_get_trade_volumes();
 
 select * 
 from deribit.public_get_tradingview_chart_data(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164,
-
 	resolution := '1D'
 );
 
 select * 
 from deribit.public_get_volatility_index_data(
 	currency := 'BTC',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164,
-
 	resolution := '1D'
 );
 
@@ -167,13 +147,11 @@ from deribit.public_ticker(
 );
 
 select * 
-from deribit.public_get_announcements(
-);
+from deribit.public_get_announcements();
 
 select * 
 from deribit.private_change_api_key_name(
 	id := UNKNOWN,
-
 	name := UNKNOWN
 );
 
@@ -185,20 +163,17 @@ from deribit.private_change_margin_model(
 select * 
 from deribit.private_change_scope_in_api_key(
 	max_scope := UNKNOWN,
-
 	id := UNKNOWN
 );
 
 select * 
 from deribit.private_change_subaccount_name(
 	sid := UNKNOWN,
-
 	name := UNKNOWN
 );
 
 select * 
-from deribit.private_create_subaccount(
-);
+from deribit.private_create_subaccount();
 
 select * 
 from deribit.private_disable_api_key(
@@ -206,8 +181,7 @@ from deribit.private_disable_api_key(
 );
 
 select * 
-from deribit.private_enable_affiliate_program(
-);
+from deribit.private_enable_affiliate_program();
 
 select * 
 from deribit.private_enable_api_key(
@@ -215,8 +189,7 @@ from deribit.private_enable_api_key(
 );
 
 select * 
-from deribit.private_get_access_log(
-);
+from deribit.private_get_access_log();
 
 select * 
 from deribit.private_get_account_summary(
@@ -224,16 +197,13 @@ from deribit.private_get_account_summary(
 );
 
 select * 
-from deribit.private_get_affiliate_program_info(
-);
+from deribit.private_get_affiliate_program_info();
 
 select * 
-from deribit.private_get_email_language(
-);
+from deribit.private_get_email_language();
 
 select * 
-from deribit.private_get_new_announcements(
-);
+from deribit.private_get_new_announcements();
 
 select * 
 from deribit.private_get_portfolio_margins(
@@ -251,8 +221,7 @@ from deribit.private_get_positions(
 );
 
 select * 
-from deribit.private_get_subaccounts(
-);
+from deribit.private_get_subaccounts();
 
 select * 
 from deribit.private_get_subaccounts_details(
@@ -262,19 +231,15 @@ from deribit.private_get_subaccounts_details(
 select * 
 from deribit.private_get_transaction_log(
 	currency := 'BTC',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
 select * 
-from deribit.private_get_user_locks(
-);
+from deribit.private_get_user_locks();
 
 select * 
-from deribit.private_list_api_keys(
-);
+from deribit.private_list_api_keys();
 
 select * 
 from deribit.private_remove_api_key(
@@ -299,7 +264,6 @@ from deribit.private_set_announcement_as_read(
 select * 
 from deribit.private_set_email_for_subaccount(
 	sid := UNKNOWN,
-
 	email := UNKNOWN
 );
 
@@ -311,14 +275,12 @@ from deribit.private_set_email_language(
 select * 
 from deribit.private_set_self_trading_config(
 	mode := UNKNOWN,
-
 	extended_to_subaccounts := UNKNOWN
 );
 
 select * 
 from deribit.private_toggle_notifications_from_subaccount(
 	sid := UNKNOWN,
-
 	state := UNKNOWN
 );
 
@@ -330,46 +292,40 @@ from deribit.private_toggle_portfolio_margining(
 select * 
 from deribit.private_toggle_subaccount_login(
 	sid := UNKNOWN,
-
 	state := UNKNOWN
 );
 
 select * 
 from deribit.private_buy(
 	instrument_name := 'BTC-PERPETUAL',
-
 	amount := 0.1::numeric
 );
 
 select * 
 from deribit.private_sell(
 	instrument_name := 'BTC-PERPETUAL',
-
 	amount := 0.1::numeric
 );
 
 select * 
 from deribit.private_edit(
-	order_id := UNKNOWN,
-
+	order_id := 19025003696,
 	amount := 0.1::numeric
 );
 
 select * 
 from deribit.private_edit_by_label(
 	instrument_name := 'BTC-PERPETUAL',
-
 	amount := 0.1::numeric
 );
 
 select * 
 from deribit.private_cancel(
-	order_id := UNKNOWN
+	order_id := 19025003696
 );
 
 select * 
-from deribit.private_cancel_all(
-);
+from deribit.private_cancel_all();
 
 select * 
 from deribit.private_cancel_all_by_currency(
@@ -389,22 +345,18 @@ from deribit.private_cancel_by_label(
 select * 
 from deribit.private_close_position(
 	instrument_name := 'BTC-PERPETUAL',
-
 	type := UNKNOWN
 );
 
 select * 
 from deribit.private_get_margins(
 	instrument_name := 'BTC-PERPETUAL',
-
 	amount := 0.1::numeric,
-
 	price := 10000::numeric
 );
 
 select * 
-from deribit.private_get_mmp_config(
-);
+from deribit.private_get_mmp_config();
 
 select * 
 from deribit.private_get_open_orders_by_currency(
@@ -433,7 +385,7 @@ from deribit.private_get_order_history_by_instrument(
 
 select * 
 from deribit.private_get_order_state(
-	order_id := UNKNOWN
+	order_id := 19025003696
 );
 
 select * 
@@ -454,9 +406,7 @@ from deribit.private_get_user_trades_by_currency(
 select * 
 from deribit.private_get_user_trades_by_currency_and_time(
 	currency := 'BTC',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
@@ -468,9 +418,7 @@ from deribit.private_get_user_trades_by_instrument(
 select * 
 from deribit.private_get_user_trades_by_instrument_and_time(
 	instrument_name := 'BTC-PERPETUAL',
-
 	start_timestamp := 1700319764,
-
 	end_timestamp := 1700406164
 );
 
@@ -487,9 +435,7 @@ from deribit.private_send_rfq(
 select * 
 from deribit.private_set_mmp_config(
 	index_name := 'btc_usd',
-
 	"interval" := UNKNOWN,
-
 	frozen_time := UNKNOWN
 );
 
@@ -506,14 +452,12 @@ from deribit.private_get_settlement_history_by_currency(
 select * 
 from deribit.private_cancel_transfer_by_id(
 	currency := 'BTC',
-
 	id := UNKNOWN
 );
 
 select * 
 from deribit.private_cancel_withdrawal(
 	currency := 'BTC',
-
 	id := UNKNOWN
 );
 
@@ -545,27 +489,21 @@ from deribit.private_get_withdrawals(
 select * 
 from deribit.private_submit_transfer_to_subaccount(
 	currency := 'BTC',
-
 	amount := 0.1::numeric,
-
 	destination := UNKNOWN
 );
 
 select * 
 from deribit.private_submit_transfer_to_user(
 	currency := 'BTC',
-
 	amount := 0.1::numeric,
-
 	destination := UNKNOWN
 );
 
 select * 
 from deribit.private_withdraw(
 	currency := 'BTC',
-
 	address := UNKNOWN,
-
 	amount := 0.1::numeric
 );
 

@@ -23,10 +23,10 @@ comment on column deribit.public_get_volatility_index_data_response.jsonrpc is '
 comment on column deribit.public_get_volatility_index_data_response.result is 'Volatility index candles.';
 
 drop type if exists deribit.public_get_volatility_index_data_request_currency cascade;
-create type deribit.public_get_volatility_index_data_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.public_get_volatility_index_data_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.public_get_volatility_index_data_request_resolution cascade;
-create type deribit.public_get_volatility_index_data_request_resolution as enum ('3600', '43200', '1', '60', '1D');
+create type deribit.public_get_volatility_index_data_request_resolution as enum ('1D', '60', '3600', '1', '43200');
 
 drop type if exists deribit.public_get_volatility_index_data_request cascade;
 create type deribit.public_get_volatility_index_data_request as (

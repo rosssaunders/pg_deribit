@@ -37,7 +37,7 @@ comment on column deribit.private_get_transfers_response.id is 'The id that was 
 comment on column deribit.private_get_transfers_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_transfers_request_currency cascade;
-create type deribit.private_get_transfers_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_get_transfers_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.private_get_transfers_request cascade;
 create type deribit.private_get_transfers_request as (

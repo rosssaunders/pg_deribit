@@ -87,13 +87,13 @@ comment on column deribit.private_get_user_trades_by_currency_and_time_response.
 comment on column deribit.private_get_user_trades_by_currency_and_time_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_user_trades_by_currency_and_time_request_currency cascade;
-create type deribit.private_get_user_trades_by_currency_and_time_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_get_user_trades_by_currency_and_time_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.private_get_user_trades_by_currency_and_time_request_kind cascade;
-create type deribit.private_get_user_trades_by_currency_and_time_request_kind as enum ('combo', 'option', 'future', 'option_combo', 'any', 'spot', 'future_combo');
+create type deribit.private_get_user_trades_by_currency_and_time_request_kind as enum ('future', 'option_combo', 'future_combo', 'combo', 'spot', 'option', 'any');
 
 drop type if exists deribit.private_get_user_trades_by_currency_and_time_request_sorting cascade;
-create type deribit.private_get_user_trades_by_currency_and_time_request_sorting as enum ('asc', 'default', 'desc');
+create type deribit.private_get_user_trades_by_currency_and_time_request_sorting as enum ('default', 'desc', 'asc');
 
 drop type if exists deribit.private_get_user_trades_by_currency_and_time_request cascade;
 create type deribit.private_get_user_trades_by_currency_and_time_request as (

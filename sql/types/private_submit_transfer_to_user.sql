@@ -30,7 +30,7 @@ comment on column deribit.private_submit_transfer_to_user_response.id is 'The id
 comment on column deribit.private_submit_transfer_to_user_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_submit_transfer_to_user_request_currency cascade;
-create type deribit.private_submit_transfer_to_user_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_submit_transfer_to_user_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.private_submit_transfer_to_user_request cascade;
 create type deribit.private_submit_transfer_to_user_request as (

@@ -22,10 +22,10 @@ comment on column deribit.public_get_rfqs_response.id is 'The id that was sent i
 comment on column deribit.public_get_rfqs_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_rfqs_request_currency cascade;
-create type deribit.public_get_rfqs_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.public_get_rfqs_request_currency as enum ('ETH', 'BTC', 'USDC');
 
 drop type if exists deribit.public_get_rfqs_request_kind cascade;
-create type deribit.public_get_rfqs_request_kind as enum ('option', 'future', 'option_combo', 'spot', 'future_combo');
+create type deribit.public_get_rfqs_request_kind as enum ('future', 'option_combo', 'future_combo', 'spot', 'option');
 
 drop type if exists deribit.public_get_rfqs_request cascade;
 create type deribit.public_get_rfqs_request as (

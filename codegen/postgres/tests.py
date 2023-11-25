@@ -21,9 +21,11 @@ def default_test_value(field: str) -> str:
     elif field == 'end_timestamp':
         return '1700406164'
     elif field == 'instrument_id':
-        return '0'  # TODO
+        return '124972'  # TODO
     elif field == 'resolution':
         return f"'1D'"  # TODO
+    elif field == 'order_id':
+        return '19025003696'
 
     return 'UNKNOWN'
 
@@ -41,12 +43,16 @@ def test_endpoint(schema: str, function: Function) -> str:
     res += f"""select * 
 from {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
-        required_fields = [x for x in function.endpoint.request_type.fields if x.required]
-        res += ',\n'.join(
-            f'\n\t{escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}' for e in
-            required_fields)
-    res += f"""
-);"""
+        required_fields = list([x for x in function.endpoint.request_type.fields if x.required])
+        if len(required_fields) > 0:
+            res += """
+"""
+            res += ',\n'.join(
+                f'\t{escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}' for e in
+                required_fields)
+            res += """
+"""
+    res += f""");"""
 
     return res
 

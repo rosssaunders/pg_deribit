@@ -1,0 +1,14 @@
+TODO:
+
+Trading key encryption:
+- [ ] Implement key encryption for trading keys
+
+Endpoints to implement:
+- [ ] deribit.public_get_delivery_prices -> expand the data to a table
+- [ ] public_get_portfolio_margins'
+- [ ] public_get_funding_chart_data': 'invalid documentation',
+- [ ] private_get_user_trades_by_order': 'invalid documentation',
+- [ ] private_cancel_all_by_kind_or_type': 'unsupported request parameter',
+- [ ] private_create_api_key': 'unsupported request parameter',
+- [ ] private_get_order_margin_by_ids': 'unsupported request parameter',
+- [ ] public_get_funding_chart_data_response_datum

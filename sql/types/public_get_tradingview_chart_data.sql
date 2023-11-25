@@ -28,7 +28,7 @@ comment on column deribit.public_get_tradingview_chart_data_response.id is 'The 
 comment on column deribit.public_get_tradingview_chart_data_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_tradingview_chart_data_request_resolution cascade;
-create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('720', '15', '3', '120', '180', '5', '360', '30', '10', '1', '60', '1D');
+create type deribit.public_get_tradingview_chart_data_request_resolution as enum ('1D', '60', '15', '360', '5', '180', '720', '1', '30', '3', '120', '10');
 
 drop type if exists deribit.public_get_tradingview_chart_data_request cascade;
 create type deribit.public_get_tradingview_chart_data_request as (
