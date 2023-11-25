@@ -24,7 +24,7 @@ comment on column deribit.public_get_delivery_prices_response.id is 'The id that
 comment on column deribit.public_get_delivery_prices_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_delivery_prices_request_index_name cascade;
-create type deribit.public_get_delivery_prices_request_index_name as enum ('near_usd', 'algo_usd', 'btcdvol_usdc', 'dot_usdc', 'avax_usdc', 'usdc_usd', 'sol_usdc', 'algo_usdc', 'matic_usd', 'xrp_usd', 'ltc_usdc', 'matic_usdc', 'doge_usdc', 'ada_usdc', 'link_usdc', 'avax_usd', 'ltc_usd', 'bch_usdc', 'near_usdc', 'trx_usdc', 'ada_usd', 'doge_usd', 'shib_usd', 'link_usd', 'btc_usdc', 'shib_usdc', 'uni_usdc', 'dot_usd', 'btc_usd', 'bch_usd', 'sol_usd', 'trx_usd', 'eth_usdc', 'eth_usd', 'xrp_usdc', 'uni_usd', 'ethdvol_usdc');
+create type deribit.public_get_delivery_prices_request_index_name as enum ('btc_usd', 'sol_usd', 'link_usdc', 'usdc_usd', 'shib_usd', 'eth_usdc', 'avax_usd', 'btcdvol_usdc', 'uni_usdc', 'avax_usdc', 'shib_usdc', 'btc_usdc', 'algo_usdc', 'link_usd', 'bch_usd', 'dot_usd', 'ada_usdc', 'near_usdc', 'xrp_usd', 'ltc_usd', 'sol_usdc', 'xrp_usdc', 'doge_usd', 'matic_usd', 'algo_usd', 'ethdvol_usdc', 'trx_usd', 'trx_usdc', 'dot_usdc', 'matic_usdc', 'ada_usd', 'ltc_usdc', 'uni_usd', 'doge_usdc', 'bch_usdc', 'eth_usd', 'near_usd');
 
 drop type if exists deribit.public_get_delivery_prices_request cascade;
 create type deribit.public_get_delivery_prices_request as (

@@ -18,7 +18,7 @@ begin
                         'id', _id
                         ) as payload;
 
-    execute format('execute %I (%L)', rate_limiter, url);
+    execute format('select %s (%L::deribit.endpoint);', rate_limiter, url);
 
     _http_request := omni_httpc.http_request(
             method := 'POST',

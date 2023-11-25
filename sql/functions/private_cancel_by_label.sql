@@ -17,7 +17,7 @@ begin
 		currency
     )::deribit.private_cancel_by_label_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel_by_label'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/cancel_by_label'::deribit.endpoint, _request, 'deribit.matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_by_label_response, 

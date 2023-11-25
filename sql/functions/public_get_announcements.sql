@@ -17,7 +17,7 @@ begin
 		count
     )::deribit.public_get_announcements_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_announcements'::deribit.endpoint, _request, 'public_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_announcements'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

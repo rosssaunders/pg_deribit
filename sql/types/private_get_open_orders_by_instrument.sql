@@ -90,7 +90,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response.id is '
 comment on column deribit.private_get_open_orders_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_get_open_orders_by_instrument_request_type cascade;
-create type deribit.private_get_open_orders_by_instrument_request_type as enum ('stop_all', 'trailing_stop', 'take_limit', 'stop_market', 'take_market', 'trigger_all', 'limit', 'take_all', 'trailing_all', 'stop_limit', 'all');
+create type deribit.private_get_open_orders_by_instrument_request_type as enum ('trigger_all', 'stop_all', 'trailing_all', 'stop_limit', 'all', 'trailing_stop', 'take_limit', 'take_market', 'stop_market', 'limit', 'take_all');
 
 drop type if exists deribit.private_get_open_orders_by_instrument_request cascade;
 create type deribit.private_get_open_orders_by_instrument_request as (

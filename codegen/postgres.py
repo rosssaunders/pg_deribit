@@ -149,11 +149,11 @@ begin
         res += f"""
     )::{schema}.{function.endpoint.request_type.name};
     
-    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, _request, '{function.endpoint.rate_limiter}'::name);
+    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, _request, '{schema}.{function.endpoint.rate_limiter}'::name);
 """
     else:
         res += f"""
-    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, null::text, '{function.endpoint.rate_limiter}'::name);
+    _http_response := deribit.internal_jsonrpc_request('{function.endpoint.path}'::deribit.endpoint, null::text, '{schema}.{function.endpoint.rate_limiter}'::name);
 """
 
     if function.response_type.is_array:

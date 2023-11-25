@@ -23,7 +23,7 @@ begin
 		sorting
     )::deribit.private_get_user_trades_by_instrument_and_time_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_instrument_and_time'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_user_trades_by_instrument_and_time'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_user_trades_by_instrument_and_time_response, 

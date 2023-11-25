@@ -25,7 +25,7 @@ begin
 		continuation
     )::deribit.private_get_transaction_log_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_transaction_log'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_transaction_log'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_transaction_log_response, 

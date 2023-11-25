@@ -1,16 +1,16 @@
 deallocate matching_engine_request_log_call;
 
 prepare matching_engine_request_log_call (deribit.endpoint) as
-select deribit.matching_engine_request_log_call($1);
-
+select deribit.matching_engine_request_log_call('/private/buy'::deribit.endpoint);
 
 select (t."order").order_id
 from generate_series(1, 10) s
 left join lateral deribit.private_buy('ETH-PERPETUAL', s.s, 'market') t on true;
 
--- select (t."order").order_id
--- from generate_series(1, 50) s
--- left join lateral deribit.private_sell('ETH-PERPETUAL', s.s, 'market') t on true;
+
+select *
+from deribit.internal_endpoint_rate_limit
+order by total_call_count desc;
 
 select *
 from deribit.internal_endpoint_rate_limit

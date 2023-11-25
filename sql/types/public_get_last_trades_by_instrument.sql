@@ -47,7 +47,7 @@ comment on column deribit.public_get_last_trades_by_instrument_response.id is 'T
 comment on column deribit.public_get_last_trades_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_last_trades_by_instrument_request_sorting cascade;
-create type deribit.public_get_last_trades_by_instrument_request_sorting as enum ('default', 'asc', 'desc');
+create type deribit.public_get_last_trades_by_instrument_request_sorting as enum ('asc', 'default', 'desc');
 
 drop type if exists deribit.public_get_last_trades_by_instrument_request cascade;
 create type deribit.public_get_last_trades_by_instrument_request as (

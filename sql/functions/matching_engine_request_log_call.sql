@@ -6,7 +6,7 @@ as
 $$
 declare
     _call_count int;
-    _rate_per_second int = 10;
+    _rate_per_second int = 5;
     _delay float = 0;
     _has_delay int = 0;
     _cleanup interval = interval '2 seconds';
@@ -28,11 +28,17 @@ begin
         perform pg_sleep(_delay);
     end if;
 
+    with delay_interval as (
+        select make_interval(secs => _delay * _has_delay) as delay, make_interval(secs := 0) as zero_interval
+    )
     update deribit.internal_endpoint_rate_limit
     set last_call = clock_timestamp(),
         total_call_count = total_call_count + 1,
         total_calls_rate_limited_count = total_calls_rate_limited_count + _has_delay,
-        total_rate_limiting_waiting = total_rate_limiting_waiting + make_interval(secs => _delay * _has_delay)
+        total_rate_limiting_waiting = total_rate_limiting_waiting + delay_interval.delay,
+        min_rate_limiting_waiting = case when min_rate_limiting_waiting = delay_interval.zero_interval then delay_interval.delay else least(min_rate_limiting_waiting, delay_interval.delay) end,
+        max_rate_limiting_waiting = greatest(max_rate_limiting_waiting, delay_interval.delay)
+    from delay_interval
     where key = url;
 
     delete from deribit.matching_engine_request_call_log where call_timestamp < clock_timestamp() - _cleanup;

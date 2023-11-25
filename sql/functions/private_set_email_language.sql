@@ -15,7 +15,7 @@ begin
 		language
     )::deribit.private_set_email_language_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/set_email_language'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/set_email_language'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_set_email_language_response, 

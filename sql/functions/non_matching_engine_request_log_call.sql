@@ -1,24 +1,24 @@
-drop function if exists deribit.matching_engine_request_log_call;
-create or replace function deribit.matching_engine_request_log_call(url deribit.endpoint)
+drop function if exists deribit.non_matching_engine_request_log_call;
+create or replace function deribit.non_matching_engine_request_log_call(url deribit.endpoint)
 returns void
 language plpgsql
 as
 $$
 declare
     _call_count int;
-    _rate_per_second int = 5;
+    _rate_per_second int = 20;
     _delay float = 0;
     _has_delay int = 0;
     _cleanup interval = interval '2 seconds';
 begin
 
     -- Insert the current timestamp into the temporary table
-    insert into deribit.matching_engine_request_call_log(call_timestamp) values (clock_timestamp());
+    insert into deribit.non_matching_engine_request_call_log(call_timestamp) values (clock_timestamp());
 
     -- Count the number of calls in the last second
     select count(*)
     into _call_count
-    from deribit.matching_engine_request_call_log
+    from deribit.non_matching_engine_request_call_log
     where call_timestamp > clock_timestamp() - interval '1 second';
 
     -- If the count exceeds the limit then wait for the remainder of the second
@@ -41,7 +41,7 @@ begin
     from delay_interval
     where key = url;
 
-    delete from deribit.matching_engine_request_call_log where call_timestamp < clock_timestamp() - _cleanup;
+    delete from deribit.non_matching_engine_request_call_log where call_timestamp < clock_timestamp() - _cleanup;
 
     return;
 end;

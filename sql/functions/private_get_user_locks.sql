@@ -9,7 +9,7 @@ declare
     
 begin
 
-    _http_response := deribit.internal_jsonrpc_request('/private/get_user_locks'::deribit.endpoint, null::text, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_user_locks'::deribit.endpoint, null::text, 'deribit.non_matching_engine_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

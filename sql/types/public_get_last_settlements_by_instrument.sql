@@ -47,7 +47,7 @@ comment on column deribit.public_get_last_settlements_by_instrument_response.id 
 comment on column deribit.public_get_last_settlements_by_instrument_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_last_settlements_by_instrument_request_type cascade;
-create type deribit.public_get_last_settlements_by_instrument_request_type as enum ('delivery', 'settlement', 'bankruptcy');
+create type deribit.public_get_last_settlements_by_instrument_request_type as enum ('settlement', 'bankruptcy', 'delivery');
 
 drop type if exists deribit.public_get_last_settlements_by_instrument_request cascade;
 create type deribit.public_get_last_settlements_by_instrument_request as (

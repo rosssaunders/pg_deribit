@@ -47,13 +47,13 @@ comment on column deribit.public_get_last_trades_by_currency_response.id is 'The
 comment on column deribit.public_get_last_trades_by_currency_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_last_trades_by_currency_request_currency cascade;
-create type deribit.public_get_last_trades_by_currency_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.public_get_last_trades_by_currency_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.public_get_last_trades_by_currency_request_kind cascade;
-create type deribit.public_get_last_trades_by_currency_request_kind as enum ('future', 'option', 'spot', 'future_combo', 'option_combo', 'any', 'combo');
+create type deribit.public_get_last_trades_by_currency_request_kind as enum ('any', 'combo', 'future_combo', 'option', 'future', 'option_combo', 'spot');
 
 drop type if exists deribit.public_get_last_trades_by_currency_request_sorting cascade;
-create type deribit.public_get_last_trades_by_currency_request_sorting as enum ('default', 'asc', 'desc');
+create type deribit.public_get_last_trades_by_currency_request_sorting as enum ('asc', 'default', 'desc');
 
 drop type if exists deribit.public_get_last_trades_by_currency_request cascade;
 create type deribit.public_get_last_trades_by_currency_request as (

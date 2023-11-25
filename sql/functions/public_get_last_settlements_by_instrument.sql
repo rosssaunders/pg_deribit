@@ -23,7 +23,7 @@ begin
 		search_start_timestamp
     )::deribit.public_get_last_settlements_by_instrument_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_instrument'::deribit.endpoint, _request, 'public_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_last_settlements_by_instrument'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.public_get_last_settlements_by_instrument_response, 

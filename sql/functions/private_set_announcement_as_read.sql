@@ -15,7 +15,7 @@ begin
 		announcement_id
     )::deribit.private_set_announcement_as_read_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/set_announcement_as_read'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/set_announcement_as_read'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_set_announcement_as_read_response, 

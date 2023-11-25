@@ -15,7 +15,7 @@ begin
 		instrument_name
     )::deribit.public_ticker_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/ticker'::deribit.endpoint, _request, 'public_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/public/ticker'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.public_ticker_response, 

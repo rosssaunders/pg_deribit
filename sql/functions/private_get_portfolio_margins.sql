@@ -19,7 +19,7 @@ begin
 		simulated_positions
     )::deribit.private_get_portfolio_margins_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_portfolio_margins'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_portfolio_margins'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_get_portfolio_margins_response, 

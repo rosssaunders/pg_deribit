@@ -169,7 +169,7 @@ comment on column deribit.private_edit_by_label_response.id is 'The id that was 
 comment on column deribit.private_edit_by_label_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_edit_by_label_request_advanced cascade;
-create type deribit.private_edit_by_label_request_advanced as enum ('usd', 'implv');
+create type deribit.private_edit_by_label_request_advanced as enum ('implv', 'usd');
 
 drop type if exists deribit.private_edit_by_label_request cascade;
 create type deribit.private_edit_by_label_request as (

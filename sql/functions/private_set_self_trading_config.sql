@@ -17,7 +17,7 @@ begin
 		extended_to_subaccounts
     )::deribit.private_set_self_trading_config_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/set_self_trading_config'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/set_self_trading_config'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_set_self_trading_config_response, 

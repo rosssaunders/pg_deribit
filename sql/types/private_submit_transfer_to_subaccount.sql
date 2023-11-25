@@ -30,7 +30,7 @@ comment on column deribit.private_submit_transfer_to_subaccount_response.id is '
 comment on column deribit.private_submit_transfer_to_subaccount_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_submit_transfer_to_subaccount_request_currency cascade;
-create type deribit.private_submit_transfer_to_subaccount_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_submit_transfer_to_subaccount_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_submit_transfer_to_subaccount_request cascade;
 create type deribit.private_submit_transfer_to_subaccount_request as (

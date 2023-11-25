@@ -17,7 +17,7 @@ begin
 		id
     )::deribit.private_cancel_withdrawal_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/cancel_withdrawal'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/cancel_withdrawal'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_cancel_withdrawal_response, 

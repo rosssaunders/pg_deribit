@@ -18,7 +18,7 @@ comment on column deribit.public_get_index_response.id is 'The id that was sent 
 comment on column deribit.public_get_index_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.public_get_index_request_currency cascade;
-create type deribit.public_get_index_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.public_get_index_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.public_get_index_request cascade;
 create type deribit.public_get_index_request as (

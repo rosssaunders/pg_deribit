@@ -45,7 +45,7 @@ begin
 		valid_until
     )::deribit.private_sell_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/sell'::deribit.endpoint, _request, 'matching_engine_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/sell'::deribit.endpoint, _request, 'deribit.matching_engine_request_log_call'::name);
 
     return (jsonb_populate_record(
         null::deribit.private_sell_response, 

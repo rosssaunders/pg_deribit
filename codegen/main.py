@@ -211,10 +211,8 @@ def extract_function_from_section(sibling):
     rate_limiter = None
     if file_name in matching_engine_endpoints:
         rate_limiter = 'matching_engine_request_log_call'
-    elif file_name.startswith('private'):
-        rate_limiter = 'private_request_log_call'
     else:
-        rate_limiter = 'public_request_log_call'
+        rate_limiter = 'non_matching_engine_request_log_call'
 
     comment = sibling.find_next_sibling('p')
     function = Function(name=url_to_type_name(sibling.text),

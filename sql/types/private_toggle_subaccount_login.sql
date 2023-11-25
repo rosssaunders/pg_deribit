@@ -9,7 +9,7 @@ comment on column deribit.private_toggle_subaccount_login_response.jsonrpc is 'T
 comment on column deribit.private_toggle_subaccount_login_response.result is 'Result of method execution. ok in case of success';
 
 drop type if exists deribit.private_toggle_subaccount_login_request_state cascade;
-create type deribit.private_toggle_subaccount_login_request_state as enum ('enable', 'disable');
+create type deribit.private_toggle_subaccount_login_request_state as enum ('disable', 'enable');
 
 drop type if exists deribit.private_toggle_subaccount_login_request cascade;
 create type deribit.private_toggle_subaccount_login_request as (

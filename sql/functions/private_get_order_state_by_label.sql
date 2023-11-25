@@ -17,7 +17,7 @@ begin
 		label
     )::deribit.private_get_order_state_by_label_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/private/get_order_state_by_label'::deribit.endpoint, _request, 'private_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/private/get_order_state_by_label'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(

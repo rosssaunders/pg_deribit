@@ -30,7 +30,7 @@ comment on column deribit.private_cancel_transfer_by_id_response.id is 'The id t
 comment on column deribit.private_cancel_transfer_by_id_response.jsonrpc is 'The JSON-RPC version (2.0)';
 
 drop type if exists deribit.private_cancel_transfer_by_id_request_currency cascade;
-create type deribit.private_cancel_transfer_by_id_request_currency as enum ('BTC', 'USDC', 'ETH');
+create type deribit.private_cancel_transfer_by_id_request_currency as enum ('BTC', 'ETH', 'USDC');
 
 drop type if exists deribit.private_cancel_transfer_by_id_request cascade;
 create type deribit.private_cancel_transfer_by_id_request as (

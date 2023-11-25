@@ -15,7 +15,7 @@ begin
 		instrument_name
     )::deribit.public_get_book_summary_by_instrument_request;
     
-    _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument'::deribit.endpoint, _request, 'public_request_log_call'::name);
+    _http_response := deribit.internal_jsonrpc_request('/public/get_book_summary_by_instrument'::deribit.endpoint, _request, 'deribit.non_matching_engine_request_log_call'::name);
 
     return query (
         select (jsonb_populate_record(
