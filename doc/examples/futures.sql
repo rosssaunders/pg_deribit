@@ -1,3 +1,11 @@
+do $$
+declare
+    password text = 'my_super_secret_password';
+begin
+    perform deribit.decrypt_and_store_in_session(password);
+end
+$$;
+
 select *
 from deribit.public_get_instrument(instrument_name := 'ETH-PERPETUAL');
 

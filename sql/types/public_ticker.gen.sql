@@ -71,7 +71,7 @@ create type deribit.public_ticker_response_result as (
     state text,
     stats deribit.public_ticker_response_stats,
     timestamp bigint,
-    underlying_index double precision,
+    underlying_index text,
     underlying_price double precision
 );
 

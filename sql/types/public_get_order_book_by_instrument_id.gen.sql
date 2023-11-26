@@ -71,7 +71,7 @@ create type deribit.public_get_order_book_by_instrument_id_response_result as (
     state text,
     stats deribit.public_get_order_book_by_instrument_id_response_stats,
     timestamp bigint,
-    underlying_index double precision,
+    underlying_index text,
     underlying_price double precision
 );
 

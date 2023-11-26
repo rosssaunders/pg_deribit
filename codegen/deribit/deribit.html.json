@@ -17,11 +17,11 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
                             "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -1749,43 +1749,43 @@
                 "enums": [
                     {
                         "items": [
-                            "usdc_usd",
-                            "near_usdc",
-                            "uni_usdc",
-                            "xrp_usdc",
-                            "btcdvol_usdc",
-                            "ltc_usdc",
-                            "ethdvol_usdc",
-                            "bch_usd",
-                            "dot_usd",
-                            "ltc_usd",
-                            "xrp_usd",
-                            "trx_usd",
-                            "bch_usdc",
-                            "eth_usdc",
-                            "matic_usd",
-                            "shib_usd",
-                            "near_usd",
-                            "trx_usdc",
-                            "ada_usd",
-                            "doge_usdc",
-                            "link_usdc",
-                            "uni_usd",
-                            "dot_usdc",
-                            "sol_usdc",
-                            "matic_usdc",
-                            "shib_usdc",
                             "algo_usd",
+                            "xrp_usd",
+                            "dot_usd",
+                            "avax_usd",
                             "algo_usdc",
+                            "ada_usdc",
+                            "doge_usd",
+                            "btc_usd",
                             "avax_usdc",
                             "sol_usd",
-                            "eth_usd",
+                            "uni_usdc",
+                            "ada_usd",
+                            "sol_usdc",
+                            "doge_usdc",
+                            "xrp_usdc",
+                            "bch_usd",
                             "link_usd",
-                            "btc_usd",
+                            "matic_usd",
+                            "btcdvol_usdc",
+                            "trx_usd",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "dot_usdc",
                             "btc_usdc",
-                            "ada_usdc",
-                            "avax_usd",
-                            "doge_usd"
+                            "ltc_usd",
+                            "near_usdc",
+                            "ltc_usdc",
+                            "link_usdc",
+                            "uni_usd",
+                            "matic_usdc",
+                            "near_usd",
+                            "bch_usdc",
+                            "eth_usd",
+                            "eth_usdc",
+                            "usdc_usd",
+                            "shib_usd",
+                            "ethdvol_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -2826,43 +2826,43 @@
                 "enums": [
                     {
                         "items": [
-                            "usdc_usd",
-                            "near_usdc",
-                            "uni_usdc",
-                            "xrp_usdc",
-                            "btcdvol_usdc",
-                            "ltc_usdc",
-                            "ethdvol_usdc",
-                            "bch_usd",
-                            "dot_usd",
-                            "ltc_usd",
-                            "xrp_usd",
-                            "trx_usd",
-                            "bch_usdc",
-                            "eth_usdc",
-                            "matic_usd",
-                            "shib_usd",
-                            "near_usd",
-                            "trx_usdc",
-                            "ada_usd",
-                            "doge_usdc",
-                            "link_usdc",
-                            "uni_usd",
-                            "dot_usdc",
-                            "sol_usdc",
-                            "matic_usdc",
-                            "shib_usdc",
                             "algo_usd",
+                            "xrp_usd",
+                            "dot_usd",
+                            "avax_usd",
                             "algo_usdc",
+                            "ada_usdc",
+                            "doge_usd",
+                            "btc_usd",
                             "avax_usdc",
                             "sol_usd",
-                            "eth_usd",
+                            "uni_usdc",
+                            "ada_usd",
+                            "sol_usdc",
+                            "doge_usdc",
+                            "xrp_usdc",
+                            "bch_usd",
                             "link_usd",
-                            "btc_usd",
+                            "matic_usd",
+                            "btcdvol_usdc",
+                            "trx_usd",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "dot_usdc",
                             "btc_usdc",
-                            "ada_usdc",
-                            "avax_usd",
-                            "doge_usd"
+                            "ltc_usd",
+                            "near_usdc",
+                            "ltc_usdc",
+                            "link_usdc",
+                            "uni_usd",
+                            "matic_usdc",
+                            "near_usd",
+                            "bch_usdc",
+                            "eth_usd",
+                            "eth_usdc",
+                            "usdc_usd",
+                            "shib_usd",
+                            "ethdvol_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -3916,11 +3916,11 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
                             "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -4715,9 +4715,9 @@
                     },
                     {
                         "items": [
-                            "delivery",
                             "bankruptcy",
-                            "settlement"
+                            "settlement",
+                            "delivery"
                         ],
                         "name": "type"
                     }
@@ -5108,9 +5108,9 @@
                 "enums": [
                     {
                         "items": [
-                            "delivery",
                             "bankruptcy",
-                            "settlement"
+                            "settlement",
+                            "delivery"
                         ],
                         "name": "type"
                     }
@@ -5509,21 +5509,21 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -5955,21 +5955,21 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -6371,9 +6371,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -6786,9 +6786,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -7324,14 +7324,14 @@
                 "enums": [
                     {
                         "items": [
-                            "5",
                             "20",
-                            "100",
-                            "50",
                             "10000",
-                            "1",
+                            "1000",
+                            "50",
+                            "5",
                             "10",
-                            "1000"
+                            "100",
+                            "1"
                         ],
                         "name": "depth"
                     }
@@ -7736,7 +7736,7 @@
                                 "is_array": false,
                                 "is_class": false,
                                 "is_enum": false,
-                                "name": "number"
+                                "name": "string"
                             }
                         },
                         {
@@ -8173,7 +8173,7 @@
                         "is_array": false,
                         "is_class": false,
                         "is_enum": false,
-                        "name": "number"
+                        "name": "string"
                     }
                 },
                 {
@@ -8204,14 +8204,14 @@
                 "enums": [
                     {
                         "items": [
-                            "5",
                             "20",
-                            "100",
-                            "50",
                             "10000",
-                            "1",
+                            "1000",
+                            "50",
+                            "5",
                             "10",
-                            "1000"
+                            "100",
+                            "1"
                         ],
                         "name": "depth"
                     }
@@ -8616,7 +8616,7 @@
                                 "is_array": false,
                                 "is_class": false,
                                 "is_enum": false,
-                                "name": "number"
+                                "name": "string"
                             }
                         },
                         {
@@ -9053,7 +9053,7 @@
                         "is_array": false,
                         "is_class": false,
                         "is_enum": false,
-                        "name": "number"
+                        "name": "string"
                     }
                 },
                 {
@@ -9092,11 +9092,11 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
                             "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -9357,9 +9357,9 @@
                 "enums": [
                     {
                         "items": [
-                            "derivative",
                             "spot",
-                            "all"
+                            "all",
+                            "derivative"
                         ],
                         "name": "type"
                     }
@@ -9908,18 +9908,18 @@
                 "enums": [
                     {
                         "items": [
-                            "5",
-                            "720",
-                            "30",
-                            "15",
-                            "180",
-                            "3",
-                            "1",
-                            "120",
                             "360",
-                            "10",
+                            "720",
+                            "1",
                             "60",
-                            "1D"
+                            "30",
+                            "5",
+                            "120",
+                            "10",
+                            "1D",
+                            "15",
+                            "3",
+                            "180"
                         ],
                         "name": "resolution"
                     }
@@ -10276,11 +10276,11 @@
                     },
                     {
                         "items": [
-                            "43200",
-                            "1",
-                            "3600",
                             "60",
-                            "1D"
+                            "3600",
+                            "1D",
+                            "43200",
+                            "1"
                         ],
                         "name": "resolution"
                     }
@@ -10884,7 +10884,7 @@
                                 "is_array": false,
                                 "is_class": false,
                                 "is_enum": false,
-                                "name": "number"
+                                "name": "string"
                             }
                         },
                         {
@@ -11321,7 +11321,7 @@
                         "is_array": false,
                         "is_class": false,
                         "is_enum": false,
-                        "name": "number"
+                        "name": "string"
                     }
                 },
                 {
@@ -11992,9 +11992,9 @@
                 "enums": [
                     {
                         "items": [
-                            "segregated_sm",
                             "cross_sm",
                             "legacy_pm",
+                            "segregated_sm",
                             "segregated_pm",
                             "cross_pm"
                         ],
@@ -16977,11 +16977,11 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
                             "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -21261,8 +21261,8 @@
                 "enums": [
                     {
                         "items": [
-                            "reject_taker",
-                            "cancel_maker"
+                            "cancel_maker",
+                            "reject_taker"
                         ],
                         "name": "mode"
                     }
@@ -21842,8 +21842,8 @@
                 "enums": [
                     {
                         "items": [
-                            "enable",
-                            "disable"
+                            "disable",
+                            "enable"
                         ],
                         "name": "state"
                     }
@@ -21984,38 +21984,38 @@
                 "enums": [
                     {
                         "items": [
+                            "market_limit",
                             "limit",
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
-                            "market",
-                            "stop_limit",
                             "take_market",
-                            "market_limit"
+                            "stop_market",
+                            "take_limit",
+                            "trailing_stop",
+                            "stop_limit",
+                            "market"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
+                            "fill_or_kill",
                             "immediate_or_cancel",
-                            "good_til_cancelled",
                             "good_til_day",
-                            "fill_or_kill"
+                            "good_til_cancelled"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "mark_price",
-                            "last_price",
-                            "index_price"
+                            "index_price",
+                            "last_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -23163,38 +23163,38 @@
                 "enums": [
                     {
                         "items": [
+                            "market_limit",
                             "limit",
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
-                            "market",
-                            "stop_limit",
                             "take_market",
-                            "market_limit"
+                            "stop_market",
+                            "take_limit",
+                            "trailing_stop",
+                            "stop_limit",
+                            "market"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
+                            "fill_or_kill",
                             "immediate_or_cancel",
-                            "good_til_cancelled",
                             "good_til_day",
-                            "fill_or_kill"
+                            "good_til_cancelled"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "mark_price",
-                            "last_price",
-                            "index_price"
+                            "index_price",
+                            "last_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -24342,8 +24342,8 @@
                 "enums": [
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -25436,8 +25436,8 @@
                 "enums": [
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -27652,24 +27652,24 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "limit",
                             "trigger_all",
+                            "take",
                             "trailing_stop",
                             "stop",
-                            "take",
-                            "all"
+                            "all",
+                            "limit"
                         ],
                         "name": "type"
                     }
@@ -27832,12 +27832,12 @@
                 "enums": [
                     {
                         "items": [
-                            "limit",
                             "trigger_all",
+                            "take",
                             "trailing_stop",
                             "stop",
-                            "take",
-                            "all"
+                            "all",
+                            "limit"
                         ],
                         "name": "type"
                     }
@@ -29392,29 +29392,29 @@
                 "enums": [
                     {
                         "items": [
-                            "xrp_usdc",
-                            "near_usdc",
-                            "uni_usdc",
-                            "btcdvol_usdc",
-                            "ltc_usdc",
-                            "ethdvol_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
-                            "bnb_usdc",
-                            "trx_usdc",
                             "luna_usdc",
-                            "doge_usdc",
-                            "link_usdc",
-                            "dot_usdc",
-                            "matic_usdc",
-                            "shib_usdc",
                             "algo_usdc",
-                            "avax_usdc",
-                            "eth_usd",
+                            "ada_usdc",
                             "btc_usd",
+                            "avax_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "xrp_usdc",
+                            "btcdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "bnb_usdc",
                             "btc_usdc",
+                            "dot_usdc",
+                            "near_usdc",
+                            "ltc_usdc",
+                            "matic_usdc",
+                            "link_usdc",
+                            "bch_usdc",
+                            "eth_usd",
+                            "eth_usdc",
                             "mshib_usdc",
-                            "ada_usdc"
+                            "ethdvol_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -29672,27 +29672,27 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
                             "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "limit",
-                            "trigger_all",
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
                             "take_all",
-                            "stop_limit",
-                            "stop_all",
-                            "take_market",
                             "trailing_all",
-                            "all"
+                            "trigger_all",
+                            "take_market",
+                            "stop_market",
+                            "take_limit",
+                            "trailing_stop",
+                            "all",
+                            "stop_limit",
+                            "limit",
+                            "stop_all"
                         ],
                         "name": "type"
                     }
@@ -30712,17 +30712,17 @@
                 "enums": [
                     {
                         "items": [
-                            "limit",
-                            "trigger_all",
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
                             "take_all",
-                            "stop_limit",
-                            "stop_all",
-                            "take_market",
                             "trailing_all",
-                            "all"
+                            "trigger_all",
+                            "take_market",
+                            "stop_market",
+                            "take_limit",
+                            "trailing_stop",
+                            "all",
+                            "stop_limit",
+                            "limit",
+                            "stop_all"
                         ],
                         "name": "type"
                     }
@@ -32750,13 +32750,13 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -37269,21 +37269,21 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -37924,21 +37924,21 @@
                     },
                     {
                         "items": [
-                            "future",
-                            "spot",
+                            "option_combo",
+                            "option",
                             "any",
                             "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo"
+                            "spot",
+                            "future",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -38538,9 +38538,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -39151,9 +39151,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
                             "asc",
-                            "default"
+                            "default",
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -39742,29 +39742,29 @@
                 "enums": [
                     {
                         "items": [
-                            "xrp_usdc",
-                            "near_usdc",
-                            "uni_usdc",
-                            "btcdvol_usdc",
-                            "ltc_usdc",
-                            "ethdvol_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
-                            "bnb_usdc",
-                            "trx_usdc",
                             "luna_usdc",
-                            "doge_usdc",
-                            "link_usdc",
-                            "dot_usdc",
-                            "matic_usdc",
-                            "shib_usdc",
                             "algo_usdc",
-                            "avax_usdc",
-                            "eth_usd",
+                            "ada_usdc",
                             "btc_usd",
+                            "avax_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "xrp_usdc",
+                            "btcdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "bnb_usdc",
                             "btc_usdc",
+                            "dot_usdc",
+                            "near_usdc",
+                            "ltc_usdc",
+                            "matic_usdc",
+                            "link_usdc",
+                            "bch_usdc",
+                            "eth_usd",
+                            "eth_usdc",
                             "mshib_usdc",
-                            "ada_usdc"
+                            "ethdvol_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -40047,29 +40047,29 @@
                 "enums": [
                     {
                         "items": [
-                            "xrp_usdc",
-                            "near_usdc",
-                            "uni_usdc",
-                            "btcdvol_usdc",
-                            "ltc_usdc",
-                            "ethdvol_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
-                            "bnb_usdc",
-                            "trx_usdc",
                             "luna_usdc",
-                            "doge_usdc",
-                            "link_usdc",
-                            "dot_usdc",
-                            "matic_usdc",
-                            "shib_usdc",
                             "algo_usdc",
-                            "avax_usdc",
-                            "eth_usd",
+                            "ada_usdc",
                             "btc_usd",
+                            "avax_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "xrp_usdc",
+                            "btcdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "bnb_usdc",
                             "btc_usdc",
+                            "dot_usdc",
+                            "near_usdc",
+                            "ltc_usdc",
+                            "matic_usdc",
+                            "link_usdc",
+                            "bch_usdc",
+                            "eth_usd",
+                            "eth_usdc",
                             "mshib_usdc",
-                            "ada_usdc"
+                            "ethdvol_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -40363,9 +40363,9 @@
                 "enums": [
                     {
                         "items": [
-                            "delivery",
                             "bankruptcy",
-                            "settlement"
+                            "settlement",
+                            "delivery"
                         ],
                         "name": "type"
                     }
@@ -40764,9 +40764,9 @@
                     },
                     {
                         "items": [
-                            "delivery",
                             "bankruptcy",
-                            "settlement"
+                            "settlement",
+                            "delivery"
                         ],
                         "name": "type"
                     }
@@ -44043,13 +44043,13 @@
                     },
                     {
                         "items": [
-                            "mid",
                             "low",
                             "extreme_high",
                             "very_low",
-                            "high",
                             "insane",
-                            "very_high"
+                            "very_high",
+                            "high",
+                            "mid"
                         ],
                         "name": "priority"
                     }

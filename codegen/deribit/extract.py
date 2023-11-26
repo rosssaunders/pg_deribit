@@ -83,6 +83,10 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
         if field_name == 'tick_size_steps':
             row[1] = 'array of object'
 
+        # hack for underlying_index in the order book... docs incorrect.
+        if field_name == 'underlying_index':
+            row[1] = 'string'
+
         # if field_name == 'data':
         #     field_name = 'result'
 

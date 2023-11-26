@@ -15,7 +15,7 @@ declare
     client_secret text = 'DRpl1FiW_nvsyRjnifD4GIFWYPNdZlx79qmfu-H6DdA';
     password text = 'my_super_secret_password';
 begin
-    select deribit.encrypt_and_store_in_table(client_id, client_secret, password);
+    perform deribit.encrypt_and_store_in_table(client_id, client_secret, password);
 end
 $$;
 
@@ -57,3 +57,4 @@ from (
     from trades t
 ) a;
 ```
+

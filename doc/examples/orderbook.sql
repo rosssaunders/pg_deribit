@@ -21,3 +21,22 @@ order by price;
 
 select *
 from unnest((deribit.public_get_order_book('ETH-PERPETUAL', '100'::deribit.public_get_order_book_request_depth)).asks);
+
+select
+    deribit.unnest_2d_1d(bids) as bids,
+    deribit.unnest_2d_1d(asks) as asks
+from deribit.public_get_order_book('ETH-PERPETUAL', '10'::deribit.public_get_order_book_request_depth);
+
+select
+    deribit.unnest_2d_1d(bids) as bids,
+    deribit.unnest_2d_1d(asks) as asks
+from deribit.public_get_order_book('BTC-15DEC23-38000-C', '10'::deribit.public_get_order_book_request_depth);
+
+select (deribit.public_get_order_book('BTC-15DEC23-38000-C', '10'::deribit.public_get_order_book_request_depth)).*
+
+select *
+from deribit.public_get_instruments('BTC', 'option');
+
+
+
+
