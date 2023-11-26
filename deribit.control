@@ -1,6 +1,0 @@
-# deribit extension
-comment = 'Trading API for Deribit'
-default_version = '1.0'
-# cannot be relocatable because of use of @extschema@
-relocatable = false
-schema = 'deribit'

@@ -8,4 +8,3 @@ create table deribit.internal_endpoint_rate_limit (
     min_rate_limiting_waiting interval not null default '0 seconds',
     max_rate_limiting_waiting interval not null default '0 seconds'
 );
-

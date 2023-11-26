@@ -1,5 +1,11 @@
 TODO:
 
+Linting
+- [ ] Respect all sqlfluff rules
+
+Extension
+- [ ] make a proper postgres extension
+
 Testing files:
 - [ ] auto seed data
 
@@ -16,4 +22,4 @@ Endpoints to implement:
 - [ ] private_get_order_margin_by_ids': 'unsupported request parameter',
 - [ ] public_get_funding_chart_data_response_datum
 - [ ] language enums - see https://docs.deribit.com/#private-set_email_language
-- 
+- [ ] all sections - sections = ['Market data', 'Account management', 'Trading', 'Wallet']

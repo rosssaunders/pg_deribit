@@ -1,0 +1,4 @@
+default_version = '1.0'
+comment = 'Deribit supporrt'
+relocatable = false
+schema = 'deribit'

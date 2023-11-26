@@ -2,3 +2,5 @@
 .idea
 venv
 .vscode
+.fake
+docs/deribit.html
