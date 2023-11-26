@@ -4,13 +4,15 @@ Linting
 - [ ] Respect all sqlfluff rules
 
 Extension
-- [ ] make a proper postgres extension
+- [ X ] make a proper postgres extension
+- [ ] explicitly mark the dependencies
 
 Testing files:
 - [ ] auto seed data
 
 Trading key encryption:
-- [ ] Implement key encryption for trading keys
+- [ X ] Implement key encryption for trading keys
+- [ ] Make the login experience WAY better
 
 Endpoints to implement:
 - [ ] deribit.public_get_delivery_prices -> expand the data to a table
@@ -22,6 +24,5 @@ Endpoints to implement:
 - [ ] private_get_order_margin_by_ids': 'unsupported request parameter',
 - [ ] public_get_funding_chart_data_response_datum
 - [ ] language enums - see https://docs.deribit.com/#private-set_email_language
-- [ ] all sections - sections = ['Market data', 'Account management', 'Trading', 'Wallet']
-- [ ] public_get_order_book -> reformat data to a table
-- 
+- [ ] all section covered - currently only sections = ['Market data', 'Account management', 'Trading', 'Wallet']
+- [ ] public_get_order_book -> reformat data to a table -> can't be done
