@@ -17,3 +17,7 @@ select
 from asks
 group by price
 order by price;
+
+
+select *
+from unnest((deribit.public_get_order_book('ETH-PERPETUAL', '100'::deribit.public_get_order_book_request_depth)).asks);

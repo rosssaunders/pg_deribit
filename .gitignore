@@ -4,3 +4,4 @@ venv
 .vscode
 .fake
 docs/deribit.html
+run.sh

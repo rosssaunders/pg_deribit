@@ -1,0 +1,8 @@
+# Ignore everything
+*
+
+# Don't ignore SQL, Markdown files, and Makefile
+!**/*.sql
+!**/*.md
+!Makefile
+!*.control

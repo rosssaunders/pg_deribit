@@ -1,5 +1,7 @@
 create or replace function deribit.join_paths(variadic paths text[])
-    returns text as
+returns text 
+language plpgsql
+as
 $$
 declare
     result text = '';
@@ -13,4 +15,4 @@ begin
 
     return result;
 end;
-$$ language plpgsql;
+$$;

@@ -54,7 +54,7 @@ from {schema}.{function.name}("""
             res += """
 """
             res += ',\n'.join(
-                f'\t{escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}' for e in
+                f'    {escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}' for e in
                 required_fields)
             res += """
 """
@@ -93,7 +93,7 @@ declare"""
     if function.endpoint.request_type is not None:
         res += "\n"
         res += ';\n'.join(
-            f'\t_{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null_value(f)}'
+            f'    _{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null_value(f)}'
             for f in function.endpoint.request_type.fields)
         res += ";\n"
 
@@ -103,7 +103,7 @@ begin
     if function.endpoint.request_type is not None:
         res += f"""_expected := {schema}.{function.name}(
 """
-        res += ',\n'.join(f'\t\t{escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}' for e in
+        res += ',\n'.join(f'        {escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}' for e in
                           function.endpoint.request_type.fields)
         res += f"""
     );"""

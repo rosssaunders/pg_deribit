@@ -23,3 +23,5 @@ Endpoints to implement:
 - [ ] public_get_funding_chart_data_response_datum
 - [ ] language enums - see https://docs.deribit.com/#private-set_email_language
 - [ ] all sections - sections = ['Market data', 'Account management', 'Trading', 'Wallet']
+- [ ] public_get_order_book -> reformat data to a table
+- 

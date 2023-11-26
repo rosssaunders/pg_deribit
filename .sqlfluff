@@ -11,13 +11,13 @@ templater = jinja
 # See https://docs.sqlfluff.com/en/stable/configuration.html#enabling-and-disabling-rules
 # AM04 (ambiguous.column_count) and ST06 (structure.column_order) are
 # two of the more controversial rules included to illustrate usage.
-exclude_rules = ambiguous.column_count, structure.column_order
+exclude_rules = ambiguous.column_count, structure.column_order, LT01
 
 # The standard max_line_length is 80 in line with the convention of
 # other tools and several style guides. Many projects however prefer
 # something a little longer.
 # Set to zero or negative to disable checks.
-max_line_length = 200
+max_line_length = 0
 
 # CPU processes to use while linting.
 # The default is "single threaded" to allow easy debugging, but this

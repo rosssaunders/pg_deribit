@@ -1,3 +1,4 @@
+import json
 import warnings
 
 import inflect
@@ -59,6 +60,16 @@ def main():
             if function is not None:
                 functions.append(function)
 
+    # export all functions to json
+    # Use json.dumps() to convert the object to a JSON string
+    functions_dict = [function.to_dict() for function in functions]
+    my_json = json.dumps(functions_dict, indent=4, sort_keys=True)
+
+    # Now you can save this JSON string to a file
+    with open('codegen/deribit/deribit.html.json', 'w') as json_file:
+        json_file.write(my_json)
+
+    # now codegen the wrapper functions
     exporter.all(functions)
 
 

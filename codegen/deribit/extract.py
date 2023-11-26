@@ -87,7 +87,7 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
             continue
 
-        if row[1] == 'array of object' or row[1] == 'array':
+        if row[1] == 'array of object':
             if p.singular_noun(field_name) is False:
                 new_parent_type_name = f"{parent_type_name}_{field_name}"
             else:
@@ -101,6 +101,15 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
             if field_name == 'result':
                 response_type = types[current_type]
+
+            continue
+
+        if row[1] == 'array':
+            field_type = FieldType(name='string', is_enum=False, is_class=False, is_array=True)
+            types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+
+            if field_name == 'result':
+                response_type = Type(name='string', fields=[], enums=[], is_primitive=True, is_array=True)
 
             continue
 

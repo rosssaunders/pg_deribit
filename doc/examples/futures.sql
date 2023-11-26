@@ -2,7 +2,7 @@ select *
 from deribit.public_get_instrument(instrument_name := 'ETH-PERPETUAL');
 
 select *
-from deribit.public_get_index_price_names() p;
+from deribit.public_get_index_price_names();
 
 -- all public in order
 
@@ -29,6 +29,3 @@ from deribit.public_get_funding_rate_history(
 extract(epoch from '2022-10-01'::timestamptz)::bigint,
 extract(epoch from '2023-11-01'::timestamptz)::bigint
 );
-
-select * from extract(epoch from '2022-10-01'::timestamptz);
-select * from extract(epoch from '2023-11-01'::timestamptz);

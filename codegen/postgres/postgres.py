@@ -47,10 +47,10 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
 
 
 def type_to_type(schema: str, type: Type) -> str:
-    res = f"drop type if exists {schema}.{type.name} cascade;\n"
+    res = f"drop type if exists {schema}.{type.name} cascade;\n\n"
     res += f"create type {schema}.{type.name} as (\n"
-    res += ',\n'.join(f'\t{escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type.name, e.type)}' for e in type.fields)
-    res += f"\n);\n"
+    res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type.name, e.type)}' for e in type.fields)
+    res += f"\n);\n\n"
 
     res += '\n'.join(f'comment on column {schema}.{type.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.comment)}\';' for e in type.fields if e.comment != '')
 
@@ -73,7 +73,7 @@ def invoke_endpoint(schema: str, function: Function) -> str:
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
         res += "\n"
-        res += ',\n'.join(f'\t{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
+        res += ',\n'.join(f'    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
         res += "\n"
     res += f""")"""
 
@@ -111,7 +111,7 @@ as $$"""
     with request as (
         select row(
 """
-        res += ',\n'.join(f'\t\t\t{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
+        res += ',\n'.join(f'            {escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
         res += f"""
         )::{schema}.{function.endpoint.request_type.name} as payload
     )
@@ -136,7 +136,7 @@ as $$"""
 """
 
     if function.response_type.is_array:
-        res += f"""\t, result as (
+        res += f"""    , result as (
         select (jsonb_populate_record(
                         null::{schema}.{function.endpoint.response_type.name},
                         convert_from((http_response.http_response).body, 'utf-8')::jsonb)
@@ -153,7 +153,7 @@ as $$"""
     select 
 """
             res += ',\n'.join(
-        f'\t\t(b.x)[{i+1}]::{convert_type_postgres("deribit", "", e.type)} as {escape_postgres_keyword(e.name)}' for i, e in enumerate(function.response_type.fields))
+        f'        (b.x)[{i+1}]::{convert_type_postgres("deribit", "", e.type)} as {escape_postgres_keyword(e.name)}' for i, e in enumerate(function.response_type.fields))
             res += """
     from unnested b(x)"""
 
@@ -162,9 +162,9 @@ as $$"""
     select
 """
             if len(function.response_type.fields) == 0:
-                res += """\t\ta.b"""
+                res += """        a.b"""
             else:
-                res += ',\n'.join(f'\t\t(b).{escape_postgres_keyword(e.name)}::{convert_type_postgres("deribit", "", e.type)}' for e in function.response_type.fields)
+                res += ',\n'.join(f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres("deribit", "", e.type)}' for e in function.response_type.fields)
             res += f"""
     from (
         select (unnest(r.data)) b
@@ -172,7 +172,7 @@ as $$"""
     ) a
     """
     else:
-        res += f"""\tselect (jsonb_populate_record(
+        res += f"""    select (jsonb_populate_record(
         null::{schema}.{function.endpoint.response_type.name}, 
         convert_from((a.http_response).body, 'utf-8')::jsonb)).result
     from http_response a

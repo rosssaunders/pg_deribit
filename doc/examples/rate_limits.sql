@@ -4,7 +4,7 @@ left join lateral deribit.private_buy('ETH-PERPETUAL', s.amount, 'market') t on 
 order by s.amount desc;
 
 select *
-from deribit.internal_archive
+from deribit.internal_archive;
 
 select *
 from deribit.matching_engine_request_call_log
