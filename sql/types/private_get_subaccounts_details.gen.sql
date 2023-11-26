@@ -37,8 +37,7 @@ create type deribit.private_get_subaccounts_details_response_position as (
     size_currency double precision,
     theta double precision,
     total_profit_loss double precision,
-    vega double precision,
-    uid bigint
+    vega double precision
 );
 
 comment on column deribit.private_get_subaccounts_details_response_position.average_price is 'Average price of trades that built this position';
@@ -65,7 +64,6 @@ comment on column deribit.private_get_subaccounts_details_response_position.size
 comment on column deribit.private_get_subaccounts_details_response_position.theta is 'Only for options, Theta parameter';
 comment on column deribit.private_get_subaccounts_details_response_position.total_profit_loss is 'Profit or loss from position';
 comment on column deribit.private_get_subaccounts_details_response_position.vega is 'Only for options, Vega parameter';
-comment on column deribit.private_get_subaccounts_details_response_position.uid is 'Account/Subaccount identifier';
 
 drop type if exists deribit.private_get_subaccounts_details_response_open_order cascade;
 
@@ -108,8 +106,7 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
     web boolean,
     creation_timestamp bigint,
     average_price double precision,
-    advanced text,
-    positions deribit.private_get_subaccounts_details_response_position[]
+    advanced text
 );
 
 comment on column deribit.private_get_subaccounts_details_response_open_order.reject_post_only is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -155,10 +152,12 @@ comment on column deribit.private_get_subaccounts_details_response_open_order.ad
 drop type if exists deribit.private_get_subaccounts_details_response_result cascade;
 
 create type deribit.private_get_subaccounts_details_response_result as (
-    open_orders deribit.private_get_subaccounts_details_response_open_order[]
+    open_orders deribit.private_get_subaccounts_details_response_open_order[],
+    positions deribit.private_get_subaccounts_details_response_position[],
+    uid bigint
 );
 
-
+comment on column deribit.private_get_subaccounts_details_response_result.uid is 'Account/Subaccount identifier';
 
 drop type if exists deribit.private_get_subaccounts_details_response cascade;
 

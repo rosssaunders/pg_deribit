@@ -20,13 +20,12 @@ p = inflect.engine()
 deribit_local_url = "codegen/deribit/deribit.html"
 schema = 'deribit'
 
+
 def download_spec():
     url = "https://docs.deribit.com/"
     response = requests.get(url)
     with open(deribit_local_url, 'w') as file:
         file.write(response.text)
-
-
 
 
 def main():

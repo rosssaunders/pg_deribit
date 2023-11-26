@@ -1,3 +1,4 @@
+from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
 
@@ -56,6 +57,7 @@ class Type:
     # If the field is an array of arrays and not an array of objects.
     # If so we need to decompose it differently.
     is_nested_array: bool = False
+    parent: Type = None
 
     def to_dict(self):
         return {

@@ -20,6 +20,10 @@ def strip_field_name(field_name:str) -> str:
     return field_name
 
 
+def count_ident(field_name:str) -> int:
+    return field_name.count('›')
+
+
 def url_to_type_name(end_point):
     items = end_point.split('/')
     return '_'.join(items[1:])
@@ -56,11 +60,19 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
     types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
     root_type = types[current_type]
     response_type:Type = None
+    current_ident_level = 0
     for index, row in df.iterrows():
         if pd.isna(row[0]):
             continue
 
+        field_ident_level = count_ident(str(row[0]))
         field_name = strip_field_name(str(row[0]))
+
+        if field_ident_level < current_ident_level:
+            # change the type back to the parent type
+            current_type = types[current_type].parent.name
+
+        current_ident_level = field_ident_level
 
         if pd.isna(row[2]):
             comment = ''
@@ -75,13 +87,19 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
         #     field_name = 'result'
 
         if row[1] == 'object':
-            new_parent_type_name = f'{parent_type_name}_{field_name}'
-            field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=False)
+            new_type_name = f'{parent_type_name}_{field_name}'
+
+            # Add the field to the parent type
+            field_type = FieldType(name=new_type_name, is_enum=False, is_class=True, is_array=False)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+            parent_type = types[current_type]
 
-            current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False)
+            # Create the new type
+            current_type = new_type_name
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, parent=parent_type)
 
+            # Check if this is the result field on the response object
+            # For Deribit this is the field we return to the caller of the function.
             if field_name == 'result':
                 response_type = types[current_type]
 
@@ -89,15 +107,16 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
 
         if row[1] == 'array of object':
             if p.singular_noun(field_name) is False:
-                new_parent_type_name = f"{parent_type_name}_{field_name}"
+                new_type_name = f"{parent_type_name}_{field_name}"
             else:
-                new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
+                new_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
 
-            field_type = FieldType(name=new_parent_type_name, is_enum=False, is_class=True, is_array=True)
+            field_type = FieldType(name=new_type_name, is_enum=False, is_class=True, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
+            parent_type = types[current_type]
 
-            current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True)
+            current_type = new_type_name
+            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True, parent=parent_type)
 
             if field_name == 'result':
                 response_type = types[current_type]
@@ -141,34 +160,26 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             continue
 
         elif row[1] == 'array of [price, amount]':
-            if p.singular_noun(field_name) is False:
-                new_parent_type_name = f"{parent_type_name}_{field_name}"
-            else:
-                new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
-
-            field_type = FieldType(name="float[]", is_enum=False, is_class=True, is_array=True)
+            field_type = FieldType(name='float[]', is_enum=False, is_class=False, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
 
-            current_type = new_parent_type_name
-            types[current_type] = Type(name=current_type, fields=[], enums=[], is_primitive=False, is_array=True, is_nested_array=True)
-
             if field_name == 'result':
-                response_type = types[current_type]
+                response_type = Type(name='string', fields=[], enums=[], is_primitive=True, is_array=True)
 
             continue
 
         elif row[1] == 'array of [timestamp, value]':
             if p.singular_noun(field_name) is False:
-                new_parent_type_name = f"{parent_type_name}_{field_name}"
+                new_type_name = f"{parent_type_name}_{field_name}"
             else:
-                new_parent_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
+                new_type_name = f"{parent_type_name}_{p.singular_noun(field_name)}"
 
             # Add the field to the parent type
             field_type = FieldType(name="float[]", is_enum=False, is_class=True, is_array=True)
             types[current_type].fields.append(Field(name=field_name, type=field_type, comment=comment, required=False))
 
             # Create the new type
-            current_type = new_parent_type_name
+            current_type = new_type_name
             types[current_type] = Type(name=current_type, fields=[], enums=[], is_array=True, is_nested_array=True)
 
             # Add the fields to the new type
@@ -189,7 +200,6 @@ def response_table_to_type(end_point: str, table) -> (Type, Type, List[Type]):
             if data_type == 'text':
                 data_type = 'string'
 
-            #if end_point == '/public/get_contract_size':
             if field_name == 'contract_size':
                 data_type = 'number'
 

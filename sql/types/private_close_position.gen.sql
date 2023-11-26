@@ -122,8 +122,7 @@ create type deribit.private_close_position_response_order as (
     web boolean,
     creation_timestamp bigint,
     average_price double precision,
-    advanced text,
-    trades deribit.private_close_position_response_trade[]
+    advanced text
 );
 
 comment on column deribit.private_close_position_response_order.reject_post_only is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -169,7 +168,8 @@ comment on column deribit.private_close_position_response_order.advanced is 'adv
 drop type if exists deribit.private_close_position_response_result cascade;
 
 create type deribit.private_close_position_response_result as (
-    "order" deribit.private_close_position_response_order
+    "order" deribit.private_close_position_response_order,
+    trades deribit.private_close_position_response_trade[]
 );
 
 

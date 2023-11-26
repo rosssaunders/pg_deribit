@@ -9,19 +9,19 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "future",
-                            "option_combo",
-                            "future_combo",
                             "spot",
-                            "option"
+                            "option",
+                            "future_combo",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -1749,43 +1749,43 @@
                 "enums": [
                     {
                         "items": [
-                            "btc_usd",
-                            "xrp_usd",
-                            "trx_usdc",
-                            "dot_usdc",
-                            "doge_usd",
-                            "shib_usd",
-                            "link_usd",
-                            "matic_usd",
-                            "bch_usdc",
-                            "ada_usdc",
-                            "sol_usd",
-                            "ethdvol_usdc",
-                            "eth_usdc",
-                            "shib_usdc",
-                            "near_usdc",
-                            "link_usdc",
                             "usdc_usd",
-                            "trx_usd",
-                            "ltc_usdc",
-                            "sol_usdc",
+                            "near_usdc",
                             "uni_usdc",
-                            "algo_usdc",
                             "xrp_usdc",
-                            "eth_usd",
-                            "near_usd",
-                            "uni_usd",
-                            "avax_usdc",
-                            "ltc_usd",
-                            "avax_usd",
-                            "dot_usd",
+                            "btcdvol_usdc",
+                            "ltc_usdc",
+                            "ethdvol_usdc",
                             "bch_usd",
+                            "dot_usd",
+                            "ltc_usd",
+                            "xrp_usd",
+                            "trx_usd",
+                            "bch_usdc",
+                            "eth_usdc",
+                            "matic_usd",
+                            "shib_usd",
+                            "near_usd",
+                            "trx_usdc",
                             "ada_usd",
                             "doge_usdc",
-                            "btcdvol_usdc",
+                            "link_usdc",
+                            "uni_usd",
+                            "dot_usdc",
+                            "sol_usdc",
                             "matic_usdc",
+                            "shib_usdc",
                             "algo_usd",
-                            "btc_usdc"
+                            "algo_usdc",
+                            "avax_usdc",
+                            "sol_usd",
+                            "eth_usd",
+                            "link_usd",
+                            "btc_usd",
+                            "btc_usdc",
+                            "ada_usdc",
+                            "avax_usd",
+                            "doge_usd"
                         ],
                         "name": "index_name"
                     }
@@ -1928,6 +1928,17 @@
                                 "is_enum": false,
                                 "name": "public_get_delivery_prices_response_datum"
                             }
+                        },
+                        {
+                            "comment": "Available delivery prices",
+                            "name": "records_total",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -1959,17 +1970,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "Available delivery prices",
-                            "name": "records_total",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
                         }
                     ],
                     "is_array": true,
@@ -1992,6 +1992,17 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "public_get_delivery_prices_response_datum"
+                    }
+                },
+                {
+                    "comment": "Available delivery prices",
+                    "name": "records_total",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
                     }
                 }
             ],
@@ -2421,9 +2432,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -2607,9 +2618,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -2815,43 +2826,43 @@
                 "enums": [
                     {
                         "items": [
-                            "btc_usd",
-                            "xrp_usd",
-                            "trx_usdc",
-                            "dot_usdc",
-                            "doge_usd",
-                            "shib_usd",
-                            "link_usd",
-                            "matic_usd",
-                            "bch_usdc",
-                            "ada_usdc",
-                            "sol_usd",
-                            "ethdvol_usdc",
-                            "eth_usdc",
-                            "shib_usdc",
-                            "near_usdc",
-                            "link_usdc",
                             "usdc_usd",
-                            "trx_usd",
-                            "ltc_usdc",
-                            "sol_usdc",
+                            "near_usdc",
                             "uni_usdc",
-                            "algo_usdc",
                             "xrp_usdc",
-                            "eth_usd",
-                            "near_usd",
-                            "uni_usd",
-                            "avax_usdc",
-                            "ltc_usd",
-                            "avax_usd",
-                            "dot_usd",
+                            "btcdvol_usdc",
+                            "ltc_usdc",
+                            "ethdvol_usdc",
                             "bch_usd",
+                            "dot_usd",
+                            "ltc_usd",
+                            "xrp_usd",
+                            "trx_usd",
+                            "bch_usdc",
+                            "eth_usdc",
+                            "matic_usd",
+                            "shib_usd",
+                            "near_usd",
+                            "trx_usdc",
                             "ada_usd",
                             "doge_usdc",
-                            "btcdvol_usdc",
+                            "link_usdc",
+                            "uni_usd",
+                            "dot_usdc",
+                            "sol_usdc",
                             "matic_usdc",
+                            "shib_usdc",
                             "algo_usd",
-                            "btc_usdc"
+                            "algo_usdc",
+                            "avax_usdc",
+                            "sol_usd",
+                            "eth_usd",
+                            "link_usd",
+                            "btc_usd",
+                            "btc_usdc",
+                            "ada_usdc",
+                            "avax_usd",
+                            "doge_usd"
                         ],
                         "name": "index_name"
                     }
@@ -3897,19 +3908,19 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "future",
-                            "option_combo",
-                            "future_combo",
                             "spot",
-                            "option"
+                            "option",
+                            "future_combo",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -4696,17 +4707,17 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "settlement",
                             "delivery",
-                            "bankruptcy"
+                            "bankruptcy",
+                            "settlement"
                         ],
                         "name": "type"
                     }
@@ -5097,9 +5108,9 @@
                 "enums": [
                     {
                         "items": [
-                            "settlement",
                             "delivery",
-                            "bankruptcy"
+                            "bankruptcy",
+                            "settlement"
                         ],
                         "name": "type"
                     }
@@ -5490,28 +5501,28 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -5936,28 +5947,28 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -6360,8 +6371,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -6775,8 +6786,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -7315,12 +7326,12 @@
                         "items": [
                             "5",
                             "20",
-                            "50",
-                            "1",
                             "100",
+                            "50",
+                            "10000",
+                            "1",
                             "10",
-                            "1000",
-                            "10000"
+                            "1000"
                         ],
                         "name": "depth"
                     }
@@ -7459,20 +7470,11 @@
                             "required": false,
                             "type": {
                                 "is_array": true,
-                                "is_class": true,
+                                "is_class": false,
                                 "is_enum": false,
                                 "name": "float[]"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_response_result"
-                },
-                {
-                    "enums": [],
-                    "fields": [
+                        },
                         {
                             "comment": "It represents the requested order size of all best asks",
                             "name": "best_ask_amount",
@@ -7534,20 +7536,11 @@
                             "required": false,
                             "type": {
                                 "is_array": true,
-                                "is_class": true,
+                                "is_class": false,
                                 "is_enum": false,
                                 "name": "float[]"
                             }
-                        }
-                    ],
-                    "is_array": true,
-                    "is_nested_array": true,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_response_ask"
-                },
-                {
-                    "enums": [],
-                    "fields": [
+                        },
                         {
                             "comment": "Current funding (perpetual only)",
                             "name": "current_funding",
@@ -7590,70 +7583,6 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "public_get_order_book_response_greeks"
-                            }
-                        }
-                    ],
-                    "is_array": true,
-                    "is_nested_array": true,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_response_bid"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "(Only for option) The delta value for the option",
-                            "name": "delta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The gamma value for the option",
-                            "name": "gamma",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The rho value for the option",
-                            "name": "rho",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The theta value for the option",
-                            "name": "theta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The vega value for the option",
-                            "name": "vega",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
                             }
                         },
                         {
@@ -7787,6 +7716,103 @@
                                 "is_enum": false,
                                 "name": "public_get_order_book_response_stats"
                             }
+                        },
+                        {
+                            "comment": "The timestamp (milliseconds since the Unix epoch)",
+                            "name": "timestamp",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Name of the underlying future, or index_price (options only)",
+                            "name": "underlying_index",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Underlying price for implied volatility calculations (options only)",
+                            "name": "underlying_price",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "public_get_order_book_response_result"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "(Only for option) The delta value for the option",
+                            "name": "delta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The gamma value for the option",
+                            "name": "gamma",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The rho value for the option",
+                            "name": "rho",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The theta value for the option",
+                            "name": "theta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The vega value for the option",
+                            "name": "vega",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -7851,39 +7877,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "The timestamp (milliseconds since the Unix epoch)",
-                            "name": "timestamp",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Name of the underlying future, or index_price (options only)",
-                            "name": "underlying_index",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "Underlying price for implied volatility calculations (options only)",
-                            "name": "underlying_price",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -7914,9 +7907,284 @@
                     "required": false,
                     "type": {
                         "is_array": true,
-                        "is_class": true,
+                        "is_class": false,
                         "is_enum": false,
                         "name": "float[]"
+                    }
+                },
+                {
+                    "comment": "It represents the requested order size of all best asks",
+                    "name": "best_ask_amount",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The current best ask price, null if there aren't any asks",
+                    "name": "best_ask_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "It represents the requested order size of all best bids",
+                    "name": "best_bid_amount",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The current best bid price, null if there aren't any bids",
+                    "name": "best_bid_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "(Only for option) implied volatility for best bid",
+                    "name": "bid_iv",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "List of bids",
+                    "name": "bids",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "float[]"
+                    }
+                },
+                {
+                    "comment": "Current funding (perpetual only)",
+                    "name": "current_funding",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The settlement price for the instrument. Only when state = closed",
+                    "name": "delivery_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Funding 8h (perpetual only)",
+                    "name": "funding_8h",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Only for options",
+                    "name": "greeks",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "public_get_order_book_response_greeks"
+                    }
+                },
+                {
+                    "comment": "Current index price",
+                    "name": "index_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Unique instrument identifier",
+                    "name": "instrument_name",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "Interest rate used in implied volatility calculations (options only)",
+                    "name": "interest_rate",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The price for the last trade",
+                    "name": "last_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "(Only for option) implied volatility for mark price",
+                    "name": "mark_iv",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The mark price for the instrument",
+                    "name": "mark_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.",
+                    "name": "max_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.",
+                    "name": "min_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.",
+                    "name": "open_interest",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Optional (not added for spot). The settlement price for the instrument. Only when state = open",
+                    "name": "settlement_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The state of the order book. Possible values are open and closed.",
+                    "name": "state",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "",
+                    "name": "stats",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "public_get_order_book_response_stats"
+                    }
+                },
+                {
+                    "comment": "The timestamp (milliseconds since the Unix epoch)",
+                    "name": "timestamp",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "integer"
+                    }
+                },
+                {
+                    "comment": "Name of the underlying future, or index_price (options only)",
+                    "name": "underlying_index",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Underlying price for implied volatility calculations (options only)",
+                    "name": "underlying_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
                     }
                 }
             ],
@@ -7938,12 +8206,12 @@
                         "items": [
                             "5",
                             "20",
-                            "50",
-                            "1",
                             "100",
+                            "50",
+                            "10000",
+                            "1",
                             "10",
-                            "1000",
-                            "10000"
+                            "1000"
                         ],
                         "name": "depth"
                     }
@@ -8082,20 +8350,11 @@
                             "required": false,
                             "type": {
                                 "is_array": true,
-                                "is_class": true,
+                                "is_class": false,
                                 "is_enum": false,
                                 "name": "float[]"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_by_instrument_id_response_result"
-                },
-                {
-                    "enums": [],
-                    "fields": [
+                        },
                         {
                             "comment": "It represents the requested order size of all best asks",
                             "name": "best_ask_amount",
@@ -8157,20 +8416,11 @@
                             "required": false,
                             "type": {
                                 "is_array": true,
-                                "is_class": true,
+                                "is_class": false,
                                 "is_enum": false,
                                 "name": "float[]"
                             }
-                        }
-                    ],
-                    "is_array": true,
-                    "is_nested_array": true,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_by_instrument_id_response_ask"
-                },
-                {
-                    "enums": [],
-                    "fields": [
+                        },
                         {
                             "comment": "Current funding (perpetual only)",
                             "name": "current_funding",
@@ -8213,70 +8463,6 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "public_get_order_book_by_instrument_id_response_greeks"
-                            }
-                        }
-                    ],
-                    "is_array": true,
-                    "is_nested_array": true,
-                    "is_primitive": false,
-                    "name": "public_get_order_book_by_instrument_id_response_bid"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "(Only for option) The delta value for the option",
-                            "name": "delta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The gamma value for the option",
-                            "name": "gamma",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The rho value for the option",
-                            "name": "rho",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The theta value for the option",
-                            "name": "theta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The vega value for the option",
-                            "name": "vega",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
                             }
                         },
                         {
@@ -8410,6 +8596,103 @@
                                 "is_enum": false,
                                 "name": "public_get_order_book_by_instrument_id_response_stats"
                             }
+                        },
+                        {
+                            "comment": "The timestamp (milliseconds since the Unix epoch)",
+                            "name": "timestamp",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Name of the underlying future, or index_price (options only)",
+                            "name": "underlying_index",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Underlying price for implied volatility calculations (options only)",
+                            "name": "underlying_price",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "public_get_order_book_by_instrument_id_response_result"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "(Only for option) The delta value for the option",
+                            "name": "delta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The gamma value for the option",
+                            "name": "gamma",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The rho value for the option",
+                            "name": "rho",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The theta value for the option",
+                            "name": "theta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The vega value for the option",
+                            "name": "vega",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -8474,39 +8757,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "The timestamp (milliseconds since the Unix epoch)",
-                            "name": "timestamp",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Name of the underlying future, or index_price (options only)",
-                            "name": "underlying_index",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "Underlying price for implied volatility calculations (options only)",
-                            "name": "underlying_price",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -8537,9 +8787,284 @@
                     "required": false,
                     "type": {
                         "is_array": true,
-                        "is_class": true,
+                        "is_class": false,
                         "is_enum": false,
                         "name": "float[]"
+                    }
+                },
+                {
+                    "comment": "It represents the requested order size of all best asks",
+                    "name": "best_ask_amount",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The current best ask price, null if there aren't any asks",
+                    "name": "best_ask_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "It represents the requested order size of all best bids",
+                    "name": "best_bid_amount",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The current best bid price, null if there aren't any bids",
+                    "name": "best_bid_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "(Only for option) implied volatility for best bid",
+                    "name": "bid_iv",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "List of bids",
+                    "name": "bids",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "float[]"
+                    }
+                },
+                {
+                    "comment": "Current funding (perpetual only)",
+                    "name": "current_funding",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The settlement price for the instrument. Only when state = closed",
+                    "name": "delivery_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Funding 8h (perpetual only)",
+                    "name": "funding_8h",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Only for options",
+                    "name": "greeks",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "public_get_order_book_by_instrument_id_response_greeks"
+                    }
+                },
+                {
+                    "comment": "Current index price",
+                    "name": "index_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Unique instrument identifier",
+                    "name": "instrument_name",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "Interest rate used in implied volatility calculations (options only)",
+                    "name": "interest_rate",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The price for the last trade",
+                    "name": "last_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "(Only for option) implied volatility for mark price",
+                    "name": "mark_iv",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The mark price for the instrument",
+                    "name": "mark_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.",
+                    "name": "max_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.",
+                    "name": "min_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.",
+                    "name": "open_interest",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Optional (not added for spot). The settlement price for the instrument. Only when state = open",
+                    "name": "settlement_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The state of the order book. Possible values are open and closed.",
+                    "name": "state",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "",
+                    "name": "stats",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "public_get_order_book_by_instrument_id_response_stats"
+                    }
+                },
+                {
+                    "comment": "The timestamp (milliseconds since the Unix epoch)",
+                    "name": "timestamp",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "integer"
+                    }
+                },
+                {
+                    "comment": "Name of the underlying future, or index_price (options only)",
+                    "name": "underlying_index",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Underlying price for implied volatility calculations (options only)",
+                    "name": "underlying_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
                     }
                 }
             ],
@@ -8559,19 +9084,19 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "future",
-                            "option_combo",
-                            "future_combo",
                             "spot",
-                            "option"
+                            "option",
+                            "future_combo",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -8832,9 +9357,9 @@
                 "enums": [
                     {
                         "items": [
+                            "derivative",
                             "spot",
-                            "all",
-                            "derivative"
+                            "all"
                         ],
                         "name": "type"
                     }
@@ -9383,18 +9908,18 @@
                 "enums": [
                     {
                         "items": [
-                            "60",
-                            "15",
                             "5",
-                            "360",
-                            "3",
-                            "180",
-                            "1D",
-                            "1",
-                            "10",
-                            "120",
                             "720",
-                            "30"
+                            "30",
+                            "15",
+                            "180",
+                            "3",
+                            "1",
+                            "120",
+                            "360",
+                            "10",
+                            "60",
+                            "1D"
                         ],
                         "name": "resolution"
                     }
@@ -9743,19 +10268,19 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "60",
                             "43200",
+                            "1",
                             "3600",
-                            "1D",
-                            "1"
+                            "60",
+                            "1D"
                         ],
                         "name": "resolution"
                     }
@@ -10196,70 +10721,6 @@
                                 "is_enum": false,
                                 "name": "public_ticker_response_greeks"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "public_ticker_response_result"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "(Only for option) The delta value for the option",
-                            "name": "delta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The gamma value for the option",
-                            "name": "gamma",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The rho value for the option",
-                            "name": "rho",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The theta value for the option",
-                            "name": "theta",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "(Only for option) The vega value for the option",
-                            "name": "vega",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
                         },
                         {
                             "comment": "Current index price",
@@ -10403,6 +10864,103 @@
                                 "is_enum": false,
                                 "name": "public_ticker_response_stats"
                             }
+                        },
+                        {
+                            "comment": "The timestamp (milliseconds since the Unix epoch)",
+                            "name": "timestamp",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Name of the underlying future, or index_price (options only)",
+                            "name": "underlying_index",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Underlying price for implied volatility calculations (options only)",
+                            "name": "underlying_price",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "public_ticker_response_result"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "(Only for option) The delta value for the option",
+                            "name": "delta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The gamma value for the option",
+                            "name": "gamma",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The rho value for the option",
+                            "name": "rho",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The theta value for the option",
+                            "name": "theta",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "(Only for option) The vega value for the option",
+                            "name": "vega",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "number"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -10460,39 +11018,6 @@
                         {
                             "comment": "Volume in usd (futures only)",
                             "name": "volume_usd",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "The timestamp (milliseconds since the Unix epoch)",
-                            "name": "timestamp",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Name of the underlying future, or index_price (options only)",
-                            "name": "underlying_index",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "Underlying price for implied volatility calculations (options only)",
-                            "name": "underlying_price",
                             "required": false,
                             "type": {
                                 "is_array": false,
@@ -10632,6 +11157,182 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "public_ticker_response_greeks"
+                    }
+                },
+                {
+                    "comment": "Current index price",
+                    "name": "index_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Unique instrument identifier",
+                    "name": "instrument_name",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "Interest rate used in implied volatility calculations (options only)",
+                    "name": "interest_rate",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Value used to calculate realized_funding in positions (perpetual only)",
+                    "name": "interest_value",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The price for the last trade",
+                    "name": "last_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "(Only for option) implied volatility for mark price",
+                    "name": "mark_iv",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The mark price for the instrument",
+                    "name": "mark_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.",
+                    "name": "max_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.",
+                    "name": "min_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.",
+                    "name": "open_interest",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Optional (not added for spot). The settlement price for the instrument. Only when state = open",
+                    "name": "settlement_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "The state of the order book. Possible values are open and closed.",
+                    "name": "state",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "string"
+                    }
+                },
+                {
+                    "comment": "",
+                    "name": "stats",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "public_ticker_response_stats"
+                    }
+                },
+                {
+                    "comment": "The timestamp (milliseconds since the Unix epoch)",
+                    "name": "timestamp",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "integer"
+                    }
+                },
+                {
+                    "comment": "Name of the underlying future, or index_price (options only)",
+                    "name": "underlying_index",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
+                    }
+                },
+                {
+                    "comment": "Underlying price for implied volatility calculations (options only)",
+                    "name": "underlying_price",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "number"
                     }
                 }
             ],
@@ -11291,11 +11992,11 @@
                 "enums": [
                     {
                         "items": [
-                            "legacy_pm",
-                            "cross_pm",
-                            "segregated_pm",
+                            "segregated_sm",
                             "cross_sm",
-                            "segregated_sm"
+                            "legacy_pm",
+                            "segregated_pm",
+                            "cross_pm"
                         ],
                         "name": "margin_model"
                     }
@@ -11449,6 +12150,17 @@
                                 "is_enum": false,
                                 "name": "private_change_margin_model_response_new_state"
                             }
+                        },
+                        {
+                            "comment": "Represents portfolio state before change",
+                            "name": "old_state",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_change_margin_model_response_old_state"
+                            }
                         }
                     ],
                     "is_array": true,
@@ -11490,17 +12202,6 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "Represents portfolio state before change",
-                            "name": "old_state",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_change_margin_model_response_old_state"
                             }
                         }
                     ],
@@ -11577,6 +12278,17 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "private_change_margin_model_response_new_state"
+                    }
+                },
+                {
+                    "comment": "Represents portfolio state before change",
+                    "name": "old_state",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_change_margin_model_response_old_state"
                     }
                 }
             ],
@@ -12253,6 +12965,72 @@
                                 "is_enum": false,
                                 "name": "private_create_subaccount_response_btc"
                             }
+                        },
+                        {
+                            "comment": "",
+                            "name": "eth",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_create_subaccount_response_eth"
+                            }
+                        },
+                        {
+                            "comment": "When true - receive all notification emails on the main email",
+                            "name": "receive_notifications",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Whether the Security Keys authentication is enabled",
+                            "name": "security_keys_enabled",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "System generated user nickname",
+                            "name": "system_name",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Account type",
+                            "name": "type",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Account name (given by user)",
+                            "name": "username",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -12350,17 +13128,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "eth",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_create_subaccount_response_eth"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -12457,61 +13224,6 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "When true - receive all notification emails on the main email",
-                            "name": "receive_notifications",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "boolean"
-                            }
-                        },
-                        {
-                            "comment": "Whether the Security Keys authentication is enabled",
-                            "name": "security_keys_enabled",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "boolean"
-                            }
-                        },
-                        {
-                            "comment": "System generated user nickname",
-                            "name": "system_name",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "Account type",
-                            "name": "type",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "Account name (given by user)",
-                            "name": "username",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
                             }
                         }
                     ],
@@ -13706,9 +14418,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -13939,6 +14651,17 @@
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_fee"
                             }
+                        },
+                        {
+                            "comment": "",
+                            "name": "limits",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_get_account_summary_response_limits"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -14003,17 +14726,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "limits",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_get_account_summary_response_limits"
-                            }
                         }
                     ],
                     "is_array": true,
@@ -14034,37 +14746,6 @@
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_futures"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "private_get_account_summary_response_limits"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "Maximal number of futures related matching engine requests allowed for user in burst mode",
-                            "name": "burst",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Number of futures related matching engine requests per second allowed for user",
-                            "name": "rate",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
                         },
                         {
                             "comment": "",
@@ -14075,37 +14756,6 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_matching_engine"
-                            }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "private_get_account_summary_response_futures"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "Maximal number of matching engine requests allowed for user in burst mode",
-                            "name": "burst",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Number of matching engine requests per second allowed for user",
-                            "name": "rate",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
                             }
                         },
                         {
@@ -14118,37 +14768,6 @@
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_non_matching_engine"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "private_get_account_summary_response_matching_engine"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "Maximal number of non matching engine requests allowed for user in burst mode",
-                            "name": "burst",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Number of non matching engine requests per second allowed for user",
-                            "name": "rate",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
                         },
                         {
                             "comment": "Field not included if limits for options are not set.",
@@ -14160,37 +14779,6 @@
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_options"
                             }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "private_get_account_summary_response_non_matching_engine"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "Maximal number of options related matching engine requests allowed for user in burst mode",
-                            "name": "burst",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Number of options related matching engine requests per second allowed for user",
-                            "name": "rate",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
                         },
                         {
                             "comment": "Field not included if limits for perpetuals are not set.",
@@ -14201,37 +14789,6 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_perpetuals"
-                            }
-                        }
-                    ],
-                    "is_array": false,
-                    "is_nested_array": false,
-                    "is_primitive": false,
-                    "name": "private_get_account_summary_response_options"
-                },
-                {
-                    "enums": [],
-                    "fields": [
-                        {
-                            "comment": "Maximal number of perpetual related matching engine requests allowed for user in burst mode",
-                            "name": "burst",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
-                        },
-                        {
-                            "comment": "Number of perpetual related matching engine requests per second allowed for user",
-                            "name": "rate",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
                             }
                         },
                         {
@@ -14265,6 +14822,161 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_get_account_summary_response_options_gamma_map"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_get_account_summary_response_limits"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Maximal number of futures related matching engine requests allowed for user in burst mode",
+                            "name": "burst",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Number of futures related matching engine requests per second allowed for user",
+                            "name": "rate",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_get_account_summary_response_futures"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Maximal number of matching engine requests allowed for user in burst mode",
+                            "name": "burst",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Number of matching engine requests per second allowed for user",
+                            "name": "rate",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_get_account_summary_response_matching_engine"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Maximal number of non matching engine requests allowed for user in burst mode",
+                            "name": "burst",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Number of non matching engine requests per second allowed for user",
+                            "name": "rate",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_get_account_summary_response_non_matching_engine"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Maximal number of options related matching engine requests allowed for user in burst mode",
+                            "name": "burst",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Number of options related matching engine requests per second allowed for user",
+                            "name": "rate",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_get_account_summary_response_options"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Maximal number of perpetual related matching engine requests allowed for user in burst mode",
+                            "name": "burst",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Number of perpetual related matching engine requests per second allowed for user",
+                            "name": "rate",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
                             }
                         }
                     ],
@@ -14799,6 +15511,17 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "private_get_account_summary_response_fee"
+                    }
+                },
+                {
+                    "comment": "",
+                    "name": "limits",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_get_account_summary_response_limits"
                     }
                 }
             ],
@@ -15401,9 +16124,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -16246,19 +16969,19 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "future",
-                            "option_combo",
-                            "future_combo",
                             "spot",
-                            "option"
+                            "option",
+                            "future_combo",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -17159,6 +17882,105 @@
                                 "is_enum": false,
                                 "name": "private_get_subaccounts_response_btc"
                             }
+                        },
+                        {
+                            "comment": "",
+                            "name": "eth",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_get_subaccounts_response_eth"
+                            }
+                        },
+                        {
+                            "comment": "hashed identifier used in the Proof Of Liability for the subaccount. This identifier allows you to find your entries in the Deribit Proof-Of-Reserves files. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.",
+                            "name": "proof_id",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "signature used as a base string for proof_id hash. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.",
+                            "name": "proof_id_signature",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "When true - receive all notification emails on the main email",
+                            "name": "receive_notifications",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Names of assignments with Security Keys assigned",
+                            "name": "security_keys_assignments",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Whether the Security Keys authentication is enabled",
+                            "name": "security_keys_enabled",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "System generated user nickname",
+                            "name": "system_name",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "type",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "username",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "string"
+                            }
                         }
                     ],
                     "is_array": false,
@@ -17255,17 +18077,6 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "",
-                            "name": "eth",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_get_subaccounts_response_eth"
                             }
                         }
                     ],
@@ -17364,94 +18175,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "hashed identifier used in the Proof Of Liability for the subaccount. This identifier allows you to find your entries in the Deribit Proof-Of-Reserves files. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.",
-                            "name": "proof_id",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "signature used as a base string for proof_id hash. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.",
-                            "name": "proof_id_signature",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "When true - receive all notification emails on the main email",
-                            "name": "receive_notifications",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "boolean"
-                            }
-                        },
-                        {
-                            "comment": "Names of assignments with Security Keys assigned",
-                            "name": "security_keys_assignments",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "Whether the Security Keys authentication is enabled",
-                            "name": "security_keys_enabled",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "boolean"
-                            }
-                        },
-                        {
-                            "comment": "System generated user nickname",
-                            "name": "system_name",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "",
-                            "name": "type",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
-                        },
-                        {
-                            "comment": "",
-                            "name": "username",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "string"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -17548,9 +18271,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -17681,6 +18404,28 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_get_subaccounts_details_response_open_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "positions",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_get_subaccounts_details_response_position"
+                            }
+                        },
+                        {
+                            "comment": "Account/Subaccount identifier",
+                            "name": "uid",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "name": "integer"
                             }
                         }
                     ],
@@ -18120,17 +18865,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "positions",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_get_subaccounts_details_response_position"
-                            }
                         }
                     ],
                     "is_array": true,
@@ -18404,17 +19138,6 @@
                                 "is_enum": false,
                                 "name": "number"
                             }
-                        },
-                        {
-                            "comment": "Account/Subaccount identifier",
-                            "name": "uid",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": false,
-                                "is_enum": false,
-                                "name": "integer"
-                            }
                         }
                     ],
                     "is_array": true,
@@ -18438,6 +19161,28 @@
                         "is_enum": false,
                         "name": "private_get_subaccounts_details_response_open_order"
                     }
+                },
+                {
+                    "comment": "",
+                    "name": "positions",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_get_subaccounts_details_response_position"
+                    }
+                },
+                {
+                    "comment": "Account/Subaccount identifier",
+                    "name": "uid",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "name": "integer"
+                    }
                 }
             ],
             "is_array": true,
@@ -18456,9 +19201,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -20516,8 +21261,8 @@
                 "enums": [
                     {
                         "items": [
-                            "cancel_maker",
-                            "reject_taker"
+                            "reject_taker",
+                            "cancel_maker"
                         ],
                         "name": "mode"
                     }
@@ -20939,6 +21684,17 @@
                                 "is_enum": false,
                                 "name": "private_toggle_portfolio_margining_response_new_state"
                             }
+                        },
+                        {
+                            "comment": "Represents portfolio state before change",
+                            "name": "old_state",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_toggle_portfolio_margining_response_old_state"
+                            }
                         }
                     ],
                     "is_array": true,
@@ -20980,17 +21736,6 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "name": "number"
-                            }
-                        },
-                        {
-                            "comment": "Represents portfolio state before change",
-                            "name": "old_state",
-                            "required": false,
-                            "type": {
-                                "is_array": false,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_toggle_portfolio_margining_response_old_state"
                             }
                         }
                     ],
@@ -21067,6 +21812,17 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "private_toggle_portfolio_margining_response_new_state"
+                    }
+                },
+                {
+                    "comment": "Represents portfolio state before change",
+                    "name": "old_state",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_toggle_portfolio_margining_response_old_state"
                     }
                 }
             ],
@@ -21228,38 +21984,38 @@
                 "enums": [
                     {
                         "items": [
-                            "stop_limit",
-                            "take_limit",
                             "limit",
+                            "take_limit",
                             "stop_market",
-                            "take_market",
-                            "market_limit",
                             "trailing_stop",
-                            "market"
+                            "market",
+                            "stop_limit",
+                            "take_market",
+                            "market_limit"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
                             "immediate_or_cancel",
-                            "fill_or_kill",
                             "good_til_cancelled",
-                            "good_til_day"
+                            "good_til_day",
+                            "fill_or_kill"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "mark_price",
-                            "index_price",
-                            "last_price"
+                            "last_price",
+                            "index_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -21544,6 +22300,17 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_buy_response_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "trades",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_buy_response_trade"
                             }
                         }
                     ],
@@ -21983,17 +22750,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "trades",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_buy_response_trade"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -22378,6 +23134,17 @@
                         "is_enum": false,
                         "name": "private_buy_response_order"
                     }
+                },
+                {
+                    "comment": "",
+                    "name": "trades",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_buy_response_trade"
+                    }
                 }
             ],
             "is_array": false,
@@ -22396,38 +23163,38 @@
                 "enums": [
                     {
                         "items": [
-                            "stop_limit",
-                            "take_limit",
                             "limit",
+                            "take_limit",
                             "stop_market",
-                            "take_market",
-                            "market_limit",
                             "trailing_stop",
-                            "market"
+                            "market",
+                            "stop_limit",
+                            "take_market",
+                            "market_limit"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
                             "immediate_or_cancel",
-                            "fill_or_kill",
                             "good_til_cancelled",
-                            "good_til_day"
+                            "good_til_day",
+                            "fill_or_kill"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "mark_price",
-                            "index_price",
-                            "last_price"
+                            "last_price",
+                            "index_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -22712,6 +23479,17 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_sell_response_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "trades",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_sell_response_trade"
                             }
                         }
                     ],
@@ -23151,17 +23929,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "trades",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_sell_response_trade"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -23546,6 +24313,17 @@
                         "is_enum": false,
                         "name": "private_sell_response_order"
                     }
+                },
+                {
+                    "comment": "",
+                    "name": "trades",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_sell_response_trade"
+                    }
                 }
             ],
             "is_array": false,
@@ -23564,8 +24342,8 @@
                 "enums": [
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -23795,6 +24573,17 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_edit_response_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "trades",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_edit_response_trade"
                             }
                         }
                     ],
@@ -24234,17 +25023,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "trades",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_edit_response_trade"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -24629,6 +25407,17 @@
                         "is_enum": false,
                         "name": "private_edit_response_order"
                     }
+                },
+                {
+                    "comment": "",
+                    "name": "trades",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_edit_response_trade"
+                    }
                 }
             ],
             "is_array": false,
@@ -24647,8 +25436,8 @@
                 "enums": [
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -24878,6 +25667,17 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_edit_by_label_response_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "trades",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_edit_by_label_response_trade"
                             }
                         }
                     ],
@@ -25317,17 +26117,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "trades",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_edit_by_label_response_trade"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -25711,6 +26500,17 @@
                         "is_class": true,
                         "is_enum": false,
                         "name": "private_edit_by_label_response_order"
+                    }
+                },
+                {
+                    "comment": "",
+                    "name": "trades",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_edit_by_label_response_trade"
                     }
                 }
             ],
@@ -26844,32 +27644,32 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
                             "limit",
+                            "trigger_all",
+                            "trailing_stop",
                             "stop",
                             "take",
-                            "all",
-                            "trigger_all",
-                            "trailing_stop"
+                            "all"
                         ],
                         "name": "type"
                     }
@@ -27033,11 +27833,11 @@
                     {
                         "items": [
                             "limit",
+                            "trigger_all",
+                            "trailing_stop",
                             "stop",
                             "take",
-                            "all",
-                            "trigger_all",
-                            "trailing_stop"
+                            "all"
                         ],
                         "name": "type"
                     }
@@ -27200,9 +28000,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -27343,8 +28143,8 @@
                 "enums": [
                     {
                         "items": [
-                            "limit",
-                            "market"
+                            "market",
+                            "limit"
                         ],
                         "name": "type"
                     }
@@ -27486,6 +28286,17 @@
                                 "is_class": true,
                                 "is_enum": false,
                                 "name": "private_close_position_response_order"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "trades",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": true,
+                                "is_enum": false,
+                                "name": "private_close_position_response_trade"
                             }
                         }
                     ],
@@ -27925,17 +28736,6 @@
                                 "is_enum": false,
                                 "name": "string"
                             }
-                        },
-                        {
-                            "comment": "",
-                            "name": "trades",
-                            "required": false,
-                            "type": {
-                                "is_array": true,
-                                "is_class": true,
-                                "is_enum": false,
-                                "name": "private_close_position_response_trade"
-                            }
                         }
                     ],
                     "is_array": false,
@@ -28320,6 +29120,17 @@
                         "is_enum": false,
                         "name": "private_close_position_response_order"
                     }
+                },
+                {
+                    "comment": "",
+                    "name": "trades",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": true,
+                        "is_enum": false,
+                        "name": "private_close_position_response_trade"
+                    }
                 }
             ],
             "is_array": false,
@@ -28581,29 +29392,29 @@
                 "enums": [
                     {
                         "items": [
-                            "btc_usd",
-                            "luna_usdc",
-                            "mshib_usdc",
-                            "trx_usdc",
-                            "dot_usdc",
-                            "bch_usdc",
-                            "ada_usdc",
-                            "ethdvol_usdc",
-                            "eth_usdc",
-                            "shib_usdc",
-                            "near_usdc",
-                            "link_usdc",
-                            "ltc_usdc",
-                            "uni_usdc",
-                            "algo_usdc",
                             "xrp_usdc",
-                            "eth_usd",
-                            "avax_usdc",
-                            "doge_usdc",
+                            "near_usdc",
+                            "uni_usdc",
                             "btcdvol_usdc",
-                            "matic_usdc",
+                            "ltc_usdc",
+                            "ethdvol_usdc",
+                            "bch_usdc",
+                            "eth_usdc",
                             "bnb_usdc",
-                            "btc_usdc"
+                            "trx_usdc",
+                            "luna_usdc",
+                            "doge_usdc",
+                            "link_usdc",
+                            "dot_usdc",
+                            "matic_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "avax_usdc",
+                            "eth_usd",
+                            "btc_usd",
+                            "btc_usdc",
+                            "mshib_usdc",
+                            "ada_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -28853,35 +29664,35 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "future",
-                            "option_combo",
-                            "future_combo",
                             "spot",
-                            "option"
+                            "option",
+                            "future_combo",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
+                            "limit",
+                            "trigger_all",
+                            "take_limit",
+                            "stop_market",
+                            "trailing_stop",
+                            "take_all",
                             "stop_limit",
                             "stop_all",
-                            "take_all",
-                            "take_limit",
-                            "limit",
-                            "stop_market",
                             "take_market",
                             "trailing_all",
-                            "all",
-                            "trigger_all",
-                            "trailing_stop"
+                            "all"
                         ],
                         "name": "type"
                     }
@@ -29901,17 +30712,17 @@
                 "enums": [
                     {
                         "items": [
+                            "limit",
+                            "trigger_all",
+                            "take_limit",
+                            "stop_market",
+                            "trailing_stop",
+                            "take_all",
                             "stop_limit",
                             "stop_all",
-                            "take_all",
-                            "take_limit",
-                            "limit",
-                            "stop_market",
                             "take_market",
                             "trailing_all",
-                            "all",
-                            "trigger_all",
-                            "trailing_stop"
+                            "all"
                         ],
                         "name": "type"
                     }
@@ -30920,9 +31731,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -31931,21 +32742,21 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -35024,9 +35835,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -36035,9 +36846,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -36450,28 +37261,28 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -37105,28 +37916,28 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
+                            "future",
+                            "spot",
                             "any",
                             "combo",
-                            "future",
-                            "option_combo",
+                            "option",
                             "future_combo",
-                            "spot",
-                            "option"
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -37727,8 +38538,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -38340,8 +39151,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -38931,29 +39742,29 @@
                 "enums": [
                     {
                         "items": [
-                            "btc_usd",
-                            "luna_usdc",
-                            "mshib_usdc",
-                            "trx_usdc",
-                            "dot_usdc",
-                            "bch_usdc",
-                            "ada_usdc",
-                            "ethdvol_usdc",
-                            "eth_usdc",
-                            "shib_usdc",
-                            "near_usdc",
-                            "link_usdc",
-                            "ltc_usdc",
-                            "uni_usdc",
-                            "algo_usdc",
                             "xrp_usdc",
-                            "eth_usd",
-                            "avax_usdc",
-                            "doge_usdc",
+                            "near_usdc",
+                            "uni_usdc",
                             "btcdvol_usdc",
-                            "matic_usdc",
+                            "ltc_usdc",
+                            "ethdvol_usdc",
+                            "bch_usdc",
+                            "eth_usdc",
                             "bnb_usdc",
-                            "btc_usdc"
+                            "trx_usdc",
+                            "luna_usdc",
+                            "doge_usdc",
+                            "link_usdc",
+                            "dot_usdc",
+                            "matic_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "avax_usdc",
+                            "eth_usd",
+                            "btc_usd",
+                            "btc_usdc",
+                            "mshib_usdc",
+                            "ada_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -39083,8 +39894,8 @@
                 "enums": [
                     {
                         "items": [
-                            "buy",
-                            "sell"
+                            "sell",
+                            "buy"
                         ],
                         "name": "side"
                     }
@@ -39236,29 +40047,29 @@
                 "enums": [
                     {
                         "items": [
-                            "btc_usd",
-                            "luna_usdc",
-                            "mshib_usdc",
-                            "trx_usdc",
-                            "dot_usdc",
-                            "bch_usdc",
-                            "ada_usdc",
-                            "ethdvol_usdc",
-                            "eth_usdc",
-                            "shib_usdc",
-                            "near_usdc",
-                            "link_usdc",
-                            "ltc_usdc",
-                            "uni_usdc",
-                            "algo_usdc",
                             "xrp_usdc",
-                            "eth_usd",
-                            "avax_usdc",
-                            "doge_usdc",
+                            "near_usdc",
+                            "uni_usdc",
                             "btcdvol_usdc",
-                            "matic_usdc",
+                            "ltc_usdc",
+                            "ethdvol_usdc",
+                            "bch_usdc",
+                            "eth_usdc",
                             "bnb_usdc",
-                            "btc_usdc"
+                            "trx_usdc",
+                            "luna_usdc",
+                            "doge_usdc",
+                            "link_usdc",
+                            "dot_usdc",
+                            "matic_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "avax_usdc",
+                            "eth_usd",
+                            "btc_usd",
+                            "btc_usdc",
+                            "mshib_usdc",
+                            "ada_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -39552,9 +40363,9 @@
                 "enums": [
                     {
                         "items": [
-                            "settlement",
                             "delivery",
-                            "bankruptcy"
+                            "bankruptcy",
+                            "settlement"
                         ],
                         "name": "type"
                     }
@@ -39945,17 +40756,17 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "settlement",
                             "delivery",
-                            "bankruptcy"
+                            "bankruptcy",
+                            "settlement"
                         ],
                         "name": "type"
                     }
@@ -40346,9 +41157,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -40697,9 +41508,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -41092,9 +41903,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -41322,9 +42133,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -41552,9 +42363,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -41846,9 +42657,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -42162,9 +42973,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -42500,9 +43311,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -42862,9 +43673,9 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -43224,21 +44035,21 @@
                 "enums": [
                     {
                         "items": [
-                            "ETH",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "mid",
-                            "very_high",
-                            "very_low",
-                            "insane",
-                            "high",
+                            "low",
                             "extreme_high",
-                            "low"
+                            "very_low",
+                            "high",
+                            "insane",
+                            "very_high"
                         ],
                         "name": "priority"
                     }

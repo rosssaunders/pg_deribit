@@ -105,48 +105,37 @@ drop type if exists deribit.private_get_account_summary_response_perpetuals casc
 
 create type deribit.private_get_account_summary_response_perpetuals as (
     burst bigint,
-    rate bigint,
-    type text,
-    initial_margin double precision,
-    options_gamma_map deribit.private_get_account_summary_response_options_gamma_map
+    rate bigint
 );
 
 comment on column deribit.private_get_account_summary_response_perpetuals.burst is 'Maximal number of perpetual related matching engine requests allowed for user in burst mode';
 comment on column deribit.private_get_account_summary_response_perpetuals.rate is 'Number of perpetual related matching engine requests per second allowed for user';
-comment on column deribit.private_get_account_summary_response_perpetuals.type is 'Account type (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_perpetuals.initial_margin is 'The account''s initial margin';
-comment on column deribit.private_get_account_summary_response_perpetuals.options_gamma_map is 'Map of options'' gammas per index';
 
 drop type if exists deribit.private_get_account_summary_response_options cascade;
 
 create type deribit.private_get_account_summary_response_options as (
     burst bigint,
-    rate bigint,
-    perpetuals deribit.private_get_account_summary_response_perpetuals
+    rate bigint
 );
 
 comment on column deribit.private_get_account_summary_response_options.burst is 'Maximal number of options related matching engine requests allowed for user in burst mode';
 comment on column deribit.private_get_account_summary_response_options.rate is 'Number of options related matching engine requests per second allowed for user';
-comment on column deribit.private_get_account_summary_response_options.perpetuals is 'Field not included if limits for perpetuals are not set.';
 
 drop type if exists deribit.private_get_account_summary_response_non_matching_engine cascade;
 
 create type deribit.private_get_account_summary_response_non_matching_engine as (
     burst bigint,
-    rate bigint,
-    options deribit.private_get_account_summary_response_options
+    rate bigint
 );
 
 comment on column deribit.private_get_account_summary_response_non_matching_engine.burst is 'Maximal number of non matching engine requests allowed for user in burst mode';
 comment on column deribit.private_get_account_summary_response_non_matching_engine.rate is 'Number of non matching engine requests per second allowed for user';
-comment on column deribit.private_get_account_summary_response_non_matching_engine.options is 'Field not included if limits for options are not set.';
 
 drop type if exists deribit.private_get_account_summary_response_matching_engine cascade;
 
 create type deribit.private_get_account_summary_response_matching_engine as (
     burst bigint,
-    rate bigint,
-    non_matching_engine deribit.private_get_account_summary_response_non_matching_engine
+    rate bigint
 );
 
 comment on column deribit.private_get_account_summary_response_matching_engine.burst is 'Maximal number of matching engine requests allowed for user in burst mode';
@@ -156,8 +145,7 @@ drop type if exists deribit.private_get_account_summary_response_futures cascade
 
 create type deribit.private_get_account_summary_response_futures as (
     burst bigint,
-    rate bigint,
-    matching_engine deribit.private_get_account_summary_response_matching_engine
+    rate bigint
 );
 
 comment on column deribit.private_get_account_summary_response_futures.burst is 'Maximal number of futures related matching engine requests allowed for user in burst mode';
@@ -166,10 +154,22 @@ comment on column deribit.private_get_account_summary_response_futures.rate is '
 drop type if exists deribit.private_get_account_summary_response_limits cascade;
 
 create type deribit.private_get_account_summary_response_limits as (
-    futures deribit.private_get_account_summary_response_futures
+    futures deribit.private_get_account_summary_response_futures,
+    matching_engine deribit.private_get_account_summary_response_matching_engine,
+    non_matching_engine deribit.private_get_account_summary_response_non_matching_engine,
+    options deribit.private_get_account_summary_response_options,
+    perpetuals deribit.private_get_account_summary_response_perpetuals,
+    type text,
+    initial_margin double precision,
+    options_gamma_map deribit.private_get_account_summary_response_options_gamma_map
 );
 
 comment on column deribit.private_get_account_summary_response_limits.futures is 'Field not included if limits for futures are not set.';
+comment on column deribit.private_get_account_summary_response_limits.options is 'Field not included if limits for options are not set.';
+comment on column deribit.private_get_account_summary_response_limits.perpetuals is 'Field not included if limits for perpetuals are not set.';
+comment on column deribit.private_get_account_summary_response_limits.type is 'Account type (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_limits.initial_margin is 'The account''s initial margin';
+comment on column deribit.private_get_account_summary_response_limits.options_gamma_map is 'Map of options'' gammas per index';
 
 drop type if exists deribit.private_get_account_summary_response_fee cascade;
 
@@ -178,8 +178,7 @@ create type deribit.private_get_account_summary_response_fee as (
     fee_type text,
     instrument_type text,
     maker_fee double precision,
-    taker_fee double precision,
-    limits deribit.private_get_account_summary_response_limits
+    taker_fee double precision
 );
 
 comment on column deribit.private_get_account_summary_response_fee.currency is 'The currency the fee applies to';
@@ -199,7 +198,8 @@ create type deribit.private_get_account_summary_response_result as (
     futures_session_rpl double precision,
     session_upl double precision,
     fee_balance double precision,
-    fees deribit.private_get_account_summary_response_fee[]
+    fees deribit.private_get_account_summary_response_fee[],
+    limits deribit.private_get_account_summary_response_limits
 );
 
 comment on column deribit.private_get_account_summary_response_result.maintenance_margin is 'The maintenance margin.';

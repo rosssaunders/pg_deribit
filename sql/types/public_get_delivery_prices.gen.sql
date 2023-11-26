@@ -15,21 +15,20 @@ drop type if exists deribit.public_get_delivery_prices_response_datum cascade;
 
 create type deribit.public_get_delivery_prices_response_datum as (
     date text,
-    delivery_price double precision,
-    records_total double precision
+    delivery_price double precision
 );
 
 comment on column deribit.public_get_delivery_prices_response_datum.date is 'The event date with year, month and day';
 comment on column deribit.public_get_delivery_prices_response_datum.delivery_price is 'The settlement price for the instrument. Only when state = closed';
-comment on column deribit.public_get_delivery_prices_response_datum.records_total is 'Available delivery prices';
 
 drop type if exists deribit.public_get_delivery_prices_response_result cascade;
 
 create type deribit.public_get_delivery_prices_response_result as (
-    data deribit.public_get_delivery_prices_response_datum[]
+    data deribit.public_get_delivery_prices_response_datum[],
+    records_total double precision
 );
 
-
+comment on column deribit.public_get_delivery_prices_response_result.records_total is 'Available delivery prices';
 
 drop type if exists deribit.public_get_delivery_prices_response cascade;
 

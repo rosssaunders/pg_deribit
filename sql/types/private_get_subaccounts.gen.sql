@@ -21,23 +21,10 @@ create type deribit.private_get_subaccounts_response_eth as (
     equity double precision,
     initial_margin double precision,
     maintenance_margin double precision,
-    margin_balance double precision,
-    proof_id text,
-    proof_id_signature text,
-    receive_notifications boolean,
-    security_keys_assignments text[],
-    security_keys_enabled boolean,
-    system_name text,
-    type text,
-    username text
+    margin_balance double precision
 );
 
-comment on column deribit.private_get_subaccounts_response_eth.proof_id is 'hashed identifier used in the Proof Of Liability for the subaccount. This identifier allows you to find your entries in the Deribit Proof-Of-Reserves files. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
-comment on column deribit.private_get_subaccounts_response_eth.proof_id_signature is 'signature used as a base string for proof_id hash. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
-comment on column deribit.private_get_subaccounts_response_eth.receive_notifications is 'When true - receive all notification emails on the main email';
-comment on column deribit.private_get_subaccounts_response_eth.security_keys_assignments is 'Names of assignments with Security Keys assigned';
-comment on column deribit.private_get_subaccounts_response_eth.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
-comment on column deribit.private_get_subaccounts_response_eth.system_name is 'System generated user nickname';
+
 
 drop type if exists deribit.private_get_subaccounts_response_btc cascade;
 
@@ -49,8 +36,7 @@ create type deribit.private_get_subaccounts_response_btc as (
     equity double precision,
     initial_margin double precision,
     maintenance_margin double precision,
-    margin_balance double precision,
-    eth deribit.private_get_subaccounts_response_eth
+    margin_balance double precision
 );
 
 
@@ -58,10 +44,24 @@ create type deribit.private_get_subaccounts_response_btc as (
 drop type if exists deribit.private_get_subaccounts_response_portfolio cascade;
 
 create type deribit.private_get_subaccounts_response_portfolio as (
-    btc deribit.private_get_subaccounts_response_btc
+    btc deribit.private_get_subaccounts_response_btc,
+    eth deribit.private_get_subaccounts_response_eth,
+    proof_id text,
+    proof_id_signature text,
+    receive_notifications boolean,
+    security_keys_assignments text[],
+    security_keys_enabled boolean,
+    system_name text,
+    type text,
+    username text
 );
 
-
+comment on column deribit.private_get_subaccounts_response_portfolio.proof_id is 'hashed identifier used in the Proof Of Liability for the subaccount. This identifier allows you to find your entries in the Deribit Proof-Of-Reserves files. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
+comment on column deribit.private_get_subaccounts_response_portfolio.proof_id_signature is 'signature used as a base string for proof_id hash. IMPORTANT: Keep it secret to not disclose your entries in the Proof-Of-Reserves.';
+comment on column deribit.private_get_subaccounts_response_portfolio.receive_notifications is 'When true - receive all notification emails on the main email';
+comment on column deribit.private_get_subaccounts_response_portfolio.security_keys_assignments is 'Names of assignments with Security Keys assigned';
+comment on column deribit.private_get_subaccounts_response_portfolio.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
+comment on column deribit.private_get_subaccounts_response_portfolio.system_name is 'System generated user nickname';
 
 drop type if exists deribit.private_get_subaccounts_response_result cascade;
 

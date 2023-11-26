@@ -21,19 +21,10 @@ create type deribit.private_create_subaccount_response_eth as (
     equity double precision,
     initial_margin double precision,
     maintenance_margin double precision,
-    margin_balance double precision,
-    receive_notifications boolean,
-    security_keys_enabled boolean,
-    system_name text,
-    type text,
-    username text
+    margin_balance double precision
 );
 
-comment on column deribit.private_create_subaccount_response_eth.receive_notifications is 'When true - receive all notification emails on the main email';
-comment on column deribit.private_create_subaccount_response_eth.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
-comment on column deribit.private_create_subaccount_response_eth.system_name is 'System generated user nickname';
-comment on column deribit.private_create_subaccount_response_eth.type is 'Account type';
-comment on column deribit.private_create_subaccount_response_eth.username is 'Account name (given by user)';
+
 
 drop type if exists deribit.private_create_subaccount_response_btc cascade;
 
@@ -45,8 +36,7 @@ create type deribit.private_create_subaccount_response_btc as (
     equity double precision,
     initial_margin double precision,
     maintenance_margin double precision,
-    margin_balance double precision,
-    eth deribit.private_create_subaccount_response_eth
+    margin_balance double precision
 );
 
 
@@ -54,10 +44,20 @@ create type deribit.private_create_subaccount_response_btc as (
 drop type if exists deribit.private_create_subaccount_response_portfolio cascade;
 
 create type deribit.private_create_subaccount_response_portfolio as (
-    btc deribit.private_create_subaccount_response_btc
+    btc deribit.private_create_subaccount_response_btc,
+    eth deribit.private_create_subaccount_response_eth,
+    receive_notifications boolean,
+    security_keys_enabled boolean,
+    system_name text,
+    type text,
+    username text
 );
 
-
+comment on column deribit.private_create_subaccount_response_portfolio.receive_notifications is 'When true - receive all notification emails on the main email';
+comment on column deribit.private_create_subaccount_response_portfolio.security_keys_enabled is 'Whether the Security Keys authentication is enabled';
+comment on column deribit.private_create_subaccount_response_portfolio.system_name is 'System generated user nickname';
+comment on column deribit.private_create_subaccount_response_portfolio.type is 'Account type';
+comment on column deribit.private_create_subaccount_response_portfolio.username is 'Account name (given by user)';
 
 drop type if exists deribit.private_create_subaccount_response_result cascade;
 

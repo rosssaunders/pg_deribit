@@ -46,7 +46,8 @@ as $$
     )
     select
         (b).currency::text,
-        (b).new_state::deribit.private_change_margin_model_response_new_state
+        (b).new_state::deribit.private_change_margin_model_response_new_state,
+        (b).old_state::deribit.private_change_margin_model_response_old_state
     from (
         select (unnest(r.data)) b
         from result r(data)

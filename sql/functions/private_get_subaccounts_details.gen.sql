@@ -43,7 +43,9 @@ as $$
         from http_response
     )
     select
-        (b).open_orders::deribit.private_get_subaccounts_details_response_open_order[]
+        (b).open_orders::deribit.private_get_subaccounts_details_response_open_order[],
+        (b).positions::deribit.private_get_subaccounts_details_response_position[],
+        (b).uid::bigint
     from (
         select (unnest(r.data)) b
         from result r(data)

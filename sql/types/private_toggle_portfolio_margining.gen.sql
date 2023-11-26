@@ -28,24 +28,24 @@ drop type if exists deribit.private_toggle_portfolio_margining_response_new_stat
 create type deribit.private_toggle_portfolio_margining_response_new_state as (
     available_balance double precision,
     initial_margin_rate double precision,
-    maintenance_margin_rate double precision,
-    old_state deribit.private_toggle_portfolio_margining_response_old_state
+    maintenance_margin_rate double precision
 );
 
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.available_balance is 'Available balance after change';
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.initial_margin_rate is 'Initial margin rate after change';
 comment on column deribit.private_toggle_portfolio_margining_response_new_state.maintenance_margin_rate is 'Maintenance margin rate after change';
-comment on column deribit.private_toggle_portfolio_margining_response_new_state.old_state is 'Represents portfolio state before change';
 
 drop type if exists deribit.private_toggle_portfolio_margining_response_result cascade;
 
 create type deribit.private_toggle_portfolio_margining_response_result as (
     currency text,
-    new_state deribit.private_toggle_portfolio_margining_response_new_state
+    new_state deribit.private_toggle_portfolio_margining_response_new_state,
+    old_state deribit.private_toggle_portfolio_margining_response_old_state
 );
 
 comment on column deribit.private_toggle_portfolio_margining_response_result.currency is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_toggle_portfolio_margining_response_result.new_state is 'Represents portfolio state after change';
+comment on column deribit.private_toggle_portfolio_margining_response_result.old_state is 'Represents portfolio state before change';
 
 drop type if exists deribit.private_toggle_portfolio_margining_response cascade;
 
