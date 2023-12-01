@@ -14,10 +14,8 @@ from bs4 import BeautifulSoup
 from codegen.postgres.exporter import Exporter
 import requests
 
-p = inflect.engine()
 
-
-deribit_local_url = "codegen/deribit/deribit.html"
+deribit_local_url = "deribit.html"
 schema = 'deribit'
 
 
@@ -65,7 +63,7 @@ def main():
     my_json = json.dumps(functions_dict, indent=4, sort_keys=True)
 
     # Now you can save this JSON string to a file
-    with open('codegen/deribit/deribit.html.json', 'w') as json_file:
+    with open('deribit.json', 'w') as json_file:
         json_file.write(my_json)
 
     # now codegen the wrapper functions

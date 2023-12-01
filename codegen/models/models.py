@@ -1,30 +1,40 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
+from enum import Enum
+
+
+class TypeName(Enum):
+    string = "string"
+    double = "float"
+    decimal = "decimal"
+    integer = "integer"
+    boolean = "boolean"
+    object = "object"
 
 
 @dataclass
 class Enum:
-    name: str
+    type_name: str
     items: List[str]
 
     def to_dict(self):
         return {
-            'name': self.name,
+            'name': self.type_name,
             'items': self.items
         }
 
 
 @dataclass
 class FieldType:
-    name: str
+    type_name: TypeName
     is_enum: bool = False
     is_class: bool = False
     is_array: bool = False
 
     def to_dict(self):
         return {
-            'name': self.name,
+            'type_name': self.type_name,
             'is_enum': self.is_enum,
             'is_class': self.is_class,
             'is_array': self.is_array
@@ -35,14 +45,14 @@ class FieldType:
 class Field:
     name: str
     type: FieldType
-    comment: str = ""
+    documentation: str = ""
     required: bool = False
 
     def to_dict(self):
         return {
             'name': self.name,
             'type': self.type.to_dict(),
-            'comment': self.comment,
+            'comment': self.documentation,
             'required': self.required
         }
 
@@ -51,12 +61,18 @@ class Field:
 class Type:
     name: str
     fields: List[Field]
+
+    #  this is here as we don't attempt to dedup enums. each type has its own enums if if they are duplicated.
     enums: List[Enum]
+
     is_array: bool = False
     is_primitive: bool = False
+
     # If the field is an array of arrays and not an array of objects.
     # If so we need to decompose it differently.
     is_nested_array: bool = False
+
+    # So we can keep track of which parent type will use this type as a field.
     parent: Type = None
 
     def to_dict(self):
@@ -74,13 +90,13 @@ class Type:
 class Parameter:
     name: str
     type: Type
-    comment: str = ""
+    documentation: str = ""
 
     def to_dict(self):
         return {
             'name': self.name,
             'type': self.type.to_dict(),
-            'comment': self.comment
+            'documentation': self.documentation
         }
 
 

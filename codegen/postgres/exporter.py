@@ -23,7 +23,7 @@ class Exporter:
         pass
 
     def sort_functions(self, functions: [Function]):
-        return sorted(functions, key=lambda f: f.endpoint.name)
+        return sorted(functions, key=lambda f: f.endpoint.type_name)
 
     def all(self, functions: [Function]):
         self.setup()

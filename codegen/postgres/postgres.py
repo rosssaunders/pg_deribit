@@ -7,43 +7,43 @@ from codegen.postgres.keywords import escape_postgres_keyword
 def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) -> str:
     if field_type.is_array:
         nested_array = False
-        if field_type.name == 'float[]':
+        if field_type.type_name == 'float[]':
             return f"double precision[][]"
 
         data_type = convert_type_postgres(
             schema,
             parent_type,
-            FieldType(name=field_type.name, is_array=False, is_class=field_type.is_class, is_enum=field_type.is_enum)
+            FieldType(type_name=field_type.type_name, is_array=False, is_class=field_type.is_class, is_enum=field_type.is_enum)
         )
         return f"{data_type}[]"
     elif field_type.is_enum:
-        return f"{schema}.{parent_type}_{field_type.name}"
+        return f"{schema}.{parent_type}_{field_type.type_name}"
     elif field_type.is_class:
-        return f"{schema}.{field_type.name}"
-    elif field_type.name == 'number or string':
+        return f"{schema}.{field_type.type_name}"
+    elif field_type.type_name == 'number or string':
         return 'text'
-    elif field_type.name == 'string':
+    elif field_type.type_name == 'string':
         return 'text'
-    elif field_type.name == 'text':
+    elif field_type.type_name == 'text':
         return 'text'
-    elif field_type.name == 'float[]':
+    elif field_type.type_name == 'float[]':
         return 'double precision[]'
-    elif field_type.name == 'float':
+    elif field_type.type_name == 'float':
         return 'double precision'
-    elif field_type.name == 'number':
+    elif field_type.type_name == 'number':
         return 'double precision'
-    elif field_type.name == 'decimal':
+    elif field_type.type_name == 'decimal':
         return 'numeric'
-    elif field_type.name == 'integer':
+    elif field_type.type_name == 'integer':
         return 'bigint'
-    elif field_type.name == 'boolean':
+    elif field_type.type_name == 'boolean':
         return 'boolean'
-    elif field_type.name == 'object':
+    elif field_type.type_name == 'object':
         return 'jsonb'
-    elif field_type.name == 'timestamp':
+    elif field_type.type_name == 'timestamp':
         return 'timestamp'
     else:
-        return f"UNKNOWN - {field_type.name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
+        return f"UNKNOWN - {field_type.type_name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
 
 
 def type_to_type(schema: str, type: Type) -> str:
@@ -52,7 +52,7 @@ def type_to_type(schema: str, type: Type) -> str:
     res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type.name, e.type)}' for e in type.fields)
     res += f"\n);\n\n"
 
-    res += '\n'.join(f'comment on column {schema}.{type.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.comment)}\';' for e in type.fields if e.comment != '')
+    res += '\n'.join(f'comment on column {schema}.{type.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type.fields if e.documentation != '')
 
     return res
 
@@ -73,7 +73,7 @@ def invoke_endpoint(schema: str, function: Function) -> str:
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
         res += "\n"
-        res += ',\n'.join(f'    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
+        res += ',\n'.join(f'    {escape_postgres_keyword(f.type_name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
         res += "\n"
     res += f""")"""
 
@@ -82,7 +82,7 @@ def invoke_endpoint(schema: str, function: Function) -> str:
     ######################
     if function.response_type.is_array and function.response_type.is_primitive:
         res += f"""
-returns setof {convert_type_postgres(schema, function.response_type.name, FieldType(name=function.response_type.name))}
+returns setof {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name))}
 """
 
     elif function.response_type.is_array and not function.response_type.is_primitive:
@@ -91,7 +91,7 @@ returns setof {schema}.{function.response_type.name}"""
 
     elif function.response_type.is_primitive:
         res += f"""
-returns {convert_type_postgres(schema, function.response_type.name, FieldType(name=function.response_type.name))}"""
+returns {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name))}"""
 
     else:
         res += f"""
@@ -153,7 +153,7 @@ as $$"""
     select 
 """
             res += ',\n'.join(
-        f'        (b.x)[{i+1}]::{convert_type_postgres("deribit", "", e.type)} as {escape_postgres_keyword(e.name)}' for i, e in enumerate(function.response_type.fields))
+        f'        (b.x)[{i+1}]::{convert_type_postgres("deribit", "", e.type)} as {escape_postgres_keyword(e.type_name)}' for i, e in enumerate(function.response_type.fields))
             res += """
     from unnested b(x)"""
 

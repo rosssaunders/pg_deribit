@@ -75,7 +75,7 @@ declare"""
     # expected type
     if function.response_type.is_primitive:
         res += f"""
-    _expected {convert_type_postgres(schema, function.response_type.name, FieldType(name=function.response_type.name, is_enum=False, is_class=False, is_array=False))};
+    _expected {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name, is_enum=False, is_class=False, is_array=False))};
     """
     elif function.response_type.is_array:
         res += f"""
