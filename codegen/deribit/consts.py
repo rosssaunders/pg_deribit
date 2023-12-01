@@ -1,4 +1,14 @@
-sections = ['Market data', 'Account management', 'Trading', 'Wallet']
+sections = ['Market data',
+            'Account management',
+            'Trading',
+            'Wallet',
+            'Authentication',
+            'Session management',
+            'Supporting',
+            'Subscription management',
+            'Combo Books'
+
+            ]
 
 
 excluded_urls = {

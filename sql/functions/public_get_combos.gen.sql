@@ -11,23 +11,23 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-drop function if exists deribit.public_get_supported_index_names;
+drop function if exists deribit.public_get_combos;
 
-create or replace function deribit.public_get_supported_index_names(
-    type deribit.public_get_supported_index_names_request_type default null
+create or replace function deribit.public_get_combos(
+    currency deribit.public_get_combos_request_currency
 )
-returns setof text
+returns setof deribit.public_get_combos_response_result
 language sql
 as $$
     
     with request as (
         select row(
-            type
-        )::deribit.public_get_supported_index_names_request as payload
+            currency
+        )::deribit.public_get_combos_request as payload
     )
     , http_response as (
         select deribit.internal_jsonrpc_request(
-            '/public/get_supported_index_names'::deribit.endpoint, 
+            '/public/get_combos'::deribit.endpoint, 
             request.payload, 
             'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
@@ -35,13 +35,18 @@ as $$
     )
     , result as (
         select (jsonb_populate_record(
-                        null::deribit.public_get_supported_index_names_response,
+                        null::deribit.public_get_combos_response,
                         convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
         from http_response
     )
     select
-        a.b
+        (b).creation_timestamp::bigint,
+        (b).id::text,
+        (b).instrument_id::bigint,
+        (b).legs::deribit.public_get_combos_response_leg[],
+        (b).state::text,
+        (b).state_timestamp::bigint
     from (
         select (unnest(r.data)) b
         from result r(data)
@@ -49,4 +54,4 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_supported_index_names is 'Retrieves the identifiers of all supported Price Indexes';
+comment on function deribit.public_get_combos is 'Retrieves information about active combos';

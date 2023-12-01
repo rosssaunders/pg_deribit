@@ -10,7 +10,8 @@ def escape_postgres_keyword(keyword: str) -> str:
         'new', 'not', 'null', 'of', 'off', 'offset', 'old', 'on', 'only', 'or', 'order',
         'placing', 'primary', 'references', 'returning', 'select', 'session_user',
         'some', 'symmetric', 'table', 'then', 'to', 'trailing', 'true', 'union', 'unique',
-        'user', 'using', 'variadic', 'when', 'where', 'window', 'with', 'interval'
+        'user', 'using', 'variadic', 'when', 'where', 'window', 'with', 'interval',
+        # 'timestamp'
     ]
 
     # If the keyword is a reserved keyword, return it wrapped in double quotes

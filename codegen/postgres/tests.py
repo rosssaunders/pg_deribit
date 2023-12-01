@@ -1,4 +1,4 @@
-from codegen.models.models import Function_, FieldType, Field_
+from codegen.models.models import Function, Field, Type_
 from codegen.postgres.keywords import escape_postgres_keyword
 from codegen.postgres.postgres import convert_type_postgres
 
@@ -39,11 +39,11 @@ def default_test_value(field: str) -> str:
     return field_values.get(field, 'UNKNOWN')
 
 
-def default_to_null_value(field: Field_) -> str:
+def default_to_null_value(field: Field) -> str:
     return '' if field.required else ' = null'
 
 
-def test_endpoint(schema: str, function: Function_) -> str:
+def test_endpoint(schema: str, function: Function) -> str:
     res = ""
 
     res += f"""select * 
@@ -63,7 +63,7 @@ from {schema}.{function.name}("""
     return res
 
 
-def test_endpoint_xunit(schema: str, function: Function_) -> str:
+def test_endpoint_xunit(schema: str, function: Function) -> str:
     res = f"""create or replace function {schema}.test_{function.name}()
 returns setof text
 language plpgsql
@@ -75,7 +75,7 @@ declare"""
     # expected type
     if function.response_type.is_primitive:
         res += f"""
-    _expected {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name, is_enum=False, is_class=False, is_array=False))};
+    _expected {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))};
     """
     elif function.response_type.is_array:
         res += f"""
@@ -103,8 +103,7 @@ begin
     if function.endpoint.request_type is not None:
         res += f"""_expected := {schema}.{function.name}(
 """
-        res += ',\n'.join(f'        {escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}' for e in
-                          function.endpoint.request_type.fields)
+        res += ',\n'.join(f'        {escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
         res += f"""
     );"""
 

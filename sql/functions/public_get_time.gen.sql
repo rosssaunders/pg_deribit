@@ -11,33 +11,24 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-drop function if exists deribit.public_get_index_price_names;
+drop function if exists deribit.public_get_time;
 
-create or replace function deribit.public_get_index_price_names()
-returns setof text
+create or replace function deribit.public_get_time()
+returns bigint
 language sql
 as $$
     with http_response as (
         select deribit.internal_jsonrpc_request(
-            '/public/get_index_price_names'::deribit.endpoint, 
+            '/public/get_time'::deribit.endpoint, 
             null::text, 
             'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
     )
-    , result as (
-        select (jsonb_populate_record(
-                        null::deribit.public_get_index_price_names_response,
-                        convert_from((http_response.http_response).body, 'utf-8')::jsonb)
-             ).result
-        from http_response
-    )
-    select
-        a.b
-    from (
-        select (unnest(r.data)) b
-        from result r(data)
-    ) a
-    
+    select (jsonb_populate_record(
+        null::deribit.public_get_time_response, 
+        convert_from((a.http_response).body, 'utf-8')::jsonb)).result
+    from http_response a
+
 $$;
 
-comment on function deribit.public_get_index_price_names is 'Retrieves the identifiers of all supported Price Indexes';
+comment on function deribit.public_get_time is 'Retrieves the current time (in milliseconds). This API endpoint can be used to check the clock skew between your software and Deribit''s systems.';

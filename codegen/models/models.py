@@ -15,26 +15,24 @@ class Enum_:
         }
 
 
-@dataclass
-class FieldType:
-    type_name: str
-    is_enum: bool = False
-    is_class: bool = False
-    is_array: bool = False
-
-    def to_dict(self):
-        return {
-            'type_name': self.type_name,
-            'is_enum': self.is_enum,
-            'is_class': self.is_class,
-            'is_array': self.is_array
-        }
+# @dataclass
+# class FieldType:
+#     type_name: str
+#
+#
+#     def to_dict(self):
+#         return {
+#             'type_name': self.type_name,
+#             'is_enum': self.is_enum,
+#             'is_class': self.is_class,
+#             'is_array': self.is_array
+#         }
 
 
 @dataclass
-class Field_:
+class Field:
     name: str
-    type: FieldType
+    type: Type_
     documentation: str = ""
     required: bool = False
 
@@ -49,21 +47,24 @@ class Field_:
 
 @dataclass
 class Type_:
-    name: str
-    fields: List[Field_]
+    def __init__(self, name: str):
+        self.name = name
+        self.fields: List[Field] = []
 
-    #  this is here as we don't attempt to dedup enums. each type has its own enums if if they are duplicated.
-    enums: List[Enum_]
+        # this is here as we don't attempt to dedup enums. each type has its own enums.
+        self.enums: List[Enum_] = []
 
-    is_array: bool = False
-    is_primitive: bool = False
+        self.is_array: bool = False
+        self.is_primitive: bool = False
+        self.is_enum: bool = False
+        self.is_class: bool = False
 
-    # If the field is an array of arrays and not an array of objects.
-    # If so we need to decompose it differently.
-    is_nested_array: bool = False
+        # If the field is an array of arrays and not an array of objects.
+        # If so we need to decompose it differently.
+        self.is_nested_array: bool = False
 
-    # So we can keep track of which parent type will use this type as a field.
-    parent: Type_ = None
+        # So we can keep track of which parent type will use this type as a field.
+        self.parent: Type_ or None = None
 
     def to_dict(self):
         return {
@@ -111,7 +112,7 @@ class Endpoint:
 
 
 @dataclass
-class Function_:
+class Function:
     name: str
     endpoint: Endpoint
     comment: str
@@ -122,5 +123,5 @@ class Function_:
             'name': self.name,
             'endpoint': self.endpoint.to_dict(),
             'comment': self.comment,
-            'response_type': self.response_type.to_dict()
+            'response_type': self.response_type.to_dict() if self.response_type is not None else None,
         }

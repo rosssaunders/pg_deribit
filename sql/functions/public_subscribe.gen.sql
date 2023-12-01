@@ -11,10 +11,10 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-drop function if exists deribit.public_get_supported_index_names;
+drop function if exists deribit.public_subscribe;
 
-create or replace function deribit.public_get_supported_index_names(
-    type deribit.public_get_supported_index_names_request_type default null
+create or replace function deribit.public_subscribe(
+    channels text[]
 )
 returns setof text
 language sql
@@ -22,12 +22,12 @@ as $$
     
     with request as (
         select row(
-            type
-        )::deribit.public_get_supported_index_names_request as payload
+            channels
+        )::deribit.public_subscribe_request as payload
     )
     , http_response as (
         select deribit.internal_jsonrpc_request(
-            '/public/get_supported_index_names'::deribit.endpoint, 
+            '/public/subscribe'::deribit.endpoint, 
             request.payload, 
             'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
@@ -35,7 +35,7 @@ as $$
     )
     , result as (
         select (jsonb_populate_record(
-                        null::deribit.public_get_supported_index_names_response,
+                        null::deribit.public_subscribe_response,
                         convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
         from http_response
@@ -49,4 +49,4 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_supported_index_names is 'Retrieves the identifiers of all supported Price Indexes';
+comment on function deribit.public_subscribe is 'Subscribe to one or more channels.';

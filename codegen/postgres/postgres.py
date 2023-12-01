@@ -1,73 +1,66 @@
 # converts from the documented type to the postgres type
-from codegen.models.models import Field_, FieldType, Function_, Type_
+from codegen.models.models import Field, Function, Type_
 from codegen.postgres.documentation import escape_comment, required_to_string
 from codegen.postgres.keywords import escape_postgres_keyword
 
 
-def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) -> str:
+def convert_type_postgres(schema: str, parent_type: str, field_type: Type_) -> str:
+    type_name = field_type.name
+    type_dict = {
+        'number or string': 'text',
+        'string': 'text',
+        'text': 'text',
+        'float': 'double precision',
+        'number': 'double precision',
+        'decimal': 'numeric',
+        'integer': 'bigint',
+        'boolean': 'boolean',
+        'object': 'jsonb',
+        'timestamp': 'timestamp'
+    }
+
     if field_type.is_array:
-        if field_type.type_name == 'float[]':
-            return f"double precision[][]"
-
-        data_type = convert_type_postgres(
-            schema,
-            parent_type,
-            FieldType(type_name=field_type.type_name, is_array=False, is_class=field_type.is_class, is_enum=field_type.is_enum)
-        )
-        return f"{data_type}[]"
+        if type_name == 'float[]':
+            return 'double precision[][]'
+        else:
+            t = Type_(type_name)
+            t.is_class = field_type.is_class
+            t.is_enum = field_type.is_enum
+            data_type = convert_type_postgres(schema, parent_type, t)
+            return f"{data_type}[]"
     elif field_type.is_enum:
-        return f"{schema}.{parent_type}_{field_type.type_name}"
+        return f"{schema}.{parent_type}_{type_name}"
     elif field_type.is_class:
-        return f"{schema}.{field_type.type_name}"
-    elif field_type.type_name == 'number or string':
-        return 'text'
-    elif field_type.type_name == 'string':
-        return 'text'
-    elif field_type.type_name == 'text':
-        return 'text'
-    elif field_type.type_name == 'float[]':
-        return 'double precision[]'
-    elif field_type.type_name == 'float':
-        return 'double precision'
-    elif field_type.type_name == 'number':
-        return 'double precision'
-    elif field_type.type_name == 'decimal':
-        return 'numeric'
-    elif field_type.type_name == 'integer':
-        return 'bigint'
-    elif field_type.type_name == 'boolean':
-        return 'boolean'
-    elif field_type.type_name == 'object':
-        return 'jsonb'
-    elif field_type.type_name == 'timestamp':
-        return 'timestamp'
+        return f"{schema}.{type_name}"
+    elif type_name in type_dict:
+        return type_dict[type_name]
     else:
-        return f"UNKNOWN - {field_type.type_name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
+        return f"UNKNOWN - {type_name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
 
 
-def type_to_type(schema: str, type: Type_) -> str:
-    res = f"drop type if exists {schema}.{type.name} cascade;\n\n"
-    res += f"create type {schema}.{type.name} as (\n"
-    res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type.name, e.type)}' for e in type.fields)
+def type_to_type(schema: str, type_: Type_) -> str:
+    res = f"drop type if exists {schema}.{type_.name} cascade;\n\n"
+    res += f"create type {schema}.{type_.name} as (\n"
+    res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type_.name, e.type)}' for e in type_.fields)
     res += f"\n);\n\n"
 
-    res += '\n'.join(f'comment on column {schema}.{type.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type.fields if e.documentation != '')
+    res += '\n'.join(f'comment on column {schema}.{type_.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type_.fields if e.documentation != '')
 
     return res
 
 
-def default_to_null(field: Field_) -> str:
+def default_to_null(field: Field) -> str:
     if field.required:
         return ''
     else:
         return ' default null'
 
 
-def sort_fields_by_required(fields: [Field_]) -> [Field_]:
+def sort_fields_by_required(fields: [Field]) -> [Field]:
     return sorted(fields, key=lambda e: e.required, reverse=True)
 
 
-def invoke_endpoint(schema: str, function: Function_) -> str:
+def invoke_endpoint(schema: str, function: Function) -> str:
     res = f"""drop function if exists {schema}.{function.name};\n\n"""
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
@@ -79,10 +72,13 @@ def invoke_endpoint(schema: str, function: Function_) -> str:
     ######################
     # start return type
     ######################
-    if function.response_type.is_array and function.response_type.is_primitive:
+    if function.response_type is None:
         res += f"""
-returns setof {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name))}
-"""
+returns void"""
+
+    elif function.response_type.is_array and function.response_type.is_primitive:
+        res += f"""
+returns setof {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))}"""
 
     elif function.response_type.is_array and not function.response_type.is_primitive:
         res += f"""
@@ -90,7 +86,7 @@ returns setof {schema}.{function.response_type.name}"""
 
     elif function.response_type.is_primitive:
         res += f"""
-returns {convert_type_postgres(schema, function.response_type.name, FieldType(type_name=function.response_type.name))}"""
+returns {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))}"""
 
     else:
         res += f"""
@@ -134,7 +130,11 @@ as $$"""
     )
 """
 
-    if function.response_type.is_array:
+    if function.response_type is None:
+        res += f"""
+            select null::void as result
+        """
+    elif function.response_type.is_array:
         res += f"""    , result as (
         select (jsonb_populate_record(
                         null::{schema}.{function.endpoint.response_type.name},

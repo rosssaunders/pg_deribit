@@ -1,6 +1,6 @@
 import os
 
-from codegen.models.models import Function_
+from codegen.models.models import Function
 from codegen.postgres.enum import enum_to_type
 from codegen.postgres.header import header
 from codegen.postgres.postgres import invoke_endpoint, type_to_type
@@ -22,29 +22,32 @@ class Exporter:
             pass
         pass
 
-    def sort_functions(self, functions: [Function_]):
+    @staticmethod
+    def sort_functions(functions: [Function]):
         return sorted(functions, key=lambda f: f.endpoint.name)
 
-    def all(self, functions: [Function_]):
+    def all(self, functions: [Function]):
         self.setup()
 
-        for function in self.sort_functions(functions):
+        sorted_endpoints = self.sort_functions(functions)
+
+        for function in sorted_endpoints:
             self.export(function)
 
         # don't treat these as code gens
         with open(os.path.join(self.script_dir, f"../../sql/types/endpoints.sql"), 'w') as file:
             file.write(f"drop type if exists deribit.endpoint cascade;\n\n")
             file.write(f"create type deribit.endpoint as enum (\n")
-            file.write(f',\n'.join(f"    '{function.endpoint.path}'" for function in functions))
+            file.write(f',\n'.join(f"    '{function.endpoint.path}'" for function in sorted_endpoints))
             file.write(f"\n);\n")
 
         # don't treat these as code gens
         with open(os.path.join(self.script_dir, f"../../sql/static/endpoints.sql"), 'w') as file:
             file.write(f"""insert into deribit.internal_endpoint_rate_limit (key)\nvalues\n""")
-            file.write(f',\n'.join(f"('{function.endpoint.path}')" for function in functions))
+            file.write(f',\n'.join(f"('{function.endpoint.path}')" for function in sorted_endpoints))
             file.write(';\n')
 
-    def export(self, function: Function_):
+    def export(self, function: Function):
         script_dir = os.path.dirname(__file__)
 
         with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.gen.sql"), 'w') as file:

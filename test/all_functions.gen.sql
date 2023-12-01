@@ -69,6 +69,10 @@ from deribit.private_close_position(
     type := market
 );
 select * 
+from deribit.private_create_combo(
+    trades := UNKNOWN
+);
+select * 
 from deribit.private_create_deposit_address(
     currency := 'BTC'
 );
@@ -78,6 +82,8 @@ select *
 from deribit.private_disable_api_key(
     id := 1
 );
+select * 
+from deribit.private_disable_cancel_on_disconnect();
 select * 
 from deribit.private_edit(
     order_id := 19025003696,
@@ -100,6 +106,8 @@ from deribit.private_enable_api_key(
     id := 1
 );
 select * 
+from deribit.private_enable_cancel_on_disconnect();
+select * 
 from deribit.private_get_access_log();
 select * 
 from deribit.private_get_account_summary(
@@ -107,6 +115,8 @@ from deribit.private_get_account_summary(
 );
 select * 
 from deribit.private_get_affiliate_program_info();
+select * 
+from deribit.private_get_cancel_on_disconnect();
 select * 
 from deribit.private_get_current_deposit_address(
     currency := 'BTC'
@@ -224,6 +234,8 @@ from deribit.private_get_withdrawals(
 select * 
 from deribit.private_list_api_keys();
 select * 
+from deribit.private_logout();
+select * 
 from deribit.private_remove_api_key(
     id := 1
 );
@@ -285,6 +297,10 @@ from deribit.private_submit_transfer_to_user(
     destination := 1
 );
 select * 
+from deribit.private_subscribe(
+    channels := UNKNOWN
+);
+select * 
 from deribit.private_toggle_notifications_from_subaccount(
     sid := 1,
     state := false
@@ -299,10 +315,37 @@ from deribit.private_toggle_subaccount_login(
     state := false
 );
 select * 
+from deribit.private_unsubscribe(
+    channels := UNKNOWN
+);
+select * 
+from deribit.private_unsubscribe_all();
+select * 
 from deribit.private_withdraw(
     currency := 'BTC',
     address := '123456',
     amount := 0.1::numeric
+);
+select * 
+from deribit.public_auth(
+    grant_type := UNKNOWN,
+    client_id := UNKNOWN,
+    client_secret := UNKNOWN,
+    refresh_token := UNKNOWN,
+    timestamp := UNKNOWN,
+    signature := UNKNOWN
+);
+select * 
+from deribit.public_disable_heartbeat();
+select * 
+from deribit.public_exchange_token(
+    refresh_token := UNKNOWN,
+    subject_id := UNKNOWN
+);
+select * 
+from deribit.public_fork_token(
+    refresh_token := UNKNOWN,
+    session_name := UNKNOWN
 );
 select * 
 from deribit.public_get_announcements();
@@ -313,6 +356,18 @@ from deribit.public_get_book_summary_by_currency(
 select * 
 from deribit.public_get_book_summary_by_instrument(
     instrument_name := 'BTC-PERPETUAL'
+);
+select * 
+from deribit.public_get_combo_details(
+    combo_id := UNKNOWN
+);
+select * 
+from deribit.public_get_combo_ids(
+    currency := 'BTC'
+);
+select * 
+from deribit.public_get_combos(
+    currency := 'BTC'
 );
 select * 
 from deribit.public_get_contract_size(
@@ -407,6 +462,8 @@ from deribit.public_get_rfqs(
 select * 
 from deribit.public_get_supported_index_names();
 select * 
+from deribit.public_get_time();
+select * 
 from deribit.public_get_trade_volumes();
 select * 
 from deribit.public_get_tradingview_chart_data(
@@ -423,6 +480,29 @@ from deribit.public_get_volatility_index_data(
     resolution := '1D'
 );
 select * 
+from deribit.public_hello(
+    client_name := UNKNOWN,
+    client_version := UNKNOWN
+);
+select * 
+from deribit.public_set_heartbeat(
+    "interval" := 1
+);
+select * 
+from deribit.public_status();
+select * 
+from deribit.public_subscribe(
+    channels := UNKNOWN
+);
+select * 
+from deribit.public_test();
+select * 
 from deribit.public_ticker(
     instrument_name := 'BTC-PERPETUAL'
 );
+select * 
+from deribit.public_unsubscribe(
+    channels := UNKNOWN
+);
+select * 
+from deribit.public_unsubscribe_all();

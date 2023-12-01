@@ -19,7 +19,6 @@ create or replace function deribit.public_get_mark_price_history(
     end_timestamp bigint
 )
 returns setof text
-
 language sql
 as $$
     

@@ -11,10 +11,11 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-drop function if exists deribit.public_get_supported_index_names;
+drop function if exists deribit.public_get_combo_ids;
 
-create or replace function deribit.public_get_supported_index_names(
-    type deribit.public_get_supported_index_names_request_type default null
+create or replace function deribit.public_get_combo_ids(
+    currency deribit.public_get_combo_ids_request_currency,
+    state deribit.public_get_combo_ids_request_state default null
 )
 returns setof text
 language sql
@@ -22,12 +23,13 @@ as $$
     
     with request as (
         select row(
-            type
-        )::deribit.public_get_supported_index_names_request as payload
+            currency,
+            state
+        )::deribit.public_get_combo_ids_request as payload
     )
     , http_response as (
         select deribit.internal_jsonrpc_request(
-            '/public/get_supported_index_names'::deribit.endpoint, 
+            '/public/get_combo_ids'::deribit.endpoint, 
             request.payload, 
             'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
@@ -35,7 +37,7 @@ as $$
     )
     , result as (
         select (jsonb_populate_record(
-                        null::deribit.public_get_supported_index_names_response,
+                        null::deribit.public_get_combo_ids_response,
                         convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
         from http_response
@@ -49,4 +51,4 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_supported_index_names is 'Retrieves the identifiers of all supported Price Indexes';
+comment on function deribit.public_get_combo_ids is 'Retrieves available combos. This method can be used to get the list of all combos, or only the list of combos in the given state.';
