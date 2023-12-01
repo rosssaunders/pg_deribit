@@ -1,4 +1,4 @@
-def escape_postgres_keyword(keyword) -> str:
+def escape_postgres_keyword(keyword: str) -> str:
     # List of PostgreSQL reserved keywords
     reserved_keywords = [
         'all', 'analyse', 'analyze', 'and', 'any', 'array', 'as', 'asc', 'asymmetric',

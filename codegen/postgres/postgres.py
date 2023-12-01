@@ -73,7 +73,7 @@ def invoke_endpoint(schema: str, function: Function) -> str:
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
         res += "\n"
-        res += ',\n'.join(f'    {escape_postgres_keyword(f.type_name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
+        res += ',\n'.join(f'    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
         res += "\n"
     res += f""")"""
 
@@ -116,8 +116,8 @@ as $$"""
         )::{schema}.{function.endpoint.request_type.name} as payload
     )
     , http_response as (
-        select deribit.internal_jsonrpc_request(
-            '{function.endpoint.path}'::deribit.endpoint, 
+        select {schema}.internal_jsonrpc_request(
+            '{function.endpoint.path}'::{schema}.endpoint, 
             request.payload, 
             '{schema}.{function.endpoint.rate_limiter}'::name
         ) as http_response
@@ -127,8 +127,8 @@ as $$"""
     else:
         res += f"""
     with http_response as (
-        select deribit.internal_jsonrpc_request(
-            '{function.endpoint.path}'::deribit.endpoint, 
+        select {schema}.internal_jsonrpc_request(
+            '{function.endpoint.path}'::{schema}.endpoint, 
             null::text, 
             '{schema}.{function.endpoint.rate_limiter}'::name
         ) as http_response
@@ -147,13 +147,13 @@ as $$"""
         if function.response_type.is_nested_array:
             res += f"""
     , unnested as (
-        select deribit.unnest_2d_1d(x.x)
+        select {schema}.unnest_2d_1d(x.x)
         from result x(x)
     )
     select 
 """
             res += ',\n'.join(
-        f'        (b.x)[{i+1}]::{convert_type_postgres("deribit", "", e.type)} as {escape_postgres_keyword(e.type_name)}' for i, e in enumerate(function.response_type.fields))
+        f'        (b.x)[{i+1}]::{convert_type_postgres(schema, "", e.type)} as {escape_postgres_keyword(e.name)}' for i, e in enumerate(function.response_type.fields))
             res += """
     from unnested b(x)"""
 
@@ -164,7 +164,7 @@ as $$"""
             if len(function.response_type.fields) == 0:
                 res += """        a.b"""
             else:
-                res += ',\n'.join(f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres("deribit", "", e.type)}' for e in function.response_type.fields)
+                res += ',\n'.join(f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres(schema, "", e.type)}' for e in function.response_type.fields)
             res += f"""
     from (
         select (unnest(r.data)) b

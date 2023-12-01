@@ -1,7 +1,6 @@
 import json
+import sys
 import warnings
-
-import inflect
 
 from codegen.deribit.consts import sections
 from codegen.deribit.extract import extract_function_from_section
@@ -22,26 +21,28 @@ schema = 'deribit'
 def download_spec():
     url = "https://docs.deribit.com/"
     response = requests.get(url)
-    with open(deribit_local_url, 'w') as file:
+    with open(deribit_local_url, 'w', encoding="utf8") as file:
         file.write(response.text)
 
 
 def main():
+    os.chdir(sys.path[0])
+
     if not os.path.isfile(deribit_local_url):
         download_spec()
 
-    with open(deribit_local_url, 'r') as file:
-        response_table = file.read()
+    with open(deribit_local_url, 'r', encoding="utf8") as file:
+        documentation = file.read()
 
     exporter = Exporter()
     exporter.set_schema(schema)
 
     exporter.setup()
 
-    soup = BeautifulSoup(response_table, "html.parser")
+    soup = BeautifulSoup(documentation, "html.parser")
 
     # dict which contains all the excluded urls
-    functions = []
+    endpoints = []
 
     for section in sections:
         h1_tag = soup.find('h1', text=section)
@@ -55,19 +56,18 @@ def main():
 
             function = extract_function_from_section(sibling)
             if function is not None:
-                functions.append(function)
+                endpoints.append(function)
 
     # export all functions to json
     # Use json.dumps() to convert the object to a JSON string
-    functions_dict = [function.to_dict() for function in functions]
-    my_json = json.dumps(functions_dict, indent=4, sort_keys=True)
+    endpoint_dict = [endpoint.to_dict() for endpoint in endpoints]
+    my_json = json.dumps(endpoint_dict, indent=4, sort_keys=True)
 
-    # Now you can save this JSON string to a file
     with open('deribit.json', 'w') as json_file:
         json_file.write(my_json)
 
     # now codegen the wrapper functions
-    exporter.all(functions)
+    exporter.all(endpoints)
 
 
 if __name__ == '__main__':

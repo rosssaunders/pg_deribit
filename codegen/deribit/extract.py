@@ -226,12 +226,9 @@ def extract_function_from_section(sibling):
 
     print(f'{file_name}: processing')
 
-    # if file_name != 'public_get_index_price_names':
-    #     continue
-
     parameters_section = sibling.find_next_sibling('h3', text='Parameters')
     request_type = None
-    if parameters_section.nextSibling.nextSibling.type_name == 'p':
+    if parameters_section.nextSibling.nextSibling.text == 'This method takes no parameters':
         print('Method has no parameters')
     else:
         parameters_table = parameters_section.find_next_sibling('table')

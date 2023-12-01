@@ -27,7 +27,7 @@ class Enum:
 
 @dataclass
 class FieldType:
-    type_name: TypeName
+    type_name: str
     is_enum: bool = False
     is_class: bool = False
     is_array: bool = False
