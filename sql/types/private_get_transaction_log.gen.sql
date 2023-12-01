@@ -104,7 +104,8 @@ drop type if exists deribit.private_get_transaction_log_request_currency cascade
 create type deribit.private_get_transaction_log_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_transaction_log_request cascade;

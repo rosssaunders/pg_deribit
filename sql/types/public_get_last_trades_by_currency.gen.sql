@@ -70,7 +70,8 @@ drop type if exists deribit.public_get_last_trades_by_currency_request_currency 
 create type deribit.public_get_last_trades_by_currency_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.public_get_last_trades_by_currency_request_kind cascade;

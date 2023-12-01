@@ -51,6 +51,7 @@ create type deribit.private_cancel_response_result as (
     trigger text,
     web boolean,
     creation_timestamp bigint,
+    is_rebalance boolean,
     average_price double precision,
     advanced text
 );
@@ -92,6 +93,7 @@ comment on column deribit.private_cancel_response_result.auto_replaced is 'Optio
 comment on column deribit.private_cancel_response_result.trigger is 'Trigger type (only for trigger orders). Allowed values: "index_price", "mark_price", "last_price".';
 comment on column deribit.private_cancel_response_result.web is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_cancel_response_result.creation_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_cancel_response_result.is_rebalance is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_cancel_response_result.average_price is 'Average fill price of the order';
 comment on column deribit.private_cancel_response_result.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 

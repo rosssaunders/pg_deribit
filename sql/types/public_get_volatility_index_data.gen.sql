@@ -38,7 +38,8 @@ drop type if exists deribit.public_get_volatility_index_data_request_currency ca
 create type deribit.public_get_volatility_index_data_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.public_get_volatility_index_data_request_resolution cascade;

@@ -1,4 +1,4 @@
-from codegen.models.models import Function, FieldType, Field
+from codegen.models.models import Function_, FieldType, Field_
 from codegen.postgres.keywords import escape_postgres_keyword
 from codegen.postgres.postgres import convert_type_postgres
 
@@ -23,7 +23,7 @@ def default_test_value(field: str) -> str:
         'announcement_id': "'1'",
         'sid': '1',
         'email': ""'test@email.com'"",
-        'max_scope': '',
+        'max_scope': '',  # TODO
         'subaccount_id': '1',
         'mode': '', # TODO
         'extended_to_subaccounts': '',
@@ -34,16 +34,16 @@ def default_test_value(field: str) -> str:
         '"interval"': '1',
         'frozen_time': '1',
         'destination': '1',
-        'address': "'123456'"
+        'address': "'123456'",
     }
     return field_values.get(field, 'UNKNOWN')
 
 
-def default_to_null_value(field: Field) -> str:
+def default_to_null_value(field: Field_) -> str:
     return '' if field.required else ' = null'
 
 
-def test_endpoint(schema: str, function: Function) -> str:
+def test_endpoint(schema: str, function: Function_) -> str:
     res = ""
 
     res += f"""select * 
@@ -63,7 +63,7 @@ from {schema}.{function.name}("""
     return res
 
 
-def test_endpoint_xunit(schema: str, function: Function) -> str:
+def test_endpoint_xunit(schema: str, function: Function_) -> str:
     res = f"""create or replace function {schema}.test_{function.name}()
 returns setof text
 language plpgsql

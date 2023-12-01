@@ -1,20 +1,10 @@
 from __future__ import annotations
 from dataclasses import dataclass
 from typing import List
-from enum import Enum
-
-
-class TypeName(Enum):
-    string = "string"
-    double = "float"
-    decimal = "decimal"
-    integer = "integer"
-    boolean = "boolean"
-    object = "object"
 
 
 @dataclass
-class Enum:
+class Enum_:
     type_name: str
     items: List[str]
 
@@ -42,7 +32,7 @@ class FieldType:
 
 
 @dataclass
-class Field:
+class Field_:
     name: str
     type: FieldType
     documentation: str = ""
@@ -58,12 +48,12 @@ class Field:
 
 
 @dataclass
-class Type:
+class Type_:
     name: str
-    fields: List[Field]
+    fields: List[Field_]
 
     #  this is here as we don't attempt to dedup enums. each type has its own enums if if they are duplicated.
-    enums: List[Enum]
+    enums: List[Enum_]
 
     is_array: bool = False
     is_primitive: bool = False
@@ -73,7 +63,7 @@ class Type:
     is_nested_array: bool = False
 
     # So we can keep track of which parent type will use this type as a field.
-    parent: Type = None
+    parent: Type_ = None
 
     def to_dict(self):
         return {
@@ -89,7 +79,7 @@ class Type:
 @dataclass
 class Parameter:
     name: str
-    type: Type
+    type: Type_
     documentation: str = ""
 
     def to_dict(self):
@@ -104,9 +94,9 @@ class Parameter:
 class Endpoint:
     name: str
     path: str
-    request_type: Type  # The type of the request
-    response_type: Type  # The main type to deserialize to
-    response_types: List[Type]  # All the types
+    request_type: Type_  # The type of the request
+    response_type: Type_  # The main type to deserialize to
+    response_types: List[Type_]  # All the types
     rate_limiter: str  # the name of the function to call to rate limit
 
     def to_dict(self):
@@ -121,11 +111,11 @@ class Endpoint:
 
 
 @dataclass
-class Function:
+class Function_:
     name: str
     endpoint: Endpoint
     comment: str
-    response_type: Type
+    response_type: Type_
 
     def to_dict(self):
         return {

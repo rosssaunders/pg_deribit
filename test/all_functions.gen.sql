@@ -84,6 +84,11 @@ from deribit.private_edit(
     amount := 0.1::numeric
 );
 select * 
+from deribit.private_edit_api_key(
+    id := 1,
+    max_scope := 
+);
+select * 
 from deribit.private_edit_by_label(
     instrument_name := 'BTC-PERPETUAL',
     amount := 0.1::numeric

@@ -80,6 +80,7 @@ as $$
         (b).trigger::text,
         (b).web::boolean,
         (b).creation_timestamp::bigint,
+        (b).is_rebalance::boolean,
         (b).average_price::double precision,
         (b).advanced::text
     from (

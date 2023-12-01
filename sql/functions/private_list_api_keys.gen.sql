@@ -38,6 +38,7 @@ as $$
         (b).enabled::boolean,
         (b).enabled_features::text[],
         (b).id::bigint,
+        (b).ip_whitelist::text[],
         (b).max_scope::text,
         (b).name::text,
         (b).public_key::text,

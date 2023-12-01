@@ -55,7 +55,8 @@ drop type if exists deribit.private_cancel_withdrawal_request_currency cascade;
 create type deribit.private_cancel_withdrawal_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_cancel_withdrawal_request cascade;

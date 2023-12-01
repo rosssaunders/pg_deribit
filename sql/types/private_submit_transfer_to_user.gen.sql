@@ -51,7 +51,8 @@ drop type if exists deribit.private_submit_transfer_to_user_request_currency cas
 create type deribit.private_submit_transfer_to_user_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_submit_transfer_to_user_request cascade;

@@ -63,7 +63,6 @@ drop type if exists deribit.private_change_margin_model_request_margin_model cas
 create type deribit.private_change_margin_model_request_margin_model as enum (
     'cross_pm',
     'cross_sm',
-    'legacy_pm',
     'segregated_pm',
     'segregated_sm'
 );

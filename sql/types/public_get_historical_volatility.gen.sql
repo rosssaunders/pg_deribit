@@ -36,7 +36,8 @@ drop type if exists deribit.public_get_historical_volatility_request_currency ca
 create type deribit.public_get_historical_volatility_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.public_get_historical_volatility_request cascade;

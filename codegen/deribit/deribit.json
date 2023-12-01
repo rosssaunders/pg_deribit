@@ -11,17 +11,18 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
-                            "spot"
+                            "spot",
+                            "option",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -1558,6 +1559,17 @@
                             }
                         },
                         {
+                            "comment": "true if the currency is part of the cross collateral pool",
+                            "name": "in_cross_collateral_pool",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Minimum number of block chain confirmations before deposit is accepted.",
                             "name": "min_confirmations",
                             "required": false,
@@ -1689,6 +1701,17 @@
                     }
                 },
                 {
+                    "comment": "true if the currency is part of the cross collateral pool",
+                    "name": "in_cross_collateral_pool",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Minimum number of block chain confirmations before deposit is accepted.",
                     "name": "min_confirmations",
                     "required": false,
@@ -1749,43 +1772,43 @@
                 "enums": [
                     {
                         "items": [
-                            "avax_usd",
-                            "btc_usdc",
+                            "bch_usd",
+                            "doge_usdc",
+                            "dot_usd",
+                            "ada_usd",
+                            "eth_usd",
                             "ltc_usdc",
-                            "uni_usd",
                             "dot_usdc",
-                            "link_usdc",
+                            "link_usd",
+                            "matic_usd",
+                            "bch_usdc",
+                            "ethdvol_usdc",
+                            "algo_usdc",
+                            "avax_usd",
+                            "algo_usd",
+                            "btc_usdc",
+                            "ada_usdc",
                             "uni_usdc",
                             "trx_usd",
-                            "ada_usdc",
-                            "matic_usd",
-                            "usdc_usd",
-                            "trx_usdc",
-                            "algo_usdc",
-                            "near_usd",
                             "eth_usdc",
-                            "ada_usd",
-                            "bch_usd",
-                            "xrp_usd",
-                            "shib_usd",
-                            "sol_usd",
-                            "near_usdc",
-                            "doge_usdc",
                             "btcdvol_usdc",
-                            "eth_usd",
-                            "sol_usdc",
-                            "ethdvol_usdc",
-                            "bch_usdc",
-                            "doge_usd",
-                            "algo_usd",
-                            "shib_usdc",
-                            "matic_usdc",
-                            "btc_usd",
-                            "ltc_usd",
                             "avax_usdc",
-                            "dot_usd",
-                            "xrp_usdc",
-                            "link_usd"
+                            "shib_usdc",
+                            "btc_usd",
+                            "doge_usd",
+                            "sol_usd",
+                            "uni_usd",
+                            "near_usdc",
+                            "xrp_usd",
+                            "sol_usdc",
+                            "near_usd",
+                            "trx_usdc",
+                            "usdc_usd",
+                            "link_usdc",
+                            "ltc_usd",
+                            "shib_usd",
+                            "matic_usdc",
+                            "xrp_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -2434,7 +2457,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -2620,7 +2644,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -2826,43 +2851,43 @@
                 "enums": [
                     {
                         "items": [
-                            "avax_usd",
-                            "btc_usdc",
+                            "bch_usd",
+                            "doge_usdc",
+                            "dot_usd",
+                            "ada_usd",
+                            "eth_usd",
                             "ltc_usdc",
-                            "uni_usd",
                             "dot_usdc",
-                            "link_usdc",
+                            "link_usd",
+                            "matic_usd",
+                            "bch_usdc",
+                            "ethdvol_usdc",
+                            "algo_usdc",
+                            "avax_usd",
+                            "algo_usd",
+                            "btc_usdc",
+                            "ada_usdc",
                             "uni_usdc",
                             "trx_usd",
-                            "ada_usdc",
-                            "matic_usd",
-                            "usdc_usd",
-                            "trx_usdc",
-                            "algo_usdc",
-                            "near_usd",
                             "eth_usdc",
-                            "ada_usd",
-                            "bch_usd",
-                            "xrp_usd",
-                            "shib_usd",
-                            "sol_usd",
-                            "near_usdc",
-                            "doge_usdc",
                             "btcdvol_usdc",
-                            "eth_usd",
-                            "sol_usdc",
-                            "ethdvol_usdc",
-                            "bch_usdc",
-                            "doge_usd",
-                            "algo_usd",
-                            "shib_usdc",
-                            "matic_usdc",
-                            "btc_usd",
-                            "ltc_usd",
                             "avax_usdc",
-                            "dot_usd",
-                            "xrp_usdc",
-                            "link_usd"
+                            "shib_usdc",
+                            "btc_usd",
+                            "doge_usd",
+                            "sol_usd",
+                            "uni_usd",
+                            "near_usdc",
+                            "xrp_usd",
+                            "sol_usdc",
+                            "near_usd",
+                            "trx_usdc",
+                            "usdc_usd",
+                            "link_usdc",
+                            "ltc_usd",
+                            "shib_usd",
+                            "matic_usdc",
+                            "xrp_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -3910,17 +3935,18 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
-                            "spot"
+                            "spot",
+                            "option",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -4709,7 +4735,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
@@ -5503,26 +5530,27 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -5949,26 +5977,27 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -6371,8 +6400,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -6786,8 +6815,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -7324,14 +7353,14 @@
                 "enums": [
                     {
                         "items": [
-                            "1",
-                            "10000",
-                            "50",
-                            "1000",
-                            "20",
                             "5",
+                            "10000",
+                            "100",
                             "10",
-                            "100"
+                            "20",
+                            "1000",
+                            "50",
+                            "1"
                         ],
                         "name": "depth"
                     }
@@ -8204,14 +8233,14 @@
                 "enums": [
                     {
                         "items": [
-                            "1",
-                            "10000",
-                            "50",
-                            "1000",
-                            "20",
                             "5",
+                            "10000",
+                            "100",
                             "10",
-                            "100"
+                            "20",
+                            "1000",
+                            "50",
+                            "1"
                         ],
                         "name": "depth"
                     }
@@ -9086,17 +9115,18 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
-                            "spot"
+                            "spot",
+                            "option",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -9908,18 +9938,18 @@
                 "enums": [
                     {
                         "items": [
-                            "1",
-                            "60",
-                            "15",
-                            "30",
-                            "1D",
-                            "5",
-                            "180",
-                            "720",
-                            "10",
                             "3",
+                            "180",
+                            "5",
+                            "10",
                             "360",
-                            "120"
+                            "1D",
+                            "15",
+                            "1",
+                            "30",
+                            "60",
+                            "120",
+                            "720"
                         ],
                         "name": "resolution"
                     }
@@ -10270,17 +10300,18 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "1",
-                            "60",
                             "1D",
-                            "43200",
-                            "3600"
+                            "3600",
+                            "60",
+                            "1",
+                            "43200"
                         ],
                         "name": "resolution"
                     }
@@ -11810,6 +11841,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -11932,6 +11974,17 @@
                     }
                 },
                 {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
                     "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                     "name": "max_scope",
                     "required": false,
@@ -11992,11 +12045,10 @@
                 "enums": [
                     {
                         "items": [
-                            "segregated_pm",
-                            "cross_sm",
                             "segregated_sm",
+                            "cross_sm",
                             "cross_pm",
-                            "legacy_pm"
+                            "segregated_pm"
                         ],
                         "name": "margin_model"
                     }
@@ -12490,6 +12542,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -12609,6 +12672,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
                     }
                 },
                 {
@@ -13481,6 +13555,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -13603,6 +13688,17 @@
                     }
                 },
                 {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
                     "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                     "name": "max_scope",
                     "required": false,
@@ -13651,6 +13747,436 @@
             "is_nested_array": false,
             "is_primitive": false,
             "name": "private_disable_api_key_response_result"
+        }
+    },
+    {
+        "comment": "Edits existing API key. At least one parameter required. Important notes",
+        "endpoint": {
+            "name": "private_edit_api_key",
+            "path": "/private/edit_api_key",
+            "rate_limiter": "non_matching_engine_request_log_call",
+            "request_type": {
+                "enums": [],
+                "fields": [
+                    {
+                        "comment": "Id of key",
+                        "name": "id",
+                        "required": true,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "integer"
+                        }
+                    },
+                    {
+                        "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
+                        "name": "max_scope",
+                        "required": true,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "string"
+                        }
+                    },
+                    {
+                        "comment": "Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)",
+                        "name": "name",
+                        "required": false,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "string"
+                        }
+                    },
+                    {
+                        "comment": "Enables/disables the API key. true to enable, false to disable",
+                        "name": "enabled",
+                        "required": false,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "boolean"
+                        }
+                    },
+                    {
+                        "comment": "List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key",
+                        "name": "enabled_features",
+                        "required": false,
+                        "type": {
+                            "is_array": true,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "text"
+                        }
+                    },
+                    {
+                        "comment": "Whitelist provided IP address on a selected key",
+                        "name": "ip_whitelist",
+                        "required": false,
+                        "type": {
+                            "is_array": true,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "text"
+                        }
+                    }
+                ],
+                "is_array": false,
+                "is_nested_array": false,
+                "is_primitive": false,
+                "name": "private_edit_api_key_request"
+            },
+            "response_type": {
+                "enums": [],
+                "fields": [
+                    {
+                        "comment": "The id that was sent in the request",
+                        "name": "id",
+                        "required": false,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "integer"
+                        }
+                    },
+                    {
+                        "comment": "The JSON-RPC version (2.0)",
+                        "name": "jsonrpc",
+                        "required": false,
+                        "type": {
+                            "is_array": false,
+                            "is_class": false,
+                            "is_enum": false,
+                            "type_name": "string"
+                        }
+                    },
+                    {
+                        "comment": "",
+                        "name": "result",
+                        "required": false,
+                        "type": {
+                            "is_array": false,
+                            "is_class": true,
+                            "is_enum": false,
+                            "type_name": "private_edit_api_key_response_result"
+                        }
+                    }
+                ],
+                "is_array": false,
+                "is_nested_array": false,
+                "is_primitive": false,
+                "name": "private_edit_api_key_response"
+            },
+            "response_types": [
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "The id that was sent in the request",
+                            "name": "id",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "The JSON-RPC version (2.0)",
+                            "name": "jsonrpc",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "",
+                            "name": "result",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": true,
+                                "is_enum": false,
+                                "type_name": "private_edit_api_key_response_result"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_edit_api_key_response"
+                },
+                {
+                    "enums": [],
+                    "fields": [
+                        {
+                            "comment": "Client identifier used for authentication",
+                            "name": "client_id",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Client secret or MD5 fingerprint of public key used for authentication",
+                            "name": "client_secret",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Informs whether this api key is default (field is deprecated and will be removed in the future)",
+                            "name": "default",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Informs whether api key is enabled and can be used for authentication",
+                            "name": "enabled",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key",
+                            "name": "enabled_features",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "key identifier",
+                            "name": "id",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
+                            "name": "max_scope",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "Api key name that can be displayed in transaction log",
+                            "name": "name",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)",
+                            "name": "public_key",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
+                            "comment": "The timestamp (milliseconds since the Unix epoch)",
+                            "name": "timestamp",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "integer"
+                            }
+                        }
+                    ],
+                    "is_array": false,
+                    "is_nested_array": false,
+                    "is_primitive": false,
+                    "name": "private_edit_api_key_response_result"
+                }
+            ]
+        },
+        "name": "private_edit_api_key",
+        "response_type": {
+            "enums": [],
+            "fields": [
+                {
+                    "comment": "Client identifier used for authentication",
+                    "name": "client_id",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "Client secret or MD5 fingerprint of public key used for authentication",
+                    "name": "client_secret",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "Informs whether this api key is default (field is deprecated and will be removed in the future)",
+                    "name": "default",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
+                    "comment": "Informs whether api key is enabled and can be used for authentication",
+                    "name": "enabled",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
+                    "comment": "List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key",
+                    "name": "enabled_features",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "key identifier",
+                    "name": "id",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
+                    "name": "max_scope",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "Api key name that can be displayed in transaction log",
+                    "name": "name",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)",
+                    "name": "public_key",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
+                    }
+                },
+                {
+                    "comment": "The timestamp (milliseconds since the Unix epoch)",
+                    "name": "timestamp",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "integer"
+                    }
+                }
+            ],
+            "is_array": false,
+            "is_nested_array": false,
+            "is_primitive": false,
+            "name": "private_edit_api_key_response_result"
         }
     },
     {
@@ -13938,6 +14464,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -14057,6 +14594,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
                     }
                 },
                 {
@@ -14420,7 +14968,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -15110,6 +15659,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for users using cross margin). The account's total initial margin in all cross collateral currencies, expressed in USD",
+                            "name": "total_initial_margin_usd",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "number"
+                            }
+                        },
+                        {
                             "comment": "Futures session unrealized profit and Loss",
                             "name": "futures_session_upl",
                             "required": false,
@@ -15143,6 +15703,17 @@
                             }
                         },
                         {
+                            "comment": "When true cross collateral is enabled for user",
+                            "name": "cross_collateral_enabled",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Options summary theta",
                             "name": "options_theta",
                             "required": false,
@@ -15162,6 +15733,17 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "type_name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Name of user's currently enabled margin model",
+                            "name": "margin_model",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
                             }
                         },
                         {
@@ -15231,6 +15813,17 @@
                         {
                             "comment": "The account's balance",
                             "name": "balance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Optional (only for users using cross margin). The account's total equity in all cross collateral currencies, expressed in USD",
+                            "name": "total_equity_usd",
                             "required": false,
                             "type": {
                                 "is_array": false,
@@ -15314,6 +15907,28 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "type_name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Optional (only for users using cross margin). The account's total maintenance margin in all cross collateral currencies, expressed in USD",
+                            "name": "total_maintenance_margin_usd",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Optional (only for users using cross margin). The account's total margin balance in all cross collateral currencies, expressed in USD",
+                            "name": "total_margin_balance_usd",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "number"
                             }
                         },
                         {
@@ -16126,7 +16741,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -16971,17 +17587,18 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
-                            "spot"
+                            "spot",
+                            "option",
+                            "future_combo"
                         ],
                         "name": "kind"
                     }
@@ -18273,7 +18890,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -18845,6 +19463,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -19203,7 +19832,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -20100,6 +20730,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -20219,6 +20860,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
                     }
                 },
                 {
@@ -20699,6 +21351,17 @@
                             }
                         },
                         {
+                            "comment": "List of IP addresses whitelisted for a selected key",
+                            "name": "ip_whitelist",
+                            "required": false,
+                            "type": {
+                                "is_array": true,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "string"
+                            }
+                        },
+                        {
                             "comment": "Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope",
                             "name": "max_scope",
                             "required": false,
@@ -20818,6 +21481,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "List of IP addresses whitelisted for a selected key",
+                    "name": "ip_whitelist",
+                    "required": false,
+                    "type": {
+                        "is_array": true,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "string"
                     }
                 },
                 {
@@ -21261,8 +21935,8 @@
                 "enums": [
                     {
                         "items": [
-                            "cancel_maker",
-                            "reject_taker"
+                            "reject_taker",
+                            "cancel_maker"
                         ],
                         "name": "mode"
                     }
@@ -21985,37 +22659,37 @@
                     {
                         "items": [
                             "take_limit",
+                            "stop_limit",
                             "stop_market",
-                            "trailing_stop",
-                            "limit",
-                            "market",
                             "market_limit",
+                            "limit",
                             "take_market",
-                            "stop_limit"
+                            "market",
+                            "trailing_stop"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
-                            "fill_or_kill",
-                            "good_til_day",
                             "immediate_or_cancel",
-                            "good_til_cancelled"
+                            "good_til_day",
+                            "good_til_cancelled",
+                            "fill_or_kill"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "index_price",
-                            "last_price",
-                            "mark_price"
+                            "mark_price",
+                            "last_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -22730,6 +23404,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -23164,37 +23849,37 @@
                     {
                         "items": [
                             "take_limit",
+                            "stop_limit",
                             "stop_market",
-                            "trailing_stop",
-                            "limit",
-                            "market",
                             "market_limit",
+                            "limit",
                             "take_market",
-                            "stop_limit"
+                            "market",
+                            "trailing_stop"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
-                            "fill_or_kill",
-                            "good_til_day",
                             "immediate_or_cancel",
-                            "good_til_cancelled"
+                            "good_til_day",
+                            "good_til_cancelled",
+                            "fill_or_kill"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
                             "index_price",
-                            "last_price",
-                            "mark_price"
+                            "mark_price",
+                            "last_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -23909,6 +24594,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -24342,8 +25038,8 @@
                 "enums": [
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -25003,6 +25699,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -25436,8 +26143,8 @@
                 "enums": [
                     {
                         "items": [
-                            "implv",
-                            "usd"
+                            "usd",
+                            "implv"
                         ],
                         "name": "advanced"
                     }
@@ -26094,6 +26801,17 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "type_name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
                             }
                         },
                         {
@@ -27042,6 +27760,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -27483,6 +28212,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -27646,30 +28386,31 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
+                            "stop",
                             "take",
-                            "trailing_stop",
+                            "trigger_all",
                             "all",
                             "limit",
-                            "stop",
-                            "trigger_all"
+                            "trailing_stop"
                         ],
                         "name": "type"
                     }
@@ -27832,12 +28573,12 @@
                 "enums": [
                     {
                         "items": [
+                            "stop",
                             "take",
-                            "trailing_stop",
+                            "trigger_all",
                             "all",
                             "limit",
-                            "stop",
-                            "trigger_all"
+                            "trailing_stop"
                         ],
                         "name": "type"
                     }
@@ -28002,7 +28743,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -28143,8 +28885,8 @@
                 "enums": [
                     {
                         "items": [
-                            "limit",
-                            "market"
+                            "market",
+                            "limit"
                         ],
                         "name": "type"
                     }
@@ -28713,6 +29455,17 @@
                                 "is_class": false,
                                 "is_enum": false,
                                 "type_name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
                             }
                         },
                         {
@@ -29392,28 +30145,28 @@
                 "enums": [
                     {
                         "items": [
-                            "luna_usdc",
-                            "btc_usdc",
-                            "ltc_usdc",
-                            "dot_usdc",
-                            "link_usdc",
-                            "mshib_usdc",
-                            "uni_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "algo_usdc",
-                            "eth_usdc",
-                            "near_usdc",
-                            "bnb_usdc",
                             "doge_usdc",
-                            "btcdvol_usdc",
                             "eth_usd",
-                            "ethdvol_usdc",
+                            "ltc_usdc",
+                            "mshib_usdc",
+                            "dot_usdc",
                             "bch_usdc",
-                            "shib_usdc",
-                            "matic_usdc",
-                            "btc_usd",
+                            "ethdvol_usdc",
+                            "luna_usdc",
+                            "algo_usdc",
+                            "bnb_usdc",
+                            "btc_usdc",
+                            "ada_usdc",
+                            "uni_usdc",
+                            "eth_usdc",
+                            "btcdvol_usdc",
                             "avax_usdc",
+                            "shib_usdc",
+                            "btc_usd",
+                            "near_usdc",
+                            "trx_usdc",
+                            "link_usdc",
+                            "matic_usdc",
                             "xrp_usdc"
                         ],
                         "name": "index_name"
@@ -29666,33 +30419,34 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
-                            "spot"
+                            "spot",
+                            "option",
+                            "future_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
-                            "all",
-                            "limit",
+                            "take_all",
                             "trailing_all",
                             "stop_all",
-                            "take_all",
                             "trigger_all",
+                            "stop_limit",
+                            "stop_market",
+                            "all",
+                            "limit",
                             "take_market",
-                            "stop_limit"
+                            "take_limit",
+                            "trailing_stop"
                         ],
                         "name": "type"
                     }
@@ -30233,6 +30987,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -30674,6 +31439,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -30712,17 +31488,17 @@
                 "enums": [
                     {
                         "items": [
-                            "take_limit",
-                            "stop_market",
-                            "trailing_stop",
-                            "all",
-                            "limit",
+                            "take_all",
                             "trailing_all",
                             "stop_all",
-                            "take_all",
                             "trigger_all",
+                            "stop_limit",
+                            "stop_market",
+                            "all",
+                            "limit",
                             "take_market",
-                            "stop_limit"
+                            "take_limit",
+                            "trailing_stop"
                         ],
                         "name": "type"
                     }
@@ -31252,6 +32028,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -31693,6 +32480,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -31733,7 +32531,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -32263,6 +33062,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -32704,6 +33514,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -32744,19 +33565,20 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     }
@@ -33330,6 +34152,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -33768,6 +34601,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
                     }
                 },
                 {
@@ -34365,6 +35209,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -34803,6 +35658,17 @@
                         "is_class": false,
                         "is_enum": false,
                         "type_name": "integer"
+                    }
+                },
+                {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
                     }
                 },
                 {
@@ -35356,6 +36222,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -35797,6 +36674,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -35837,7 +36725,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -36367,6 +37256,17 @@
                             }
                         },
                         {
+                            "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                            "name": "is_rebalance",
+                            "required": false,
+                            "type": {
+                                "is_array": false,
+                                "is_class": false,
+                                "is_enum": false,
+                                "type_name": "boolean"
+                            }
+                        },
+                        {
                             "comment": "Average fill price of the order",
                             "name": "average_price",
                             "required": false,
@@ -36808,6 +37708,17 @@
                     }
                 },
                 {
+                    "comment": "Optional (only for spot). true if order was automatically created during cross-collateral balance restoration",
+                    "name": "is_rebalance",
+                    "required": false,
+                    "type": {
+                        "is_array": false,
+                        "is_class": false,
+                        "is_enum": false,
+                        "type_name": "boolean"
+                    }
+                },
+                {
                     "comment": "Average fill price of the order",
                     "name": "average_price",
                     "required": false,
@@ -36848,7 +37759,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -37263,26 +38175,27 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -37918,26 +38831,27 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
                             "option_combo",
                             "future",
                             "spot",
-                            "any"
+                            "option",
+                            "future_combo",
+                            "any",
+                            "combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -38538,8 +39452,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -39151,8 +40065,8 @@
                 "enums": [
                     {
                         "items": [
-                            "asc",
                             "desc",
+                            "asc",
                             "default"
                         ],
                         "name": "sorting"
@@ -39742,28 +40656,28 @@
                 "enums": [
                     {
                         "items": [
-                            "luna_usdc",
-                            "btc_usdc",
-                            "ltc_usdc",
-                            "dot_usdc",
-                            "link_usdc",
-                            "mshib_usdc",
-                            "uni_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "algo_usdc",
-                            "eth_usdc",
-                            "near_usdc",
-                            "bnb_usdc",
                             "doge_usdc",
-                            "btcdvol_usdc",
                             "eth_usd",
-                            "ethdvol_usdc",
+                            "ltc_usdc",
+                            "mshib_usdc",
+                            "dot_usdc",
                             "bch_usdc",
-                            "shib_usdc",
-                            "matic_usdc",
-                            "btc_usd",
+                            "ethdvol_usdc",
+                            "luna_usdc",
+                            "algo_usdc",
+                            "bnb_usdc",
+                            "btc_usdc",
+                            "ada_usdc",
+                            "uni_usdc",
+                            "eth_usdc",
+                            "btcdvol_usdc",
                             "avax_usdc",
+                            "shib_usdc",
+                            "btc_usd",
+                            "near_usdc",
+                            "trx_usdc",
+                            "link_usdc",
+                            "matic_usdc",
                             "xrp_usdc"
                         ],
                         "name": "index_name"
@@ -40047,28 +40961,28 @@
                 "enums": [
                     {
                         "items": [
-                            "luna_usdc",
-                            "btc_usdc",
-                            "ltc_usdc",
-                            "dot_usdc",
-                            "link_usdc",
-                            "mshib_usdc",
-                            "uni_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "algo_usdc",
-                            "eth_usdc",
-                            "near_usdc",
-                            "bnb_usdc",
                             "doge_usdc",
-                            "btcdvol_usdc",
                             "eth_usd",
-                            "ethdvol_usdc",
+                            "ltc_usdc",
+                            "mshib_usdc",
+                            "dot_usdc",
                             "bch_usdc",
-                            "shib_usdc",
-                            "matic_usdc",
-                            "btc_usd",
+                            "ethdvol_usdc",
+                            "luna_usdc",
+                            "algo_usdc",
+                            "bnb_usdc",
+                            "btc_usdc",
+                            "ada_usdc",
+                            "uni_usdc",
+                            "eth_usdc",
+                            "btcdvol_usdc",
                             "avax_usdc",
+                            "shib_usdc",
+                            "btc_usd",
+                            "near_usdc",
+                            "trx_usdc",
+                            "link_usdc",
+                            "matic_usdc",
                             "xrp_usdc"
                         ],
                         "name": "index_name"
@@ -40758,7 +41672,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
@@ -41159,7 +42074,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -41510,7 +42426,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -41905,7 +42822,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -42135,7 +43053,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -42365,7 +43284,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -42659,7 +43579,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -42975,7 +43896,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -43313,7 +44235,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -43675,7 +44598,8 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     }
@@ -44037,19 +44961,20 @@
                         "items": [
                             "BTC",
                             "USDC",
-                            "ETH"
+                            "ETH",
+                            "USDT"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "extreme_high",
+                            "mid",
                             "very_high",
-                            "low",
                             "insane",
-                            "very_low",
+                            "extreme_high",
+                            "low",
                             "high",
-                            "mid"
+                            "very_low"
                         ],
                         "name": "priority"
                     }

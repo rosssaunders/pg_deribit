@@ -28,7 +28,8 @@ drop type if exists deribit.private_cancel_all_by_currency_request_currency casc
 create type deribit.private_cancel_all_by_currency_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_cancel_all_by_currency_request_kind cascade;

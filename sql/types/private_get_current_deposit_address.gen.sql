@@ -42,7 +42,8 @@ drop type if exists deribit.private_get_current_deposit_address_request_currency
 create type deribit.private_get_current_deposit_address_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_current_deposit_address_request cascade;

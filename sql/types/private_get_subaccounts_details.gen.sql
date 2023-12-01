@@ -105,6 +105,7 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
     trigger text,
     web boolean,
     creation_timestamp bigint,
+    is_rebalance boolean,
     average_price double precision,
     advanced text
 );
@@ -146,6 +147,7 @@ comment on column deribit.private_get_subaccounts_details_response_open_order.au
 comment on column deribit.private_get_subaccounts_details_response_open_order.trigger is 'Trigger type (only for trigger orders). Allowed values: "index_price", "mark_price", "last_price".';
 comment on column deribit.private_get_subaccounts_details_response_open_order.web is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_subaccounts_details_response_open_order.creation_timestamp is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_subaccounts_details_response_open_order.is_rebalance is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_subaccounts_details_response_open_order.average_price is 'Average fill price of the order';
 comment on column deribit.private_get_subaccounts_details_response_open_order.advanced is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
 
@@ -175,7 +177,8 @@ drop type if exists deribit.private_get_subaccounts_details_request_currency cas
 create type deribit.private_get_subaccounts_details_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_subaccounts_details_request cascade;

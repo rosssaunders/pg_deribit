@@ -35,6 +35,7 @@ values
 ('/private/change_subaccount_name'),
 ('/private/create_subaccount'),
 ('/private/disable_api_key'),
+('/private/edit_api_key'),
 ('/private/enable_affiliate_program'),
 ('/private/enable_api_key'),
 ('/private/get_access_log'),

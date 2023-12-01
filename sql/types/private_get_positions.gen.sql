@@ -83,7 +83,8 @@ drop type if exists deribit.private_get_positions_request_currency cascade;
 create type deribit.private_get_positions_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_positions_request_kind cascade;

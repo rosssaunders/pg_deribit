@@ -29,6 +29,7 @@ drop type if exists deribit.private_get_account_summary_response_options_vega_ma
 
 create type deribit.private_get_account_summary_response_options_vega_map as (
     balance double precision,
+    total_equity_usd double precision,
     mmp_enabled boolean,
     projected_initial_margin double precision,
     email text,
@@ -36,12 +37,15 @@ create type deribit.private_get_account_summary_response_options_vega_map as (
     spot_reserve double precision,
     projected_delta_total double precision,
     portfolio_margining_enabled boolean,
+    total_maintenance_margin_usd double precision,
+    total_margin_balance_usd double precision,
     total_pl double precision,
     margin_balance double precision,
     options_theta_map deribit.private_get_account_summary_response_options_theta_map
 );
 
 comment on column deribit.private_get_account_summary_response_options_vega_map.balance is 'The account''s balance';
+comment on column deribit.private_get_account_summary_response_options_vega_map.total_equity_usd is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
 comment on column deribit.private_get_account_summary_response_options_vega_map.mmp_enabled is 'Whether MMP is enabled (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_options_vega_map.projected_initial_margin is 'Projected initial margin';
 comment on column deribit.private_get_account_summary_response_options_vega_map.email is 'User email (available when parameter extended = true)';
@@ -49,6 +53,8 @@ comment on column deribit.private_get_account_summary_response_options_vega_map.
 comment on column deribit.private_get_account_summary_response_options_vega_map.spot_reserve is 'The account''s balance reserved in active spot orders';
 comment on column deribit.private_get_account_summary_response_options_vega_map.projected_delta_total is 'The sum of position deltas without positions that will expire during closest expiration';
 comment on column deribit.private_get_account_summary_response_options_vega_map.portfolio_margining_enabled is 'true when portfolio margining is enabled for user';
+comment on column deribit.private_get_account_summary_response_options_vega_map.total_maintenance_margin_usd is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_options_vega_map.total_margin_balance_usd is 'Optional (only for users using cross margin). The account''s total margin balance in all cross collateral currencies, expressed in USD';
 comment on column deribit.private_get_account_summary_response_options_vega_map.total_pl is 'Profit and loss';
 comment on column deribit.private_get_account_summary_response_options_vega_map.margin_balance is 'The account''s margin balance';
 comment on column deribit.private_get_account_summary_response_options_vega_map.options_theta_map is 'Map of options'' thetas per index';
@@ -67,11 +73,14 @@ create type deribit.private_get_account_summary_response_options_gamma_map as (
     has_non_block_chain_equity boolean,
     system_name text,
     deposit_address text,
+    total_initial_margin_usd double precision,
     futures_session_upl double precision,
     options_session_upl double precision,
     referrer_id text,
+    cross_collateral_enabled boolean,
     options_theta double precision,
     login_enabled boolean,
+    margin_model text,
     username text,
     interuser_transfers_enabled boolean,
     options_delta double precision,
@@ -90,11 +99,14 @@ comment on column deribit.private_get_account_summary_response_options_gamma_map
 comment on column deribit.private_get_account_summary_response_options_gamma_map.has_non_block_chain_equity is 'Optional field returned with value true when user has non block chain equity that is excluded from proof of reserve calculations';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.system_name is 'System generated user nickname (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.deposit_address is 'The deposit address for the account (if available)';
+comment on column deribit.private_get_account_summary_response_options_gamma_map.total_initial_margin_usd is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.futures_session_upl is 'Futures session unrealized profit and Loss';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.options_session_upl is 'Options session unrealized profit and Loss';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.referrer_id is 'Optional identifier of the referrer (of the affiliation program, and available when parameter extended = true), which link was used by this account at registration. It coincides with suffix of the affiliation link path after /reg-';
+comment on column deribit.private_get_account_summary_response_options_gamma_map.cross_collateral_enabled is 'When true cross collateral is enabled for user';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.options_theta is 'Options summary theta';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.login_enabled is 'Whether account is loginable using email and password (available when parameter extended = true and account is a subaccount)';
+comment on column deribit.private_get_account_summary_response_options_gamma_map.margin_model is 'Name of user''s currently enabled margin model';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.username is 'Account name (given by user) (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.interuser_transfers_enabled is 'true when the inter-user transfers are enabled for user (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_options_gamma_map.options_delta is 'Options summary delta';
@@ -228,7 +240,8 @@ drop type if exists deribit.private_get_account_summary_request_currency cascade
 create type deribit.private_get_account_summary_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_account_summary_request cascade;

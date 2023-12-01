@@ -1,12 +1,11 @@
 # converts from the documented type to the postgres type
-from codegen.models.models import Field, FieldType, Function, Type
+from codegen.models.models import Field_, FieldType, Function_, Type_
 from codegen.postgres.documentation import escape_comment, required_to_string
 from codegen.postgres.keywords import escape_postgres_keyword
 
 
 def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) -> str:
     if field_type.is_array:
-        nested_array = False
         if field_type.type_name == 'float[]':
             return f"double precision[][]"
 
@@ -46,7 +45,7 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: FieldType) 
         return f"UNKNOWN - {field_type.type_name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
 
 
-def type_to_type(schema: str, type: Type) -> str:
+def type_to_type(schema: str, type: Type_) -> str:
     res = f"drop type if exists {schema}.{type.name} cascade;\n\n"
     res += f"create type {schema}.{type.name} as (\n"
     res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type.name, e.type)}' for e in type.fields)
@@ -57,18 +56,18 @@ def type_to_type(schema: str, type: Type) -> str:
     return res
 
 
-def default_to_null(field: Field) -> str:
+def default_to_null(field: Field_) -> str:
     if field.required:
         return ''
     else:
         return ' default null'
 
 
-def sort_fields_by_required(fields: [Field]) -> [Field]:
+def sort_fields_by_required(fields: [Field_]) -> [Field_]:
     return sorted(fields, key=lambda e: e.required, reverse=True)
 
 
-def invoke_endpoint(schema: str, function: Function) -> str:
+def invoke_endpoint(schema: str, function: Function_) -> str:
     res = f"""drop function if exists {schema}.{function.name};\n\n"""
     res += f"""create or replace function {schema}.{function.name}("""
     if function.endpoint.request_type is not None:

@@ -36,6 +36,7 @@ as $$
         (b).currency::text,
         (b).currency_long::text,
         (b).fee_precision::bigint,
+        (b).in_cross_collateral_pool::boolean,
         (b).min_confirmations::bigint,
         (b).min_withdrawal_fee::double precision,
         (b).withdrawal_fee::double precision,

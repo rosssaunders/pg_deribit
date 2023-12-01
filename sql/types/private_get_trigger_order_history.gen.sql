@@ -76,7 +76,8 @@ drop type if exists deribit.private_get_trigger_order_history_request_currency c
 create type deribit.private_get_trigger_order_history_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_trigger_order_history_request cascade;

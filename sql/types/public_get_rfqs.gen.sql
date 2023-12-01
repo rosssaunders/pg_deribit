@@ -43,7 +43,8 @@ drop type if exists deribit.public_get_rfqs_request_currency cascade;
 create type deribit.public_get_rfqs_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.public_get_rfqs_request_kind cascade;

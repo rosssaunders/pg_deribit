@@ -106,7 +106,8 @@ drop type if exists deribit.private_get_user_trades_by_currency_request_currency
 create type deribit.private_get_user_trades_by_currency_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_user_trades_by_currency_request_kind cascade;

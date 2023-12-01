@@ -1,6 +1,6 @@
 import os
 
-from codegen.models.models import Function
+from codegen.models.models import Function_
 from codegen.postgres.enum import enum_to_type
 from codegen.postgres.header import header
 from codegen.postgres.postgres import invoke_endpoint, type_to_type
@@ -22,10 +22,10 @@ class Exporter:
             pass
         pass
 
-    def sort_functions(self, functions: [Function]):
+    def sort_functions(self, functions: [Function_]):
         return sorted(functions, key=lambda f: f.endpoint.name)
 
-    def all(self, functions: [Function]):
+    def all(self, functions: [Function_]):
         self.setup()
 
         for function in self.sort_functions(functions):
@@ -44,7 +44,7 @@ class Exporter:
             file.write(f',\n'.join(f"('{function.endpoint.path}')" for function in functions))
             file.write(';\n')
 
-    def export(self, function: Function):
+    def export(self, function: Function_):
         script_dir = os.path.dirname(__file__)
 
         with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.gen.sql"), 'w') as file:

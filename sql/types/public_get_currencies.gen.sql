@@ -27,6 +27,7 @@ create type deribit.public_get_currencies_response_result as (
     currency text,
     currency_long text,
     fee_precision bigint,
+    in_cross_collateral_pool boolean,
     min_confirmations bigint,
     min_withdrawal_fee double precision,
     withdrawal_fee double precision,
@@ -37,6 +38,7 @@ comment on column deribit.public_get_currencies_response_result.coin_type is 'Th
 comment on column deribit.public_get_currencies_response_result.currency is 'The abbreviation of the currency. This abbreviation is used elsewhere in the API to identify the currency.';
 comment on column deribit.public_get_currencies_response_result.currency_long is 'The full name for the currency.';
 comment on column deribit.public_get_currencies_response_result.fee_precision is 'fee precision';
+comment on column deribit.public_get_currencies_response_result.in_cross_collateral_pool is 'true if the currency is part of the cross collateral pool';
 comment on column deribit.public_get_currencies_response_result.min_confirmations is 'Minimum number of block chain confirmations before deposit is accepted.';
 comment on column deribit.public_get_currencies_response_result.min_withdrawal_fee is 'The minimum transaction fee paid for withdrawals';
 comment on column deribit.public_get_currencies_response_result.withdrawal_fee is 'The total transaction fee paid for withdrawals';

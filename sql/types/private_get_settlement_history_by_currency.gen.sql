@@ -70,7 +70,8 @@ drop type if exists deribit.private_get_settlement_history_by_currency_request_c
 create type deribit.private_get_settlement_history_by_currency_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_settlement_history_by_currency_request_type cascade;

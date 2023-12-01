@@ -57,8 +57,8 @@ create type deribit.private_edit_api_key_request as (
     max_scope text,
     name text,
     enabled boolean,
-    enabled_features UNKNOWN - array - False - False - False,
-    ip_whitelist UNKNOWN - array - False - False - False
+    enabled_features text[],
+    ip_whitelist text[]
 );
 
 comment on column deribit.private_edit_api_key_request.id is '(Required) Id of key';

@@ -36,7 +36,8 @@ drop type if exists deribit.private_get_portfolio_margins_request_currency casca
 create type deribit.private_get_portfolio_margins_request_currency as enum (
     'BTC',
     'ETH',
-    'USDC'
+    'USDC',
+    'USDT'
 );
 
 drop type if exists deribit.private_get_portfolio_margins_request cascade;

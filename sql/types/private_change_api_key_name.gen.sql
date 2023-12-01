@@ -20,6 +20,7 @@ create type deribit.private_change_api_key_name_response_result as (
     enabled boolean,
     enabled_features text[],
     id bigint,
+    ip_whitelist text[],
     max_scope text,
     name text,
     public_key text,
@@ -32,6 +33,7 @@ comment on column deribit.private_change_api_key_name_response_result."default" 
 comment on column deribit.private_change_api_key_name_response_result.enabled is 'Informs whether api key is enabled and can be used for authentication';
 comment on column deribit.private_change_api_key_name_response_result.enabled_features is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key';
 comment on column deribit.private_change_api_key_name_response_result.id is 'key identifier';
+comment on column deribit.private_change_api_key_name_response_result.ip_whitelist is 'List of IP addresses whitelisted for a selected key';
 comment on column deribit.private_change_api_key_name_response_result.max_scope is 'Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, it value is set as none. Please check details described in Access scope';
 comment on column deribit.private_change_api_key_name_response_result.name is 'Api key name that can be displayed in transaction log';
 comment on column deribit.private_change_api_key_name_response_result.public_key is 'PEM encoded public key (Ed25519/RSA) used for asymmetric signatures (optional)';
