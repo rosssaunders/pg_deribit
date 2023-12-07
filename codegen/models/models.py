@@ -1,4 +1,5 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List
 
@@ -13,20 +14,6 @@ class Enum_:
             'name': self.type_name,
             'items': self.items
         }
-
-
-# @dataclass
-# class FieldType:
-#     type_name: str
-#
-#
-#     def to_dict(self):
-#         return {
-#             'type_name': self.type_name,
-#             'is_enum': self.is_enum,
-#             'is_class': self.is_class,
-#             'is_array': self.is_array
-#         }
 
 
 @dataclass
