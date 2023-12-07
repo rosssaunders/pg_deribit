@@ -57,6 +57,7 @@ class Type_:
         self.is_array: bool = False
         self.is_primitive: bool = False
         self.is_enum: bool = False
+        self.enum_items: List[str] = []
         self.is_class: bool = False
 
         # If the field is an array of arrays and not an array of objects.

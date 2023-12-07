@@ -2,13 +2,14 @@ from typing import List
 import pandas as pd
 from pandas import DataFrame
 
-from codegen.utils.name_utils import url_to_type_name, get_singular_type_name, count_ident
+from codegen.utils.name_utils import url_to_type_name, get_singular_type_name, count_ident, strip_field_name
 from codegen.models.models import Type_, Field, Enum_
 
 
 class request_row:
     def __init__(self, name, required, type_, enum, description):
-        self.name = name
+        self.level = count_ident(name)
+        self.name = strip_field_name(name)
         self.required = required
         self.type = type_
         self.enum = enum
@@ -43,18 +44,18 @@ class request_row:
         if self.is_enum():
             t = Type_(name=self.name)
             t.is_enum = True
+            t.is_primitive = True
+            t.enum_items = self.enum_items()
             return t
 
         t = Type_(name=self.type)
         t.is_enum = self.is_enum()
         t.is_array = self.is_array()
+        t.is_primitive = self.is_primitive()
         return t
 
     def to_field(self) -> Field:
         return Field(name=self.name, type=self.to_field_type(), required=self.required, documentation=self.description)
-
-    def level(self):
-        return count_ident(self.name)
 
 
 def convert_to_request_row(row):
@@ -85,9 +86,9 @@ class type_builder:
             child_row = convert_to_request_row(df.iloc[j])
 
             if indent_level == 0:
-                indent_level = child_row.level()
+                indent_level = child_row.level
             else:
-                if child_row.level() < indent_level:
+                if child_row.level < indent_level:
                     break
 
             if child_row.is_enum():

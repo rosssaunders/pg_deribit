@@ -49,7 +49,7 @@ as $$
         (b).interest_1h::double precision,
         (b).interest_8h::double precision,
         (b).prev_index_price::double precision,
-        (b).timestamp::bigint
+        (b)."timestamp"::bigint
     from (
         select (unnest(r.data)) b
         from result r(data)

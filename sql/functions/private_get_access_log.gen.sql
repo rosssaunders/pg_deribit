@@ -49,7 +49,7 @@ as $$
         (b).id::bigint,
         (b).ip::text,
         (b).log::text,
-        (b).timestamp::bigint
+        (b)."timestamp"::bigint
     from (
         select (unnest(r.data)) b
         from result r(data)

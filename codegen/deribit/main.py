@@ -56,7 +56,7 @@ def main():
             if sibling.name != 'h2':
                 continue
 
-            # if sibling.text != '/private/buy':
+            # if sibling.text != '/private/create_combo':
             #     continue
 
             function = extract_function_from_section(sibling)

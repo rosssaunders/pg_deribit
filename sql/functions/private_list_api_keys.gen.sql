@@ -42,7 +42,7 @@ as $$
         (b).max_scope::text,
         (b).name::text,
         (b).public_key::text,
-        (b).timestamp::bigint
+        (b)."timestamp"::bigint
     from (
         select (unnest(r.data)) b
         from result r(data)

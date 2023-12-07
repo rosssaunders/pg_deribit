@@ -332,7 +332,7 @@ from deribit.public_auth(
     client_id := UNKNOWN,
     client_secret := UNKNOWN,
     refresh_token := UNKNOWN,
-    timestamp := UNKNOWN,
+    "timestamp" := UNKNOWN,
     signature := UNKNOWN
 );
 select * 

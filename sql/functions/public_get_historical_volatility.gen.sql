@@ -45,7 +45,7 @@ as $$
         from result x(x)
     )
     select 
-        (b.x)[1]::bigint as timestamp,
+        (b.x)[1]::bigint as "timestamp",
         (b.x)[2]::double precision as value
     from unnested b(x)
 $$;

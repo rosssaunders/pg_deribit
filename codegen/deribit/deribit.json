@@ -18,11 +18,11 @@
                     },
                     {
                         "items": [
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
-                            "future_combo"
+                            "future_combo",
+                            "option",
+                            "spot"
                         ],
                         "name": "kind"
                     }
@@ -37,7 +37,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -50,7 +50,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     }
@@ -773,7 +773,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -1496,7 +1496,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -2062,43 +2062,43 @@
                 "enums": [
                     {
                         "items": [
-                            "ada_usdc",
-                            "shib_usdc",
-                            "avax_usd",
-                            "btc_usd",
-                            "link_usdc",
-                            "near_usd",
-                            "ltc_usdc",
-                            "ltc_usd",
-                            "eth_usdc",
-                            "algo_usd",
-                            "uni_usdc",
-                            "avax_usdc",
-                            "sol_usdc",
-                            "ethdvol_usdc",
-                            "eth_usd",
-                            "trx_usdc",
-                            "btc_usdc",
-                            "uni_usd",
+                            "matic_usd",
                             "doge_usd",
-                            "bch_usd",
                             "sol_usd",
-                            "near_usdc",
-                            "doge_usdc",
-                            "shib_usd",
-                            "trx_usd",
-                            "btcdvol_usdc",
                             "bch_usdc",
-                            "dot_usd",
-                            "algo_usdc",
-                            "matic_usdc",
+                            "doge_usdc",
+                            "ltc_usdc",
+                            "ada_usdc",
+                            "ethdvol_usdc",
+                            "near_usd",
                             "link_usd",
-                            "xrp_usdc",
-                            "xrp_usd",
-                            "ada_usd",
+                            "trx_usd",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "avax_usd",
                             "dot_usdc",
+                            "xrp_usdc",
                             "usdc_usd",
-                            "matic_usd"
+                            "eth_usdc",
+                            "link_usdc",
+                            "shib_usd",
+                            "near_usdc",
+                            "btc_usdc",
+                            "eth_usd",
+                            "ada_usd",
+                            "algo_usd",
+                            "sol_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "uni_usd",
+                            "btcdvol_usdc",
+                            "dot_usd",
+                            "xrp_usd",
+                            "avax_usdc",
+                            "ltc_usd",
+                            "uni_usdc",
+                            "bch_usd"
                         ],
                         "name": "index_name"
                     }
@@ -2113,7 +2113,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "index_name"
                         }
                     },
@@ -2126,7 +2126,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -2139,7 +2139,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -2375,7 +2375,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -2388,7 +2388,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -2401,7 +2401,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -2682,7 +2682,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -2695,7 +2695,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -2708,7 +2708,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -2855,7 +2855,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -3064,7 +3064,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -3281,43 +3281,43 @@
                 "enums": [
                     {
                         "items": [
-                            "ada_usdc",
-                            "shib_usdc",
-                            "avax_usd",
-                            "btc_usd",
-                            "link_usdc",
-                            "near_usd",
-                            "ltc_usdc",
-                            "ltc_usd",
-                            "eth_usdc",
-                            "algo_usd",
-                            "uni_usdc",
-                            "avax_usdc",
-                            "sol_usdc",
-                            "ethdvol_usdc",
-                            "eth_usd",
-                            "trx_usdc",
-                            "btc_usdc",
-                            "uni_usd",
+                            "matic_usd",
                             "doge_usd",
-                            "bch_usd",
                             "sol_usd",
-                            "near_usdc",
-                            "doge_usdc",
-                            "shib_usd",
-                            "trx_usd",
-                            "btcdvol_usdc",
                             "bch_usdc",
-                            "dot_usd",
-                            "algo_usdc",
-                            "matic_usdc",
+                            "doge_usdc",
+                            "ltc_usdc",
+                            "ada_usdc",
+                            "ethdvol_usdc",
+                            "near_usd",
                             "link_usd",
-                            "xrp_usdc",
-                            "xrp_usd",
-                            "ada_usd",
+                            "trx_usd",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "avax_usd",
                             "dot_usdc",
+                            "xrp_usdc",
                             "usdc_usd",
-                            "matic_usd"
+                            "eth_usdc",
+                            "link_usdc",
+                            "shib_usd",
+                            "near_usdc",
+                            "btc_usdc",
+                            "eth_usd",
+                            "ada_usd",
+                            "algo_usd",
+                            "sol_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "uni_usd",
+                            "btcdvol_usdc",
+                            "dot_usd",
+                            "xrp_usd",
+                            "avax_usdc",
+                            "ltc_usd",
+                            "uni_usdc",
+                            "bch_usd"
                         ],
                         "name": "index_name"
                     }
@@ -3332,7 +3332,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "index_name"
                         }
                     }
@@ -3647,7 +3647,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -4534,11 +4534,11 @@
                     },
                     {
                         "items": [
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
-                            "future_combo"
+                            "future_combo",
+                            "option",
+                            "spot"
                         ],
                         "name": "kind"
                     }
@@ -4553,7 +4553,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -4566,7 +4566,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -4579,7 +4579,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -5470,8 +5470,8 @@
                     },
                     {
                         "items": [
-                            "settlement",
                             "delivery",
+                            "settlement",
                             "bankruptcy"
                         ],
                         "name": "type"
@@ -5487,7 +5487,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -5500,7 +5500,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -5513,7 +5513,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -5526,7 +5526,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -5539,7 +5539,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -5923,8 +5923,8 @@
                 "enums": [
                     {
                         "items": [
-                            "settlement",
                             "delivery",
+                            "settlement",
                             "bankruptcy"
                         ],
                         "name": "type"
@@ -5940,7 +5940,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -5953,7 +5953,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -5966,7 +5966,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -5979,7 +5979,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -5992,7 +5992,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -6385,13 +6385,13 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     },
@@ -6414,7 +6414,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -6427,7 +6427,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -6440,7 +6440,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -6453,7 +6453,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -6466,7 +6466,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6479,7 +6479,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6492,7 +6492,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6505,7 +6505,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -6898,13 +6898,13 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     },
@@ -6927,7 +6927,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -6940,7 +6940,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -6953,7 +6953,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6966,7 +6966,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6979,7 +6979,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -6992,7 +6992,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -7393,7 +7393,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -7406,7 +7406,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7419,7 +7419,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7432,7 +7432,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7445,7 +7445,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7458,7 +7458,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7471,7 +7471,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -7872,7 +7872,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -7885,7 +7885,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7898,7 +7898,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7911,7 +7911,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -7924,7 +7924,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -8316,7 +8316,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -8329,7 +8329,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -8342,7 +8342,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -8472,13 +8472,13 @@
                     {
                         "items": [
                             "10",
-                            "100",
-                            "50",
-                            "1000",
                             "1",
-                            "5",
+                            "20",
+                            "100",
                             "10000",
-                            "20"
+                            "1000",
+                            "50",
+                            "5"
                         ],
                         "name": "depth"
                     }
@@ -8493,7 +8493,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -8506,7 +8506,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "depth"
                         }
                     }
@@ -9496,13 +9496,13 @@
                     {
                         "items": [
                             "10",
-                            "100",
-                            "50",
-                            "1000",
                             "1",
-                            "5",
+                            "20",
+                            "100",
                             "10000",
-                            "20"
+                            "1000",
+                            "50",
+                            "5"
                         ],
                         "name": "depth"
                     }
@@ -9517,7 +9517,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -9530,7 +9530,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "depth"
                         }
                     }
@@ -10528,11 +10528,11 @@
                     },
                     {
                         "items": [
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
-                            "future_combo"
+                            "future_combo",
+                            "option",
+                            "spot"
                         ],
                         "name": "kind"
                     }
@@ -10547,7 +10547,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -10560,7 +10560,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     }
@@ -10833,9 +10833,9 @@
                 "enums": [
                     {
                         "items": [
-                            "spot",
+                            "all",
                             "derivative",
-                            "all"
+                            "spot"
                         ],
                         "name": "type"
                     }
@@ -10850,7 +10850,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     }
@@ -10987,7 +10987,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -11468,18 +11468,18 @@
                 "enums": [
                     {
                         "items": [
-                            "15",
-                            "3",
-                            "30",
-                            "60",
-                            "180",
-                            "120",
+                            "10",
                             "1",
-                            "5",
+                            "30",
+                            "180",
                             "360",
-                            "720",
                             "1D",
-                            "10"
+                            "120",
+                            "15",
+                            "720",
+                            "3",
+                            "60",
+                            "5"
                         ],
                         "name": "resolution"
                     }
@@ -11494,7 +11494,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -11507,7 +11507,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -11520,7 +11520,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -11533,7 +11533,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "resolution"
                         }
                     }
@@ -11889,11 +11889,11 @@
                     },
                     {
                         "items": [
-                            "60",
-                            "1",
-                            "43200",
                             "1D",
-                            "3600"
+                            "1",
+                            "3600",
+                            "43200",
+                            "60"
                         ],
                         "name": "resolution"
                     }
@@ -11908,7 +11908,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -11921,7 +11921,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -11934,7 +11934,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -11947,7 +11947,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "resolution"
                         }
                     }
@@ -12146,7 +12146,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -13143,7 +13143,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -13156,7 +13156,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -13463,7 +13463,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -13476,7 +13476,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -13903,8 +13903,8 @@
                         "items": [
                             "cross_sm",
                             "cross_pm",
-                            "segregated_pm",
-                            "segregated_sm"
+                            "segregated_sm",
+                            "segregated_pm"
                         ],
                         "name": "margin_model"
                     }
@@ -13919,7 +13919,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -13932,7 +13932,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "margin_model"
                         }
                     },
@@ -13945,7 +13945,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -14270,7 +14270,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -14283,7 +14283,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -14716,7 +14716,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -14729,7 +14729,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -15448,7 +15448,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -15881,7 +15881,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -15894,7 +15894,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -15907,7 +15907,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -15920,7 +15920,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -16495,7 +16495,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -16928,7 +16928,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -16941,7 +16941,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -17284,7 +17284,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -17297,7 +17297,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -17310,7 +17310,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -19331,7 +19331,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -19344,7 +19344,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -19502,7 +19502,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -20300,11 +20300,11 @@
                     },
                     {
                         "items": [
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
-                            "future_combo"
+                            "future_combo",
+                            "option",
+                            "spot"
                         ],
                         "name": "kind"
                     }
@@ -20319,7 +20319,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -20332,7 +20332,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -20345,7 +20345,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -21146,7 +21146,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -21828,7 +21828,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -21841,7 +21841,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -22934,7 +22934,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -22947,7 +22947,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -22960,7 +22960,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -22973,7 +22973,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -22986,7 +22986,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -22999,7 +22999,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -24206,7 +24206,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -24343,7 +24343,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -24480,7 +24480,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -24913,7 +24913,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -25050,7 +25050,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -25063,7 +25063,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -25200,7 +25200,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -25329,8 +25329,8 @@
                 "enums": [
                     {
                         "items": [
-                            "reject_taker",
-                            "cancel_maker"
+                            "cancel_maker",
+                            "reject_taker"
                         ],
                         "name": "mode"
                     }
@@ -25345,7 +25345,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "mode"
                         }
                     },
@@ -25358,7 +25358,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -25495,7 +25495,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -25508,7 +25508,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -25645,7 +25645,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -25658,7 +25658,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -25671,7 +25671,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -25988,8 +25988,8 @@
                 "enums": [
                     {
                         "items": [
-                            "enable",
-                            "disable"
+                            "disable",
+                            "enable"
                         ],
                         "name": "state"
                     }
@@ -26004,7 +26004,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -26017,7 +26017,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "state"
                         }
                     }
@@ -26146,31 +26146,31 @@
                 "enums": [
                     {
                         "items": [
-                            "stop_limit",
-                            "market",
                             "stop_market",
+                            "limit",
                             "market_limit",
-                            "trailing_stop",
                             "take_market",
                             "take_limit",
-                            "limit"
+                            "trailing_stop",
+                            "stop_limit",
+                            "market"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
+                            "fill_or_kill",
                             "good_til_cancelled",
                             "good_til_day",
-                            "fill_or_kill",
                             "immediate_or_cancel"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
+                            "last_price",
                             "index_price",
-                            "mark_price",
-                            "last_price"
+                            "mark_price"
                         ],
                         "name": "trigger"
                     },
@@ -26192,7 +26192,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -26205,7 +26205,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -26218,7 +26218,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -26231,7 +26231,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -26244,7 +26244,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -26257,7 +26257,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "time_in_force"
                         }
                     },
@@ -26270,7 +26270,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -26283,7 +26283,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -26296,7 +26296,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -26309,7 +26309,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -26322,7 +26322,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -26335,7 +26335,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -26348,7 +26348,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "trigger"
                         }
                     },
@@ -26361,7 +26361,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "advanced"
                         }
                     },
@@ -26374,7 +26374,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -26387,7 +26387,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -27534,31 +27534,31 @@
                 "enums": [
                     {
                         "items": [
-                            "stop_limit",
-                            "market",
                             "stop_market",
+                            "limit",
                             "market_limit",
-                            "trailing_stop",
                             "take_market",
                             "take_limit",
-                            "limit"
+                            "trailing_stop",
+                            "stop_limit",
+                            "market"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
+                            "fill_or_kill",
                             "good_til_cancelled",
                             "good_til_day",
-                            "fill_or_kill",
                             "immediate_or_cancel"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
+                            "last_price",
                             "index_price",
-                            "mark_price",
-                            "last_price"
+                            "mark_price"
                         ],
                         "name": "trigger"
                     },
@@ -27580,7 +27580,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -27593,7 +27593,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -27606,7 +27606,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -27619,7 +27619,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -27632,7 +27632,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -27645,7 +27645,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "time_in_force"
                         }
                     },
@@ -27658,7 +27658,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -27671,7 +27671,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -27684,7 +27684,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -27697,7 +27697,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -27710,7 +27710,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -27723,7 +27723,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -27736,7 +27736,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "trigger"
                         }
                     },
@@ -27749,7 +27749,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "advanced"
                         }
                     },
@@ -27762,7 +27762,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -27775,7 +27775,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -28938,7 +28938,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -28951,7 +28951,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -28964,7 +28964,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -28977,7 +28977,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -28990,7 +28990,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -29003,7 +29003,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -29016,7 +29016,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "advanced"
                         }
                     },
@@ -29029,7 +29029,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -29042,7 +29042,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -29055,7 +29055,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -29068,7 +29068,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -30231,7 +30231,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -30244,7 +30244,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -30257,7 +30257,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -30270,7 +30270,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -30283,7 +30283,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -30296,7 +30296,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -30309,7 +30309,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -30322,7 +30322,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "advanced"
                         }
                     },
@@ -30335,7 +30335,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -30348,7 +30348,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -30361,7 +30361,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -31516,7 +31516,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -32703,7 +32703,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -32841,24 +32841,24 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "trailing_stop",
-                            "trigger_all",
-                            "stop",
                             "all",
+                            "limit",
+                            "trailing_stop",
+                            "stop",
                             "take",
-                            "limit"
+                            "trigger_all"
                         ],
                         "name": "type"
                     }
@@ -32873,7 +32873,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -32886,7 +32886,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -32899,7 +32899,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -32912,7 +32912,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -33041,12 +33041,12 @@
                 "enums": [
                     {
                         "items": [
-                            "trailing_stop",
-                            "trigger_all",
-                            "stop",
                             "all",
+                            "limit",
+                            "trailing_stop",
+                            "stop",
                             "take",
-                            "limit"
+                            "trigger_all"
                         ],
                         "name": "type"
                     }
@@ -33061,7 +33061,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -33074,7 +33074,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -33087,7 +33087,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -33100,7 +33100,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -33247,7 +33247,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -33260,7 +33260,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -33405,7 +33405,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -33418,7 +33418,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -33431,7 +33431,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -34586,7 +34586,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -34599,7 +34599,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -34612,7 +34612,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -34855,29 +34855,29 @@
                 "enums": [
                     {
                         "items": [
-                            "ada_usdc",
-                            "shib_usdc",
-                            "btc_usd",
-                            "link_usdc",
+                            "bch_usdc",
+                            "doge_usdc",
                             "ltc_usdc",
+                            "ada_usdc",
                             "mshib_usdc",
+                            "ethdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "dot_usdc",
+                            "xrp_usdc",
+                            "luna_usdc",
                             "bnb_usdc",
                             "eth_usdc",
-                            "uni_usdc",
-                            "avax_usdc",
-                            "ethdvol_usdc",
-                            "eth_usd",
-                            "trx_usdc",
-                            "btc_usdc",
+                            "link_usdc",
                             "near_usdc",
-                            "doge_usdc",
-                            "btcdvol_usdc",
-                            "bch_usdc",
-                            "algo_usdc",
+                            "btc_usdc",
+                            "eth_usd",
                             "matic_usdc",
-                            "luna_usdc",
-                            "xrp_usdc",
-                            "dot_usdc"
+                            "btc_usd",
+                            "btcdvol_usdc",
+                            "avax_usdc",
+                            "uni_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -34892,7 +34892,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "index_name"
                         }
                     }
@@ -35174,27 +35174,27 @@
                     },
                     {
                         "items": [
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
-                            "future_combo"
+                            "future_combo",
+                            "option",
+                            "spot"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "stop_limit",
                             "stop_market",
-                            "trailing_stop",
-                            "trigger_all",
+                            "all",
+                            "limit",
+                            "take_all",
                             "stop_all",
                             "take_market",
                             "take_limit",
-                            "all",
-                            "trailing_all",
-                            "limit",
-                            "take_all"
+                            "trailing_stop",
+                            "stop_limit",
+                            "trigger_all",
+                            "trailing_all"
                         ],
                         "name": "type"
                     }
@@ -35209,7 +35209,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -35222,7 +35222,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -35235,7 +35235,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     }
@@ -36418,17 +36418,17 @@
                 "enums": [
                     {
                         "items": [
-                            "stop_limit",
                             "stop_market",
-                            "trailing_stop",
-                            "trigger_all",
+                            "all",
+                            "limit",
+                            "take_all",
                             "stop_all",
                             "take_market",
                             "take_limit",
-                            "all",
-                            "trailing_all",
-                            "limit",
-                            "take_all"
+                            "trailing_stop",
+                            "stop_limit",
+                            "trigger_all",
+                            "trailing_all"
                         ],
                         "name": "type"
                     }
@@ -36443,7 +36443,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -36456,7 +36456,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     }
@@ -37657,7 +37657,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -37670,7 +37670,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -38862,13 +38862,13 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     }
@@ -38883,7 +38883,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -38896,7 +38896,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -38909,7 +38909,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -38922,7 +38922,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -38935,7 +38935,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -38948,7 +38948,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -40139,7 +40139,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -40152,7 +40152,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -40165,7 +40165,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -40178,7 +40178,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     },
@@ -40191,7 +40191,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -41382,7 +41382,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -42579,7 +42579,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -42592,7 +42592,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -43793,7 +43793,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -43806,7 +43806,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -43819,7 +43819,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -43832,7 +43832,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -44264,13 +44264,13 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     },
@@ -44293,7 +44293,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -44306,7 +44306,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -44319,7 +44319,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -44332,7 +44332,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -44345,7 +44345,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -44358,7 +44358,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -44371,7 +44371,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -44384,7 +44384,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     },
@@ -44397,7 +44397,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -45024,13 +45024,13 @@
                     },
                     {
                         "items": [
-                            "any",
-                            "option",
-                            "spot",
                             "future",
                             "option_combo",
+                            "combo",
                             "future_combo",
-                            "combo"
+                            "option",
+                            "any",
+                            "spot"
                         ],
                         "name": "kind"
                     },
@@ -45053,7 +45053,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -45066,7 +45066,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "kind"
                         }
                     },
@@ -45079,7 +45079,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45092,7 +45092,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45105,7 +45105,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45118,7 +45118,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -45753,7 +45753,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -45766,7 +45766,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45779,7 +45779,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45792,7 +45792,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45805,7 +45805,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45818,7 +45818,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -45831,7 +45831,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -46466,7 +46466,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -46479,7 +46479,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -46492,7 +46492,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -46505,7 +46505,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -46518,7 +46518,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "sorting"
                         }
                     }
@@ -47136,29 +47136,29 @@
                 "enums": [
                     {
                         "items": [
-                            "ada_usdc",
-                            "shib_usdc",
-                            "btc_usd",
-                            "link_usdc",
+                            "bch_usdc",
+                            "doge_usdc",
                             "ltc_usdc",
+                            "ada_usdc",
                             "mshib_usdc",
+                            "ethdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "dot_usdc",
+                            "xrp_usdc",
+                            "luna_usdc",
                             "bnb_usdc",
                             "eth_usdc",
-                            "uni_usdc",
-                            "avax_usdc",
-                            "ethdvol_usdc",
-                            "eth_usd",
-                            "trx_usdc",
-                            "btc_usdc",
+                            "link_usdc",
                             "near_usdc",
-                            "doge_usdc",
-                            "btcdvol_usdc",
-                            "bch_usdc",
-                            "algo_usdc",
+                            "btc_usdc",
+                            "eth_usd",
                             "matic_usdc",
-                            "luna_usdc",
-                            "xrp_usdc",
-                            "dot_usdc"
+                            "btc_usd",
+                            "btcdvol_usdc",
+                            "avax_usdc",
+                            "uni_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -47173,7 +47173,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "index_name"
                         }
                     }
@@ -47318,7 +47318,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -47331,7 +47331,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -47344,7 +47344,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "side"
                         }
                     }
@@ -47473,29 +47473,29 @@
                 "enums": [
                     {
                         "items": [
-                            "ada_usdc",
-                            "shib_usdc",
-                            "btc_usd",
-                            "link_usdc",
+                            "bch_usdc",
+                            "doge_usdc",
                             "ltc_usdc",
+                            "ada_usdc",
                             "mshib_usdc",
+                            "ethdvol_usdc",
+                            "trx_usdc",
+                            "shib_usdc",
+                            "algo_usdc",
+                            "dot_usdc",
+                            "xrp_usdc",
+                            "luna_usdc",
                             "bnb_usdc",
                             "eth_usdc",
-                            "uni_usdc",
-                            "avax_usdc",
-                            "ethdvol_usdc",
-                            "eth_usd",
-                            "trx_usdc",
-                            "btc_usdc",
+                            "link_usdc",
                             "near_usdc",
-                            "doge_usdc",
-                            "btcdvol_usdc",
-                            "bch_usdc",
-                            "algo_usdc",
+                            "btc_usdc",
+                            "eth_usd",
                             "matic_usdc",
-                            "luna_usdc",
-                            "xrp_usdc",
-                            "dot_usdc"
+                            "btc_usd",
+                            "btcdvol_usdc",
+                            "avax_usdc",
+                            "uni_usdc"
                         ],
                         "name": "index_name"
                     }
@@ -47510,7 +47510,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "index_name"
                         }
                     },
@@ -47523,7 +47523,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -47536,7 +47536,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -47549,7 +47549,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -47562,7 +47562,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -47835,8 +47835,8 @@
                 "enums": [
                     {
                         "items": [
-                            "settlement",
                             "delivery",
+                            "settlement",
                             "bankruptcy"
                         ],
                         "name": "type"
@@ -47852,7 +47852,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -47865,7 +47865,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -47878,7 +47878,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -47891,7 +47891,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -47904,7 +47904,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -48297,8 +48297,8 @@
                     },
                     {
                         "items": [
-                            "settlement",
                             "delivery",
+                            "settlement",
                             "bankruptcy"
                         ],
                         "name": "type"
@@ -48314,7 +48314,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -48327,7 +48327,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "type"
                         }
                     },
@@ -48340,7 +48340,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -48353,7 +48353,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -48366,7 +48366,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -48768,7 +48768,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -48781,7 +48781,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -49172,7 +49172,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -49185,7 +49185,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -49628,7 +49628,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -49889,7 +49889,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -50150,7 +50150,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -50163,7 +50163,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -50176,7 +50176,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -50487,7 +50487,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -50500,7 +50500,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -50513,7 +50513,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -50850,7 +50850,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -50863,7 +50863,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -50876,7 +50876,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -51239,7 +51239,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -51252,7 +51252,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -51265,7 +51265,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -51656,7 +51656,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -51669,7 +51669,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -51682,7 +51682,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -52064,13 +52064,13 @@
                     },
                     {
                         "items": [
-                            "very_low",
-                            "very_high",
-                            "low",
-                            "insane",
                             "high",
+                            "extreme_high",
                             "mid",
-                            "extreme_high"
+                            "low",
+                            "very_high",
+                            "very_low",
+                            "insane"
                         ],
                         "name": "priority"
                     }
@@ -52085,7 +52085,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -52098,7 +52098,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52111,7 +52111,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     },
@@ -52124,7 +52124,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "priority"
                         }
                     }
@@ -52550,8 +52550,8 @@
                     {
                         "items": [
                             "client_credentials",
-                            "refresh_token",
-                            "client_signature"
+                            "client_signature",
+                            "refresh_token"
                         ],
                         "name": "grant_type"
                     }
@@ -52566,7 +52566,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "grant_type"
                         }
                     },
@@ -52579,7 +52579,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52592,7 +52592,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52605,7 +52605,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52618,7 +52618,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     },
@@ -52631,7 +52631,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52644,7 +52644,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52657,7 +52657,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52670,7 +52670,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -52683,7 +52683,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -53012,7 +53012,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -53025,7 +53025,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "integer"
                         }
                     }
@@ -53328,7 +53328,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -53341,7 +53341,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -53644,7 +53644,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "boolean"
                         }
                     }
@@ -53748,7 +53748,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "number"
                         }
                     }
@@ -54009,7 +54009,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "scope"
                         }
                     }
@@ -54154,7 +54154,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "scope"
                         }
                     }
@@ -54299,7 +54299,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "scope"
                         }
                     }
@@ -54614,7 +54614,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     },
@@ -54627,7 +54627,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -54985,7 +54985,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "expected_result"
                         }
                     }
@@ -55561,7 +55561,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -55951,7 +55951,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "string"
                         }
                     }
@@ -56292,9 +56292,9 @@
                     },
                     {
                         "items": [
+                            "active",
                             "inactive",
-                            "rfq",
-                            "active"
+                            "rfq"
                         ],
                         "name": "state"
                     }
@@ -56309,7 +56309,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     },
@@ -56322,7 +56322,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "state"
                         }
                     }
@@ -56469,7 +56469,7 @@
                             "fields": [],
                             "is_array": false,
                             "is_nested_array": false,
-                            "is_primitive": false,
+                            "is_primitive": true,
                             "name": "currency"
                         }
                     }
@@ -56815,47 +56815,47 @@
                                         "sell",
                                         "buy"
                                     ],
-                                    "name": "\u203a direction"
+                                    "name": "direction"
                                 }
                             ],
                             "fields": [
                                 {
                                     "comment": "Instrument name",
-                                    "name": "\u203a instrument_name",
+                                    "name": "instrument_name",
                                     "required": "true",
                                     "type": {
                                         "enums": [],
                                         "fields": [],
                                         "is_array": false,
                                         "is_nested_array": false,
-                                        "is_primitive": false,
+                                        "is_primitive": true,
                                         "name": "string"
                                     }
                                 },
                                 {
                                     "comment": "It represents the requested trade size. For perpetual and futures the amount is in USD units, for options it is amount of corresponding cryptocurrency contracts, e.g., BTC or ETH",
-                                    "name": "\u203a amount",
+                                    "name": "amount",
                                     "required": "true",
                                     "type": {
                                         "enums": [],
                                         "fields": [],
                                         "is_array": false,
                                         "is_nested_array": false,
-                                        "is_primitive": false,
+                                        "is_primitive": true,
                                         "name": "number"
                                     }
                                 },
                                 {
                                     "comment": "Direction of trade from the maker perspective",
-                                    "name": "\u203a direction",
+                                    "name": "direction",
                                     "required": "true",
                                     "type": {
                                         "enums": [],
                                         "fields": [],
                                         "is_array": false,
                                         "is_nested_array": false,
-                                        "is_primitive": false,
-                                        "name": "\u203a direction"
+                                        "is_primitive": true,
+                                        "name": "direction"
                                     }
                                 }
                             ],

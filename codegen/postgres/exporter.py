@@ -1,6 +1,6 @@
 import os
 
-from codegen.models.models import Function
+from codegen.models.models import Function, Type_, Enum_
 from codegen.postgres.enum import enum_to_type
 from codegen.postgres.header import header
 from codegen.postgres.postgres import invoke_endpoint, type_to_type
@@ -50,20 +50,26 @@ class Exporter:
     def export(self, function: Function):
         script_dir = os.path.dirname(__file__)
 
-        with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.gen.sql"), 'w') as file:
+        with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.response.gen.sql"), 'w') as file:
             file.write(header())
 
             for tpe in reversed(function.endpoint.response_types):
                 file.write(type_to_type(self.schema, tpe))
                 file.write('\n\n')
 
-            if function.endpoint.request_type is not None:
-                for enum in function.endpoint.request_type.enums:
-                    file.write(enum_to_type(self.schema, function.endpoint.request_type.name, enum))
+        if function.endpoint.request_type is not None:
+            with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.request.gen.sql"), 'w') as file:
+                file.write(header())
+
+                enums = walk_types_return_enums_in_reverse_order(function.endpoint.request_type)
+                for parent, e in enums:
+                    file.write(enum_to_type(self.schema, parent.name, e))
                     file.write('\n\n')
 
-                file.write(type_to_type(self.schema, function.endpoint.request_type))
-                file.write('\n')
+                types = walk_types_return_complex_types_in_reverse_order(function.endpoint.request_type)
+                for t in types:
+                    file.write(type_to_type(self.schema, t))
+                    file.write('\n')
 
         with open(os.path.join(script_dir, f"../../sql/functions/{function.endpoint.name}.gen.sql"), 'w') as file:
             file.write(header())
@@ -73,3 +79,31 @@ class Exporter:
         with open(os.path.join(script_dir, f"../../test/all_functions.gen.sql"), 'a') as file:
             file.write(test_endpoint(self.schema, function))
             file.write('\n')
+
+
+def walk_types_return_enums_in_reverse_order(tpe: Type_) -> [(Type_, Type_)]:
+    all_types = walk_types_return_complex_types_in_reverse_order(tpe)
+    res = []
+    for t in all_types:
+        for f in t.fields:
+            if f.type.is_enum:
+                res.append((t, f.type))
+
+    return res
+
+
+def walk_types_return_complex_types_in_reverse_order(tpe: Type_) -> [Type_]:
+    res = []
+
+    if tpe.is_primitive:
+        return res
+
+    for field in tpe.fields:
+        if field.type.is_primitive:
+            continue
+
+        res.extend(walk_types_return_complex_types_in_reverse_order(field.type))
+
+    res.append(tpe)
+
+    return res
