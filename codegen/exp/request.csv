@@ -1,0 +1,18 @@
+Parameter,Required,Type,Enum,Description
+wait_for_response,FALSE,boolean,,"If false, the response is sent immediately after the risk check. If true, the response is sent after the orders all go through the matching engine. Default - true ."
+detailed,FALSE,boolean,,"Flag to receive a list of all order changes and a list of errors, or to only receive a list of errors. Default - false ."
+quote_id,TRUE,string,,Identifier of a mass quote message. Can be used to match trades to requests. We recommend using an incrementing counter.
+mmp_group,TRUE,string,,Name of the MMP group. An MMP group has to be used and only one quote can exist per instrument per side per MMP group.
+quotes,TRUE,array of objects,,List of quotes.
+›  instrument_name,TRUE,string,,The name of the instrument.
+›  quote_set_id,TRUE,string,,User-defined label that can be used for targeted cancels using private/cancel_quotes.
+›  ask,FALSE,object,,"Order details for the ask. If not provided, bid must be present."
+›    ›  price,FALSE,number,,"The price of this side of the quote. If no price is supplied, only the amount is amended."
+›    ›  amount,FALSE,number,,"The amount of this side of the quote. If no quantity is supplied, only the price is amended."
+›    ›  post_only,FALSE,boolean,,"If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Default - false"
+›    ›  reject_post_only,FALSE,boolean,,"If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with ""post_only"" set to true . Default value - false"
+›  bid,FALSE,object,,"Order details for the bid. If not provided, ask must be present."
+›    ›  price,FALSE,number,,"The price of this side of the quote. If no price is supplied, only the amount is amended."
+›    ›  amount,FALSE,number,,"The amount of this side of the quote. If no quantity is supplied, only the price is amended."
+›    ›  post_only,FALSE,boolean,,"If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Default - false"
+›    ›  reject_post_only,FALSE,boolean,,"If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with ""post_only"" set to true . Default value - false"
