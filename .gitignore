@@ -56,3 +56,4 @@ venv
 .fake
 run.sh
 .run/main.run.xml
+.DS_Store
