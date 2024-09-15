@@ -22,7 +22,8 @@ sql/$(EXTENSION)--$(EXTVERSION).sql: \
 	$(sort $(wildcard sql/tables/*.gen.sql)) \
 	$(sort $(wildcard sql/functions/*.gen.sql)) \
 	$(sort $(wildcard sql/triggers/*.gen.sql)) \
-	$(sort $(wildcard sql/static/*.gen.sql))
+	$(sort $(wildcard sql/static/*.gen.sql)) \
+	$(sort $(wildcard sql/endpoints/*.sql))
 	cat $^ > $@
 
 DATA = $(wildcard updates/*--*.sql) sql/$(EXTENSION)--$(EXTVERSION).sql

@@ -1,15 +1,13 @@
 import warnings
 import inflect
+from typing import List, Dict, Union
 
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
-
-from typing import List, Dict
-
 import pandas as pd
 
-from codegen.utils.name_utils import url_to_type_name, count_ident, strip_field_name
-from codegen.models.models import Type_, Field, Enum_
+from utils.name_utils import url_to_type_name, count_ident, strip_field_name
+from models.models import Type_, Field, Enum_
 
 p = inflect.engine()
 
@@ -63,7 +61,7 @@ class response_row:
         return count_ident(self.name)
 
 
-def convert_to_response_row(row) -> response_row or None:
+def convert_to_response_row(row) -> Union[response_row, None]:
     if pd.isna(row[0]):
         return None
 
@@ -88,18 +86,33 @@ def default_response_type(end_point: str) -> Type_:
     return def_res_type
 
 
-def response_table_to_type(end_point: str, table) -> (Type_, Type_, List[Type_]):
+def response_table_to_type(end_point: str, table) -> tuple[Type_, Type_, List[Type_]]:
     parent_type_name = f"{url_to_type_name(end_point)}_response"
 
     df = pd.read_html(str(table), )[0]
 
+    # WARNING: HACKS FOR BROKENS DOCS
+    if end_point == '/private/get_user_trades_by_order':
+        new_row = {
+            'Name': 'result', 
+            'Type': 'array of object', 
+            'Description': ''
+        }
+        df = pd.concat([df.iloc[:2], pd.DataFrame([new_row]), df.iloc[2:]]).reset_index(drop=True)
+        df.at[3, 'Name'] = 'timestamp'
+        df.at[3, 'Type'] = 'integer'
+        df.at[3, 'Description'] = ''
+        df.iloc[3:, 0] = (
+            '› ' + df.iloc[3:, 0].astype(str)
+        )
+    
     types: Dict[str, Type_] = dict()
 
     current_type = parent_type_name
 
     types[current_type] = Type_(name=current_type)
     root_type = types[current_type]
-    response_type: Type_ or None = None
+    response_type: Type_
     current_ident_level = 0
 
     index = 0
@@ -171,7 +184,7 @@ def response_table_to_type(end_point: str, table) -> (Type_, Type_, List[Type_])
 
             current_type = new_type_name
             types[current_type] = Type_(name=current_type)
-            types[current_type].is_array = True,
+            types[current_type].is_array = True
             types[current_type].parent = parent_type
 
             if field_name == 'result':

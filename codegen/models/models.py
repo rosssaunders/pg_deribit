@@ -105,6 +105,7 @@ class Function:
     endpoint: Endpoint
     comment: str
     response_type: Type_
+    requires_auth: bool
 
     def to_dict(self):
         return {
@@ -112,4 +113,5 @@ class Function:
             'endpoint': self.endpoint.to_dict(),
             'comment': self.comment,
             'response_type': self.response_type.to_dict() if self.response_type is not None else None,
+            'requires_auth': self.requires_auth
         }

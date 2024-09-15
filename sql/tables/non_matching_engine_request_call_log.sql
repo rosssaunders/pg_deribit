@@ -1,4 +1,3 @@
-drop table if exists deribit.non_matching_engine_request_call_log;
 create unlogged table deribit.non_matching_engine_request_call_log
 (
     call_timestamp timestamp

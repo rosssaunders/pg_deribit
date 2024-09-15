@@ -26,6 +26,7 @@ This project provides a PostgreSQL wrapper for the Deribit API, enabling easy in
 \echo Use "CREATE EXTENSION pg_deribit" to load this file. \quit
 
 ## Configuration
+
 Set up your Deribit API credentials in a configuration file.
 Configure your PostgreSQL connection settings.
 
@@ -41,14 +42,18 @@ Placing an Order:
 SELECT place_order('BTC-25DEC20', 'buy', 1, 10000);
 
 ## Documentation
+
 Refer to the docs folder for detailed documentation on all available functions, parameters, and examples.
 
 ## Contributing
+
 Contributions are welcome! Please read our contributing guidelines in CONTRIBUTING.md before submitting pull requests.
 
 ## License
+
 This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## Acknowledgments
+
 Thanks to Deribit for providing the API.
 Contributors and maintainers of this project.

@@ -1,10 +1,13 @@
-FROM ghcr.io/omnigres/omnigres-slim:latest
+FROM ghcr.io/omnigres/omnigres:latest
 
 RUN apt-get update && apt-get install -y \
     build-essential \
     postgresql-server-dev-all \
     wget \
-    unzip
+    unzip \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/* \
+    || { echo "APT-GET INSTALL FAILED"; exit 1; }
 
 # Install pgTAP
 RUN wget -c http://api.pgxn.org/dist/pgtap/1.1.0/pgtap-1.1.0.zip

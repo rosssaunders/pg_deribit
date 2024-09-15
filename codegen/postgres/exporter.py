@@ -1,10 +1,11 @@
 import os
+from typing import List
 
-from codegen.models.models import Function, Type_, Enum_
-from codegen.postgres.enum import enum_to_type
-from codegen.postgres.header import header
-from codegen.postgres.postgres import invoke_endpoint, type_to_type
-from codegen.postgres.tests import test_endpoint
+from models.models import Function, Type_
+from postgres.enum import enum_to_type
+from postgres.header import header
+from postgres.postgres import invoke_endpoint, type_to_type
+from postgres.tests import test_endpoint
 
 
 class Exporter:
@@ -17,16 +18,13 @@ class Exporter:
         self.schema = schema
 
     def setup(self):
-        with open(os.path.join(self.script_dir, f"../../test/all_functions.gen.sql"), 'w') as file:
-            file.write(header())
-            pass
         pass
 
     @staticmethod
-    def sort_functions(functions: [Function]):
+    def sort_functions(functions: List[Function]):
         return sorted(functions, key=lambda f: f.endpoint.name)
 
-    def all(self, functions: [Function]):
+    def all(self, functions: List[Function]):
         self.setup()
 
         sorted_endpoints = self.sort_functions(functions)
@@ -36,7 +34,7 @@ class Exporter:
 
         # don't treat these as code gens
         with open(os.path.join(self.script_dir, f"../../sql/types/endpoints.sql"), 'w') as file:
-            file.write(f"drop type if exists deribit.endpoint cascade;\n\n")
+            #file.write(f"drop type if exists deribit.endpoint cascade;\n\n")
             file.write(f"create type deribit.endpoint as enum (\n")
             file.write(f',\n'.join(f"    '{function.endpoint.path}'" for function in sorted_endpoints))
             file.write(f"\n);\n")
@@ -50,38 +48,29 @@ class Exporter:
     def export(self, function: Function):
         script_dir = os.path.dirname(__file__)
 
-        with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.response.gen.sql"), 'w') as file:
+        with open(os.path.join(script_dir, f"../../sql/endpoints/{function.endpoint.name}.sql"), 'w') as file:
+            sections: List[str] = []
             file.write(header())
 
-            for tpe in reversed(function.endpoint.response_types):
-                file.write(type_to_type(self.schema, tpe))
-                file.write('\n\n')
-
-        if function.endpoint.request_type is not None:
-            with open(os.path.join(script_dir, f"../../sql/types/{function.endpoint.name}.request.gen.sql"), 'w') as file:
-                file.write(header())
-
+            if function.endpoint.request_type is not None:
                 enums = walk_types_return_enums_in_reverse_order(function.endpoint.request_type)
                 for parent, e in enums:
-                    file.write(enum_to_type(self.schema, parent.name, e))
-                    file.write('\n\n')
+                    sections.append(enum_to_type(self.schema, parent.name, e))
 
                 types = walk_types_return_complex_types_in_reverse_order(function.endpoint.request_type)
                 for t in types:
-                    file.write(type_to_type(self.schema, t))
-                    file.write('\n')
+                    sections.append(type_to_type(self.schema, t))
 
-        with open(os.path.join(script_dir, f"../../sql/functions/{function.endpoint.name}.gen.sql"), 'w') as file:
-            file.write(header())
-            file.write(invoke_endpoint(self.schema, function))
-            file.write('\n')
+            for tpe in reversed(function.endpoint.response_types):
+                sections.append(type_to_type(self.schema, tpe))
 
-        with open(os.path.join(script_dir, f"../../test/all_functions.gen.sql"), 'a') as file:
-            file.write(test_endpoint(self.schema, function))
-            file.write('\n')
+            sections.append(invoke_endpoint(self.schema, function))
+
+            file.write("\n\n".join(sections))
+            file.write("\n")
 
 
-def walk_types_return_enums_in_reverse_order(tpe: Type_) -> [(Type_, Type_)]:
+def walk_types_return_enums_in_reverse_order(tpe: Type_) -> List[tuple[Type_, Type_]]:
     all_types = walk_types_return_complex_types_in_reverse_order(tpe)
     res = []
     for t in all_types:
@@ -92,8 +81,8 @@ def walk_types_return_enums_in_reverse_order(tpe: Type_) -> [(Type_, Type_)]:
     return res
 
 
-def walk_types_return_complex_types_in_reverse_order(tpe: Type_) -> [Type_]:
-    res = []
+def walk_types_return_complex_types_in_reverse_order(tpe: Type_) -> List[Type_]:
+    res: List[Type_] = []
 
     if tpe.is_primitive:
         return res

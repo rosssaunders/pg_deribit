@@ -1,4 +1,4 @@
-create or replace function decrypt_and_store_in_session(decryption_key text)
+create function deribit.decrypt_and_store_in_session(decryption_key text)
 returns void
 language plpgsql
 as

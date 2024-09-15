@@ -1,5 +1,4 @@
-drop function if exists deribit.matching_engine_request_log_call;
-create or replace function deribit.matching_engine_request_log_call(url deribit.endpoint)
+create function deribit.matching_engine_request_log_call(url deribit.endpoint)
 returns void
 language plpgsql
 as

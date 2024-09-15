@@ -1,7 +1,8 @@
 # converts from the documented type to the postgres type
-from codegen.models.models import Field, Function, Type_
-from codegen.postgres.documentation import escape_comment, required_to_string
-from codegen.postgres.keywords import escape_postgres_keyword
+from typing import List
+from models.models import Field, Function, Type_
+from postgres.documentation import escape_comment, required_to_string
+from postgres.keywords import escape_postgres_keyword
 
 
 def convert_type_postgres(schema: str, parent_type: str, field_type: Type_) -> str:
@@ -39,12 +40,14 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: Type_) -> s
 
 
 def type_to_type(schema: str, type_: Type_) -> str:
-    res = f"drop type if exists {schema}.{type_.name} cascade;\n\n"
-    res += f"create type {schema}.{type_.name} as (\n"
+    #res = f"drop type if exists {schema}.{type_.name} cascade;\n\n"
+    res = f"create type {schema}.{type_.name} as (\n"
     res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type_.name, e.type)}' for e in type_.fields)
-    res += f"\n);\n\n"
+    res += f"\n);"
 
-    res += '\n'.join(f'comment on column {schema}.{type_.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type_.fields if e.documentation != '')
+    comments = '\n'.join(f'comment on column {schema}.{type_.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type_.fields if e.documentation != '')
+    if len(comments) > 0:
+        res += "\n\n" + comments
 
     return res
 
@@ -56,16 +59,27 @@ def default_to_null(field: Field) -> str:
         return ' default null'
 
 
-def sort_fields_by_required(fields: [Field]) -> [Field]:
+def sort_fields_by_required(fields: List[Field]) -> List[Field]:
     return sorted(fields, key=lambda e: e.required, reverse=True)
 
 
 def invoke_endpoint(schema: str, function: Function) -> str:
-    res = f"""drop function if exists {schema}.{function.name};\n\n"""
-    res += f"""create or replace function {schema}.{function.name}("""
+    public_private = ""
+    res = ""
+    if function.requires_auth:
+        public_private = "private"
+        res = f"""create function {schema}.{function.name}(\n    auth deribit.auth"""
+    else:
+        public_private = "public"
+        res = f"""create function {schema}.{function.name}("""
+
     if function.endpoint.request_type is not None:
-        res += "\n"
+        if public_private == "private":
+            res += "\n,"
+        
         res += ',\n'.join(f'    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
+        res += "\n"
+    else:
         res += "\n"
     res += f""")"""
 
@@ -109,21 +123,33 @@ as $$"""
         res += ',\n'.join(f'            {escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
         res += f"""
         )::{schema}.{function.endpoint.request_type.name} as payload
-    )
-    , http_response as (
-        select {schema}.internal_jsonrpc_request(
-            '{function.endpoint.path}'::{schema}.endpoint, 
-            request.payload, 
-            '{schema}.{function.endpoint.rate_limiter}'::name
+    ), 
+    http_response as (
+    """
+        
+        res += f"""    select {schema}.{public_private}_jsonrpc_request("""
+
+        if public_private == 'private':
+            res += """
+            auth := auth, """
+
+        res += f"""            
+            url := '{function.endpoint.path}'::{schema}.endpoint, 
+            request := request.payload, 
+            rate_limiter := '{schema}.{function.endpoint.rate_limiter}'::name
         ) as http_response
         from request
     )
-"""
+    """
     else:
         res += f"""
     with http_response as (
-        select {schema}.internal_jsonrpc_request(
-            '{function.endpoint.path}'::{schema}.endpoint, 
+        select {schema}.{public_private}_jsonrpc_request("""
+
+        if public_private == 'private':
+            res += """auth, """
+
+        res += f"""'{function.endpoint.path}'::{schema}.endpoint, 
             null::text, 
             '{schema}.{function.endpoint.rate_limiter}'::name
         ) as http_response
@@ -136,7 +162,7 @@ as $$"""
         """
     elif function.response_type.is_array:
         res += f"""    , result as (
-        select (jsonb_populate_record(
+select (jsonb_populate_record(
                         null::{schema}.{function.endpoint.response_type.name},
                         convert_from((http_response.http_response).body, 'utf-8')::jsonb)
              ).result
@@ -171,7 +197,7 @@ as $$"""
     ) a
     """
     else:
-        res += f"""    select (jsonb_populate_record(
+        res += f"""select (jsonb_populate_record(
         null::{schema}.{function.endpoint.response_type.name}, 
         convert_from((a.http_response).body, 'utf-8')::jsonb)).result
     from http_response a
@@ -191,5 +217,3 @@ comment on function {schema}.{function.name} is \'{escape_comment(function.comme
     ############################
 
     return res
-
-

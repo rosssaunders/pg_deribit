@@ -2,8 +2,8 @@ from typing import List
 import pandas as pd
 from pandas import DataFrame
 
-from codegen.utils.name_utils import url_to_type_name, get_singular_type_name, count_ident, strip_field_name
-from codegen.models.models import Type_, Field, Enum_
+from utils.name_utils import url_to_type_name, get_singular_type_name, count_ident, strip_field_name
+from models.models import Type_, Field, Enum_
 
 
 class request_row:
@@ -16,7 +16,7 @@ class request_row:
         self.description = description
 
     def is_array(self) -> bool:
-        return self.type == 'array of objects' or self.type == 'array'
+        return self.type == 'array of objects' or self.type == 'array' or self.type == 'string or array of strings'
 
     def is_primitive(self) -> bool:
         return (self.type == 'string' or
@@ -24,7 +24,9 @@ class request_row:
                 self.type == 'number' or
                 self.type == 'integer' or
                 self.type == 'boolean' or
-                self.type == 'array')
+                self.type == 'array' or
+                self.type == 'object' or
+                self.type == 'string or array of strings')
 
     def is_enum(self) -> bool:
         return pd.isna(self.enum) is False
@@ -39,6 +41,7 @@ class request_row:
         if self.is_primitive() and self.is_array():
             t = Type_(name='string')
             t.is_array = True
+            t.is_primitive = True
             return t
 
         if self.is_enum():
@@ -107,34 +110,38 @@ def request_table_to_type(endpoint: str, table) -> Type_:
     while i < len(df):
         df_row = df.iloc[i]
 
-        row = convert_to_request_row(df_row)
+        # skip blank rows incorrectly in the deribit docs
+        # this will be blank if so
+        if not pd.isna(df_row[0]):
+            
+            row = convert_to_request_row(df_row)
 
-        if row.is_enum():
-            request_type.enums.append(row.to_enum())
-            request_type.fields.append(row.to_field())
+            if row.is_enum():
+                request_type.enums.append(row.to_enum())
+                request_type.fields.append(row.to_field())
 
-        elif row.is_array() and row.is_primitive():
-            request_type.fields.append(row.to_field())
+            elif row.is_array() and row.is_primitive():
+                request_type.fields.append(row.to_field())
 
-        elif row.is_array() and row.is_primitive() is False:
-            complex_type_builder = type_builder(type_name)
-            complex_type_builder.parse(i, df)
+            elif row.is_array() and row.is_primitive() is False:
+                complex_type_builder = type_builder(type_name)
+                complex_type_builder.parse(i, df)
 
-            field_type = Type_(name=complex_type_builder.name)
-            field_type.is_array = True
-            field_type.is_class = True
-            field_type.fields = complex_type_builder.fields
-            field_type.enums = complex_type_builder.enums
+                field_type = Type_(name=complex_type_builder.name)
+                field_type.is_array = True
+                field_type.is_class = True
+                field_type.fields = complex_type_builder.fields
+                field_type.enums = complex_type_builder.enums
 
-            field = Field(name=row.name, type=field_type, required=row.required, documentation=row.description)
+                field = Field(name=row.name, type=field_type, required=row.required, documentation=row.description)
 
-            request_type.fields.append(field)
+                request_type.fields.append(field)
 
-            # move the index to the end of the complex type
-            i = i + len(complex_type_builder.fields)
+                # move the index to the end of the complex type
+                i = i + len(complex_type_builder.fields)
 
-        else:
-            request_type.fields.append(row.to_field())
+            else:
+                request_type.fields.append(row.to_field())
 
         i += 1
 

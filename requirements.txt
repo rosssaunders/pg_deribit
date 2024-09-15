@@ -1,7 +1,0 @@
-inflect
-pandas
-bs4
-requests
-lxml
-sqlfluff
-numpy

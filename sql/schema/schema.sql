@@ -1,1 +1,1 @@
-create schema if not exists deribit;
+create schema deribit;

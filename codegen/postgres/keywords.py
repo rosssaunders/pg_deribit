@@ -15,6 +15,8 @@ def escape_postgres_keyword(keyword: str) -> str:
         'timestamp'
     ]
 
+    return f'"{keyword}"'
+
     # If the keyword is a reserved keyword, return it wrapped in double quotes
     if keyword.lower() in reserved_keywords:
         return f'"{keyword}"'

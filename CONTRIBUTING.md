@@ -47,7 +47,7 @@ People *love* thorough bug reports.
 
 ## Use a Consistent Coding Style
 
-* Please follow the SQL formatting and layout used in this repo.
+- Please follow the SQL formatting and layout used in this repo.
 
 ## License
 

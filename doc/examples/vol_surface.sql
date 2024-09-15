@@ -33,23 +33,13 @@ with elements as (
 )
 select x -> 0, x -> 1
 from elements;
-
-
-
-
-
-        # as r
-
-
-
-with x as (
-    select convert_from((deribit.internal_jsonrpc_request('/public/get_historical_volatility',
-  row('BTC')::deribit.public_get_historical_volatility_request)).body, 'utf-8')::jsonb -> 'result' as r
-)
-select *
-from deribit.convert_from_jsonb_array_to_table(x.r);
-
-
+--
+-- with x as (
+--     select convert_from((deribit.internal_jsonrpc_request('/public/get_historical_volatility',
+--   row('BTC')::deribit.public_get_historical_volatility_request)).body, 'utf-8')::jsonb -> 'result' as r
+-- )
+-- select *
+-- from deribit.convert_from_jsonb_array_to_table(x.r);
 
 
 drop function deribit.convert_from_jsonb_array_to_table(jsonb);
@@ -113,10 +103,6 @@ $$
         (unnest_2d_1d::double precision[])[2]
     from unnest(values) unnest_2d_1d
 $$ language sql;
-
-
-
-
 
 
 

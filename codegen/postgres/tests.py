@@ -1,11 +1,12 @@
-from codegen.models.models import Function, Field, Type_
-from codegen.postgres.keywords import escape_postgres_keyword
-from codegen.postgres.postgres import convert_type_postgres
+from models.models import Function, Field, Type_
+from postgres.keywords import escape_postgres_keyword
+from postgres.postgres import convert_type_postgres
 
 
 def default_test_value(field: str) -> str:
     field_values = {
         'currency': "'BTC'",
+        'currency_pair': "'BTC-USD'",
         'instrument_name': "'BTC-PERPETUAL'",
         'amount': '0.1::numeric',
         'price': '10000::numeric',

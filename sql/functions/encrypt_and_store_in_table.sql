@@ -1,4 +1,4 @@
-create or replace function encrypt_and_store_in_table(client_id text, client_secret text, encryption_password text)
+create function deribit.encrypt_and_store_in_table(client_id text, client_secret text, encryption_password text)
 returns void
 language plpgsql
 as

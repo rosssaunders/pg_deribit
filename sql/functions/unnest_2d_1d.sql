@@ -1,4 +1,4 @@
-create or replace function deribit.unnest_2d_1d(anyarray)
+create function deribit.unnest_2d_1d(anyarray)
 returns setof anyarray
 language sql
 immutable parallel safe strict as

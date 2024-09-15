@@ -6,7 +6,7 @@ create extension if not exists pgcrypto cascade;
 create extension if not exists pg_deribit cascade;
 ```
 
-# How to login for the current session.
+## How to login for the current session.
 
 ```sql
 do $$
@@ -29,7 +29,7 @@ $$;
 
 ```
 
-# Using a recursive CTE to paginate through all trades.
+## Using a recursive CTE to paginate through all trades.
 
 ```sql
 with recursive trades as (
@@ -57,4 +57,3 @@ from (
     from trades t
 ) a;
 ```
-

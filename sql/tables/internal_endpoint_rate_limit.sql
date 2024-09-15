@@ -1,4 +1,3 @@
-drop table if exists deribit.internal_endpoint_rate_limit;
 create table deribit.internal_endpoint_rate_limit (
     key deribit.endpoint primary key,
     last_call timestamptz null default null,

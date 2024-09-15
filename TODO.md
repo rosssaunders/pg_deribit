@@ -31,3 +31,8 @@ Endpoints to implement:
 - [ ] language enums - see <https://docs.deribit.com/#private-set_email_language>
 - [ ] all section covered - currently only sections = ['Market data', 'Account management', 'Trading', 'Wallet']
 - [ ] public_get_order_book -> reformat data to a table -> can't be done
+
+Websocket Functions investigation
+
+- public_disable_heartbeat
+- public endpoints are requiring auth

@@ -1,8 +1,8 @@
-from codegen.deribit.consts import excluded_urls, matching_engine_endpoints
-from codegen.deribit.request import request_table_to_type
-from codegen.deribit.response import default_response_type, response_table_to_type
-from codegen.utils.name_utils import url_to_type_name
-from codegen.models.models import Endpoint, Function
+from deribit.consts import excluded_urls, matching_engine_endpoints
+from deribit.request import request_table_to_type
+from deribit.response import default_response_type, response_table_to_type
+from utils.name_utils import url_to_type_name
+from models.models import Endpoint, Function
 
 
 def extract_function_from_section(sibling):
@@ -40,6 +40,11 @@ def extract_function_from_section(sibling):
         rate_limiter = 'non_matching_engine_request_log_call'
 
     comment = sibling.find_next_sibling('p')
+
+    requires_auth = True
+    if sibling.text.startswith("/public/"):
+        requires_auth = False
+    
     function = Function(name=url_to_type_name(sibling.text),
                         endpoint=Endpoint(
                             name=file_name,
@@ -50,7 +55,8 @@ def extract_function_from_section(sibling):
                             rate_limiter=rate_limiter
                         ),
                         comment=comment.text,
-                        response_type=response_type
+                        response_type=response_type,
+                        requires_auth=requires_auth
                         )
 
     return function

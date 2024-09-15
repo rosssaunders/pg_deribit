@@ -1,18 +1,18 @@
-create or replace function deribit.join_paths(variadic paths text[])
-returns text 
-language plpgsql
-as
-$$
-declare
-    result text = '';
-    path   text;
-begin
-    for i in 1..array_length(paths, 1)
-        loop
-            path := paths[i];
-            result := result || '/' || regexp_replace(path, '^/|/$', '', 'g');
-        end loop;
+-- create function deribit.join_paths(variadic paths text[])
+-- returns text 
+-- language plpgsql
+-- as
+-- $$
+-- declare
+--     result text = '';
+--     path   text;
+-- begin
+--     for i in 1..array_length(paths, 1)
+--         loop
+--             path := paths[i];
+--             result := result || '/' || regexp_replace(path, '^/|/$', '', 'g');
+--         end loop;
 
-    return result;
-end;
-$$;
+--     return result;
+-- end;
+-- $$;
