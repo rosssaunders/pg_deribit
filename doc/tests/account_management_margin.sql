@@ -1,28 +1,33 @@
 create extension if not exists pg_deribit cascade;
 
-delete from deribit.keys;
-select deribit.encrypt_and_store_in_table('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE', 'password123');
-select deribit.decrypt_and_store_in_session('password123');
+select deribit.store_auth(
+    client_id := 'rvAcPbEz',
+    client_secret := 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE');
+select deribit.get_auth();
 
 select *
 from deribit.private_change_margin_model(
+    auth := deribit.get_auth(),
     margin_model := 'cross_pm',
     dry_run := true
 );
 
--- TODO
+-- TODO - returns zero columns
 select *
 from deribit.private_pme_simulate(
+    auth := deribit.get_auth(),
     currency := 'CROSS'
 );
 
 -- TODO: doesn't work
 select *
 from deribit.private_simulate_portfolio(
+    auth := deribit.get_auth(),
     currency := 'BTC'
 );
 
 select *
 from deribit.private_toggle_portfolio_margining(
+    auth := deribit.get_auth(),
     enabled := true
 );
