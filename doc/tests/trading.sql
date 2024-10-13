@@ -5,13 +5,13 @@ delete from deribit.keys;
 select deribit.encrypt_and_store_in_table('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE', 'password123');
 select deribit.decrypt_and_store_in_session('password123');
 
-select *
+select ("order").*
 from deribit.private_buy(
     (select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
     instrument_name := 'BTC-PERPETUAL',
     contracts := 1,
     type := 'limit',
-    price := 60000
+    price := 63000
 );
 
 select *
@@ -103,6 +103,7 @@ from deribit.private_get_open_orders();
 
 select *
 from deribit.private_get_open_orders_by_currency(
+(select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
     currency := 'BTC'
 );
 
@@ -156,16 +157,51 @@ from deribit.private_get_user_trades_by_currency(
 
 select *
 from deribit.private_get_user_trades_by_currency_and_time(
+    (select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
     currency := 'BTC',
     start_timestamp := (extract(epoch from '2024-09-01'::timestamptz) * 1000)::bigint,
     end_timestamp := (extract(epoch from '2024-09-15'::timestamptz) * 1000)::bigint
 );
 
-
-select *
+select (unnest(trades)).fee
 from deribit.private_get_user_trades_by_instrument(
+(select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
     instrument_name := 'BTC-PERPETUAL'
 );
+
+with recursive trades as (
+    select a.*
+    from deribit.private_get_user_trades_by_instrument(
+          (select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
+          instrument_name := 'BTC-PERPETUAL',
+          count := 1,
+          start_timestamp := 0,
+          sorting := 'asc'
+       ) a
+    union all
+    select b.*
+    from trades t
+    cross join deribit.private_get_user_trades_by_instrument(
+          (select row('rvAcPbEz', 'O7p6B9IY5Ly374KG-jXMovyo3zIt0XhjMcdKTYvQENE')::deribit.auth),
+          instrument_name := 'BTC-PERPETUAL',
+          sorting := 'asc',
+          count := 1,
+          start_seq := (select max(v.trade_seq) from unnest((t).trades) v) + 1
+             ) b
+    where t.has_more
+)
+select (a.t).*
+from (select unnest((t).trades) as t
+      from trades t) a;
+
+
+
+
+
+
+
+
+
 
 select *
 from deribit.private_get_user_trades_by_instrument_and_time(
