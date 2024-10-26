@@ -8,7 +8,9 @@ sections = [
     'Combo Books',
     'Block Trade',
     'Wallet',
-    'Account management'
+    'Account management',
+    'New Section 1',  # Added new section
+    'New Section 2'   # Added new section
 ]
 
 excluded_urls = {
@@ -18,7 +20,9 @@ excluded_urls = {
     'public_disable_heartbeat': 'Websocket only',
     'public_get_portfolio_margins': 'Deprecated', #https://docs.deribit.com/#public-get_portfolio_margins
     'private_get_portfolio_margins': 'Deprecated', #https://docs.deribit.com/?javascript#private-get_portfolio_margins
-    'public_get_index': 'Deprecated' # https://docs.deribit.com/#public-get_index
+    'public_get_index': 'Deprecated', # https://docs.deribit.com/#public-get_index
+    'new_endpoint_1': 'New endpoint description',  # Added new endpoint
+    'new_endpoint_2': 'New endpoint description'   # Added new endpoint
 }
 
 matching_engine_endpoints = [
