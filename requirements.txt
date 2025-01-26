@@ -1,0 +1,7 @@
+inflect
+pandas
+pandas-stubs
+bs4
+requests
+lxml
+numpy
