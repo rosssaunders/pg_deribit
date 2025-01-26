@@ -1,17 +1,12 @@
 # pg_deribit - Deribit API Wrapper for PostgreSQL
 
-This project provides a PostgreSQL wrapper for the Deribit API, enabling easy interaction with Deribit's cryptocurrency trading platform from PostgreSQL. 
+This project provides a PostgreSQL wrapper for the Deribit API, enabling easy interaction with Deribit's cryptocurrency trading platform from PostgreSQL.
 
 It's designed for developers and data analysts who want to integrate Deribit's features into PostgreSQL-based applications or perform complex data analysis.
 
+## Who is this for
+
 ![Who is this for](whoisthisfor.png)
-
-## Features
-
-- **Seamless Integration**: Directly use SQL to interact with Deribit's API.
-- **Data Analysis**: Perform complex queries on trading data.
-- **Real-Time Data**: Access live market data.
-- **User-Friendly**: Designed with simplicity in mind for both developers and analysts.
 
 ## Getting Started
 
@@ -23,7 +18,7 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 
 ### Installation
 
-pg_deribit currently ships as source code. 
+pg_deribit currently ships as source code.
 
 1. Clone the repository:
 
@@ -36,32 +31,39 @@ pg_deribit currently ships as source code.
 Run the following commands to start a fresh container changing the port number as needed.
 
 ```bash
-docker build . -t pg_deribit
-
 # stop existing container called pg_deribit
-docker stop pg_deribit
+docker stop pg_deribit 2>/dev/null || true
 
 # remove any existing container called pg_deribit
-docker rm -f pg_deribit
+docker rm -f pg_deribit 2>/dev/null || true
 
 # launch the new one
-docker run -d --name pg_deribit -p 5433:5432 pg_deribit
+docker build . -t pg_deribit
+
+docker run -d --name pg_deribit -p 5433:5432 \
+  -e POSTGRES_PASSWORD=deribitpwd \
+  -e POSTGRES_USER=deribit \
+  -e POSTGRES_DB=deribit \
+  pg_deribit
 
 # connect to the container
-psql -h localhost -p 5433 -U postgres -d deribit
+PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
 
 # load the extension
-create extension pg_deribit cascade;
+create extension if not exists pg_deribit cascade;
+
+# test the extension
+select currency
+from deribit.public_get_currencies()
+order by currency;
 
 # exit the container
 \q
 ```
 
+Connect using your favourite Postgres GUI and get going. For how to use it, see the examples in the doc folder.
+
 ## Usage
-
-See the examples in the doc folder.
-
-## Documentation
 
 Refer to the docs folder for examples and the sql/endpoints folder for the full list of endpoints.
 

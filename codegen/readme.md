@@ -26,7 +26,7 @@ python main.py
 
 ## Deribit Documentation Errors
 
-The Deribit documentation has a few errors that need to be worked around. 
+The Deribit documentation has a few errors that need to be worked around.
 
 The `fix_broken_docs.py` script contains the code to work around these errors.
 
