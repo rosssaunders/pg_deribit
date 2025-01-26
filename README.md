@@ -17,21 +17,45 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 
 ### Prerequisites
 
-- Docker
-- A Deribit account (Prod or Test)
+- [Docker](https://www.docker.com/)
+- [Deribit account](https://www.deribit.com/) (Production or Testnet)
+- [psql](https://www.postgresql.org/docs/current/app-psql.html)
 
 ### Installation
+
+pg_deribit currently ships as source code. 
 
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/rosssaunders/pg_deribit.git
+   git clone https://github.com/rosssaunders/pg_deribit
+   ```
 
-\echo Use "CREATE EXTENSION pg_deribit" to load this file. \quit
+## Quickstart
 
-## Configuration
+Run the following commands to start a fresh container changing the port number as needed.
 
-Configure your PostgreSQL connection settings.
+```bash
+docker build . -t pg_deribit
+
+# stop existing container called pg_deribit
+docker stop pg_deribit
+
+# remove any existing container called pg_deribit
+docker rm -f pg_deribit
+
+# launch the new one
+docker run -d --name pg_deribit -p 5433:5432 pg_deribit
+
+# connect to the container
+psql -h localhost -p 5433 -U postgres -d deribit
+
+# load the extension
+create extension pg_deribit cascade;
+
+# exit the container
+\q
+```
 
 ## Usage
 
@@ -44,13 +68,3 @@ Refer to the docs folder for examples and the sql/endpoints folder for the full 
 ## Contributing
 
 Contributions are welcome! Please read our contributing guidelines in CONTRIBUTING.md before submitting pull requests.
-
-## How to generate the SQL code wrappers from the Deribit HTML documentation
-
-```PowerShell
-python -m venv venv
-.\venv\Scripts\activate
-pip install -r requirements.txt
-cd codegen
-python main.py
-```
