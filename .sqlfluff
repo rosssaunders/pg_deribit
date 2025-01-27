@@ -11,7 +11,7 @@ templater = jinja
 # See https://docs.sqlfluff.com/en/stable/configuration.html#enabling-and-disabling-rules
 # AM04 (ambiguous.column_count) and ST06 (structure.column_order) are
 # two of the more controversial rules included to illustrate usage.
-exclude_rules = ambiguous.column_count, structure.column_order, LT01, LT08, RF02, LT09, LT02, AL06
+exclude_rules = ambiguous.column_count, structure.column_order, LT01, LT08, RF02, LT09, LT02, AL06, ST05
 
 # The standard max_line_length is 80 in line with the convention of
 # other tools and several style guides. Many projects however prefer
