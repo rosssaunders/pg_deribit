@@ -20,10 +20,10 @@ schema = 'deribit'
 
 def download_spec():
     try:
-        response = requests.get(deribit_local_url)
+        response = requests.get("https://docs.deribit.com/")
         response.raise_for_status()
         response.encoding = 'utf-8'  # Ensure the response is interpreted as UTF-8
-        with open('output.html', 'w', encoding='utf-8') as file:
+        with open('deribit.html', 'w', encoding='utf-8') as file:
             file.write(response.text)
     except requests.RequestException as e:
         print(f"Error downloading spec: {e}")
