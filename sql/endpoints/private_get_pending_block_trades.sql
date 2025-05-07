@@ -18,7 +18,7 @@ create type deribit.private_get_pending_block_trades_response_trade as (
     "price" double precision
 );
 
-comment on column deribit.private_get_pending_block_trades_response_trade."amount" is 'Trade amount. For perpetual and futures - in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.private_get_pending_block_trades_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_pending_block_trades_response_trade."direction" is 'Direction: buy, or sell';
 comment on column deribit.private_get_pending_block_trades_response_trade."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.private_get_pending_block_trades_response_trade."price" is 'Price in base currency';

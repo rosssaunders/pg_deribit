@@ -49,7 +49,7 @@ comment on column deribit.private_get_position_response_result."average_price" i
 comment on column deribit.private_get_position_response_result."average_price_usd" is 'Only for options, average price in USD';
 comment on column deribit.private_get_position_response_result."delta" is 'Delta parameter';
 comment on column deribit.private_get_position_response_result."direction" is 'Direction: buy, sell or zero';
-comment on column deribit.private_get_position_response_result."estimated_liquidation_price" is 'Estimated liquidation price, added only for futures, for non portfolio margining users';
+comment on column deribit.private_get_position_response_result."estimated_liquidation_price" is 'Estimated liquidation price, added only for futures, for users with segregated_sm margin model';
 comment on column deribit.private_get_position_response_result."floating_profit_loss" is 'Floating profit or loss';
 comment on column deribit.private_get_position_response_result."floating_profit_loss_usd" is 'Only for options, floating profit or loss in USD';
 comment on column deribit.private_get_position_response_result."gamma" is 'Only for options, Gamma parameter';

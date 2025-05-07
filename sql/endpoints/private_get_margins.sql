@@ -18,7 +18,7 @@ create type deribit.private_get_margins_request as (
 );
 
 comment on column deribit.private_get_margins_request."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_get_margins_request."amount" is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For linear futures it is the underlying base currency coin. For options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.private_get_margins_request."amount" is '(Required) It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_margins_request."price" is '(Required) Price';
 
 create type deribit.private_get_margins_response_result as (

@@ -32,8 +32,12 @@ comment on column deribit.private_get_deposits_request."offset" is 'The offset f
 create type deribit.private_get_deposits_response_datum as (
     "address" text,
     "amount" double precision,
+    "clearance_state" text,
     "currency" text,
+    "note" text,
     "received_timestamp" bigint,
+    "refund_transaction_id" text,
+    "source_address" text,
     "state" text,
     "transaction_id" text,
     "updated_timestamp" bigint
@@ -41,8 +45,11 @@ create type deribit.private_get_deposits_response_datum as (
 
 comment on column deribit.private_get_deposits_response_datum."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_deposits_response_datum."amount" is 'Amount of funds in given currency';
+comment on column deribit.private_get_deposits_response_datum."clearance_state" is 'Clearance state, allowed values : in_progress, pending_admin_decision, pending_user_input, success, failed, cancelled, refund_initiated, refunded';
 comment on column deribit.private_get_deposits_response_datum."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_get_deposits_response_datum."received_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_deposits_response_datum."refund_transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
+comment on column deribit.private_get_deposits_response_datum."source_address" is 'Address in proper format for currency';
 comment on column deribit.private_get_deposits_response_datum."state" is 'Deposit state, allowed values : pending, completed, rejected, replaced';
 comment on column deribit.private_get_deposits_response_datum."transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_deposits_response_datum."updated_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';

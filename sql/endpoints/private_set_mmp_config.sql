@@ -20,11 +20,13 @@ create type deribit.private_set_mmp_config_request_index_name as enum (
     'avax_usdt',
     'bch_usdc',
     'bch_usdt',
+    'bnb_usdc',
     'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
+    'buidl_usdc',
     'doge_usdc',
     'doge_usdt',
     'dot_usdc',
@@ -42,6 +44,7 @@ create type deribit.private_set_mmp_config_request_index_name as enum (
     'matic_usdt',
     'near_usdc',
     'near_usdt',
+    'paxg_usdc',
     'shib_usdc',
     'shib_usdt',
     'sol_usdc',
@@ -50,6 +53,7 @@ create type deribit.private_set_mmp_config_request_index_name as enum (
     'trx_usdt',
     'uni_usdc',
     'uni_usdt',
+    'usde_usdc',
     'xrp_usdc',
     'xrp_usdt'
 );
@@ -60,7 +64,8 @@ create type deribit.private_set_mmp_config_request as (
     "frozen_time" bigint,
     "mmp_group" text,
     "quantity_limit" double precision,
-    "delta_limit" double precision
+    "delta_limit" double precision,
+    "vega_limit" double precision
 );
 
 comment on column deribit.private_set_mmp_config_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
@@ -69,6 +74,7 @@ comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Requ
 comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name';
 comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
 comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
+comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
 
 create type deribit.private_set_mmp_config_response_result as (
     "delta_limit" double precision,
@@ -76,7 +82,8 @@ create type deribit.private_set_mmp_config_response_result as (
     "index_name" text,
     "interval" bigint,
     "mmp_group" text,
-    "quantity_limit" double precision
+    "quantity_limit" double precision,
+    "vega_limit" double precision
 );
 
 comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit';
@@ -85,6 +92,7 @@ comment on column deribit.private_set_mmp_config_response_result."index_name" is
 comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_set_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
 comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit';
 
 create type deribit.private_set_mmp_config_response as (
     "id" bigint,
@@ -101,7 +109,8 @@ create function deribit.private_set_mmp_config(
     "frozen_time" bigint,
     "mmp_group" text default null,
     "quantity_limit" double precision default null,
-    "delta_limit" double precision default null
+    "delta_limit" double precision default null,
+    "vega_limit" double precision default null
 )
 returns setof deribit.private_set_mmp_config_response_result
 language sql
@@ -114,7 +123,8 @@ as $$
             "frozen_time",
             "mmp_group",
             "quantity_limit",
-            "delta_limit"
+            "delta_limit",
+            "vega_limit"
         )::deribit.private_set_mmp_config_request as payload
     ), 
     http_response as (
@@ -139,7 +149,8 @@ as $$
         (b)."index_name"::text,
         (b)."interval"::bigint,
         (b)."mmp_group"::text,
-        (b)."quantity_limit"::double precision
+        (b)."quantity_limit"::double precision,
+        (b)."vega_limit"::double precision
     from (
         select (unnest(r.data)) b
         from result r(data)

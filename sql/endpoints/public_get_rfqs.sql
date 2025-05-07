@@ -43,7 +43,7 @@ create type deribit.public_get_rfqs_response_result as (
     "traded_volume" double precision
 );
 
-comment on column deribit.public_get_rfqs_response_result."amount" is 'It represents the requested order size. For perpetual and futures the amount is in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.public_get_rfqs_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.public_get_rfqs_response_result."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.public_get_rfqs_response_result."last_rfq_timestamp" is 'The timestamp of last RFQ (milliseconds since the Unix epoch)';
 comment on column deribit.public_get_rfqs_response_result."side" is 'Side - buy or sell';

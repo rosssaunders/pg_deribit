@@ -1,4 +1,4 @@
-FROM ghcr.io/omnigres/omnigres-slim:latest
+FROM ghcr.io/omnigres/omnigres-17:latest
 
 RUN apt-get update && apt-get install -y \
     build-essential \

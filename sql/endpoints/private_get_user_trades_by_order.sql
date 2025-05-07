@@ -19,84 +19,89 @@ create type deribit.private_get_user_trades_by_order_request_sorting as enum (
 
 create type deribit.private_get_user_trades_by_order_request as (
     "order_id" text,
-    "sorting" deribit.private_get_user_trades_by_order_request_sorting
+    "sorting" deribit.private_get_user_trades_by_order_request_sorting,
+    "historical" boolean
 );
 
 comment on column deribit.private_get_user_trades_by_order_request."order_id" is '(Required) The order id';
 comment on column deribit.private_get_user_trades_by_order_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
+comment on column deribit.private_get_user_trades_by_order_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
 
 create type deribit.private_get_user_trades_by_order_response_result as (
-    "timestamp" bigint,
-    "label" text,
+    "tick_direction" bigint,
+    "fee_currency" text,
+    "api" boolean,
+    "advanced" text,
+    "order_id" text,
+    "liquidity" text,
+    "post_only" text,
+    "direction" text,
+    "contracts" double precision,
+    "mmp" boolean,
     "fee" double precision,
     "quote_id" text,
-    "liquidity" text,
     "index_price" double precision,
-    "api" boolean,
-    "mmp" boolean,
-    "legs" text[],
+    "label" text,
+    "block_trade_id" text,
+    "price" double precision,
+    "combo_id" text,
+    "matching_id" text,
+    "order_type" text,
+    "profit_loss" double precision,
+    "timestamp" bigint,
+    "iv" double precision,
+    "state" text,
+    "underlying_price" double precision,
+    "block_rfq_quote_id" bigint,
+    "quote_set_id" text,
+    "mark_price" double precision,
+    "block_rfq_id" bigint,
+    "combo_trade_id" double precision,
+    "reduce_only" text,
+    "amount" double precision,
+    "liquidation" text,
     "trade_seq" bigint,
     "risk_reducing" boolean,
     "instrument_name" text,
-    "fee_currency" text,
-    "direction" text,
-    "trade_id" text,
-    "tick_direction" bigint,
-    "profit_loss" double precision,
-    "matching_id" text,
-    "price" double precision,
-    "reduce_only" text,
-    "amount" double precision,
-    "post_only" text,
-    "liquidation" text,
-    "combo_trade_id" double precision,
-    "order_id" text,
-    "block_trade_id" text,
-    "order_type" text,
-    "quote_set_id" text,
-    "combo_id" text,
-    "underlying_price" double precision,
-    "contracts" double precision,
-    "mark_price" double precision,
-    "iv" double precision,
-    "state" text,
-    "advanced" text
+    "legs" text[]
 );
 
-comment on column deribit.private_get_user_trades_by_order_response_result."label" is 'User defined label (presented only when previously set for order by user)';
+comment on column deribit.private_get_user_trades_by_order_response_result."tick_direction" is 'Direction of the "tick" (0 = Plus Tick, 1 = Zero-Plus Tick, 2 = Minus Tick, 3 = Zero-Minus Tick).';
+comment on column deribit.private_get_user_trades_by_order_response_result."fee_currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_get_user_trades_by_order_response_result."api" is 'true if user order was created with API';
+comment on column deribit.private_get_user_trades_by_order_response_result."advanced" is 'Advanced type of user order: "usd" or "implv" (only for options; omitted if not applicable)';
+comment on column deribit.private_get_user_trades_by_order_response_result."order_id" is 'Id of the user order (maker or taker), i.e. subscriber''s order id that took part in the trade';
+comment on column deribit.private_get_user_trades_by_order_response_result."liquidity" is 'Describes what was role of users order: "M" when it was maker order, "T" when it was taker order';
+comment on column deribit.private_get_user_trades_by_order_response_result."post_only" is 'true if user order is post-only';
+comment on column deribit.private_get_user_trades_by_order_response_result."direction" is 'Direction: buy, or sell';
+comment on column deribit.private_get_user_trades_by_order_response_result."contracts" is 'Trade size in contract units (optional, may be absent in historical trades)';
+comment on column deribit.private_get_user_trades_by_order_response_result."mmp" is 'true if user order is MMP';
 comment on column deribit.private_get_user_trades_by_order_response_result."fee" is 'User''s fee in units of the specified fee_currency';
 comment on column deribit.private_get_user_trades_by_order_response_result."quote_id" is 'QuoteID of the user order (optional, present only for orders placed with private/mass_quote)';
-comment on column deribit.private_get_user_trades_by_order_response_result."liquidity" is 'Describes what was role of users order: "M" when it was maker order, "T" when it was taker order';
 comment on column deribit.private_get_user_trades_by_order_response_result."index_price" is 'Index Price at the moment of trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."api" is 'true if user order was created with API';
-comment on column deribit.private_get_user_trades_by_order_response_result."mmp" is 'true if user order is MMP';
-comment on column deribit.private_get_user_trades_by_order_response_result."legs" is 'Optional field containing leg trades if trade is a combo trade (present when querying for only combo trades and in combo_trades events)';
+comment on column deribit.private_get_user_trades_by_order_response_result."label" is 'User defined label (presented only when previously set for order by user)';
+comment on column deribit.private_get_user_trades_by_order_response_result."block_trade_id" is 'Block trade id - when trade was part of a block trade';
+comment on column deribit.private_get_user_trades_by_order_response_result."price" is 'Price in base currency';
+comment on column deribit.private_get_user_trades_by_order_response_result."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
+comment on column deribit.private_get_user_trades_by_order_response_result."matching_id" is 'Always null';
+comment on column deribit.private_get_user_trades_by_order_response_result."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_order_response_result."profit_loss" is 'Profit and loss in base currency.';
+comment on column deribit.private_get_user_trades_by_order_response_result."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
+comment on column deribit.private_get_user_trades_by_order_response_result."iv" is 'Option implied volatility for the price (Option only)';
+comment on column deribit.private_get_user_trades_by_order_response_result."state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered" or "archive" (if order was archived)';
+comment on column deribit.private_get_user_trades_by_order_response_result."underlying_price" is 'Underlying price for implied volatility calculations (Options only)';
+comment on column deribit.private_get_user_trades_by_order_response_result."block_rfq_quote_id" is 'ID of the Block RFQ quote - when trade was part of the Block RFQ';
+comment on column deribit.private_get_user_trades_by_order_response_result."quote_set_id" is 'QuoteSet of the user order (optional, present only for orders placed with private/mass_quote)';
+comment on column deribit.private_get_user_trades_by_order_response_result."mark_price" is 'Mark Price at the moment of trade';
+comment on column deribit.private_get_user_trades_by_order_response_result."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
+comment on column deribit.private_get_user_trades_by_order_response_result."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
+comment on column deribit.private_get_user_trades_by_order_response_result."reduce_only" is 'true if user order is reduce-only';
+comment on column deribit.private_get_user_trades_by_order_response_result."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_user_trades_by_order_response_result."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.private_get_user_trades_by_order_response_result."trade_seq" is 'The sequence number of the trade within instrument';
 comment on column deribit.private_get_user_trades_by_order_response_result."risk_reducing" is 'true if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)';
 comment on column deribit.private_get_user_trades_by_order_response_result."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.private_get_user_trades_by_order_response_result."fee_currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
-comment on column deribit.private_get_user_trades_by_order_response_result."direction" is 'Direction: buy, or sell';
-comment on column deribit.private_get_user_trades_by_order_response_result."trade_id" is 'Unique (per currency) trade identifier';
-comment on column deribit.private_get_user_trades_by_order_response_result."tick_direction" is 'Direction of the "tick" (0 = Plus Tick, 1 = Zero-Plus Tick, 2 = Minus Tick, 3 = Zero-Minus Tick).';
-comment on column deribit.private_get_user_trades_by_order_response_result."profit_loss" is 'Profit and loss in base currency.';
-comment on column deribit.private_get_user_trades_by_order_response_result."matching_id" is 'Always null';
-comment on column deribit.private_get_user_trades_by_order_response_result."price" is 'Price in base currency';
-comment on column deribit.private_get_user_trades_by_order_response_result."reduce_only" is 'true if user order is reduce-only';
-comment on column deribit.private_get_user_trades_by_order_response_result."amount" is 'Trade amount. For perpetual and futures - in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
-comment on column deribit.private_get_user_trades_by_order_response_result."post_only" is 'true if user order is post-only';
-comment on column deribit.private_get_user_trades_by_order_response_result."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
-comment on column deribit.private_get_user_trades_by_order_response_result."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."order_id" is 'Id of the user order (maker or taker), i.e. subscriber''s order id that took part in the trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."block_trade_id" is 'Block trade id - when trade was part of a block trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."order_type" is 'Order type: "limit, "market", or "liquidation"';
-comment on column deribit.private_get_user_trades_by_order_response_result."quote_set_id" is 'QuoteSet of the user order (optional, present only for orders placed with private/mass_quote)';
-comment on column deribit.private_get_user_trades_by_order_response_result."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."underlying_price" is 'Underlying price for implied volatility calculations (Options only)';
-comment on column deribit.private_get_user_trades_by_order_response_result."contracts" is 'Trade size in contract units (optional, may be absent in historical trades)';
-comment on column deribit.private_get_user_trades_by_order_response_result."mark_price" is 'Mark Price at the moment of trade';
-comment on column deribit.private_get_user_trades_by_order_response_result."iv" is 'Option implied volatility for the price (Option only)';
-comment on column deribit.private_get_user_trades_by_order_response_result."state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered" or "archive" (if order was archived)';
-comment on column deribit.private_get_user_trades_by_order_response_result."advanced" is 'Advanced type of user order: "usd" or "implv" (only for options; omitted if not applicable)';
+comment on column deribit.private_get_user_trades_by_order_response_result."legs" is 'Optional field containing leg trades if trade is a combo trade (present when querying for only combo trades and in combo_trades events)';
 
 create type deribit.private_get_user_trades_by_order_response as (
     "id" bigint,
@@ -109,7 +114,8 @@ comment on column deribit.private_get_user_trades_by_order_response."jsonrpc" is
 
 create function deribit.private_get_user_trades_by_order(
     "order_id" text,
-    "sorting" deribit.private_get_user_trades_by_order_request_sorting default null
+    "sorting" deribit.private_get_user_trades_by_order_request_sorting default null,
+    "historical" boolean default null
 )
 returns setof deribit.private_get_user_trades_by_order_response_result
 language sql
@@ -118,7 +124,8 @@ as $$
     with request as (
         select row(
             "order_id",
-            "sorting"
+            "sorting",
+            "historical"
         )::deribit.private_get_user_trades_by_order_request as payload
     ), 
     http_response as (
@@ -138,41 +145,42 @@ as $$
         from http_response
     )
     select
-        (b)."timestamp"::bigint,
-        (b)."label"::text,
+        (b)."tick_direction"::bigint,
+        (b)."fee_currency"::text,
+        (b)."api"::boolean,
+        (b)."advanced"::text,
+        (b)."order_id"::text,
+        (b)."liquidity"::text,
+        (b)."post_only"::text,
+        (b)."direction"::text,
+        (b)."contracts"::double precision,
+        (b)."mmp"::boolean,
         (b)."fee"::double precision,
         (b)."quote_id"::text,
-        (b)."liquidity"::text,
         (b)."index_price"::double precision,
-        (b)."api"::boolean,
-        (b)."mmp"::boolean,
-        (b)."legs"::text[],
+        (b)."label"::text,
+        (b)."block_trade_id"::text,
+        (b)."price"::double precision,
+        (b)."combo_id"::text,
+        (b)."matching_id"::text,
+        (b)."order_type"::text,
+        (b)."profit_loss"::double precision,
+        (b)."timestamp"::bigint,
+        (b)."iv"::double precision,
+        (b)."state"::text,
+        (b)."underlying_price"::double precision,
+        (b)."block_rfq_quote_id"::bigint,
+        (b)."quote_set_id"::text,
+        (b)."mark_price"::double precision,
+        (b)."block_rfq_id"::bigint,
+        (b)."combo_trade_id"::double precision,
+        (b)."reduce_only"::text,
+        (b)."amount"::double precision,
+        (b)."liquidation"::text,
         (b)."trade_seq"::bigint,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
-        (b)."fee_currency"::text,
-        (b)."direction"::text,
-        (b)."trade_id"::text,
-        (b)."tick_direction"::bigint,
-        (b)."profit_loss"::double precision,
-        (b)."matching_id"::text,
-        (b)."price"::double precision,
-        (b)."reduce_only"::text,
-        (b)."amount"::double precision,
-        (b)."post_only"::text,
-        (b)."liquidation"::text,
-        (b)."combo_trade_id"::double precision,
-        (b)."order_id"::text,
-        (b)."block_trade_id"::text,
-        (b)."order_type"::text,
-        (b)."quote_set_id"::text,
-        (b)."combo_id"::text,
-        (b)."underlying_price"::double precision,
-        (b)."contracts"::double precision,
-        (b)."mark_price"::double precision,
-        (b)."iv"::double precision,
-        (b)."state"::text,
-        (b)."advanced"::text
+        (b)."legs"::text[]
     from (
         select (unnest(r.data)) b
         from result r(data)

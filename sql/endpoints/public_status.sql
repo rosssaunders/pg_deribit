@@ -13,11 +13,11 @@
 */
 create type deribit.public_status_response_result as (
     "locked" text,
-    "locked_currencies" text[]
+    "locked_indices" text[]
 );
 
 comment on column deribit.public_status_response_result."locked" is 'true when platform is locked in all currencies, partial when some currencies are locked, false - when there are not currencies locked';
-comment on column deribit.public_status_response_result."locked_currencies" is 'List of currencies in which platform is locked';
+comment on column deribit.public_status_response_result."locked_indices" is 'List of currency indices locked platform-wise';
 
 create type deribit.public_status_response as (
     "id" bigint,
