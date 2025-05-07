@@ -16,9 +16,19 @@ Each endpoint is saved as a separate sql file in the sql/endpoints folder.
 
 From the root of the repo, run the following commands:
 
+For PowerShell:
 ```PowerShell
 python -m venv venv
 .\venv\Scripts\activate
+pip install -r requirements.txt
+cd codegen
+python main.py
+```
+
+For Bash:
+```bash
+python -m venv venv
+source venv/bin/activate
 pip install -r requirements.txt
 cd codegen
 python main.py
