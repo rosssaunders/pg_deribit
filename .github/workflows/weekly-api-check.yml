@@ -1,0 +1,65 @@
+name: Weekly Deribit API Check
+
+on:
+  schedule:
+    # Run at 23:00 UTC every Saturday
+    - cron: '0 23 * * 6'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  check-api-changes:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Delete existing deribit.html
+        run: rm -f codegen/deribit.html
+
+      - name: Run codegen
+        run: |
+          cd codegen
+          python main.py
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git config --global user.name 'GitHub Action'
+          git config --global user.email 'action@github.com'
+          git add .
+          git diff --quiet && git diff --staged --quiet || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        id: create-pr
+        if: steps.git-check.outputs.changes == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: update Deribit API endpoints'
+          title: 'Update Deribit API endpoints'
+          body: |
+            This PR was automatically created by the weekly Deribit API check workflow.
+            
+            Changes include:
+            - Updated API endpoints based on latest Deribit documentation
+            - Regenerated SQL wrappers
+            
+            Please review the changes and merge if everything looks good.
+          branch: update-deribit-api
+          base: main
