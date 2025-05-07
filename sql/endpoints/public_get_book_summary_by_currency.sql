@@ -76,7 +76,7 @@ comment on column deribit.public_get_book_summary_by_currency_response_result."l
 comment on column deribit.public_get_book_summary_by_currency_response_result."mark_iv" is '(Only for option) implied volatility for mark price';
 comment on column deribit.public_get_book_summary_by_currency_response_result."mark_price" is 'The current instrument market price';
 comment on column deribit.public_get_book_summary_by_currency_response_result."mid_price" is 'The average of the best bid and ask, null if there aren''t any asks or bids';
-comment on column deribit.public_get_book_summary_by_currency_response_result."open_interest" is 'Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and futures the amount is in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.public_get_book_summary_by_currency_response_result."open_interest" is 'Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.public_get_book_summary_by_currency_response_result."price_change" is '24-hour price change expressed as a percentage, null if there weren''t any trades';
 comment on column deribit.public_get_book_summary_by_currency_response_result."quote_currency" is 'Quote currency';
 comment on column deribit.public_get_book_summary_by_currency_response_result."underlying_index" is 'Name of the underlying future, or ''index_price'' (options only)';

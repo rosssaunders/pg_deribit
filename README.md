@@ -15,6 +15,7 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 - [Docker](https://www.docker.com/)
 - [Deribit account](https://www.deribit.com/) (Production or Testnet)
 - [psql](https://www.postgresql.org/docs/current/app-psql.html)
+- [GitHub account](https://github.com) with a Personal Access Token (PAT) that has `read:packages` scope
 
 ### Installation
 
@@ -24,6 +25,14 @@ pg_deribit currently ships as source code.
 
    ```bash
    git clone https://github.com/rosssaunders/pg_deribit
+   ```
+
+2. Authenticate with GitHub Container Registry:
+
+   ```bash
+   # Replace YOUR_PAT with your GitHub Personal Access Token
+   # Replace YOUR_GITHUB_USERNAME with your GitHub username
+   echo YOUR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
    ```
 
 ## Quickstart

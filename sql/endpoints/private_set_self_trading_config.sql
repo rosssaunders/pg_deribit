@@ -18,11 +18,13 @@ create type deribit.private_set_self_trading_config_request_mode as enum (
 
 create type deribit.private_set_self_trading_config_request as (
     "mode" deribit.private_set_self_trading_config_request_mode,
-    "extended_to_subaccounts" boolean
+    "extended_to_subaccounts" boolean,
+    "block_rfq_self_match_prevention" boolean
 );
 
 comment on column deribit.private_set_self_trading_config_request."mode" is '(Required) Self trading prevention behavior: reject_taker (reject the incoming order), cancel_maker (cancel the matched order in the book)';
 comment on column deribit.private_set_self_trading_config_request."extended_to_subaccounts" is '(Required) If value is true trading is prevented between subaccounts of given account, otherwise they are treated separately';
+comment on column deribit.private_set_self_trading_config_request."block_rfq_self_match_prevention" is 'When Block RFQ Self Match Prevention is enabled, it ensures that RFQs cannot be executed between accounts that belong to the same legal entity. This setting is independent of the general self-match prevention settings and must be configured separately.';
 
 create type deribit.private_set_self_trading_config_response as (
     "id" bigint,
@@ -36,7 +38,8 @@ comment on column deribit.private_set_self_trading_config_response."result" is '
 
 create function deribit.private_set_self_trading_config(
     "mode" deribit.private_set_self_trading_config_request_mode,
-    "extended_to_subaccounts" boolean
+    "extended_to_subaccounts" boolean,
+    "block_rfq_self_match_prevention" boolean default null
 )
 returns text
 language sql
@@ -45,7 +48,8 @@ as $$
     with request as (
         select row(
             "mode",
-            "extended_to_subaccounts"
+            "extended_to_subaccounts",
+            "block_rfq_self_match_prevention"
         )::deribit.private_set_self_trading_config_request as payload
     ), 
     http_response as (

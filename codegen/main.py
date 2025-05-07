@@ -2,6 +2,7 @@ import json
 import os
 import sys
 import warnings
+import shutil
 
 from deribit.consts import sections
 from deribit.extract import extract_function_from_section
@@ -16,6 +17,17 @@ from postgres.exporter import Exporter
 
 deribit_local_url = "deribit.html"
 schema = 'deribit'
+
+
+def cleanup_endpoints():
+    """Clean up old endpoint files before generating new ones"""
+    endpoints_dir = os.path.join(os.path.dirname(__file__), '..', 'sql', 'endpoints')
+    if os.path.exists(endpoints_dir):
+        print("Cleaning up old endpoint files...")
+        for file in os.listdir(endpoints_dir):
+            if file.endswith('.sql'):
+                os.remove(os.path.join(endpoints_dir, file))
+        print("Cleanup complete")
 
 
 def download_spec():
@@ -33,6 +45,9 @@ def download_spec():
 
 def main():
     os.chdir(sys.path[0])
+
+    # Clean up old endpoint files first
+    cleanup_endpoints()
 
     if not os.path.isfile(deribit_local_url):
         download_spec()

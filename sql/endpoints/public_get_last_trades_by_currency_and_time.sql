@@ -53,8 +53,11 @@ comment on column deribit.public_get_last_trades_by_currency_and_time_request."s
 
 create type deribit.public_get_last_trades_by_currency_and_time_response_trade as (
     "amount" double precision,
+    "block_rfq_id" bigint,
     "block_trade_id" text,
     "block_trade_leg_count" bigint,
+    "combo_id" text,
+    "combo_trade_id" double precision,
     "contracts" double precision,
     "direction" text,
     "index_price" double precision,
@@ -69,9 +72,12 @@ create type deribit.public_get_last_trades_by_currency_and_time_response_trade a
     "trade_seq" bigint
 );
 
-comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."amount" is 'Trade amount. For perpetual and futures - in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."block_trade_id" is 'Block trade id - when trade was part of a block trade';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."block_trade_leg_count" is 'Block trade leg count - when trade was part of a block trade';
+comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
+comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."contracts" is 'Trade size in contract units (optional, may be absent in historical trades)';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."direction" is 'Direction: buy, or sell';
 comment on column deribit.public_get_last_trades_by_currency_and_time_response_trade."index_price" is 'Index Price at the moment of trade';

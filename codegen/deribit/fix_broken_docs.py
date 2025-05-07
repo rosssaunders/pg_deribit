@@ -70,4 +70,17 @@ def fix_broken_docs(df, end_point):
         ]
         df = pd.concat([df.iloc[:63], pd.DataFrame(new_rows), df.iloc[63:]]).reset_index(drop=True)
 
+    #############################
+    # missing result field
+    #############################
+    if end_point == '/private/set_clearance_originator':
+        # Add a result field of type boolean since this is likely a success/failure operation
+        new_row = {
+            'Name': 'result',
+            'Type': 'boolean',
+            'Description': 'Whether the clearance originator was set successfully'
+        }
+        # Insert at the beginning after any standard fields
+        df = pd.concat([df.iloc[:2], pd.DataFrame([new_row]), df.iloc[2:]]).reset_index(drop=True)
+
     return df

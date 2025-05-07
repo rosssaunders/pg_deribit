@@ -20,11 +20,13 @@ create type deribit.private_get_mmp_config_request_index_name as enum (
     'avax_usdt',
     'bch_usdc',
     'bch_usdt',
+    'bnb_usdc',
     'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
+    'buidl_usdc',
     'doge_usdc',
     'doge_usdt',
     'dot_usdc',
@@ -42,6 +44,7 @@ create type deribit.private_get_mmp_config_request_index_name as enum (
     'matic_usdt',
     'near_usdc',
     'near_usdt',
+    'paxg_usdc',
     'shib_usdc',
     'shib_usdt',
     'sol_usdc',
@@ -50,6 +53,7 @@ create type deribit.private_get_mmp_config_request_index_name as enum (
     'trx_usdt',
     'uni_usdc',
     'uni_usdt',
+    'usde_usdc',
     'xrp_usdc',
     'xrp_usdt'
 );
@@ -68,7 +72,8 @@ create type deribit.private_get_mmp_config_response_result as (
     "index_name" text,
     "interval" bigint,
     "mmp_group" text,
-    "quantity_limit" double precision
+    "quantity_limit" double precision,
+    "vega_limit" double precision
 );
 
 comment on column deribit.private_get_mmp_config_response_result."delta_limit" is 'Delta limit';
@@ -77,6 +82,7 @@ comment on column deribit.private_get_mmp_config_response_result."index_name" is
 comment on column deribit.private_get_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_get_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
 comment on column deribit.private_get_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_get_mmp_config_response_result."vega_limit" is 'Vega limit';
 
 create type deribit.private_get_mmp_config_response as (
     "id" bigint,
@@ -123,7 +129,8 @@ as $$
         (b)."index_name"::text,
         (b)."interval"::bigint,
         (b)."mmp_group"::text,
-        (b)."quantity_limit"::double precision
+        (b)."quantity_limit"::double precision,
+        (b)."vega_limit"::double precision
     from (
         select (unnest(r.data)) b
         from result r(data)

@@ -15,19 +15,19 @@ create type deribit.private_pme_simulate_request_currency as enum (
     'BTC',
     'CROSS',
     'ETH',
-    'EURR',
-    'MATIC',
-    'SOL',
     'USDC',
-    'USDT',
-    'XRP'
+    'USDT'
 );
 
 create type deribit.private_pme_simulate_request as (
-    "currency" deribit.private_pme_simulate_request_currency
+    "currency" deribit.private_pme_simulate_request_currency,
+    "add_positions" boolean,
+    "simulated_positions" jsonb
 );
 
 comment on column deribit.private_pme_simulate_request."currency" is '(Required) The currency for which the Extended Risk Matrix will be calculated. Use CROSS for Cross Collateral simulation.';
+comment on column deribit.private_pme_simulate_request."add_positions" is 'If true, adds simulated positions to current positions, otherwise uses only simulated positions. By default true';
+comment on column deribit.private_pme_simulate_request."simulated_positions" is 'Object with positions in following form: {InstrumentName1: Position1, InstrumentName2: Position2...}, for example {"BTC-PERPETUAL": -1.0} (or corresponding URI-encoding for GET). Size in base currency.';
 
 create type deribit.private_pme_simulate_response as (
     "id" bigint,
@@ -40,7 +40,9 @@ comment on column deribit.private_pme_simulate_response."jsonrpc" is 'The JSON-R
 comment on column deribit.private_pme_simulate_response."result" is 'PM details';
 
 create function deribit.private_pme_simulate(
-    "currency" deribit.private_pme_simulate_request_currency
+    "currency" deribit.private_pme_simulate_request_currency,
+    "add_positions" boolean default null,
+    "simulated_positions" jsonb default null
 )
 returns jsonb
 language sql
@@ -48,7 +50,9 @@ as $$
     
     with request as (
         select row(
-            "currency"
+            "currency",
+            "add_positions",
+            "simulated_positions"
         )::deribit.private_pme_simulate_request as payload
     ), 
     http_response as (

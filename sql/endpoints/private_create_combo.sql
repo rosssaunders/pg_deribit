@@ -23,7 +23,7 @@ create type deribit.private_create_combo_request_trade as (
 );
 
 comment on column deribit.private_create_combo_request_trade."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_create_combo_request_trade."amount" is 'It represents the requested trade size. For perpetual and futures the amount is in USD units, for options it is the amount of corresponding cryptocurrency contracts, e.g., BTC or ETH';
+comment on column deribit.private_create_combo_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_create_combo_request_trade."direction" is '(Required) Direction of trade from the maker perspective';
 
 create type deribit.private_create_combo_request as (

@@ -19,7 +19,8 @@ excluded_urls = {
     'public_disable_heartbeat': 'Websocket only',
     'public_get_portfolio_margins': 'Deprecated', #https://docs.deribit.com/#public-get_portfolio_margins
     'private_get_portfolio_margins': 'Deprecated', #https://docs.deribit.com/?javascript#private-get_portfolio_margins
-    'public_get_index': 'Deprecated' # https://docs.deribit.com/#public-get_index
+    'public_get_index': 'Deprecated', # https://docs.deribit.com/#public-get_index
+    'private_set_clearance_originator': 'Takes a structure request payload which is not supported by the CodeGen',
 }
 
 # https://www.deribit.com/kb/deribit-rate-limits

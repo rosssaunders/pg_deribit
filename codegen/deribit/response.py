@@ -6,7 +6,7 @@ import inflect
 warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
 import pandas as pd
-from deribit.fix_broken_docs import fix_broken_docs
+from deribit.fix_broken_response_docs import fix_broken_docs
 from models.models import Enum_, Field, Type_
 from utils.name_utils import count_ident, strip_field_name, url_to_type_name
 

@@ -45,6 +45,8 @@ create type deribit.public_auth_response_result as (
     "access_token" text,
     "enabled_features" text[],
     "expires_in" bigint,
+    "google_login" boolean,
+    "mandatory_tfa_status" text,
     "refresh_token" text,
     "scope" text,
     "sid" text,
@@ -52,8 +54,10 @@ create type deribit.public_auth_response_result as (
     "token_type" text
 );
 
-comment on column deribit.public_auth_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval';
+comment on column deribit.public_auth_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 comment on column deribit.public_auth_response_result."expires_in" is 'Token lifetime in seconds';
+comment on column deribit.public_auth_response_result."google_login" is 'The access token was acquired by logging in through Google.';
+comment on column deribit.public_auth_response_result."mandatory_tfa_status" is '2FA is required for privileged methods';
 comment on column deribit.public_auth_response_result."refresh_token" is 'Can be used to request a new token (with a new lifetime)';
 comment on column deribit.public_auth_response_result."scope" is 'Type of the access for assigned token';
 comment on column deribit.public_auth_response_result."sid" is 'Optional Session id';
