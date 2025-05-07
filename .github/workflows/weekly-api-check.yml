@@ -50,7 +50,6 @@ jobs:
         if: steps.git-check.outputs.changes == 'true'
         uses: peter-evans/create-pull-request@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
           commit-message: 'chore: update Deribit API endpoints'
           title: 'Update Deribit API endpoints'
           body: |
@@ -63,3 +62,5 @@ jobs:
             Please review the changes and merge if everything looks good.
           branch: update-deribit-api
           base: main
+          delete-branch: true
+          token: ${{ secrets.PAT_GITHUB }}
