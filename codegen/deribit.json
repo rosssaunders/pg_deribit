@@ -9,9 +9,9 @@
                 "enums": [
                     {
                         "items": [
-                            "refresh_token",
+                            "client_credentials",
                             "client_signature",
-                            "client_credentials"
+                            "refresh_token"
                         ],
                         "name": "grant_type"
                     }
@@ -1282,8 +1282,8 @@
                 "enums": [
                     {
                         "items": [
-                            "account",
-                            "connection"
+                            "connection",
+                            "account"
                         ],
                         "name": "scope"
                     }
@@ -1428,8 +1428,8 @@
                 "enums": [
                     {
                         "items": [
-                            "account",
-                            "connection"
+                            "connection",
+                            "account"
                         ],
                         "name": "scope"
                     }
@@ -1574,8 +1574,8 @@
                 "enums": [
                     {
                         "items": [
-                            "account",
-                            "connection"
+                            "connection",
+                            "account"
                         ],
                         "name": "scope"
                     }
@@ -2259,21 +2259,21 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -4355,78 +4355,78 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "eth_usde",
-                            "avax_usd",
-                            "paxg_usdc",
-                            "uni_usd",
-                            "xrp_usd",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "steth_eth",
-                            "paxg_usd",
-                            "link_usdc",
+                            "steth_usdt",
+                            "bch_usdt",
+                            "ethdvol_usdc",
+                            "eth_usdt",
+                            "usde_usdt",
                             "doge_usdt",
-                            "btc_usde",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
+                            "steth_eth",
+                            "link_usd",
+                            "bch_usd",
+                            "trx_usd",
+                            "dot_usdt",
+                            "ltc_usd",
+                            "trx_usdt",
+                            "avax_usd",
+                            "paxg_usd",
+                            "near_usd",
+                            "xrp_usd",
+                            "bnb_usdt",
+                            "paxg_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "paxg_btc",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "usde_usd",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "algo_usd",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "steth_usdc",
+                            "btc_usyc",
+                            "usyc_usdc",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "doge_usd",
+                            "matic_usd",
+                            "eth_usyc",
+                            "avax_usdc",
+                            "ada_usdc",
+                            "usdc_usd",
+                            "dot_usdc",
+                            "sol_usd",
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
                             "shib_usd",
                             "bch_usdc",
-                            "trx_usd",
-                            "ada_usd",
-                            "eth_usdc",
-                            "steth_usdc",
-                            "bch_usdt",
-                            "paxg_usdt",
-                            "near_usdc",
-                            "usde_usdt",
-                            "matic_usdt",
-                            "dot_usd",
-                            "algo_usd",
-                            "doge_usdc",
-                            "usyc_usdc",
-                            "sol_usdc",
-                            "dot_usdc",
-                            "near_usdt",
-                            "doge_usd",
-                            "uni_usdt",
-                            "avax_usdc",
-                            "xrp_usdt",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "steth_usdt",
-                            "btc_usyc",
-                            "sol_usd",
-                            "steth_usd",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "ltc_usd",
-                            "near_usd",
-                            "usdc_usd",
-                            "matic_usd",
-                            "usde_usd",
-                            "usde_usdc",
-                            "sol_usdt",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "bch_usd",
-                            "trx_usdt",
-                            "paxg_btc",
                             "matic_usdc",
+                            "btc_usde",
+                            "dot_usd",
+                            "btc_usd",
+                            "steth_usd",
+                            "algo_usdt",
                             "algo_usdc",
-                            "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
-                            "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
-                            "link_usd",
-                            "eth_usyc",
-                            "btc_usd"
+                            "ada_usd",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "eth_usde",
+                            "uni_usd",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -4694,12 +4694,12 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "BTC",
                             "USDC",
                             "any",
-                            "grouped"
+                            "BTC",
+                            "grouped",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
@@ -4713,78 +4713,78 @@
                     },
                     {
                         "items": [
-                            "eth_usd",
-                            "eth_usde",
-                            "avax_usd",
-                            "paxg_usdc",
-                            "uni_usd",
-                            "xrp_usd",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "steth_eth",
-                            "paxg_usd",
-                            "link_usdc",
+                            "steth_usdt",
+                            "bch_usdt",
+                            "ethdvol_usdc",
+                            "eth_usdt",
+                            "usde_usdt",
                             "doge_usdt",
-                            "btc_usde",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
+                            "steth_eth",
+                            "link_usd",
+                            "bch_usd",
+                            "trx_usd",
+                            "dot_usdt",
+                            "ltc_usd",
+                            "trx_usdt",
+                            "avax_usd",
+                            "paxg_usd",
+                            "near_usd",
+                            "xrp_usd",
+                            "bnb_usdt",
+                            "paxg_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "paxg_btc",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "usde_usd",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "algo_usd",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "steth_usdc",
+                            "btc_usyc",
+                            "usyc_usdc",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "doge_usd",
+                            "matic_usd",
+                            "eth_usyc",
+                            "avax_usdc",
+                            "ada_usdc",
+                            "usdc_usd",
+                            "dot_usdc",
+                            "sol_usd",
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
                             "shib_usd",
                             "bch_usdc",
-                            "trx_usd",
-                            "ada_usd",
-                            "eth_usdc",
-                            "steth_usdc",
-                            "bch_usdt",
-                            "paxg_usdt",
-                            "near_usdc",
-                            "usde_usdt",
-                            "matic_usdt",
-                            "dot_usd",
-                            "algo_usd",
-                            "doge_usdc",
-                            "usyc_usdc",
-                            "sol_usdc",
-                            "dot_usdc",
-                            "near_usdt",
-                            "doge_usd",
-                            "uni_usdt",
-                            "avax_usdc",
-                            "xrp_usdt",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "steth_usdt",
-                            "btc_usyc",
-                            "sol_usd",
-                            "steth_usd",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "ltc_usd",
-                            "near_usd",
-                            "usdc_usd",
-                            "matic_usd",
-                            "usde_usd",
-                            "usde_usdc",
-                            "sol_usdt",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "bch_usd",
-                            "trx_usdt",
-                            "paxg_btc",
                             "matic_usdc",
+                            "btc_usde",
+                            "dot_usd",
+                            "btc_usd",
+                            "steth_usd",
+                            "algo_usdt",
                             "algo_usdc",
-                            "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
-                            "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
-                            "link_usd",
-                            "eth_usyc",
-                            "btc_usd"
+                            "ada_usd",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "eth_usde",
+                            "uni_usd",
+                            "luna_usdt"
                         ],
                         "name": "currency_pair"
                     }
@@ -5781,11 +5781,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -5992,78 +5992,78 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "eth_usde",
-                            "avax_usd",
-                            "paxg_usdc",
-                            "uni_usd",
-                            "xrp_usd",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "steth_eth",
-                            "paxg_usd",
-                            "link_usdc",
+                            "steth_usdt",
+                            "bch_usdt",
+                            "ethdvol_usdc",
+                            "eth_usdt",
+                            "usde_usdt",
                             "doge_usdt",
-                            "btc_usde",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
+                            "steth_eth",
+                            "link_usd",
+                            "bch_usd",
+                            "trx_usd",
+                            "dot_usdt",
+                            "ltc_usd",
+                            "trx_usdt",
+                            "avax_usd",
+                            "paxg_usd",
+                            "near_usd",
+                            "xrp_usd",
+                            "bnb_usdt",
+                            "paxg_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "paxg_btc",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "usde_usd",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "algo_usd",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "steth_usdc",
+                            "btc_usyc",
+                            "usyc_usdc",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "doge_usd",
+                            "matic_usd",
+                            "eth_usyc",
+                            "avax_usdc",
+                            "ada_usdc",
+                            "usdc_usd",
+                            "dot_usdc",
+                            "sol_usd",
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
                             "shib_usd",
                             "bch_usdc",
-                            "trx_usd",
-                            "ada_usd",
-                            "eth_usdc",
-                            "steth_usdc",
-                            "bch_usdt",
-                            "paxg_usdt",
-                            "near_usdc",
-                            "usde_usdt",
-                            "matic_usdt",
-                            "dot_usd",
-                            "algo_usd",
-                            "doge_usdc",
-                            "usyc_usdc",
-                            "sol_usdc",
-                            "dot_usdc",
-                            "near_usdt",
-                            "doge_usd",
-                            "uni_usdt",
-                            "avax_usdc",
-                            "xrp_usdt",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "steth_usdt",
-                            "btc_usyc",
-                            "sol_usd",
-                            "steth_usd",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "ltc_usd",
-                            "near_usd",
-                            "usdc_usd",
-                            "matic_usd",
-                            "usde_usd",
-                            "usde_usdc",
-                            "sol_usdt",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "bch_usd",
-                            "trx_usdt",
-                            "paxg_btc",
                             "matic_usdc",
+                            "btc_usde",
+                            "dot_usd",
+                            "btc_usd",
+                            "steth_usd",
+                            "algo_usdt",
                             "algo_usdc",
-                            "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
-                            "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
-                            "link_usd",
-                            "eth_usyc",
-                            "btc_usd"
+                            "ada_usd",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "eth_usde",
+                            "uni_usd",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -7298,22 +7298,22 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
-                            "BTC",
                             "USDC",
-                            "any"
+                            "any",
+                            "BTC",
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -8257,11 +8257,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
@@ -9171,31 +9171,31 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -9736,31 +9736,31 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -10275,9 +10275,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -10805,9 +10805,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -11474,13 +11474,13 @@
                     {
                         "items": [
                             "5",
-                            "100",
                             "1000",
-                            "10000",
-                            "10",
-                            "50",
                             "1",
-                            "20"
+                            "50",
+                            "10",
+                            "20",
+                            "100",
+                            "10000"
                         ],
                         "name": "depth"
                     }
@@ -12499,13 +12499,13 @@
                     {
                         "items": [
                             "5",
-                            "100",
                             "1000",
-                            "10000",
-                            "10",
-                            "50",
                             "1",
-                            "20"
+                            "50",
+                            "10",
+                            "20",
+                            "100",
+                            "10000"
                         ],
                         "name": "depth"
                     }
@@ -13523,21 +13523,21 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -13835,8 +13835,8 @@
                 "enums": [
                     {
                         "items": [
-                            "derivative",
                             "spot",
+                            "derivative",
                             "all"
                         ],
                         "name": "type"
@@ -14468,18 +14468,18 @@
                 "enums": [
                     {
                         "items": [
-                            "720",
                             "5",
                             "30",
-                            "120",
-                            "360",
-                            "180",
-                            "1D",
-                            "60",
-                            "10",
                             "3",
+                            "120",
+                            "1D",
                             "1",
-                            "15"
+                            "180",
+                            "720",
+                            "10",
+                            "15",
+                            "360",
+                            "60"
                         ],
                         "name": "resolution"
                     }
@@ -14881,21 +14881,21 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
                             "3600",
-                            "60",
-                            "43200",
                             "1D",
-                            "1"
+                            "43200",
+                            "1",
+                            "60"
                         ],
                         "name": "resolution"
                     }
@@ -16139,54 +16139,54 @@
                 "enums": [
                     {
                         "items": [
-                            "take_market",
-                            "trailing_stop",
-                            "market",
-                            "stop_market",
-                            "market_limit",
                             "take_limit",
-                            "stop_limit",
-                            "limit"
+                            "take_market",
+                            "market",
+                            "trailing_stop",
+                            "limit",
+                            "market_limit",
+                            "stop_market",
+                            "stop_limit"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
                             "good_til_cancelled",
+                            "immediate_or_cancel",
                             "fill_or_kill",
-                            "good_til_day",
-                            "immediate_or_cancel"
+                            "good_til_day"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
+                            "last_price",
                             "mark_price",
-                            "index_price",
-                            "last_price"
+                            "index_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     },
                     {
                         "items": [
-                            "one_triggers_one_cancels_other",
                             "one_cancels_other",
-                            "one_triggers_other"
+                            "one_triggers_other",
+                            "one_triggers_one_cancels_other"
                         ],
                         "name": "linked_order_type"
                     },
                     {
                         "items": [
-                            "incremental",
                             "first_hit",
-                            "complete_fill"
+                            "complete_fill",
+                            "incremental"
                         ],
                         "name": "trigger_fill_condition"
                     }
@@ -16454,31 +16454,31 @@
                                 },
                                 {
                                     "items": [
-                                        "take_market",
-                                        "trailing_stop",
-                                        "market",
-                                        "stop_market",
-                                        "market_limit",
                                         "take_limit",
-                                        "stop_limit",
-                                        "limit"
+                                        "take_market",
+                                        "market",
+                                        "trailing_stop",
+                                        "limit",
+                                        "market_limit",
+                                        "stop_market",
+                                        "stop_limit"
                                     ],
                                     "name": "type"
                                 },
                                 {
                                     "items": [
                                         "good_til_cancelled",
+                                        "immediate_or_cancel",
                                         "fill_or_kill",
-                                        "good_til_day",
-                                        "immediate_or_cancel"
+                                        "good_til_day"
                                     ],
                                     "name": "time_in_force"
                                 },
                                 {
                                     "items": [
+                                        "last_price",
                                         "mark_price",
-                                        "index_price",
-                                        "last_price"
+                                        "index_price"
                                     ],
                                     "name": "trigger"
                                 }
@@ -17997,54 +17997,54 @@
                 "enums": [
                     {
                         "items": [
-                            "take_market",
-                            "trailing_stop",
-                            "market",
-                            "stop_market",
-                            "market_limit",
                             "take_limit",
-                            "stop_limit",
-                            "limit"
+                            "take_market",
+                            "market",
+                            "trailing_stop",
+                            "limit",
+                            "market_limit",
+                            "stop_market",
+                            "stop_limit"
                         ],
                         "name": "type"
                     },
                     {
                         "items": [
                             "good_til_cancelled",
+                            "immediate_or_cancel",
                             "fill_or_kill",
-                            "good_til_day",
-                            "immediate_or_cancel"
+                            "good_til_day"
                         ],
                         "name": "time_in_force"
                     },
                     {
                         "items": [
+                            "last_price",
                             "mark_price",
-                            "index_price",
-                            "last_price"
+                            "index_price"
                         ],
                         "name": "trigger"
                     },
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     },
                     {
                         "items": [
-                            "one_triggers_one_cancels_other",
                             "one_cancels_other",
-                            "one_triggers_other"
+                            "one_triggers_other",
+                            "one_triggers_one_cancels_other"
                         ],
                         "name": "linked_order_type"
                     },
                     {
                         "items": [
-                            "incremental",
                             "first_hit",
-                            "complete_fill"
+                            "complete_fill",
+                            "incremental"
                         ],
                         "name": "trigger_fill_condition"
                     }
@@ -18312,31 +18312,31 @@
                                 },
                                 {
                                     "items": [
-                                        "take_market",
-                                        "trailing_stop",
-                                        "market",
-                                        "stop_market",
-                                        "market_limit",
                                         "take_limit",
-                                        "stop_limit",
-                                        "limit"
+                                        "take_market",
+                                        "market",
+                                        "trailing_stop",
+                                        "limit",
+                                        "market_limit",
+                                        "stop_market",
+                                        "stop_limit"
                                     ],
                                     "name": "type"
                                 },
                                 {
                                     "items": [
                                         "good_til_cancelled",
+                                        "immediate_or_cancel",
                                         "fill_or_kill",
-                                        "good_til_day",
-                                        "immediate_or_cancel"
+                                        "good_til_day"
                                     ],
                                     "name": "time_in_force"
                                 },
                                 {
                                     "items": [
+                                        "last_price",
                                         "mark_price",
-                                        "index_price",
-                                        "last_price"
+                                        "index_price"
                                     ],
                                     "name": "trigger"
                                 }
@@ -19855,8 +19855,8 @@
                 "enums": [
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -21368,8 +21368,8 @@
                 "enums": [
                     {
                         "items": [
-                            "usd",
-                            "implv"
+                            "implv",
+                            "usd"
                         ],
                         "name": "advanced"
                     }
@@ -24506,34 +24506,34 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "limit",
-                            "stop",
                             "trailing_stop",
-                            "all",
                             "trigger_all",
-                            "take"
+                            "limit",
+                            "all",
+                            "take",
+                            "stop"
                         ],
                         "name": "type"
                     }
@@ -24730,101 +24730,101 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "eth_usde",
-                            "avax_usd",
-                            "paxg_usdc",
-                            "uni_usd",
-                            "xrp_usd",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "steth_eth",
-                            "paxg_usd",
-                            "link_usdc",
+                            "steth_usdt",
+                            "bch_usdt",
+                            "ethdvol_usdc",
+                            "eth_usdt",
+                            "usde_usdt",
                             "doge_usdt",
-                            "btc_usde",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
+                            "steth_eth",
+                            "link_usd",
+                            "bch_usd",
+                            "trx_usd",
+                            "dot_usdt",
+                            "ltc_usd",
+                            "trx_usdt",
+                            "avax_usd",
+                            "paxg_usd",
+                            "near_usd",
+                            "xrp_usd",
+                            "bnb_usdt",
+                            "paxg_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "paxg_btc",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "usde_usd",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "algo_usd",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "steth_usdc",
+                            "btc_usyc",
+                            "usyc_usdc",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "doge_usd",
+                            "matic_usd",
+                            "eth_usyc",
+                            "avax_usdc",
+                            "ada_usdc",
+                            "usdc_usd",
+                            "dot_usdc",
+                            "sol_usd",
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
                             "shib_usd",
                             "bch_usdc",
-                            "trx_usd",
-                            "ada_usd",
-                            "eth_usdc",
-                            "steth_usdc",
-                            "bch_usdt",
-                            "paxg_usdt",
-                            "near_usdc",
-                            "usde_usdt",
-                            "matic_usdt",
-                            "dot_usd",
-                            "algo_usd",
-                            "doge_usdc",
-                            "usyc_usdc",
-                            "sol_usdc",
-                            "dot_usdc",
-                            "near_usdt",
-                            "doge_usd",
-                            "uni_usdt",
-                            "avax_usdc",
-                            "xrp_usdt",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "steth_usdt",
-                            "btc_usyc",
-                            "sol_usd",
-                            "steth_usd",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "ltc_usd",
-                            "near_usd",
-                            "usdc_usd",
-                            "matic_usd",
-                            "usde_usd",
-                            "usde_usdc",
-                            "sol_usdt",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "bch_usd",
-                            "trx_usdt",
-                            "paxg_btc",
                             "matic_usdc",
+                            "btc_usde",
+                            "dot_usd",
+                            "btc_usd",
+                            "steth_usd",
+                            "algo_usdt",
                             "algo_usdc",
-                            "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
-                            "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
-                            "link_usd",
-                            "eth_usyc",
-                            "btc_usd"
+                            "ada_usd",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "eth_usde",
+                            "uni_usd",
+                            "luna_usdt"
                         ],
                         "name": "currency_pair"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "limit",
-                            "stop",
                             "trailing_stop",
-                            "all",
                             "trigger_all",
-                            "take"
+                            "limit",
+                            "all",
+                            "take",
+                            "stop"
                         ],
                         "name": "type"
                     }
@@ -25021,12 +25021,12 @@
                 "enums": [
                     {
                         "items": [
-                            "limit",
-                            "stop",
                             "trailing_stop",
-                            "all",
                             "trigger_all",
-                            "take"
+                            "limit",
+                            "all",
+                            "take",
+                            "stop"
                         ],
                         "name": "type"
                     }
@@ -25223,24 +25223,24 @@
                 "enums": [
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "limit",
-                            "stop",
                             "trailing_stop",
-                            "all",
                             "trigger_all",
-                            "take"
+                            "limit",
+                            "all",
+                            "take",
+                            "stop"
                         ],
                         "name": "type"
                     }
@@ -25437,11 +25437,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -25599,112 +25599,112 @@
                 "enums": [
                     {
                         "items": [
-                            "all",
-                            "currency_pair",
-                            "instrument_kind",
-                            "quote_set_id",
                             "delta",
+                            "instrument_kind",
+                            "all",
+                            "quote_set_id",
                             "currency",
-                            "instrument"
+                            "instrument",
+                            "currency_pair"
                         ],
                         "name": "cancel_type"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "eth_usd",
-                            "eth_usde",
-                            "avax_usd",
-                            "paxg_usdc",
-                            "uni_usd",
-                            "xrp_usd",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "steth_eth",
-                            "paxg_usd",
-                            "link_usdc",
+                            "steth_usdt",
+                            "bch_usdt",
+                            "ethdvol_usdc",
+                            "eth_usdt",
+                            "usde_usdt",
                             "doge_usdt",
-                            "btc_usde",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
+                            "steth_eth",
+                            "link_usd",
+                            "bch_usd",
+                            "trx_usd",
+                            "dot_usdt",
+                            "ltc_usd",
+                            "trx_usdt",
+                            "avax_usd",
+                            "paxg_usd",
+                            "near_usd",
+                            "xrp_usd",
+                            "bnb_usdt",
+                            "paxg_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "paxg_btc",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "usde_usd",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "algo_usd",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "steth_usdc",
+                            "btc_usyc",
+                            "usyc_usdc",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "doge_usd",
+                            "matic_usd",
+                            "eth_usyc",
+                            "avax_usdc",
+                            "ada_usdc",
+                            "usdc_usd",
+                            "dot_usdc",
+                            "sol_usd",
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
                             "shib_usd",
                             "bch_usdc",
-                            "trx_usd",
-                            "ada_usd",
-                            "eth_usdc",
-                            "steth_usdc",
-                            "bch_usdt",
-                            "paxg_usdt",
-                            "near_usdc",
-                            "usde_usdt",
-                            "matic_usdt",
-                            "dot_usd",
-                            "algo_usd",
-                            "doge_usdc",
-                            "usyc_usdc",
-                            "sol_usdc",
-                            "dot_usdc",
-                            "near_usdt",
-                            "doge_usd",
-                            "uni_usdt",
-                            "avax_usdc",
-                            "xrp_usdt",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "steth_usdt",
-                            "btc_usyc",
-                            "sol_usd",
-                            "steth_usd",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "ltc_usd",
-                            "near_usd",
-                            "usdc_usd",
-                            "matic_usd",
-                            "usde_usd",
-                            "usde_usdc",
-                            "sol_usdt",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "bch_usd",
-                            "trx_usdt",
-                            "paxg_btc",
                             "matic_usdc",
+                            "btc_usde",
+                            "dot_usd",
+                            "btc_usd",
+                            "steth_usd",
+                            "algo_usdt",
                             "algo_usdc",
-                            "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
-                            "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
-                            "link_usd",
-                            "eth_usyc",
-                            "btc_usd"
+                            "ada_usd",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "eth_usde",
+                            "uni_usd",
+                            "luna_usdt"
                         ],
                         "name": "currency_pair"
                     }
@@ -27640,50 +27640,50 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "paxg_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "doge_usdt",
-                            "link_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
                             "bch_usdt",
-                            "near_usdc",
-                            "matic_usdt",
-                            "doge_usdc",
-                            "sol_usdc",
-                            "near_usdt",
-                            "buidl_usdc",
-                            "uni_usdt",
-                            "xrp_usdt",
-                            "avax_usdc",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "sol_usdt",
-                            "usde_usdc",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "trx_usdt",
-                            "matic_usdc",
-                            "algo_usdc",
                             "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
                             "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
+                            "doge_usdt",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
                             "bnb_usdc",
+                            "buidl_usdc",
+                            "dot_usdt",
+                            "trx_usdt",
+                            "bnb_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "avax_usdc",
+                            "ada_usdc",
                             "dot_usdc",
-                            "btc_usd"
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
+                            "bch_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "algo_usdt",
+                            "algo_usdc",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -28033,50 +28033,50 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "paxg_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "doge_usdt",
-                            "link_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
                             "bch_usdt",
-                            "near_usdc",
-                            "matic_usdt",
-                            "doge_usdc",
-                            "sol_usdc",
-                            "near_usdt",
-                            "buidl_usdc",
-                            "uni_usdt",
-                            "xrp_usdt",
-                            "avax_usdc",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "sol_usdt",
-                            "usde_usdc",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "trx_usdt",
-                            "matic_usdc",
-                            "algo_usdc",
                             "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
                             "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
+                            "doge_usdt",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
                             "bnb_usdc",
+                            "buidl_usdc",
+                            "dot_usdt",
+                            "trx_usdt",
+                            "bnb_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "avax_usdc",
+                            "ada_usdc",
                             "dot_usdc",
-                            "btc_usd"
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
+                            "bch_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "algo_usdt",
+                            "algo_usdc",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -28322,27 +28322,27 @@
                 "enums": [
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
+                            "stop_all",
+                            "take_limit",
                             "take_market",
-                            "trigger_all",
+                            "take_all",
                             "trailing_stop",
+                            "trigger_all",
+                            "limit",
                             "all",
                             "stop_market",
-                            "take_all",
-                            "take_limit",
-                            "trailing_all",
-                            "stop_all",
                             "stop_limit",
-                            "limit"
+                            "trailing_all"
                         ],
                         "name": "type"
                     }
@@ -29836,37 +29836,37 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
+                            "stop_all",
+                            "take_limit",
                             "take_market",
-                            "trigger_all",
+                            "take_all",
                             "trailing_stop",
+                            "trigger_all",
+                            "limit",
                             "all",
                             "stop_market",
-                            "take_all",
-                            "take_limit",
-                            "trailing_all",
-                            "stop_all",
                             "stop_limit",
-                            "limit"
+                            "trailing_all"
                         ],
                         "name": "type"
                     }
@@ -31373,17 +31373,17 @@
                 "enums": [
                     {
                         "items": [
+                            "stop_all",
+                            "take_limit",
                             "take_market",
-                            "trigger_all",
+                            "take_all",
                             "trailing_stop",
+                            "trigger_all",
+                            "limit",
                             "all",
                             "stop_market",
-                            "take_all",
-                            "take_limit",
-                            "trailing_all",
-                            "stop_all",
                             "stop_limit",
-                            "limit"
+                            "trailing_all"
                         ],
                         "name": "type"
                     }
@@ -32877,11 +32877,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -34375,23 +34375,23 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -39241,11 +39241,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -40739,11 +40739,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -41258,31 +41258,31 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -42096,31 +42096,31 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "combo",
-                            "option",
-                            "future_combo",
-                            "option_combo",
-                            "any",
                             "spot",
-                            "future"
+                            "future",
+                            "any",
+                            "combo",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     },
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -42895,9 +42895,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -43685,9 +43685,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -44449,9 +44449,9 @@
                 "enums": [
                     {
                         "items": [
-                            "desc",
+                            "default",
                             "asc",
-                            "default"
+                            "desc"
                         ],
                         "name": "sorting"
                     }
@@ -45568,11 +45568,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -45919,50 +45919,50 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "paxg_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "doge_usdt",
-                            "link_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
                             "bch_usdt",
-                            "near_usdc",
-                            "matic_usdt",
-                            "doge_usdc",
-                            "sol_usdc",
-                            "near_usdt",
-                            "buidl_usdc",
-                            "uni_usdt",
-                            "xrp_usdt",
-                            "avax_usdc",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "sol_usdt",
-                            "usde_usdc",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "trx_usdt",
-                            "matic_usdc",
-                            "algo_usdc",
                             "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
                             "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
+                            "doge_usdt",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
                             "bnb_usdc",
+                            "buidl_usdc",
+                            "dot_usdt",
+                            "trx_usdt",
+                            "bnb_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "avax_usdc",
+                            "ada_usdc",
                             "dot_usdc",
-                            "btc_usd"
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
+                            "bch_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "algo_usdt",
+                            "algo_usdc",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -46292,50 +46292,50 @@
                 "enums": [
                     {
                         "items": [
-                            "eth_usd",
-                            "paxg_usdc",
-                            "ada_usdc",
-                            "trx_usdc",
-                            "ltc_usdt",
-                            "uni_usdc",
-                            "doge_usdt",
-                            "link_usdc",
-                            "bch_usdc",
-                            "eth_usdc",
                             "bch_usdt",
-                            "near_usdc",
-                            "matic_usdt",
-                            "doge_usdc",
-                            "sol_usdc",
-                            "near_usdt",
-                            "buidl_usdc",
-                            "uni_usdt",
-                            "xrp_usdt",
-                            "avax_usdc",
-                            "btc_usdt",
-                            "ltc_usdc",
-                            "bnb_usdt",
-                            "shib_usdc",
-                            "avax_usdt",
-                            "sol_usdt",
-                            "usde_usdc",
-                            "link_usdt",
-                            "luna_usdt",
-                            "algo_usdt",
-                            "ada_usdt",
-                            "trx_usdt",
-                            "matic_usdc",
-                            "algo_usdc",
                             "ethdvol_usdc",
-                            "shib_usdt",
-                            "xrp_usdc",
-                            "dot_usdt",
                             "eth_usdt",
-                            "btcdvol_usdc",
-                            "btc_usdc",
+                            "doge_usdt",
+                            "ltc_usdt",
+                            "near_usdt",
+                            "shib_usdt",
                             "bnb_usdc",
+                            "buidl_usdc",
+                            "dot_usdt",
+                            "trx_usdt",
+                            "bnb_usdt",
+                            "ada_usdt",
+                            "uni_usdt",
+                            "link_usdc",
+                            "near_usdc",
+                            "xrp_usdc",
+                            "btc_usdt",
+                            "usde_usdc",
+                            "btc_usdc",
+                            "matic_usdt",
+                            "xrp_usdt",
+                            "eth_usdc",
+                            "ltc_usdc",
+                            "shib_usdc",
+                            "sol_usdc",
+                            "paxg_usdc",
+                            "link_usdt",
+                            "avax_usdc",
+                            "ada_usdc",
                             "dot_usdc",
-                            "btc_usd"
+                            "btcdvol_usdc",
+                            "uni_usdc",
+                            "doge_usdc",
+                            "sol_usdt",
+                            "eth_usd",
+                            "bch_usdc",
+                            "matic_usdc",
+                            "btc_usd",
+                            "algo_usdt",
+                            "algo_usdc",
+                            "trx_usdc",
+                            "avax_usdt",
+                            "luna_usdt"
                         ],
                         "name": "index_name"
                     }
@@ -47202,11 +47202,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
@@ -48003,19 +48003,19 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "inactive",
                             "active",
-                            "rfq"
+                            "rfq",
+                            "inactive"
                         ],
                         "name": "state"
                     }
@@ -48173,12 +48173,12 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
-                            "BTC",
                             "USDC",
-                            "any"
+                            "any",
+                            "BTC",
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -49233,8 +49233,8 @@
                 "enums": [
                     {
                         "items": [
-                            "maker",
-                            "taker"
+                            "taker",
+                            "maker"
                         ],
                         "name": "role"
                     }
@@ -49405,8 +49405,8 @@
                 "enums": [
                     {
                         "items": [
-                            "maker",
-                            "taker"
+                            "taker",
+                            "maker"
                         ],
                         "name": "role"
                     }
@@ -51010,11 +51010,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -52419,8 +52419,8 @@
                 "enums": [
                     {
                         "items": [
-                            "maker",
-                            "taker"
+                            "taker",
+                            "maker"
                         ],
                         "name": "role"
                     }
@@ -52591,8 +52591,8 @@
                 "enums": [
                     {
                         "items": [
-                            "maker",
-                            "taker"
+                            "taker",
+                            "maker"
                         ],
                         "name": "role"
                     }
@@ -52811,8 +52811,8 @@
                 "enums": [
                     {
                         "items": [
-                            "maker",
-                            "taker"
+                            "taker",
+                            "maker"
                         ],
                         "name": "role"
                     }
@@ -53093,27 +53093,27 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "transfer",
                             "withdrawal",
+                            "transfer",
                             "deposit_source"
                         ],
                         "name": "type"
@@ -53880,11 +53880,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -54286,11 +54286,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -54744,11 +54744,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -55007,27 +55007,27 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "transfer",
                             "withdrawal",
+                            "transfer",
                             "deposit_source"
                         ],
                         "name": "type"
@@ -55664,11 +55664,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -55927,11 +55927,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -56316,11 +56316,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -56679,11 +56679,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -57068,27 +57068,27 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "transfer",
                             "withdrawal",
+                            "transfer",
                             "deposit_source"
                         ],
                         "name": "type"
@@ -57260,11 +57260,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -57692,11 +57692,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -58111,11 +58111,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -58530,27 +58530,27 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "transfer",
                             "withdrawal",
+                            "transfer",
                             "deposit_source"
                         ],
                         "name": "type"
@@ -58839,11 +58839,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
@@ -58851,11 +58851,11 @@
                         "items": [
                             "mid",
                             "low",
-                            "very_low",
                             "insane",
+                            "very_low",
+                            "high",
                             "extreme_high",
-                            "very_high",
-                            "high"
+                            "very_high"
                         ],
                         "name": "priority"
                     }
@@ -60100,9 +60100,9 @@
                     {
                         "items": [
                             "cross_pm",
+                            "segregated_pm",
                             "cross_sm",
-                            "segregated_sm",
-                            "segregated_pm"
+                            "segregated_sm"
                         ],
                         "name": "margin_model"
                     }
@@ -65209,20 +65209,20 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     }
@@ -68449,22 +68449,22 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
-                            "BTC",
                             "USDC",
-                            "any"
+                            "any",
+                            "BTC",
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     },
                     {
                         "items": [
-                            "option",
-                            "future_combo",
-                            "option_combo",
                             "spot",
-                            "future"
+                            "future",
+                            "future_combo",
+                            "option",
+                            "option_combo"
                         ],
                         "name": "kind"
                     }
@@ -70042,11 +70042,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -71272,20 +71272,20 @@
                 "enums": [
                     {
                         "items": [
+                            "BNB",
+                            "USDC",
+                            "PAXG",
+                            "SOL",
+                            "BTC",
                             "XRP",
                             "USYC",
                             "USDE",
-                            "USDT",
-                            "ETH",
                             "EURR",
-                            "SOL",
-                            "PAXG",
-                            "BTC",
-                            "BNB",
-                            "USDC",
+                            "STETH",
+                            "USDT",
                             "MATIC",
-                            "ETHW",
-                            "STETH"
+                            "ETH",
+                            "ETHW"
                         ],
                         "name": "currency"
                     }
@@ -72626,11 +72626,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -73071,11 +73071,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "CROSS",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "CROSS",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -74706,11 +74706,11 @@
                 "enums": [
                     {
                         "items": [
-                            "USDT",
-                            "ETH",
-                            "EURR",
+                            "USDC",
                             "BTC",
-                            "USDC"
+                            "EURR",
+                            "USDT",
+                            "ETH"
                         ],
                         "name": "currency"
                     }
@@ -75032,8 +75032,8 @@
                 "enums": [
                     {
                         "items": [
-                            "enable",
-                            "disable"
+                            "disable",
+                            "enable"
                         ],
                         "name": "state"
                     }
