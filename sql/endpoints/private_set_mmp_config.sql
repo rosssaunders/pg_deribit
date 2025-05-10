@@ -13,49 +13,33 @@
 */
 create type deribit.private_set_mmp_config_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_set_mmp_config_request as (
@@ -65,7 +49,9 @@ create type deribit.private_set_mmp_config_request as (
     "mmp_group" text,
     "quantity_limit" double precision,
     "delta_limit" double precision,
-    "vega_limit" double precision
+    "vega_limit" double precision,
+    "block_rfq" boolean,
+    "trade_count_limit" bigint
 );
 
 comment on column deribit.private_set_mmp_config_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
@@ -75,23 +61,29 @@ comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designa
 comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
 comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
 comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
+comment on column deribit.private_set_mmp_config_request."block_rfq" is 'If true, configures MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
+comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all".';
 
 create type deribit.private_set_mmp_config_response_result as (
+    "block_rfq" boolean,
     "delta_limit" double precision,
     "frozen_time" bigint,
     "index_name" text,
     "interval" bigint,
     "mmp_group" text,
     "quantity_limit" double precision,
+    "trade_count_limit" bigint,
     "vega_limit" double precision
 );
 
+comment on column deribit.private_set_mmp_config_response_result."block_rfq" is 'If true, indicates MMP configuration for Block RFQ. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit';
 comment on column deribit.private_set_mmp_config_response_result."frozen_time" is 'MMP frozen time in seconds, if set to 0 manual reset is required';
 comment on column deribit.private_set_mmp_config_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_set_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
 comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_set_mmp_config_response_result."trade_count_limit" is 'For Block RFQ only. The maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs.';
 comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit';
 
 create type deribit.private_set_mmp_config_response as (
@@ -110,7 +102,9 @@ create function deribit.private_set_mmp_config(
     "mmp_group" text default null,
     "quantity_limit" double precision default null,
     "delta_limit" double precision default null,
-    "vega_limit" double precision default null
+    "vega_limit" double precision default null,
+    "block_rfq" boolean default null,
+    "trade_count_limit" bigint default null
 )
 returns setof deribit.private_set_mmp_config_response_result
 language sql
@@ -124,7 +118,9 @@ as $$
             "mmp_group",
             "quantity_limit",
             "delta_limit",
-            "vega_limit"
+            "vega_limit",
+            "block_rfq",
+            "trade_count_limit"
         )::deribit.private_set_mmp_config_request as payload
     ), 
     http_response as (
@@ -144,12 +140,14 @@ as $$
         from http_response
     )
     select
+        (b)."block_rfq"::boolean,
         (b)."delta_limit"::double precision,
         (b)."frozen_time"::bigint,
         (b)."index_name"::text,
         (b)."interval"::bigint,
         (b)."mmp_group"::text,
         (b)."quantity_limit"::double precision,
+        (b)."trade_count_limit"::bigint,
         (b)."vega_limit"::double precision
     from (
         select (unnest(r.data)) b
