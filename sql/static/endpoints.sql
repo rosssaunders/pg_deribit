@@ -107,6 +107,7 @@ values
 ('/public/exchange_token'),
 ('/public/fork_token'),
 ('/public/get_announcements'),
+('/public/get_apr_history'),
 ('/public/get_book_summary_by_currency'),
 ('/public/get_book_summary_by_instrument'),
 ('/public/get_combo_details'),
