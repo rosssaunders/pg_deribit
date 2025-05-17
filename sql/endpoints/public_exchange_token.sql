@@ -13,11 +13,13 @@
 */
 create type deribit.public_exchange_token_request as (
     "refresh_token" text,
-    "subject_id" bigint
+    "subject_id" bigint,
+    "scope" text
 );
 
 comment on column deribit.public_exchange_token_request."refresh_token" is '(Required) Refresh token';
 comment on column deribit.public_exchange_token_request."subject_id" is '(Required) New subject id';
+comment on column deribit.public_exchange_token_request."scope" is 'Optional scope override for the new session. Cannot exceed caller''s permissions. Supports session scope for direct session creation during token exchange.';
 
 create type deribit.public_exchange_token_response_result as (
     "access_token" text,
@@ -45,7 +47,8 @@ comment on column deribit.public_exchange_token_response."jsonrpc" is 'The JSON-
 
 create function deribit.public_exchange_token(
     "refresh_token" text,
-    "subject_id" bigint
+    "subject_id" bigint,
+    "scope" text default null
 )
 returns deribit.public_exchange_token_response_result
 language sql
@@ -54,7 +57,8 @@ as $$
     with request as (
         select row(
             "refresh_token",
-            "subject_id"
+            "subject_id",
+            "scope"
         )::deribit.public_exchange_token_request as payload
     ), 
     http_response as (
