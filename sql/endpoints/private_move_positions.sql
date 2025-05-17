@@ -107,4 +107,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount';
+comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount Note:In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.';

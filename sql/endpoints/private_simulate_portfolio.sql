@@ -37,7 +37,7 @@ create type deribit.private_simulate_portfolio_response as (
 
 comment on column deribit.private_simulate_portfolio_response."id" is 'The id that was sent in the request';
 comment on column deribit.private_simulate_portfolio_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_simulate_portfolio_response."result" is 'PM details';
+comment on column deribit.private_simulate_portfolio_response."result" is 'Portfolio details';
 
 create function deribit.private_simulate_portfolio(
     "currency" deribit.private_simulate_portfolio_request_currency,
