@@ -13,65 +13,53 @@
 */
 create type deribit.private_get_mmp_status_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_get_mmp_status_request as (
     "index_name" deribit.private_get_mmp_status_request_index_name,
-    "mmp_group" text
+    "mmp_group" text,
+    "block_rfq" boolean
 );
 
 comment on column deribit.private_get_mmp_status_request."index_name" is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
 comment on column deribit.private_get_mmp_status_request."mmp_group" is 'Specifies the MMP group for which the status is being retrieved. The index_name must be specified before using this parameter.';
+comment on column deribit.private_get_mmp_status_request."block_rfq" is 'If true, retrieves MMP status for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP status is completely separate from normal order/quote MMP status.';
 
 create type deribit.private_get_mmp_status_response_result as (
+    "block_rfq" boolean,
     "frozen_until" bigint,
     "index_name" text,
     "mmp_group" text
 );
 
+comment on column deribit.private_get_mmp_status_response_result."block_rfq" is 'If true, indicates that the MMP status is for Block RFQ. Block RFQ MMP status is completely separate from normal order/quote MMP status.';
 comment on column deribit.private_get_mmp_status_response_result."frozen_until" is 'Timestamp (milliseconds since the UNIX epoch) until the user will be frozen - 0 means that the user is frozen until manual reset.';
 comment on column deribit.private_get_mmp_status_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_get_mmp_status_response_result."mmp_group" is 'Triggered mmp group, this parameter is optional (appears only for Mass Quote orders trigger)';
@@ -87,7 +75,8 @@ comment on column deribit.private_get_mmp_status_response."jsonrpc" is 'The JSON
 
 create function deribit.private_get_mmp_status(
     "index_name" deribit.private_get_mmp_status_request_index_name default null,
-    "mmp_group" text default null
+    "mmp_group" text default null,
+    "block_rfq" boolean default null
 )
 returns setof deribit.private_get_mmp_status_response_result
 language sql
@@ -96,7 +85,8 @@ as $$
     with request as (
         select row(
             "index_name",
-            "mmp_group"
+            "mmp_group",
+            "block_rfq"
         )::deribit.private_get_mmp_status_request as payload
     ), 
     http_response as (
@@ -116,6 +106,7 @@ as $$
         from http_response
     )
     select
+        (b)."block_rfq"::boolean,
         (b)."frozen_until"::bigint,
         (b)."index_name"::text,
         (b)."mmp_group"::text
@@ -126,4 +117,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_mmp_status is 'Get MMP status for triggred index (or group). If the parameter is not provided, a list of all triggered MMP statuses is returned.';
+comment on function deribit.private_get_mmp_status is 'Get MMP status for triggered index (or group). If the parameter is not provided, a list of all triggered MMP statuses is returned.';
