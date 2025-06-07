@@ -17,6 +17,7 @@ create type deribit.public_get_currencies_response_withdrawal_priority as (
 );
 
 create type deribit.public_get_currencies_response_result as (
+    "apr" double precision,
     "coin_type" text,
     "currency" text,
     "currency_long" text,
@@ -28,6 +29,7 @@ create type deribit.public_get_currencies_response_result as (
     "withdrawal_priorities" deribit.public_get_currencies_response_withdrawal_priority[]
 );
 
+comment on column deribit.public_get_currencies_response_result."apr" is 'Simple Moving Average (SMA) of the last 7 days of rewards. If fewer than 7 days of reward data are available, the APR is calculated as the average of the available rewards. Only applicable to yield-generating tokens (USDE, STETH).';
 comment on column deribit.public_get_currencies_response_result."coin_type" is 'The type of the currency.';
 comment on column deribit.public_get_currencies_response_result."currency" is 'The abbreviation of the currency. This abbreviation is used elsewhere in the API to identify the currency.';
 comment on column deribit.public_get_currencies_response_result."currency_long" is 'The full name for the currency.';
@@ -65,6 +67,7 @@ as $$
         from http_response
     )
     select
+        (b)."apr"::double precision,
         (b)."coin_type"::text,
         (b)."currency"::text,
         (b)."currency_long"::text,

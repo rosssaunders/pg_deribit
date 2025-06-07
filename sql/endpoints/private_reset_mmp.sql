@@ -13,58 +13,44 @@
 */
 create type deribit.private_reset_mmp_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_reset_mmp_request as (
     "index_name" deribit.private_reset_mmp_request_index_name,
-    "mmp_group" text
+    "mmp_group" text,
+    "block_rfq" boolean
 );
 
 comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
 comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the endpoint resets the traditional (no group) MMP limits';
+comment on column deribit.private_reset_mmp_request."block_rfq" is 'If true, resets MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 
 create type deribit.private_reset_mmp_response as (
     "id" bigint,
@@ -78,7 +64,8 @@ comment on column deribit.private_reset_mmp_response."result" is 'Result of meth
 
 create function deribit.private_reset_mmp(
     "index_name" deribit.private_reset_mmp_request_index_name,
-    "mmp_group" text default null
+    "mmp_group" text default null,
+    "block_rfq" boolean default null
 )
 returns text
 language sql
@@ -87,7 +74,8 @@ as $$
     with request as (
         select row(
             "index_name",
-            "mmp_group"
+            "mmp_group",
+            "block_rfq"
         )::deribit.private_reset_mmp_request as payload
     ), 
     http_response as (

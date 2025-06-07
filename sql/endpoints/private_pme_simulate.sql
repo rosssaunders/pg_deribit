@@ -37,7 +37,7 @@ create type deribit.private_pme_simulate_response as (
 
 comment on column deribit.private_pme_simulate_response."id" is 'The id that was sent in the request';
 comment on column deribit.private_pme_simulate_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_pme_simulate_response."result" is 'PM details';
+comment on column deribit.private_pme_simulate_response."result" is 'Simulation details';
 
 create function deribit.private_pme_simulate(
     "currency" deribit.private_pme_simulate_request_currency,
