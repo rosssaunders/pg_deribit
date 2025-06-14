@@ -39,6 +39,7 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -69,6 +70,7 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -79,7 +81,6 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -92,6 +93,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."api" is 'true if created with API';
@@ -122,6 +124,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."original_order_type" is 'Original order type. Optional field';
@@ -132,7 +135,6 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_open_orders_by_instrument_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."instrument_name" is 'Unique instrument identifier';
@@ -184,6 +186,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -214,6 +217,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -224,7 +228,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,

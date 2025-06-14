@@ -51,6 +51,7 @@ create type deribit.private_get_address_book_response_result as (
     "beneficiary_last_name" text,
     "beneficiary_vasp_did" text,
     "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
     "creation_timestamp" bigint,
     "currency" text,
     "info_required" boolean,
@@ -70,6 +71,7 @@ comment on column deribit.private_get_address_book_response_result."beneficiary_
 comment on column deribit.private_get_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
 comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
 comment on column deribit.private_get_address_book_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_address_book_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_get_address_book_response_result."info_required" is 'Signalises that addition information regarding the beneficiary of the address is required';
@@ -129,6 +131,7 @@ as $$
         (b)."beneficiary_last_name"::text,
         (b)."beneficiary_vasp_did"::text,
         (b)."beneficiary_vasp_name"::text,
+        (b)."beneficiary_vasp_website"::text,
         (b)."creation_timestamp"::bigint,
         (b)."currency"::text,
         (b)."info_required"::boolean,
