@@ -38,35 +38,29 @@ comment on column deribit.private_get_account_summary_request."currency" is '(Re
 comment on column deribit.private_get_account_summary_request."subaccount_id" is 'The user id for the subaccount';
 comment on column deribit.private_get_account_summary_request."extended" is 'Include additional fields';
 
-create type deribit.private_get_account_summary_response_fee as (
-    "currency" text,
-    "fee_type" text,
-    "instrument_type" text,
-    "maker_fee" double precision,
-    "taker_fee" double precision
+create type deribit.private_get_account_summary_response_default as (
+    "maker" double precision,
+    "taker" double precision,
+    "type" text
 );
 
-comment on column deribit.private_get_account_summary_response_fee."currency" is 'The currency the fee applies to';
-comment on column deribit.private_get_account_summary_response_fee."fee_type" is 'Fee type - relative if fee is calculated as a fraction of base instrument fee, fixed if fee is calculated solely using user fee';
-comment on column deribit.private_get_account_summary_response_fee."instrument_type" is 'Type of the instruments the fee applies to - future for future instruments (excluding perpetual), perpetual for future perpetual instruments, option for options';
-comment on column deribit.private_get_account_summary_response_fee."maker_fee" is 'User fee as a maker';
-comment on column deribit.private_get_account_summary_response_fee."taker_fee" is 'User fee as a taker';
+comment on column deribit.private_get_account_summary_response_default."maker" is 'Maker fee';
+comment on column deribit.private_get_account_summary_response_default."taker" is 'Taker fee';
+comment on column deribit.private_get_account_summary_response_default."type" is 'Fee type - relative if fee is calculated as a fraction of base instrument fee, fixed if fee is calculated solely using user fee';
 
-create type deribit.private_get_account_summary_response_result as (
-    "options_pl" double precision,
-    "projected_delta_total" double precision,
-    "options_theta_map" jsonb,
-    "has_non_block_chain_equity" boolean,
-    "total_margin_balance_usd" double precision,
-    "limits" jsonb,
-    "type" text,
-    "total_delta_total_usd" double precision,
-    "available_withdrawal_funds" double precision,
-    "options_session_rpl" double precision,
-    "futures_session_rpl" double precision,
-    "total_pl" double precision,
-    "spot_reserve" double precision,
-    "fees" deribit.private_get_account_summary_response_fee[],
+create type deribit.private_get_account_summary_response_value as (
+    "block_trade" double precision,
+    "default" deribit.private_get_account_summary_response_default,
+    "settlement" double precision
+);
+
+comment on column deribit.private_get_account_summary_response_value."block_trade" is 'Block trade fee (if applicable)';
+comment on column deribit.private_get_account_summary_response_value."settlement" is 'Settlement fee';
+
+create type deribit.private_get_account_summary_response_fee as (
+    "index_name" text,
+    "kind" text,
+    "value" deribit.private_get_account_summary_response_value,
     "additional_reserve" double precision,
     "options_session_upl" double precision,
     "cross_collateral_enabled" boolean,
@@ -113,6 +107,70 @@ create type deribit.private_get_account_summary_response_result as (
     "delta_total" double precision
 );
 
+comment on column deribit.private_get_account_summary_response_fee."index_name" is 'The currency pair this fee applies to';
+comment on column deribit.private_get_account_summary_response_fee."kind" is 'Type of the instruments the fee applies to - future for future instruments (excluding perpetual), perpetual for future perpetual instruments, option for options';
+comment on column deribit.private_get_account_summary_response_fee."additional_reserve" is 'The account''s balance reserved in other orders';
+comment on column deribit.private_get_account_summary_response_fee."options_session_upl" is 'Options session unrealized profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
+comment on column deribit.private_get_account_summary_response_fee."id" is 'Account id (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_value" is 'Options value';
+comment on column deribit.private_get_account_summary_response_fee."creation_timestamp" is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."email" is 'User email (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_vega_map" is 'Map of options'' vegas per index';
+comment on column deribit.private_get_account_summary_response_fee."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."mmp_enabled" is 'Whether MMP is enabled (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."futures_session_upl" is 'Futures session unrealized profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
+comment on column deribit.private_get_account_summary_response_fee."futures_pl" is 'Futures profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."options_gamma_map" is 'Map of options'' gammas per index';
+comment on column deribit.private_get_account_summary_response_fee."currency" is 'The selected currency';
+comment on column deribit.private_get_account_summary_response_fee."options_delta" is 'Options summary delta';
+comment on column deribit.private_get_account_summary_response_fee."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."referrer_id" is 'Optional identifier of the referrer (of the affiliation program, and available when parameter extended = true), which link was used by this account at registration. It coincides with suffix of the affiliation link path after /reg-';
+comment on column deribit.private_get_account_summary_response_fee."login_enabled" is 'Whether account is loginable using email and password (available when parameter extended = true and account is a subaccount)';
+comment on column deribit.private_get_account_summary_response_fee."equity" is 'The account''s current equity';
+comment on column deribit.private_get_account_summary_response_fee."margin_model" is 'Name of user''s currently enabled margin model';
+comment on column deribit.private_get_account_summary_response_fee."balance" is 'The account''s balance';
+comment on column deribit.private_get_account_summary_response_fee."session_upl" is 'Session unrealized profit and loss';
+comment on column deribit.private_get_account_summary_response_fee."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."security_keys_enabled" is 'Whether Security Key authentication is enabled (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."deposit_address" is 'The deposit address for the account (if available)';
+comment on column deribit.private_get_account_summary_response_fee."options_theta" is 'Options summary theta';
+comment on column deribit.private_get_account_summary_response_fee."self_trading_extended_to_subaccounts" is 'true if self trading rejection behavior is applied to trades between subaccounts (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."interuser_transfers_enabled" is 'true when the inter-user transfers are enabled for user (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."session_rpl" is 'Session realized profit and loss';
+comment on column deribit.private_get_account_summary_response_fee."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
+comment on column deribit.private_get_account_summary_response_fee."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."options_vega" is 'Options summary vega';
+comment on column deribit.private_get_account_summary_response_fee."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."system_name" is 'System generated user nickname (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_gamma" is 'Options summary gamma';
+comment on column deribit.private_get_account_summary_response_fee."username" is 'Account name (given by user) (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."delta_total" is 'The sum of position deltas';
+
+create type deribit.private_get_account_summary_response_result as (
+    "options_pl" double precision,
+    "projected_delta_total" double precision,
+    "options_theta_map" jsonb,
+    "has_non_block_chain_equity" boolean,
+    "total_margin_balance_usd" double precision,
+    "limits" jsonb,
+    "type" text,
+    "total_delta_total_usd" double precision,
+    "available_withdrawal_funds" double precision,
+    "options_session_rpl" double precision,
+    "futures_session_rpl" double precision,
+    "total_pl" double precision,
+    "spot_reserve" double precision,
+    "fees" deribit.private_get_account_summary_response_fee[]
+);
+
 comment on column deribit.private_get_account_summary_response_result."options_pl" is 'Options profit and Loss';
 comment on column deribit.private_get_account_summary_response_result."projected_delta_total" is 'The sum of position deltas without positions that will expire during closest expiration';
 comment on column deribit.private_get_account_summary_response_result."options_theta_map" is 'Map of options'' thetas per index';
@@ -126,51 +184,7 @@ comment on column deribit.private_get_account_summary_response_result."options_s
 comment on column deribit.private_get_account_summary_response_result."futures_session_rpl" is 'Futures session realized profit and Loss';
 comment on column deribit.private_get_account_summary_response_result."total_pl" is 'Profit and loss';
 comment on column deribit.private_get_account_summary_response_result."spot_reserve" is 'The account''s balance reserved in active spot orders';
-comment on column deribit.private_get_account_summary_response_result."fees" is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
-comment on column deribit.private_get_account_summary_response_result."additional_reserve" is 'The account''s balance reserved in other orders';
-comment on column deribit.private_get_account_summary_response_result."options_session_upl" is 'Options session unrealized profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
-comment on column deribit.private_get_account_summary_response_result."id" is 'Account id (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_value" is 'Options value';
-comment on column deribit.private_get_account_summary_response_result."creation_timestamp" is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."email" is 'User email (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_vega_map" is 'Map of options'' vegas per index';
-comment on column deribit.private_get_account_summary_response_result."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."mmp_enabled" is 'Whether MMP is enabled (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."futures_session_upl" is 'Futures session unrealized profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
-comment on column deribit.private_get_account_summary_response_result."futures_pl" is 'Futures profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."options_gamma_map" is 'Map of options'' gammas per index';
-comment on column deribit.private_get_account_summary_response_result."currency" is 'The selected currency';
-comment on column deribit.private_get_account_summary_response_result."options_delta" is 'Options summary delta';
-comment on column deribit.private_get_account_summary_response_result."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."referrer_id" is 'Optional identifier of the referrer (of the affiliation program, and available when parameter extended = true), which link was used by this account at registration. It coincides with suffix of the affiliation link path after /reg-';
-comment on column deribit.private_get_account_summary_response_result."login_enabled" is 'Whether account is loginable using email and password (available when parameter extended = true and account is a subaccount)';
-comment on column deribit.private_get_account_summary_response_result."equity" is 'The account''s current equity';
-comment on column deribit.private_get_account_summary_response_result."margin_model" is 'Name of user''s currently enabled margin model';
-comment on column deribit.private_get_account_summary_response_result."balance" is 'The account''s balance';
-comment on column deribit.private_get_account_summary_response_result."session_upl" is 'Session unrealized profit and loss';
-comment on column deribit.private_get_account_summary_response_result."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."security_keys_enabled" is 'Whether Security Key authentication is enabled (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."deposit_address" is 'The deposit address for the account (if available)';
-comment on column deribit.private_get_account_summary_response_result."options_theta" is 'Options summary theta';
-comment on column deribit.private_get_account_summary_response_result."self_trading_extended_to_subaccounts" is 'true if self trading rejection behavior is applied to trades between subaccounts (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."interuser_transfers_enabled" is 'true when the inter-user transfers are enabled for user (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."session_rpl" is 'Session realized profit and loss';
-comment on column deribit.private_get_account_summary_response_result."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
-comment on column deribit.private_get_account_summary_response_result."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."options_vega" is 'Options summary vega';
-comment on column deribit.private_get_account_summary_response_result."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."system_name" is 'System generated user nickname (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_gamma" is 'Options summary gamma';
-comment on column deribit.private_get_account_summary_response_result."username" is 'Account name (given by user) (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."delta_total" is 'The sum of position deltas';
+comment on column deribit.private_get_account_summary_response_result."fees" is 'List of fee objects for all currency pairs and instrument types related to the currency (available when parameter extended = true and user has any discounts)';
 
 create type deribit.private_get_account_summary_response as (
     "id" bigint,

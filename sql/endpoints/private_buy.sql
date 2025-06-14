@@ -117,7 +117,7 @@ create type deribit.private_buy_request as (
     "label" text,
     "price" double precision,
     "time_in_force" deribit.private_buy_request_time_in_force,
-    "max_show" double precision,
+    "display_amount" double precision,
     "post_only" boolean,
     "reject_post_only" boolean,
     "reduce_only" boolean,
@@ -139,7 +139,7 @@ comment on column deribit.private_buy_request."type" is 'The order type, default
 comment on column deribit.private_buy_request."label" is 'user defined label for the order (maximum 64 characters)';
 comment on column deribit.private_buy_request."price" is 'The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
 comment on column deribit.private_buy_request."time_in_force" is 'Specifies how long the order remains in effect. Default "good_til_cancelled" "good_til_cancelled" - unfilled order remains in order book until cancelled "good_til_day" - unfilled order remains in order book till the end of the trading session "fill_or_kill" - execute a transaction immediately and completely or not at all "immediate_or_cancel" - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled';
-comment on column deribit.private_buy_request."max_show" is 'Maximum amount within an order to be shown to other customers, 0 for invisible order';
+comment on column deribit.private_buy_request."display_amount" is 'Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.';
 comment on column deribit.private_buy_request."post_only" is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force="good_til_cancelled"';
 comment on column deribit.private_buy_request."reject_post_only" is 'If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with "post_only" set to true';
 comment on column deribit.private_buy_request."reduce_only" is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
@@ -237,6 +237,7 @@ create type deribit.private_buy_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -267,6 +268,7 @@ create type deribit.private_buy_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -277,7 +279,6 @@ create type deribit.private_buy_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -290,6 +291,7 @@ comment on column deribit.private_buy_response_order."triggered" is 'Whether the
 comment on column deribit.private_buy_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_buy_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_buy_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_buy_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_buy_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_buy_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_buy_response_order."api" is 'true if created with API';
@@ -320,6 +322,7 @@ comment on column deribit.private_buy_response_order."price" is 'Price in base c
 comment on column deribit.private_buy_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_buy_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_buy_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_buy_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_buy_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_buy_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_buy_response_order."original_order_type" is 'Original order type. Optional field';
@@ -330,7 +333,6 @@ comment on column deribit.private_buy_response_order."trigger_offset" is 'The ma
 comment on column deribit.private_buy_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
 comment on column deribit.private_buy_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_buy_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_buy_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_buy_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_buy_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_buy_response_order."instrument_name" is 'Unique instrument identifier';
@@ -359,7 +361,7 @@ create function deribit.private_buy(
     "label" text default null,
     "price" double precision default null,
     "time_in_force" deribit.private_buy_request_time_in_force default null,
-    "max_show" double precision default null,
+    "display_amount" double precision default null,
     "post_only" boolean default null,
     "reject_post_only" boolean default null,
     "reduce_only" boolean default null,
@@ -386,7 +388,7 @@ as $$
             "label",
             "price",
             "time_in_force",
-            "max_show",
+            "display_amount",
             "post_only",
             "reject_post_only",
             "reduce_only",

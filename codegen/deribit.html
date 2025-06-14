@@ -943,6 +943,9 @@
                     <a href="#block_trade_confirmations" class="toc-h2 toc-link" data-title="block_trade_confirmations">block_trade_confirmations</a>
                   </li>
                   <li>
+                    <a href="#block_trade_confirmations-currency" class="toc-h2 toc-link" data-title="block_trade_confirmations.{currency}">block_trade_confirmations.{currency}</a>
+                  </li>
+                  <li>
                     <a href="#book-instrument_name-group-depth-interval" class="toc-h2 toc-link" data-title="book.{instrument_name}.{group}.{depth}.{interval}">book.{instrument_name}.{group}.{depth}.{interval}</a>
                   </li>
                   <li>
@@ -1517,10 +1520,9 @@ When that happens the client is required to resend a request with additional par
 <ul>
 <li><code>security_keys</code> -  a list of security keys that can be used for authentication. Fields in Security Key object are:
 <ul>
-  <li><code>type</code> - type of security key: <code>tfa</code> for TOTP Two Factor Authentication, <code>u2f</code> for authentication with Yubikey</li>
+  <li><code>type</code> - type of security key: <code>tfa</code> for TOTP Two Factor Authentication</li>
   <li><code>name</code> - name of security key</li>
-  <li><code>credential_id</code> - optional filed for U2F keys only</li>
-</ul></li>
+  </ul></li>
 <li><code>rp_id</code> - relying party identifier (need to be used with WebAuthn)</li>
 <li><code>challenge</code> - this string needs to be resend, it is valid for 1 minute</li>
 </ul></p>
@@ -1556,9 +1558,7 @@ When that happens the client is required to resend a request with additional par
         </span><span class="nl">"challenge"</span><span class="p">:</span><span class="w"> </span><span class="s2">"+Di4SKN9VykrSoHlZO2KF3LEyEZF4ih9CZXVuudQiKQ="</span><span class="w">
     </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre></div><h3 id='u2f-authorization'>U2F authorization</h3>
-<p>For details of U2F authorization ask our staff.</p>
-<h3 id='errors'>Errors:</h3>
+</span></code></pre></div><h3 id='errors'>Errors:</h3>
 <p>When there is an error related to the Security Key authorization, a response with the error <code>security_key_authorization_error</code> (code: 13668) is returned.  It will have a <code>data.reason</code> field that possible values are:
 <ul>
 <li><code>tfa_code_not_matched</code> - provided TFA code was invalid</li>
@@ -4403,7 +4403,8 @@ in what form.</p>
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
-<p>Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).</p>
+<p>Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).
+<strong>Note</strong> - For real-time updates, we recommend using the WebSocket subscription to <code>ticker.{instrument_name}.{interval}</code> instead of polling this endpoint.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fget_book_summary_by_currency" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='parameters-21'>Parameters</h3>
@@ -6608,7 +6609,8 @@ in what form.</p>
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
-<p>Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.</p>
+<p>Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.
+<strong>Note - This endpoint has distinct API rate limiting requirements:</strong> 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to <a href="https://docs.deribit.com/#instrument-state-kind-currency">instrument_state.{kind}.{currency}</a> for real-time updates. For more information, see <a href="https://support.deribit.com/hc/en-us/articles/25944617523357-Rate-Limits">Rate Limits</a>.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fget_instruments" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='parameters-35'>Parameters</h3>
@@ -10319,11 +10321,11 @@ in what form.</p>
 <td><p>Specifies how long the order remains in effect. Default <code>&quot;good_til_cancelled&quot;</code></p> <ul> <li><code>&quot;good_til_cancelled&quot;</code> - unfilled order remains in order book until cancelled</li> <li><code>&quot;good_til_day&quot;</code> - unfilled order remains in order book till the end of the trading session</li> <li><code>&quot;fill_or_kill&quot;</code> - execute a transaction immediately and completely or not at all</li> <li><code>&quot;immediate_or_cancel&quot;</code> - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled</li> </ul></td>
 </tr>
 <tr>
-<td>max_show</td>
+<td>display_amount</td>
 <td>false</td>
 <td>number</td>
 <td></td>
-<td>Maximum amount within an order to be shown to other customers, <code>0</code> for invisible order</td>
+<td>Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.</td>
 </tr>
 <tr>
 <td>post_only</td>
@@ -10548,6 +10550,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -10703,6 +10710,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -10751,11 +10763,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -11136,11 +11143,11 @@ in what form.</p>
 <td><p>Specifies how long the order remains in effect. Default <code>&quot;good_til_cancelled&quot;</code></p> <ul> <li><code>&quot;good_til_cancelled&quot;</code> - unfilled order remains in order book until cancelled</li> <li><code>&quot;good_til_day&quot;</code> - unfilled order remains in order book till the end of the trading session</li> <li><code>&quot;fill_or_kill&quot;</code> - execute a transaction immediately and completely or not at all</li> <li><code>&quot;immediate_or_cancel&quot;</code> - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled</li> </ul></td>
 </tr>
 <tr>
-<td>max_show</td>
+<td>display_amount</td>
 <td>false</td>
 <td>number</td>
 <td></td>
-<td>Maximum amount within an order to be shown to other customers, <code>0</code> for invisible order</td>
+<td>Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.</td>
 </tr>
 <tr>
 <td>post_only</td>
@@ -11365,6 +11372,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -11520,6 +11532,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -11568,11 +11585,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -11984,6 +11996,13 @@ in what form.</p>
 <td></td>
 <td>Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases <code>timed_out</code> error will be responded. Remember that the given timestamp should be consistent with the server&#39;s time, use <a href='#public-get_time'>/public/time</a> method to obtain current server time.</td>
 </tr>
+<tr>
+<td>display_amount</td>
+<td>false</td>
+<td>number</td>
+<td></td>
+<td>Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.</td>
+</tr>
 </tbody></table>
 <h3 id='response-53'>Response</h3>
 <table><thead>
@@ -12037,6 +12056,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -12194,6 +12218,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -12242,11 +12271,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -12713,6 +12737,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -12868,6 +12897,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -12916,11 +12950,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -13295,6 +13324,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -13450,6 +13484,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -13498,11 +13537,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -14712,6 +14746,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -14867,6 +14906,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -14915,11 +14959,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -15788,6 +15827,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -15943,6 +15987,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -15991,11 +16040,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -16195,6 +16239,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -16350,6 +16399,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -16398,11 +16452,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -16595,6 +16644,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -16750,6 +16804,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -16798,11 +16857,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -16997,6 +17051,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -17152,6 +17211,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -17200,11 +17264,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -17450,6 +17509,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -17605,6 +17669,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -17653,11 +17722,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -17894,6 +17958,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -18049,6 +18118,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -18097,11 +18171,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -18435,6 +18504,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -18590,6 +18664,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -18638,11 +18717,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -18837,6 +18911,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -18992,6 +19071,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -19040,11 +19124,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -21733,6 +21812,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -21888,6 +21972,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -21936,11 +22025,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -26336,7 +26420,7 @@ in what form.</p>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;signature</td>
 <td>string</td>
-<td>Signature of block trade<br>It is valid only for 5 minutes “around” given timestamp</td>
+<td>Signature of block trade<br>It is valid only for 5 minutes around given timestamp</br></td>
 </tr>
 </tbody></table>
 <h1 id='block-rfq'>Block RFQ</h1><h2 id='public-get_block_rfq_trades'>/public/get_block_rfq_trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/public/get_block_rfq_trades?currency=BTC"</span> <span class="se">\</span>
@@ -26670,7 +26754,7 @@ in what form.</p>
 <td>Continuation token for pagination. <code>NULL</code> when no continuation. Consists of <code>timestamp</code> and <code>block_rfq_id</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='private-add_block_rfq_quote'>/private/add_block_rfq_quote</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/add_block_rfq_quote?amount=10000&amp;block_rfq_id=3&amp;direction=buy&amp;execution_instruction=any_part_of&amp;hedge=%7B%22price%22%3A70000%2C%22instrument_name%22%3A%22BTC-PERPETUAL%22%2C%22direction%22%3A%22buy%22%2C%22amount%22%3A10%7D&amp;label=example_quote&amp;legs=%5B%7B%22ratio%22%3A%221%22%2C%22price%22%3A69600%2C%22instrument_name%22%3A%22BTC-15NOV24%22%2C%22direction%22%3A%22buy%22%7D%5D"</span> <span class="se">\</span>
+<h2 id='private-add_block_rfq_quote'>/private/add_block_rfq_quote</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/add_block_rfq_quote?amount=10000&amp;block_rfq_id=3&amp;direction=buy&amp;execution_instruction=any_part_of&amp;expires_at=1745312540321&amp;hedge=%7B%22price%22%3A70000%2C%22instrument_name%22%3A%22BTC-PERPETUAL%22%2C%22direction%22%3A%22buy%22%2C%22amount%22%3A10%7D&amp;label=example_quote&amp;legs=%5B%7B%22ratio%22%3A%221%22%2C%22price%22%3A69600%2C%22instrument_name%22%3A%22BTC-15NOV24%22%2C%22direction%22%3A%22buy%22%7D%5D"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
 </code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
@@ -26695,7 +26779,8 @@ in what form.</p>
       <span class="dl">"</span><span class="s2">price</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">70000</span><span class="p">,</span>
       <span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC-PERPETUAL</span><span class="dl">"</span>
     <span class="p">},</span>
-    <span class="dl">"</span><span class="s2">execution_instruction</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">any_part_of</span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">execution_instruction</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">any_part_of</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">expires_at</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1745312540321</span>
   <span class="p">},</span>
   <span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span>
@@ -26738,7 +26823,8 @@ in what form.</p>
       <span class="s">"price"</span> <span class="p">:</span> <span class="mi">70000</span><span class="p">,</span>
       <span class="s">"instrument_name"</span> <span class="p">:</span> <span class="s">"BTC-PERPETUAL"</span>
     <span class="p">},</span>
-    <span class="s">"execution_instruction"</span> <span class="p">:</span> <span class="s">"any_part_of"</span>
+    <span class="s">"execution_instruction"</span> <span class="p">:</span> <span class="s">"any_part_of"</span><span class="p">,</span>
+    <span class="s">"expires_at"</span> <span class="p">:</span> <span class="mi">1745312540321</span>
   <span class="p">},</span>
   <span class="s">"jsonrpc"</span> <span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
   <span class="s">"id"</span> <span class="p">:</span> <span class="mi">1</span>
@@ -26922,6 +27008,13 @@ in what form.</p>
 <td>number</td>
 <td></td>
 <td>Aggregated price used for quoting future spreads.</td>
+</tr>
+<tr>
+<td>expires_at</td>
+<td>false</td>
+<td>integer</td>
+<td></td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch)</td>
 </tr>
 </tbody></table>
 <h3 id='response-104'>Response</h3>
@@ -27344,6 +27437,11 @@ in what form.</p>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
 <td>integer</td>
 <td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
@@ -27372,6 +27470,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
 <td>string</td>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
@@ -28078,6 +28181,11 @@ in what form.</p>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
 <td>integer</td>
 <td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
@@ -28106,6 +28214,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
 <td>string</td>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
@@ -29386,6 +29499,11 @@ in what form.</p>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
 <td>integer</td>
 <td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
@@ -29414,6 +29532,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
 <td>string</td>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
@@ -30235,6 +30358,13 @@ in what form.</p>
 <td>DID of beneficiary VASP</td>
 </tr>
 <tr>
+<td>beneficiary_vasp_website</td>
+<td>false</td>
+<td>string</td>
+<td></td>
+<td>Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs</td>
+</tr>
+<tr>
 <td>beneficiary_first_name</td>
 <td>false</td>
 <td>string</td>
@@ -30275,6 +30405,13 @@ in what form.</p>
 <td>boolean</td>
 <td></td>
 <td>The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software</td>
+</tr>
+<tr>
+<td>extra_currencies</td>
+<td>false</td>
+<td>array</td>
+<td></td>
+<td>The user can pass a list of currencies to add the address for. It is currently available ONLY for ERC20 currencies. Without passing this paramater for an ERC20 currency, the address will be added to ALL of the ERC20 currencies.</td>
 </tr>
 </tbody></table>
 <h3 id='response-115'>Response</h3>
@@ -30339,6 +30476,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;beneficiary_vasp_name</td>
 <td>string</td>
 <td>Name of beneficiary VASP</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;beneficiary_vasp_website</td>
+<td>string</td>
+<td>Website of the beneficiary VASP</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;creation_timestamp</td>
@@ -31081,6 +31223,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;beneficiary_vasp_name</td>
 <td>string</td>
 <td>Name of beneficiary VASP</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;beneficiary_vasp_website</td>
+<td>string</td>
+<td>Website of the beneficiary VASP</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;creation_timestamp</td>
@@ -32975,6 +33122,13 @@ in what form.</p>
 <td>DID of beneficiary VASP</td>
 </tr>
 <tr>
+<td>beneficiary_vasp_website</td>
+<td>false</td>
+<td>string</td>
+<td></td>
+<td>Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs</td>
+</tr>
+<tr>
 <td>beneficiary_first_name</td>
 <td>false</td>
 <td>string</td>
@@ -34342,7 +34496,7 @@ in what form.</p>
     </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5414</span><span class="p">,</span><span class="w">
     </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="77020412052836363637121a161e1b5914181a">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c292f392e031d1d1d1c39313d3530723f3331">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w">
         </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"login_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -35471,7 +35625,7 @@ in what form.</p>
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2515</span><span class="p">,</span><span class="w">
   </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a8dddbcddae8cdd0c9c5d8c4cd86cbc7c5">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6c3c5d3c4f6d3ced7dbc6dad398d5d9db">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"system_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"block_rfq_self_match_prevention"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
@@ -35543,7 +35697,45 @@ in what form.</p>
         </span><span class="nl">"spot_reserve"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"delta_total"</span><span class="p">:</span><span class="w"> </span><span class="mf">31.602958</span><span class="p">,</span><span class="w">
         </span><span class="nl">"options_gamma"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="w">
+        </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fees"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"perpetual"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"relative"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"option"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"future"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
       </span><span class="p">},</span><span class="w">
 
       </span><span class="p">{</span><span class="w">
@@ -35603,7 +35795,45 @@ in what form.</p>
         </span><span class="nl">"total_pl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"options_value"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"margin_balance"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="w">
+        </span><span class="nl">"margin_balance"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"fees"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00025</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.00005</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"perpetual"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth_usd"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"relative"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.5</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"option"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth_usd"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+                </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00025</span><span class="p">,</span><span class="w">
+                </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.00005</span><span class="w">
+              </span><span class="p">},</span><span class="w">
+              </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.2</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"future"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"eth_usd"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
+        </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
     </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
@@ -35788,32 +36018,52 @@ in what form.</p>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fees</td>
 <td>array of <em>object</em></td>
-<td>User fees in case of any discounts (available when parameter <code>extended</code> = <code>true</code> and user has any discounts)</td>
+<td>List of fee objects for all currency pairs and instrument types related to the currency (available when parameter <code>extended</code> = <code>true</code> and user has any discounts)</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;currency</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;index_name</td>
 <td>string</td>
-<td>The currency the fee applies to</td>
+<td>The currency pair this fee applies to</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fee_type</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;kind</td>
 <td>string</td>
-<td>Fee type - <code>relative</code> if fee is calculated as a fraction of base instrument fee, <code>fixed</code> if fee is calculated solely using user fee</td>
+<td>Instrument type (e.g., future, perpetual, option)</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_type</td>
-<td>string</td>
-<td>Type of the instruments the fee applies to - <code>future</code> for future instruments (excluding perpetual), <code>perpetual</code> for future perpetual instruments, <code>option</code> for options</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;value</td>
+<td><em>object</em></td>
+<td></td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;maker_fee</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;block_trade</td>
 <td>number</td>
-<td>User fee as a maker</td>
+<td>Block trade fee (if applicable)</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker_fee</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;default</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;maker</td>
 <td>number</td>
-<td>User fee as a taker</td>
+<td>Maker fee</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker</td>
+<td>number</td>
+<td>Taker fee</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;type</td>
+<td>string</td>
+<td>Fee calculation type (e.g., fixed, relative)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;settlement</td>
+<td>number</td>
+<td>Settlement fee</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;additional_reserve</td>
@@ -36062,7 +36312,7 @@ in what form.</p>
       </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1009872222854525</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="nl">"session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05271555</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bfcaccdacdffdac7ded2cfd3da91dcd0d2">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2c7c1d7c0f2d7cad3dfc2ded79cd1dddf">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"system_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"interuser_transfers_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -36127,7 +36377,45 @@ in what form.</p>
     </span><span class="nl">"spot_reserve"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
     </span><span class="nl">"delta_total"</span><span class="p">:</span><span class="w"> </span><span class="mf">31.602958</span><span class="p">,</span><span class="w">
     </span><span class="nl">"options_gamma"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00001</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="w">
+    </span><span class="nl">"session_rpl"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.03258105</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"fees"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"perpetual"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"relative"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.625</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"option"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"default"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"fixed"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"taker"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.00035</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"maker"</span><span class="p">:</span><span class="w"> </span><span class="mf">-0.0001</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"block_trade"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.3</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"kind"</span><span class="p">:</span><span class="w"> </span><span class="s2">"future"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"index_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"btc_usd"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
 
@@ -36262,32 +36550,52 @@ in what form.</p>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fees</td>
 <td>array of <em>object</em></td>
-<td>User fees in case of any discounts (available when parameter <code>extended</code> = <code>true</code> and user has any discounts)</td>
+<td>List of fee objects for all currency pairs and instrument types related to the currency (available when parameter <code>extended</code> = <code>true</code> and user has any discounts)</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;currency</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;index_name</td>
 <td>string</td>
-<td>The currency the fee applies to</td>
+<td>The currency pair this fee applies to</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fee_type</td>
-<td>string</td>
-<td>Fee type - <code>relative</code> if fee is calculated as a fraction of base instrument fee, <code>fixed</code> if fee is calculated solely using user fee</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_type</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;kind</td>
 <td>string</td>
 <td>Type of the instruments the fee applies to - <code>future</code> for future instruments (excluding perpetual), <code>perpetual</code> for future perpetual instruments, <code>option</code> for options</td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;maker_fee</td>
-<td>number</td>
-<td>User fee as a maker</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;value</td>
+<td><em>object</em></td>
+<td></td>
 </tr>
 <tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker_fee</td>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;block_trade</td>
 <td>number</td>
-<td>User fee as a taker</td>
+<td>Block trade fee (if applicable)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;default</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;maker</td>
+<td>number</td>
+<td>Maker fee</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker</td>
+<td>number</td>
+<td>Taker fee</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;type</td>
+<td>string</td>
+<td>Fee type - <code>relative</code> if fee is calculated as a fraction of base instrument fee, <code>fixed</code> if fee is calculated solely using user fee</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;settlement</td>
+<td>number</td>
+<td>Settlement fee</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;additional_reserve</td>
@@ -37461,7 +37769,7 @@ in what form.</p>
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4947</span><span class="p">,</span><span class="w">
     </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="394c4a5c4b66787878795c54585055175a5654">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b5e584e59746a6a6a6b4e464a424705484446">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
             </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
             </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
             </span><span class="nl">"margin_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"segregated_sm"</span><span class="p">,</span><span class="w">
@@ -37500,7 +37808,7 @@ in what form.</p>
             </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_1"</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4c393f293e130d0d0d0c2b212d2520622f2321">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f085839582afb1b1b1b0979d91999cde939f9d">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
             </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
             </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
             </span><span class="nl">"margin_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cross_pm"</span><span class="p">,</span><span class="w">
@@ -37971,6 +38279,11 @@ in what form.</p>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
 <td>number</td>
 <td>Option price in USD (Only if <code>advanced=&quot;usd&quot;</code>)</td>
@@ -38126,6 +38439,11 @@ in what form.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -38174,11 +38492,6 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -40257,7 +40570,7 @@ in what form.</p>
   <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">private/set_email_for_subaccount</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">sid</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bcc9cfd9cee38de38dfcd9d1ddd5d092dfd3d1">[email&#160;protected]</a></span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="285d5b4d5a77197719684d45494144064b4745">[email&#160;protected]</a></span><span class="dl">"</span>
   <span class="p">}</span>
 <span class="p">};</span>
 <span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
@@ -40283,7 +40596,7 @@ in what form.</p>
   <span class="s">"method"</span> <span class="p">:</span> <span class="s">"private/set_email_for_subaccount"</span><span class="p">,</span>
   <span class="s">"params"</span> <span class="p">:</span> <span class="p">{</span>
     <span class="s">"sid"</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s">"email"</span> <span class="p">:</span> <span class="s">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="493c3a2c3b16781678092c24282025672a2624">[email&#160;protected]</a>"</span>
+    <span class="s">"email"</span> <span class="p">:</span> <span class="s">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4b1b7a1b69bf59bf584a1a9a5ada8eaa7aba9">[email&#160;protected]</a>"</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -41585,6 +41898,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
 <td>integer</td>
 <td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
@@ -41613,6 +41931,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
 <td>string</td>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
@@ -41939,6 +42262,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
 <td>integer</td>
 <td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
@@ -41967,6 +42295,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
 <td>string</td>
 <td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
@@ -42517,6 +42850,193 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Unique user identifier</td>
 </tr>
 </tbody></table>
+<h2 id='block_trade_confirmations-currency'>block_trade_confirmations.{currency}</h2>
+<blockquote>
+<p><em>Subscriptions are only available via websockets.</em></p>
+</blockquote>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="c1">// To subscribe to this channel:</span>
+<span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+    <span class="p">{</span><span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span><span class="p">:</span> <span class="dl">"</span><span class="s2">public/subscribe</span><span class="dl">"</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">channels</span><span class="dl">"</span><span class="p">:</span> <span class="p">[</span><span class="dl">"</span><span class="s2">block_trade_confirmations.btc</span><span class="dl">"</span><span class="p">]}</span>
+    <span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the notifications...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="c1"># To subscribe to this channel:
+</span><span class="n">msg</span> <span class="o">=</span> \
+    <span class="p">{</span><span class="s">"jsonrpc"</span><span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+     <span class="s">"method"</span><span class="p">:</span> <span class="s">"public/subscribe"</span><span class="p">,</span>
+     <span class="s">"id"</span><span class="p">:</span> <span class="mi">42</span><span class="p">,</span>
+     <span class="s">"params"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s">"channels"</span><span class="p">:</span> <span class="p">[</span><span class="s">"block_trade_confirmations.btc"</span><span class="p">]}</span>
+    <span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the notifications...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>This subscription will send next notifications like this:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"params"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"data"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"user_id"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trades"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"price"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mf">70246.66</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"instrument_name"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-PERPETUAL"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"direction"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"amount"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">],</span><span class="w">
+      </span><span class="nl">"timestamp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1711468468131</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"state"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"value"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"rejected"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"timestamp"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">1711468632693</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"role"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"maker"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"nonce"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"bt-jdqv98"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
+    </span><span class="nl">"channel"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"block_trade_confirmations.btc"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"method"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"subscription"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Provides notifications regarding block trade approval. Supports filtering by currency.</p>
+
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=block_trade_confirmations.%7Bcurrency%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
+<h3 id='channel-parameters-7'>Channel Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>currency</td>
+<td>true</td>
+<td>string</td>
+<td><code>BTC</code><br><code>ETH</code><br><code>USDC</code><br><code>USDT</code><br><code>EURR</code><br><code>any</code></td>
+<td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
+</tr>
+</tbody></table>
+<h3 id='response-174'>Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>data</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;app_name</td>
+<td>string</td>
+<td>The name of the application that executed the block trade on behalf of the user (optional).</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;counterparty_state</td>
+<td><em>object</em></td>
+<td>State of the pending block trade for the other party (optional).</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;timestamp</td>
+<td>integer</td>
+<td>State timestamp.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;value</td>
+<td>string</td>
+<td>State value.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;nonce</td>
+<td>string</td>
+<td>Nonce that can be used to approve or reject pending block trade.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;role</td>
+<td>string</td>
+<td>Trade role of the user: <code>maker</code> or <code>taker</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td><em>object</em></td>
+<td>State of the pending block trade for current user.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;timestamp</td>
+<td>integer</td>
+<td>State timestamp.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;value</td>
+<td>string</td>
+<td>State value.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;timestamp</td>
+<td>integer</td>
+<td>Timestamp that can be used to approve or reject pending block trade.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>number</td>
+<td>Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;user_id</td>
+<td>integer</td>
+<td>Unique user identifier</td>
+</tr>
+</tbody></table>
 <h2 id='book-instrument_name-group-depth-interval'>book.{instrument_name}.{group}.{depth}.{interval}</h2>
 <blockquote>
 <p><em>Subscriptions are only available via websockets.</em></p>
@@ -42596,7 +43116,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><em>amount</em> indicates the amount of all orders at price level. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</p></p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=book.%7Binstrument_name%7D.%7Bgroup%7D.%7Bdepth%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-7'>Channel Parameters</h3>
+<h3 id='channel-parameters-8'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -42635,7 +43155,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-174'>Response</h3>
+<h3 id='response-175'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42801,7 +43321,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>The amount for perpetual and futures is in USD units, for options it is in corresponding cryptocurrency contracts, e.g., BTC or ETH.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=book.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-8'>Channel Parameters</h3>
+<h3 id='channel-parameters-9'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -42826,7 +43346,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-175'>Response</h3>
+<h3 id='response-176'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42941,7 +43461,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Publicly available market data used to generate a TradingView candle chart. During a single resolution period, many events can be sent, each with updated values for the recent period.<br/><br/> <strong>NOTICE</strong> When there is no trade during the requested resolution period (e.g. 1 minute), then a filling sample is generated which uses data from the last available trade candle (open and close values).</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=chart.trades.%7Binstrument_name%7D.%7Bresolution%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-9'>Channel Parameters</h3>
+<h3 id='channel-parameters-10'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -42966,7 +43486,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Chart bars resolution given in full minutes or keyword <code>1D</code> (only some specific resolutions are supported)</td>
 </tr>
 </tbody></table>
-<h3 id='response-176'>Response</h3>
+<h3 id='response-177'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43077,7 +43597,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Provides information about current value (price) for Deribit Index</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=deribit_price_index.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-10'>Channel Parameters</h3>
+<h3 id='channel-parameters-11'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43095,7 +43615,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-177'>Response</h3>
+<h3 id='response-178'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43239,7 +43759,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Provides information about current value (price) for stock exchanges used to calculate Deribit Index</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=deribit_price_ranking.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-11'>Channel Parameters</h3>
+<h3 id='channel-parameters-12'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43257,7 +43777,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-178'>Response</h3>
+<h3 id='response-179'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43365,7 +43885,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>This subscription provides basic statistics about Deribit Index</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=deribit_price_statistics.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-12'>Channel Parameters</h3>
+<h3 id='channel-parameters-13'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43383,7 +43903,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-179'>Response</h3>
+<h3 id='response-180'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43484,7 +44004,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Provides volatility index subscription</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=deribit_volatility_index.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-13'>Channel Parameters</h3>
+<h3 id='channel-parameters-14'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43502,7 +44022,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier supported for DVOL</td>
 </tr>
 </tbody></table>
-<h3 id='response-180'>Response</h3>
+<h3 id='response-181'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43593,7 +44113,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Returns calculated (estimated) ending price for given index.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=estimated_expiration_price.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-14'>Channel Parameters</h3>
+<h3 id='channel-parameters-15'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43611,7 +44131,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-181'>Response</h3>
+<h3 id='response-182'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43760,7 +44280,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Notifies about changes in instrument ticker (key information about the instrument).</p> <p>The first notification will contain the whole ticker. After that there will only be information about changes in the ticker.</p> <p>This event is sent at most once per second.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=incremental_ticker.%7Binstrument_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-15'>Channel Parameters</h3>
+<h3 id='channel-parameters-16'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -43778,7 +44298,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-182'>Response</h3>
+<h3 id='response-183'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44039,7 +44559,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Get notifications about new or terminated instruments of given kind in given currency. <strong>(Please note that our system does not send notifications when currencies are locked. Users are advised to subscribe to the <a href="https://docs.deribit.com/#platform_state">platform_state</a> channel to monitor the state of currencies actively.)</strong></p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=instrument.state.%7Bkind%7D.%7Bcurrency%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-16'>Channel Parameters</h3>
+<h3 id='channel-parameters-17'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44064,7 +44584,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-183'>Response</h3>
+<h3 id='response-184'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44182,7 +44702,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Provides information about options markprices.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=markprice.options.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-17'>Channel Parameters</h3>
+<h3 id='channel-parameters-18'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44200,7 +44720,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-184'>Response</h3>
+<h3 id='response-185'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44296,7 +44816,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Provide current interest rate - but only for <strong>perpetual</strong> instruments. Other types won&#39;t generate any notification.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=perpetual.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-18'>Channel Parameters</h3>
+<h3 id='channel-parameters-19'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44321,7 +44841,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-185'>Response</h3>
+<h3 id='response-186'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44411,9 +44931,9 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Information about platform state.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=platform_state" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-19'>Channel Parameters</h3>
+<h3 id='channel-parameters-20'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-186'>Response</h3>
+<h3 id='response-187'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44502,9 +45022,9 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Information whether unauthorized public requests are allowed</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=platform_state.public_methods_state" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-20'>Channel Parameters</h3>
+<h3 id='channel-parameters-21'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-187'>Response</h3>
+<h3 id='response-188'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44588,7 +45108,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Best bid/ask price and size.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=quote.%7Binstrument_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-21'>Channel Parameters</h3>
+<h3 id='channel-parameters-22'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44606,7 +45126,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-188'>Response</h3>
+<h3 id='response-189'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44714,7 +45234,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Get notifications about RFQs for instruments in given currency.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=rfq.%7Bcurrency%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-22'>Channel Parameters</h3>
+<h3 id='channel-parameters-23'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44732,7 +45252,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-189'>Response</h3>
+<h3 id='response-190'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44860,7 +45380,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Key information about the instrument</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=ticker.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-23'>Channel Parameters</h3>
+<h3 id='channel-parameters-24'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -44885,7 +45405,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-190'>Response</h3>
+<h3 id='response-191'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45155,7 +45675,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Get notifications about trades for an instrument.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=trades.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-24'>Channel Parameters</h3>
+<h3 id='channel-parameters-25'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -45180,7 +45700,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-191'>Response</h3>
+<h3 id='response-192'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45356,7 +45876,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p>Get notifications about trades in any instrument of a given kind and given currency.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=trades.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='channel-parameters-25'>Channel Parameters</h3>
+<h3 id='channel-parameters-26'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -45388,7 +45908,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-192'>Response</h3>
+<h3 id='response-193'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45559,9 +46079,9 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.access_log" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-26'>Channel Parameters</h3>
+<h3 id='channel-parameters-27'>Channel Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-193'>Response</h3>
+<h3 id='response-194'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45743,7 +46263,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.changes.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-27'>Channel Parameters</h3>
+<h3 id='channel-parameters-28'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -45768,7 +46288,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-194'>Response</h3>
+<h3 id='response-195'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45815,6 +46335,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -45972,6 +46497,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -46020,11 +46550,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -46495,7 +47020,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.changes.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-28'>Channel Parameters</h3>
+<h3 id='channel-parameters-29'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -46527,7 +47052,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-195'>Response</h3>
+<h3 id='response-196'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -46574,6 +47099,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -46731,6 +47261,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -46779,11 +47314,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -47263,7 +47793,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.combo_trades.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-29'>Channel Parameters</h3>
+<h3 id='channel-parameters-30'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -47288,7 +47818,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-196'>Response</h3>
+<h3 id='response-197'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -47629,7 +48159,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.combo_trades.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-30'>Channel Parameters</h3>
+<h3 id='channel-parameters-31'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -47661,7 +48191,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-197'>Response</h3>
+<h3 id='response-198'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -47923,9 +48453,9 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.lock" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-31'>Channel Parameters</h3>
+<h3 id='channel-parameters-32'>Channel Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-198'>Response</h3>
+<h3 id='response-199'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48013,7 +48543,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.mmp_trigger.%7Bindex_name%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-32'>Channel Parameters</h3>
+<h3 id='channel-parameters-33'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -48031,7 +48561,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier of derivative instrument on the platform</td>
 </tr>
 </tbody></table>
-<h3 id='response-199'>Response</h3>
+<h3 id='response-200'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48147,7 +48677,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.orders.%7Binstrument_name%7D.raw" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-33'>Channel Parameters</h3>
+<h3 id='channel-parameters-34'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -48165,7 +48695,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-200'>Response</h3>
+<h3 id='response-201'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48202,6 +48732,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -48359,6 +48894,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -48407,11 +48947,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -48523,7 +49058,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.orders.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-34'>Channel Parameters</h3>
+<h3 id='channel-parameters-35'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -48548,7 +49083,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-201'>Response</h3>
+<h3 id='response-202'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48585,6 +49120,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -48742,6 +49282,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -48790,11 +49335,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -48904,7 +49444,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.orders.%7Bkind%7D.%7Bcurrency%7D.raw" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-35'>Channel Parameters</h3>
+<h3 id='channel-parameters-36'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -48929,7 +49469,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-202'>Response</h3>
+<h3 id='response-203'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48966,6 +49506,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -49123,6 +49668,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -49171,11 +49721,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -49285,7 +49830,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.orders.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-36'>Channel Parameters</h3>
+<h3 id='channel-parameters-37'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -49317,7 +49862,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-203'>Response</h3>
+<h3 id='response-204'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -49354,6 +49899,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;implv</td>
 <td>number</td>
 <td>Implied volatility in percent. (Only if <code>advanced=&quot;implv&quot;</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;refresh_amount</td>
+<td>number</td>
+<td>The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;usd</td>
@@ -49511,6 +50061,11 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;display_amount</td>
+<td>number</td>
+<td>The actual display amount of iceberg order. Absent for other types of orders.</td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
 <td>string</td>
 <td>Order type: <code>&quot;limit&quot;</code>, <code>&quot;market&quot;</code>, <code>&quot;stop_limit&quot;</code>, <code>&quot;stop_market&quot;</code></td>
@@ -49559,11 +50114,6 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
 <td>boolean</td>
 <td>Optional (not added for spot). &#39;<code>true</code> for reduce-only orders only&#39;</td>
-</tr>
-<tr>
-<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;max_show</td>
-<td>number</td>
-<td>Maximum amount within an order to be shown to other traders, 0 for invisible order.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
@@ -49700,7 +50250,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.portfolio.%7Bcurrency%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-37'>Channel Parameters</h3>
+<h3 id='channel-parameters-38'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -49718,7 +50268,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-204'>Response</h3>
+<h3 id='response-205'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50045,7 +50595,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.trades.%7Binstrument_name%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-38'>Channel Parameters</h3>
+<h3 id='channel-parameters-39'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -50070,7 +50620,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-205'>Response</h3>
+<h3 id='response-206'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50351,7 +50901,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=user.trades.%7Bkind%7D.%7Bcurrency%7D.%7Binterval%7D" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
-<h3 id='channel-parameters-39'>Channel Parameters</h3>
+<h3 id='channel-parameters-40'>Channel Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -50383,7 +50933,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-206'>Response</h3>
+<h3 id='response-207'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50858,7 +51408,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">11021</td>
 <td style="text-align: left"><code>&quot;post_only_price_modification_not_possible&quot;</code></td>
-<td style="text-align: left">Price modification for post only order is not possible</td>
+<td style="text-align: left">Price modification for post only order is not possible.</td>
 </tr>
 <tr>
 <td style="text-align: left">11022</td>
@@ -50978,12 +51528,12 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">11055</td>
 <td style="text-align: left"><code>&quot;post_only_not_allowed&quot;</code></td>
-<td style="text-align: left">Post only flag not allowed for given order type</td>
+<td style="text-align: left">Post only flag not allowed for given order type.</td>
 </tr>
 <tr>
 <td style="text-align: left">11056</td>
 <td style="text-align: left"><code>&quot;unauthenticated_public_requests_temporarily_disabled&quot;</code></td>
-<td style="text-align: left">Request rejected because of unauthenticated public requests were temporarily disabled</td>
+<td style="text-align: left">Request rejected because of unauthenticated public requests were temporarily disabled.</td>
 </tr>
 <tr>
 <td style="text-align: left">11090</td>
@@ -51173,12 +51723,12 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">13032</td>
 <td style="text-align: left"><code>&quot;non_unique_order_label&quot;</code></td>
-<td style="text-align: left">Request allowed only for orders uniquely identified by given label, more than one match was found</td>
+<td style="text-align: left">Request allowed only for orders uniquely identified by given label, more than one match was foun.</td>
 </tr>
 <tr>
 <td style="text-align: left">13034</td>
 <td style="text-align: left"><code>&quot;no_more_security_keys_allowed&quot;</code></td>
-<td style="text-align: left">Maximal number of tokens allowed reached</td>
+<td style="text-align: left">Maximal number of tokens allowed reached.</td>
 </tr>
 <tr>
 <td style="text-align: left">13035</td>
@@ -51213,7 +51763,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">13403</td>
 <td style="text-align: left"><code>&quot;scope_exceeded&quot;</code></td>
-<td style="text-align: left">Error returned after the user tried to edit / delete an API key using an authorized key connection with insufficient scope</td>
+<td style="text-align: left">Error returned after the user tried to edit / delete an API key using an authorized key connection with insufficient scope.</td>
 </tr>
 <tr>
 <td style="text-align: left">13503</td>
@@ -51238,12 +51788,12 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">13780</td>
 <td style="text-align: left"><code>&quot;move_positions_over_limit&quot;</code></td>
-<td style="text-align: left">The client cannot execute the request yet, and should wait for <code>wait</code> seconds to try again</td>
+<td style="text-align: left">The client cannot execute the request yet, and should wait for <code>wait</code> seconds to try again.</td>
 </tr>
 <tr>
 <td style="text-align: left">13781</td>
 <td style="text-align: left"><code>&quot;coupon_already_used&quot;</code></td>
-<td style="text-align: left">The coupon has already been used by current account</td>
+<td style="text-align: left">The coupon has already been used by current account.</td>
 </tr>
 <tr>
 <td style="text-align: left">13791</td>
@@ -51263,7 +51813,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">13888</td>
 <td style="text-align: left"><code>&quot;timed_out&quot;</code></td>
-<td style="text-align: left">Server did not manage to process request when it was valid (<code>valid_until</code>)</td>
+<td style="text-align: left">Server did not manage to process request when it was valid (<code>valid_until</code>).</td>
 </tr>
 <tr>
 <td style="text-align: left">13901</td>
@@ -51278,12 +51828,82 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">13903</td>
 <td style="text-align: left"><code>&quot;too_many_quotes&quot;</code></td>
-<td style="text-align: left">Number of qoutes (in Mass Quotes requests) per second exceeded.</td>
+<td style="text-align: left">Number of quotes (in Mass Quotes requests) per second exceeded.</td>
 </tr>
 <tr>
 <td style="text-align: left">13904</td>
 <td style="text-align: left"><code>&quot;security_key_setup_required&quot;</code></td>
 <td style="text-align: left">Not allowed without a full security key setup.</td>
+</tr>
+<tr>
+<td style="text-align: left">13905</td>
+<td style="text-align: left"><code>&quot;too_many_quotes_per_block_rfq&quot;</code></td>
+<td style="text-align: left">Number of quotes for single block rfq exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13906</td>
+<td style="text-align: left"><code>&quot;too_many_quotes_per_block_rfq_side&quot;</code></td>
+<td style="text-align: left">Number of quotes per single block rfq side exceeded.</td>
+</tr>
+<tr>
+<td style="text-align: left">13907</td>
+<td style="text-align: left"><code>&quot;not_fully_filled&quot;</code></td>
+<td style="text-align: left">Block Rfq trade cannot be fully filled with matched quotes.</td>
+</tr>
+<tr>
+<td style="text-align: left">13907</td>
+<td style="text-align: left"><code>&quot;too_many_open_block_rfqs&quot;</code></td>
+<td style="text-align: left">Number of open block rfq by taker exceeds configured max amount.</td>
+</tr>
+<tr>
+<td style="text-align: left">13910</td>
+<td style="text-align: left"><code>&quot;quote_crossed&quot;</code></td>
+<td style="text-align: left">Quote placed by the maker crosses an already placed quote by the same maker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13911</td>
+<td style="text-align: left"><code>&quot;max_broker_client_count&quot;</code></td>
+<td style="text-align: left">Number of broker client&#39;s exceeds allowed max amount.</td>
+</tr>
+<tr>
+<td style="text-align: left">13912</td>
+<td style="text-align: left"><code>&quot;broker_cannot_be_client&quot;</code></td>
+<td style="text-align: left">Broker accounts cannot be clients of other brokers.</td>
+</tr>
+<tr>
+<td style="text-align: left">13913</td>
+<td style="text-align: left"><code>&quot;broker_already_linked&quot;</code></td>
+<td style="text-align: left">User has already been linked to this broker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13914</td>
+<td style="text-align: left"><code>&quot;user_is_a_broker_client&quot;</code></td>
+<td style="text-align: left">User is a client of a broker account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13915</td>
+<td style="text-align: left"><code>&quot;user_is_not_a_broker&quot;</code></td>
+<td style="text-align: left">User account is not configured as broker account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13916</td>
+<td style="text-align: left"><code>&quot;app_registered_to_broker&quot;</code></td>
+<td style="text-align: left">Application is registered to a broker.</td>
+</tr>
+<tr>
+<td style="text-align: left">13917</td>
+<td style="text-align: left"><code>&quot;account_quote_limit_crossed&quot;</code></td>
+<td style="text-align: left">Block Rfq quote limits set for the account were crossed.</td>
+</tr>
+<tr>
+<td style="text-align: left">13918</td>
+<td style="text-align: left"><code>&quot;inverse_future_cross_trading&quot;</code></td>
+<td style="text-align: left">Placed block rfq quote would cross trade inverse futures with block rfq quote limits set on the account.</td>
+</tr>
+<tr>
+<td style="text-align: left">13919</td>
+<td style="text-align: left"><code>&quot;client_of_main_account&quot;</code></td>
+<td style="text-align: left">Subaccounts of brokers cannot be linked to their own broker account.</td>
 </tr>
 <tr>
 <td style="text-align: left">-32602</td>
@@ -51293,7 +51913,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <tr>
 <td style="text-align: left">-32600</td>
 <td style="text-align: left"><code>&quot;request entity too large&quot;</code></td>
-<td style="text-align: left">Error thrown when body size in POST request or single frame in websocket connection frame exceeds the limit (32 kB)</td>
+<td style="text-align: left">Error thrown when body size in POST request or single frame in websocket connection frame exceeds the limit (32 kB).</td>
 </tr>
 <tr>
 <td style="text-align: left">-32601</td>
@@ -51581,7 +52201,7 @@ only.</p>
 
 <p><code>CancelOnDisconnect</code>(<code>9001</code>) controls &quot;Close on Disconnect&quot;. If this tag is not
 provided, the default setting from the account is used.</p>
-<h3 id='response-207'>Response</h3>
+<h3 id='response-208'>Response</h3>
 <p>When the login is successful, the server will echo back the request.</p>
 
 <p>If the login was not successful, the server will respond with a
@@ -51641,7 +52261,7 @@ session should be considered lost and corrective action should be initiated.</p>
 <td>The identifier when responding to the <a href="#test-request-1"><code>Test Request</code>(<code>1</code>)</a> message. When not responding to a <code>Test Request</code>(<code>1</code>) message, this tag can be left out</td>
 </tr>
 </tbody></table>
-<h3 id='response-208'>Response</h3>
+<h3 id='response-209'>Response</h3>
 <p>When the heartbeat has been received successfully, the server will echo back the
 request as confirmation.</p>
 <h2 id='test-request-1'><code>Test Request</code>(<code>1</code>)</h2>
@@ -51763,7 +52383,7 @@ header is ignored.</p>
 <td>New Sequence Number</td>
 </tr>
 </tbody></table>
-<h3 id='response-209'>Response</h3>
+<h3 id='response-210'>Response</h3>
 <p>In reply to <code>Sequence Reset</code>(<code>4</code>), the exchange replies with <code>Resend
 Request</code>(<code>2</code>) with <code>BeginSeqNo</code>(<code>7</code>) and <code>EndSeqNo</code>(<code>16</code>) equal to the passed
 <code>NewSeqNo</code>(<code>36</code>) in case of success. In case of wrong arguments, the server
@@ -51847,7 +52467,7 @@ messages starting from the sequence number equal to the <code>NewSeqNo</code>(<c
 <td>Optional parameter for limiting output by the <code>SecurityType</code>. Describes type of security.<p> Possible values: <ul><li><code>FXSPOT</code> for currency exchange spot</li><li><code>FUT</code> for futures,</li><li> <code>OPT</code> for options,</li> <li> <code>FUTCO</code> for future combo,</li> <li><code>OPTCO</code> for option combo</li><li><code>INDEX</code> for indexes</li></ul></td>
 </tr>
 </tbody></table>
-<h3 id='response-210'>Response</h3>
+<h3 id='response-211'>Response</h3>
 <p>The server will respond with a <a href="#security-list-y"><code>Security List</code>(<code>y</code>)</a> message,
 where the <code>SecurityReq</code>(<code>320</code>) is equal to that of the request.</p>
 <h2 id='security-list-y'><code>Security List</code>(<code>y</code>)</h2>
@@ -52220,7 +52840,7 @@ combinations are:</p>
 
 <p>If multiple instrument symbols are specified then the system responds with
 multiple market data messages corresponding to those instruments.</p>
-<h3 id='response-211'>Response</h3>
+<h3 id='response-212'>Response</h3>
 <p>If the server is unable to supply the requested data, it will respond with a
 <a href="#market-data-request-reject-y"><code>Market Data Request Reject</code>(<code>Y</code>)</a> message.</p>
 
@@ -52738,11 +53358,18 @@ exchange.</p>
 <td>Price per unit of quantity</td>
 </tr>
 <tr>
-<td>210</td>
-<td><code>MaxShow</code></td>
+<td>1138</td>
+<td><code>DisplayQty</code></td>
 <td>Qty</td>
 <td>No</td>
-<td>Maximum quantity within an order to be shown to other customers</td>
+<td>The (max) quantity to be displayed in the orderbook. Setting the <code>DisplayQty (1138)</code> = 0 is interpreted as no hidden volume, i.e. the full order quantity is displayed to the market. Omitting the field gives the same result.</td>
+</tr>
+<tr>
+<td>1088</td>
+<td><code>RefreshQty</code></td>
+<td>Qty</td>
+<td>No</td>
+<td>Defines the quantity used to refresh <code>DisplayQty</code>.</td>
 </tr>
 <tr>
 <td>854</td>
@@ -52794,7 +53421,7 @@ exchange.</p>
 <td>Selects condition trigger method for algo orders. Valid values:<p><ul><li><code>1</code> = mark price,</li><li><code>2</code> = trade,</li><li><code>3</code> = index</li></ul></p></td>
 </tr>
 </tbody></table>
-<h3 id='response-212'>Response</h3>
+<h3 id='response-213'>Response</h3>
 <p>Upon receiving a new order, the exchange responds with the <code>Execution
 Report</code>(<code>8</code>) message communicating whether the order was accepted or rejected.</p>
 
@@ -52983,11 +53610,11 @@ Report</code>(<code>8</code>) message communicating whether the order was accept
 <td>Average execution price or 0.0 if not executed yet or rejected</td>
 </tr>
 <tr>
-<td>210</td>
-<td><code>MaxShow</code></td>
+<td>1138</td>
+<td><code>DisplayQty</code></td>
 <td>Qty</td>
 <td>No</td>
-<td>Maximum quantity (e.g. number of shares) within an order to be shown to other customers</td>
+<td>The (max) quantity to be displayed in the orderbook.</td>
 </tr>
 <tr>
 <td>9008</td>
@@ -53380,7 +54007,7 @@ option <code>10</code> of the <code>MassCancelRequestType</code>(<code>530</code
 <td>Whether or not to reject incoming quotes for 1 second after cancelling</td>
 </tr>
 </tbody></table>
-<h3 id='response-213'>Response</h3>
+<h3 id='response-214'>Response</h3>
 <p>After the cancellation, the server responds with
 an <code>Order Mass Cancel Report</code>(<code>r</code>).</p>
 <h2 id='order-mass-cancel-report-r'><code>Order Mass Cancel Report</code>(<code>r</code>)</h2>
@@ -53569,7 +54196,7 @@ to closed orders.</p>
 <!-- *To request historical orders*: set `MassStatusReqType=10` and specify `Currency` or `Symbol` for the request. To include fully unfilled orders in the response, set custom tag `OrderHistoryIncludeUnfilled` (`9037`) to `Y`. The default maximum number of reports is 100, use `TotNumReports` in the request for the different number if required (maximum 1000 reports is allowed, and `OrderHistoryOffset` (`9039`) custom tag can be used for the pagination). The server will respond with a series of `Execution Reports`(`8`) messages, where the first message contains `MassStatusReqType=7`
 and `TotNumReports` will be set to the number of reports to be expected as a
 follow-up. Open unfilled orders are not included in the historical data.  -->
-<h3 id='response-214'>Response</h3>
+<h3 id='response-215'>Response</h3>
 <p>When the client requests the status of current orders, the exchange should reply
 with a series of special <code>Execution Reports</code>(<code>8</code>), one for every order
 requested.</p>
@@ -53731,11 +54358,11 @@ requested.</p>
 <td>Average execution price or 0.0 if not executed yet or rejected</td>
 </tr>
 <tr>
-<td>210</td>
-<td><code>MaxShow</code></td>
+<td>1138</td>
+<td><code>DisplayQty</code></td>
 <td>Qty</td>
 <td>No</td>
-<td>Maximum quantity (e.g. number of shares) within an order to be shown to other customers in Contract units corresponding to the ContractMultiplier in SecurityList</td>
+<td>The (max) quantity to be displayed in the orderbook. Contract units corresponding to the ContractMultiplier in SecurityList</td>
 </tr>
 <tr>
 <td>9008</td>
@@ -53935,7 +54562,7 @@ Position Report.</p>
 <td>To request for certain currency only. If it is missing, all currencies are reported</td>
 </tr>
 </tbody></table>
-<h3 id='response-215'>Response</h3>
+<h3 id='response-216'>Response</h3>
 <p>The server will respond with a <a href="#position-report-ap"><code>Position Report</code>(<code>AP</code>)</a>
 message.</p>
 <h2 id='position-report-ap'><code>Position Report</code>(<code>AP</code>)</h2>
@@ -54120,12 +54747,12 @@ info.</p>
 <td>Currency of the report. See <a href="#security-list-request-x"><code>Security List Request</code>(<code>x</code>)</a>. Default is BTC. <p>If <code>CROSS</code> is given as currency and user has cross collateral enabled, only the following fields are returned:</p><p><ul><li>100001 <code>DeribitUserEquity</code></li><li>100003 <code>DeribitUserInitialMargin</code></li><li>100004 <code>DeribitUserMaintenanceMargin</code></li><li>100013 <code>DeribitMarginBalance</code></li></ul></p></td>
 </tr>
 </tbody></table>
-<h3 id='response-216'>Response</h3>
+<h3 id='response-217'>Response</h3>
 <p>The server will respond with a <code>User Response</code>(<code>BF</code>) message.</p>
 <h2 id='user-response-bf'><code>User Response</code>(<code>BF</code>)</h2>
 <p>This message is used to respond to a <a href="#user-request-be"><code>USER REQUEST</code>(<code>BE</code>)</a>
 message, it reports the status of the user and user&#39;s account info.</p>
-<h3 id='response-217'>Response</h3>
+<h3 id='response-218'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -54333,7 +54960,7 @@ orders by <code>OrigClOrdId</code> is noticeably faster.</p>
 <td>Order Market Maker Protection (MMP) flag, if it is absent then the current MMP flag of the order is not changed. <code>N</code> removes the flag if it is set. <strong>Important: manual admin action is necessary to activate Market Maker Protection (MMP) for an account</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-218'>Response</h3>
+<h3 id='response-219'>Response</h3>
 <p>See <code>New Order Single</code>(<code>D</code>) response</p>
 <h2 id='execution-reports-8-about-order-changes'><code>Execution Reports</code>(<code>8</code>) about order changes</h2><h3 id='notification'>Notification</h3>
 <p>The report <code>Execution Reports</code>(<code>8</code>) is similar to New Order Single or
@@ -54517,11 +55144,11 @@ Cancel/Replace responses</p>
 <td>Average execution price or 0.0 if not executed yet or rejected</td>
 </tr>
 <tr>
-<td>210</td>
-<td><code>MaxShow</code></td>
+<td>1138</td>
+<td><code>DisplayQty</code></td>
 <td>Qty</td>
 <td>No</td>
-<td>Maximum quantity (e.g. number of shares) within an order to be shown to other customers</td>
+<td>The (max) quantity to be displayed in the orderbook.</td>
 </tr>
 <tr>
 <td>100012</td>
@@ -54677,13 +55304,13 @@ Cancel/Replace responses</p>
 <td><code>0</code> = <code>Snapshot</code>, <code>1</code> = <code>Snapshot + Updates</code> (<code>Subscribe</code>), <code>2</code> = <code>Unsubscribe</code> <p>(Please note that our system does not send notifications when currencies are <b>locked</b>. Users are advised to subscribe to the <a href="https://docs.deribit.com/#platform_state">platform_state</a> channel to monitor the state of currencies actively.)</p></td>
 </tr>
 </tbody></table>
-<h3 id='response-219'>Response</h3>
+<h3 id='response-220'>Response</h3>
 <p>The server will respond with a <a href="#security-status-f"><code>Security Status</code> (<code>f</code>)</a>
 message.</p>
 <h2 id='security-status-f'><code>Security Status</code> (<code>f</code>)</h2>
 <p>The <code>Security Status</code> (<code>f</code>) message provides for the ability to report changes
 in status to a security.</p>
-<h3 id='response-220'>Response</h3>
+<h3 id='response-221'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -54844,7 +55471,7 @@ used to set or get the limits for Market Maker Protection (MMP) for a currency p
 <p><strong>Important: manual admin action is necessary to activate Market Maker
 Protection (MMP) for an account.</strong> This message is sent by the server in reply
 to <a href="#mmprotection-limits-mm"><code>MMProtection Limits</code> (<code>MM</code>)</a> or <a href="#mmprotection-reset-mz"><code>MMProtectionReset</code> (<code>MZ</code>)</a></p>
-<h3 id='response-221'>Response</h3>
+<h3 id='response-222'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -54919,7 +55546,7 @@ Protection (MMP) for an account.</strong> This message resets Market Maker Prote
 <td>A custom tag of MMP Group</td>
 </tr>
 </tbody></table>
-<h3 id='response-222'>Response</h3>
+<h3 id='response-223'>Response</h3>
 <p>The server sends <code>MMProtection Result (MR)</code> message as a response.</p>
 <h2 id='security-definition-request-c'><code>Security Definition Request</code> (<code>c</code>)</h2>
 <p>Request a specific Security to be traded with the second party. The request
@@ -55002,7 +55629,7 @@ end-points depending on <code>SecurityRequestType (321)</code> tag value).</p>
 <td>Positive integer for the strategy</td>
 </tr>
 </tbody></table>
-<h3 id='response-223'>Response</h3>
+<h3 id='response-224'>Response</h3>
 <p>The server sends <a href="#security-definition-d"><code>Security Definition (d)</code></a> message as
 a response, or rejects the request</p>
 <h2 id='security-definition-d'><code>Security Definition</code> (<code>d</code>)</h2>
@@ -55227,7 +55854,7 @@ via RFQ subscription or in the snapshots.</p>
 <td>Order quantity in contracts</td>
 </tr>
 </tbody></table>
-<h3 id='response-224'>Response</h3>
+<h3 id='response-225'>Response</h3>
 <p>In case of success, the response will be
 a <a href="#quote-status-report-ai"><code>Quote Status Report (AI)</code></a>. If the request fails,
 the <a href="#quote-request-reject-ag"><code>Quote Request Reject (AG)</code></a> will be sent, or session level
@@ -55392,7 +56019,7 @@ of the current quotes in the system.</p>
 <td>Subscription Request Type to get notifications about new or terminated instruments. Valid values: <ul><li> <code>0</code> = Snapshot,</li> <li><code>1</code> = Snapshot + Updates (Subscribe),</li> <li><code>2</code> = Disable previous Snapshot + Update Request (Unsubscribe)</li></ul></td>
 </tr>
 </tbody></table>
-<h3 id='response-225'>Response</h3>
+<h3 id='response-226'>Response</h3>
 <p>RFQ request can be used to request existing
 <a href="#quote-request-r"><code>Quote Requests (R)</code></a> as well as to subscribe for new
 <a href="#quote-request-r"><code>Quote Requests (R)</code></a> and <a href="#quote-status-report-ai"><code>Quote Status Reports (AI)</code></a>
@@ -56009,7 +56636,12 @@ MassQuote
 <td>Max Delta to cancel by delta range</td>
 </tr>
 </tbody></table>
-<h2 id='changes-log'>Changes Log</h2><h3 id='release-06-03-2025'>Release 06.03.2025</h3>
+<h2 id='changes-log'>Changes Log</h2><h3 id='release-10-06-2025'>Release 10.06.2025</h3>
+<ul>
+<li><code>MaxShow(210)</code> is replaced with <code>DisplayQty(1138)</code>. The iceberg orders cannot be fully invisible anymore. Setting the <code>DisplayQty (1138)</code> = 0 is interpreted as no hidden volume, i.e. the full order quantity is displayed to the market. Omitting the field gives the same result.</li>
+<li><code>Execution Reports</code> (<code>8</code>): added nonmandatory tag <code>RefreshQty</code> (<code>1088</code>)</li>
+</ul>
+<h3 id='release-06-03-2025'>Release 06.03.2025</h3>
 <ul>
 <li>Support for non-printable ASCII characters (such as control characters ranging from 0x00 to 0x1F) in string values has been removed to ensure compliance with the WS/REST API. Attempting to use non-printable ASCII characters will now result in a decoding error.</li>
 </ul>
