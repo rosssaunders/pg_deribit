@@ -40,6 +40,7 @@ create type deribit.private_update_in_address_book_request as (
     "address" text,
     "beneficiary_vasp_name" text,
     "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
     "beneficiary_first_name" text,
     "beneficiary_last_name" text,
     "beneficiary_company_name" text,
@@ -54,6 +55,7 @@ comment on column deribit.private_update_in_address_book_request."type" is '(Req
 comment on column deribit.private_update_in_address_book_request."address" is '(Required) Address in currency format, it must be in address book';
 comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_name" is '(Required) Name of beneficiary VASP';
 comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_did" is '(Required) DID of beneficiary VASP';
+comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
 comment on column deribit.private_update_in_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
@@ -82,6 +84,7 @@ create function deribit.private_update_in_address_book(
     "agreed" boolean,
     "personal" boolean,
     "label" text,
+    "beneficiary_vasp_website" text default null,
     "beneficiary_first_name" text default null,
     "beneficiary_last_name" text default null,
     "beneficiary_company_name" text default null
@@ -97,6 +100,7 @@ as $$
             "address",
             "beneficiary_vasp_name",
             "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
             "beneficiary_first_name",
             "beneficiary_last_name",
             "beneficiary_company_name",

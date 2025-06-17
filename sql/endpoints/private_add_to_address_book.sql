@@ -41,12 +41,14 @@ create type deribit.private_add_to_address_book_request as (
     "label" text,
     "beneficiary_vasp_name" text,
     "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
     "beneficiary_first_name" text,
     "beneficiary_last_name" text,
     "beneficiary_company_name" text,
     "beneficiary_address" text,
     "agreed" boolean,
-    "personal" boolean
+    "personal" boolean,
+    "extra_currencies" text[]
 );
 
 comment on column deribit.private_add_to_address_book_request."currency" is '(Required) The currency symbol';
@@ -55,12 +57,14 @@ comment on column deribit.private_add_to_address_book_request."address" is '(Req
 comment on column deribit.private_add_to_address_book_request."label" is '(Required) Label of the address book entry';
 comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_name" is '(Required) Name of beneficiary VASP';
 comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_did" is '(Required) DID of beneficiary VASP';
+comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
 comment on column deribit.private_add_to_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_address" is '(Required) nan';
 comment on column deribit.private_add_to_address_book_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_add_to_address_book_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_add_to_address_book_request."extra_currencies" is 'The user can pass a list of currencies to add the address for. It is currently available ONLY for ERC20 currencies. Without passing this paramater for an ERC20 currency, the address will be added to ALL of the ERC20 currencies.';
 
 create type deribit.private_add_to_address_book_response_result as (
     "address" text,
@@ -71,6 +75,7 @@ create type deribit.private_add_to_address_book_response_result as (
     "beneficiary_last_name" text,
     "beneficiary_vasp_did" text,
     "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
     "creation_timestamp" bigint,
     "currency" text,
     "info_required" boolean,
@@ -90,6 +95,7 @@ comment on column deribit.private_add_to_address_book_response_result."beneficia
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
 comment on column deribit.private_add_to_address_book_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_add_to_address_book_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_add_to_address_book_response_result."info_required" is 'Signalises that addition information regarding the beneficiary of the address is required';
@@ -120,9 +126,11 @@ create function deribit.private_add_to_address_book(
     "beneficiary_address" text,
     "agreed" boolean,
     "personal" boolean,
+    "beneficiary_vasp_website" text default null,
     "beneficiary_first_name" text default null,
     "beneficiary_last_name" text default null,
-    "beneficiary_company_name" text default null
+    "beneficiary_company_name" text default null,
+    "extra_currencies" text[] default null
 )
 returns deribit.private_add_to_address_book_response_result
 language sql
@@ -136,12 +144,14 @@ as $$
             "label",
             "beneficiary_vasp_name",
             "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
             "beneficiary_first_name",
             "beneficiary_last_name",
             "beneficiary_company_name",
             "beneficiary_address",
             "agreed",
-            "personal"
+            "personal",
+            "extra_currencies"
         )::deribit.private_add_to_address_book_request as payload
     ), 
     http_response as (

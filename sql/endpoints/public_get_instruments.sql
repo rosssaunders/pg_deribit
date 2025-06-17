@@ -181,4 +181,5 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.';
+comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.
+Note - This endpoint has distinct API rate limiting requirements: 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to instrument_state.{kind}.{currency} for real-time updates. For more information, see Rate Limits.';

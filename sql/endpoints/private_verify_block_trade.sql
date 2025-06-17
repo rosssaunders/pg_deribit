@@ -49,7 +49,7 @@ create type deribit.private_verify_block_trade_response_result as (
     "signature" text
 );
 
-comment on column deribit.private_verify_block_trade_response_result."signature" is 'Signature of block trade It is valid only for 5 minutes “around” given timestamp';
+comment on column deribit.private_verify_block_trade_response_result."signature" is 'Signature of block trade It is valid only for 5 minutes around given timestamp';
 
 create type deribit.private_verify_block_trade_response as (
     "id" bigint,
