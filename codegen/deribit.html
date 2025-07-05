@@ -718,6 +718,9 @@
                     <a href="#public-get_block_rfq_trades" class="toc-h2 toc-link" data-title="/public/get_block_rfq_trades">/public/get_block_rfq_trades</a>
                   </li>
                   <li>
+                    <a href="#private-accept_block_rfq" class="toc-h2 toc-link" data-title="/private/accept_block_rfq">/private/accept_block_rfq</a>
+                  </li>
+                  <li>
                     <a href="#private-add_block_rfq_quote" class="toc-h2 toc-link" data-title="/private/add_block_rfq_quote">/private/add_block_rfq_quote</a>
                   </li>
                   <li>
@@ -728,6 +731,9 @@
                   </li>
                   <li>
                     <a href="#private-cancel_block_rfq_quote" class="toc-h2 toc-link" data-title="/private/cancel_block_rfq_quote">/private/cancel_block_rfq_quote</a>
+                  </li>
+                  <li>
+                    <a href="#private-cancel_block_rfq_trigger" class="toc-h2 toc-link" data-title="/private/cancel_block_rfq_trigger">/private/cancel_block_rfq_trigger</a>
                   </li>
                   <li>
                     <a href="#private-create_block_rfq" class="toc-h2 toc-link" data-title="/private/create_block_rfq">/private/create_block_rfq</a>
@@ -25345,7 +25351,7 @@ in what form.</p>
 </span><span class="p">}</span><span class="w">
 
 </span></code></pre></div>
-<p>Returns list of users block trades. <code>block_rfq_id</code> can be provided to receive block trades related to that particular Block RFQ.</p>
+<p>Returns list of users block trades. If currency is not provided, returns block trades for all currencies. <code>block_rfq_id</code> can be provided to receive block trades related to that particular Block RFQ.</p>
 
 <p><strong>Scope: </strong> <code>block_trade:read</code></p>
 
@@ -25364,7 +25370,7 @@ in what form.</p>
 </thead><tbody>
 <tr>
 <td>currency</td>
-<td>true</td>
+<td>false</td>
 <td>string</td>
 <td><code>BTC</code><br><code>ETH</code><br><code>USDC</code><br><code>USDT</code><br><code>EURR</code></td>
 <td>The currency symbol</td>
@@ -26420,7 +26426,7 @@ in what form.</p>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;signature</td>
 <td>string</td>
-<td>Signature of block trade<br>It is valid only for 5 minutes around given timestamp</br></td>
+<td>Signature of block trade<br>It is valid only for 5 minutes around given timestamp</td>
 </tr>
 </tbody></table>
 <h1 id='block-rfq'>Block RFQ</h1><h2 id='public-get_block_rfq_trades'>/public/get_block_rfq_trades</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/public/get_block_rfq_trades?currency=BTC"</span> <span class="se">\</span>
@@ -26754,6 +26760,523 @@ in what form.</p>
 <td>Continuation token for pagination. <code>NULL</code> when no continuation. Consists of <code>timestamp</code> and <code>block_rfq_id</code>.</td>
 </tr>
 </tbody></table>
+<h2 id='private-accept_block_rfq'>/private/accept_block_rfq</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/accept_block_rfq?amount=100&amp;block_rfq_id=1&amp;direction=buy&amp;legs=%5B%7B%22ratio%22%3A1%2C%22instrument_name%22%3A%22BTC-8NOV24-70000-C%22%2C%22direction%22%3A%22buy%22%7D%2C%7B%22ratio%22%3A1%2C%22instrument_name%22%3A%22BTC-8NOV24-72000-C%22%2C%22direction%22%3A%22sell%22%7D%5D&amp;price=1.00000000000000002082e-02&amp;time_in_force=fill_or_kill"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span>
+  <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">private/accept_block_rfq</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">block_rfq_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">legs</span><span class="dl">"</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC-8NOV24-70000-C</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">ratio</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">direction</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">buy</span><span class="dl">"</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="dl">"</span><span class="s2">instrument_name</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">BTC-8NOV24-72000-C</span><span class="dl">"</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">ratio</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="dl">"</span><span class="s2">direction</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">sell</span><span class="dl">"</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="dl">"</span><span class="s2">price</span><span class="dl">"</span> <span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">direction</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">buy</span><span class="dl">"</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">amount</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">time_in_force</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">fill_or_kill</span><span class="dl">"</span>
+  <span class="p">},</span>
+  <span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span>
+  <span class="s">"method"</span> <span class="p">:</span> <span class="s">"private/accept_block_rfq"</span><span class="p">,</span>
+  <span class="s">"params"</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="s">"block_rfq_id"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s">"legs"</span> <span class="p">:</span> <span class="p">[</span>
+      <span class="p">{</span>
+        <span class="s">"instrument_name"</span> <span class="p">:</span> <span class="s">"BTC-8NOV24-70000-C"</span><span class="p">,</span>
+        <span class="s">"ratio"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">"direction"</span> <span class="p">:</span> <span class="s">"buy"</span>
+      <span class="p">},</span>
+      <span class="p">{</span>
+        <span class="s">"instrument_name"</span> <span class="p">:</span> <span class="s">"BTC-8NOV24-72000-C"</span><span class="p">,</span>
+        <span class="s">"ratio"</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="s">"direction"</span> <span class="p">:</span> <span class="s">"sell"</span>
+      <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="s">"price"</span> <span class="p">:</span> <span class="mf">0.01</span><span class="p">,</span>
+    <span class="s">"direction"</span> <span class="p">:</span> <span class="s">"buy"</span><span class="p">,</span>
+    <span class="s">"amount"</span> <span class="p">:</span> <span class="mi">100</span><span class="p">,</span>
+    <span class="s">"time_in_force"</span> <span class="p">:</span> <span class="s">"fill_or_kill"</span>
+  <span class="p">},</span>
+  <span class="s">"jsonrpc"</span> <span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+  <span class="s">"id"</span> <span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BLOCK-423"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1730798381504</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"trades"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+        </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1730798381502</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"filled"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5e-7</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">69696.8</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mi">70000</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"profit_loss"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-8NOV24-70000-C"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"trade_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.03</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2899"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"matching_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"tick_direction"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"combo_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-CS-8NOV24-70000_72000"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_rfq_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"api"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"contracts"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"post_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BLOCK-423"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"771"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"order_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"limit"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"mmp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"risk_reducing"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_trade_leg_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"self_trade"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"fee_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"liquidity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"T"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+       </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1730798381502</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"filled"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"fee"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.5e-7</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"sell"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">69677.4</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"index_price"</span><span class="p">:</span><span class="w"> </span><span class="mi">70000</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"profit_loss"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-8NOV24-72000-C"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"trade_seq"</span><span class="p">:</span><span class="w"> </span><span class="mi">113</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.02</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"order_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2900"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"matching_id"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"tick_direction"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"combo_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-CS-8NOV24-70000_72000"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_rfq_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">548</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"api"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"contracts"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"post_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BLOCK-423"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"trade_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"772"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"order_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"limit"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"mmp"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"risk_reducing"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"reduce_only"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"block_trade_leg_count"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"self_trade"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"fee_currency"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"liquidity"</span><span class="p">:</span><span class="w"> </span><span class="s2">"T"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
+      </span><span class="p">]</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p><b>Taker method</b> <p>This method allows Block RFQ taker to accept the response by sending a single crossing price. The order can be either filled immediately (<code>fill_or_kill</code>) or remain active until cancelled (<code>good_til_cancelled</code>). Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.</p></p>
+
+<p><strong>Scope: </strong> <code>block_rfq:read_write</code></p>
+
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Faccept_block_rfq" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
+
+<aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id='parameters-104'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>block_rfq_id</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>ID of the Block RFQ</td>
+</tr>
+<tr>
+<td>price</td>
+<td>true</td>
+<td>number</td>
+<td></td>
+<td>Maximum acceptable price for execution</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>true</td>
+<td>number</td>
+<td></td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>direction</td>
+<td>true</td>
+<td>string</td>
+<td><code>buy</code><br><code>sell</code></td>
+<td>Direction of the trade from the taker perspective</td>
+</tr>
+<tr>
+<td>hedge</td>
+<td>false</td>
+<td>object</td>
+<td></td>
+<td>Hedge leg of the Block RFQ. There is only one hedge leg allowed per Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>true</td>
+<td>string</td>
+<td><code>buy</code><br><code>sell</code></td>
+<td>Direction of selected leg. Must match the direction of the corresponding leg in the Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>true</td>
+<td>number</td>
+<td></td>
+<td>Hedge leg price</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>true</td>
+<td>number</td>
+<td></td>
+<td>It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>legs</td>
+<td>true</td>
+<td>array of objects</td>
+<td></td>
+<td>List of legs used to trade Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>true</td>
+<td>string</td>
+<td></td>
+<td>Instrument name</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>true</td>
+<td>string</td>
+<td><code>buy</code><br><code>sell</code></td>
+<td>Direction of selected leg. Must match the direction of the corresponding leg in the Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;ratio</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>Ratio of amount between legs</td>
+</tr>
+<tr>
+<td>time_in_force</td>
+<td>true</td>
+<td>string</td>
+<td><code>fill_or_kill</code><br><code>good_til_cancelled</code></td>
+<td>Specifies how long the order should remain active</td>
+</tr>
+</tbody></table>
+<h3 id='response-104'>Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>block_trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;app_name</td>
+<td>string</td>
+<td>The name of the application that executed the block trade on behalf of the user (optional).</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;id</td>
+<td>string</td>
+<td>Block trade id</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;timestamp</td>
+<td>integer</td>
+<td>The timestamp (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_id</td>
+<td>string</td>
+<td>Unique (per currency) trade identifier</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;tick_direction</td>
+<td>integer</td>
+<td>Direction of the &quot;tick&quot; (<code>0</code> = Plus Tick, <code>1</code> = Zero-Plus Tick, <code>2</code> = Minus Tick, <code>3</code> = Zero-Minus Tick).</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fee_currency</td>
+<td>string</td>
+<td>Currency, i.e <code>&quot;BTC&quot;</code>, <code>&quot;ETH&quot;</code>, <code>&quot;USDC&quot;</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;api</td>
+<td>boolean</td>
+<td><code>true</code> if user order was created with API</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;advanced</td>
+<td>string</td>
+<td>Advanced type of user order: <code>&quot;usd&quot;</code> or <code>&quot;implv&quot;</code> (only for options; omitted if not applicable)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_id</td>
+<td>string</td>
+<td>Id of the user order (maker or taker), i.e. subscriber&#39;s order id that took part in the trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;liquidity</td>
+<td>string</td>
+<td>Describes what was role of users order: <code>&quot;M&quot;</code> when it was maker order, <code>&quot;T&quot;</code> when it was taker order</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;post_only</td>
+<td>string</td>
+<td><code>true</code> if user order is post-only</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;contracts</td>
+<td>number</td>
+<td>Trade size in contract units (optional, may be absent in historical trades)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;mmp</td>
+<td>boolean</td>
+<td><code>true</code> if user order is MMP</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fee</td>
+<td>number</td>
+<td>User&#39;s fee in units of the specified <code>fee_currency</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;quote_id</td>
+<td>string</td>
+<td>QuoteID of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;index_price</td>
+<td>number</td>
+<td>Index Price at the moment of trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;label</td>
+<td>string</td>
+<td>User defined label (presented only when previously set for order by user)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;block_trade_id</td>
+<td>string</td>
+<td>Block trade id - when trade was part of a block trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;combo_id</td>
+<td>string</td>
+<td>Optional field containing combo instrument name if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;matching_id</td>
+<td>string</td>
+<td>Always <code>null</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;order_type</td>
+<td>string</td>
+<td>Order type: <code>&quot;limit</code>, <code>&quot;market&quot;</code>, or <code>&quot;liquidation&quot;</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;profit_loss</td>
+<td>number</td>
+<td>Profit and loss in base currency.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;timestamp</td>
+<td>integer</td>
+<td>The timestamp of the trade (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;iv</td>
+<td>number</td>
+<td>Option implied volatility for the price (Option only)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Order state: <code>&quot;open&quot;</code>, <code>&quot;filled&quot;</code>, <code>&quot;rejected&quot;</code>, <code>&quot;cancelled&quot;</code>, <code>&quot;untriggered&quot;</code> or <code>&quot;archive&quot;</code> (if order was archived)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;underlying_price</td>
+<td>number</td>
+<td>Underlying price for implied volatility calculations (Options only)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;block_rfq_quote_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ quote - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;quote_set_id</td>
+<td>string</td>
+<td>QuoteSet of the user order (optional, present only for orders placed with <code>private/mass_quote</code>)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;mark_price</td>
+<td>number</td>
+<td>Mark Price at the moment of trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ - when trade was part of the Block RFQ</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;combo_trade_id</td>
+<td>number</td>
+<td>Optional field containing combo trade identifier if the trade is a combo trade</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;reduce_only</td>
+<td>string</td>
+<td><code>true</code> if user order is reduce-only</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>number</td>
+<td>Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;liquidation</td>
+<td>string</td>
+<td>Optional field (only for trades caused by liquidation): <code>&quot;M&quot;</code> when maker side of trade was under liquidation, <code>&quot;T&quot;</code> when taker side was under liquidation, <code>&quot;MT&quot;</code> when both sides of trade were under liquidation</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_seq</td>
+<td>integer</td>
+<td>The sequence number of the trade within instrument</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;risk_reducing</td>
+<td>boolean</td>
+<td><code>true</code> if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;legs</td>
+<td>array</td>
+<td>Optional field containing leg trades if trade is a combo trade (present when querying for <strong>only</strong> combo trades and in <code>combo_trades</code> events)</td>
+</tr>
+<tr>
+<td>trade_trigger</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td></td>
+</tr>
+</tbody></table>
 <h2 id='private-add_block_rfq_quote'>/private/add_block_rfq_quote</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/add_block_rfq_quote?amount=10000&amp;block_rfq_id=3&amp;direction=buy&amp;execution_instruction=any_part_of&amp;expires_at=1745312540321&amp;hedge=%7B%22price%22%3A70000%2C%22instrument_name%22%3A%22BTC-PERPETUAL%22%2C%22direction%22%3A%22buy%22%2C%22amount%22%3A10%7D&amp;label=example_quote&amp;legs=%5B%7B%22ratio%22%3A%221%22%2C%22price%22%3A69600%2C%22instrument_name%22%3A%22BTC-15NOV24%22%2C%22direction%22%3A%22buy%22%7D%5D"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
@@ -26887,7 +27410,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fadd_block_rfq_quote" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-104'>Parameters</h3>
+<h3 id='parameters-105'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -27017,7 +27540,7 @@ in what form.</p>
 <td>The timestamp when the quote expires (milliseconds since the Unix epoch)</td>
 </tr>
 </tbody></table>
-<h3 id='response-104'>Response</h3>
+<h3 id='response-105'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -27229,7 +27752,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_all_block_rfq_quotes" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-105'>Parameters</h3>
+<h3 id='parameters-106'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -27254,7 +27777,7 @@ in what form.</p>
 <td>When detailed is set to <code>true</code> output format is changed. See <a href='#detailed-response-for-private-cancel_all-and-private-cancel_by_label-methods'>description</a>. Default: <code>false</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-105'>Response</h3>
+<h3 id='response-106'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -27370,7 +27893,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_block_rfq" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-106'>Parameters</h3>
+<h3 id='parameters-107'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -27388,7 +27911,7 @@ in what form.</p>
 <td>ID of the Block RFQ</td>
 </tr>
 </tbody></table>
-<h3 id='response-106'>Response</h3>
+<h3 id='response-107'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -27607,6 +28130,31 @@ in what form.</p>
 <td>Rating of the taker</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
 <td>array of <em>object</em></td>
 <td></td>
@@ -27734,7 +28282,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_block_rfq_quote" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-107'>Parameters</h3>
+<h3 id='parameters-108'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -27766,7 +28314,7 @@ in what form.</p>
 <td>ID of the Block RFQ</td>
 </tr>
 </tbody></table>
-<h3 id='response-107'>Response</h3>
+<h3 id='response-108'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -27910,6 +28458,382 @@ in what form.</p>
 <td><code>true</code> if the quote was edited, otherwise <code>false</code>.</td>
 </tr>
 </tbody></table>
+<h2 id='private-cancel_block_rfq_trigger'>/private/cancel_block_rfq_trigger</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/cancel_block_rfq_trigger?block_rfq_id=123"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
+<span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
+</code></pre></div><div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="kd">var</span> <span class="nx">msg</span> <span class="o">=</span> 
+<span class="p">{</span>
+  <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">private/cancel_block_rfq_trigger</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">block_rfq_id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">123</span>
+  <span class="p">},</span>
+  <span class="dl">"</span><span class="s2">jsonrpc</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">2.0</span><span class="dl">"</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">id</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">1</span>
+<span class="p">};</span>
+<span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onmessage</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// do something with the response...</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="dl">'</span><span class="s1">received from server : </span><span class="dl">'</span><span class="p">,</span> <span class="nx">e</span><span class="p">.</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">};</span>
+<span class="nx">ws</span><span class="p">.</span><span class="nx">onopen</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+    <span class="c1">// ------------------- </span>
+    <span class="c1">// Before sending message, make sure that your connection</span>
+    <span class="c1">// is authenticated (use public/auth call before) </span>
+    <span class="c1">// ------------------- </span>
+    <span class="nx">ws</span><span class="p">.</span><span class="nx">send</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">msg</span><span class="p">));</span>
+<span class="p">};</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">import</span> <span class="nn">asyncio</span>
+<span class="kn">import</span> <span class="nn">websockets</span>
+<span class="kn">import</span> <span class="nn">json</span>
+
+<span class="n">msg</span> <span class="o">=</span> \
+<span class="p">{</span>
+  <span class="s">"method"</span> <span class="p">:</span> <span class="s">"private/cancel_block_rfq_trigger"</span><span class="p">,</span>
+  <span class="s">"params"</span> <span class="p">:</span> <span class="p">{</span>
+    <span class="s">"block_rfq_id"</span> <span class="p">:</span> <span class="mi">123</span>
+  <span class="p">},</span>
+  <span class="s">"jsonrpc"</span> <span class="p">:</span> <span class="s">"2.0"</span><span class="p">,</span>
+  <span class="s">"id"</span> <span class="p">:</span> <span class="mi">1</span>
+<span class="p">}</span>
+
+<span class="k">async</span> <span class="k">def</span> <span class="nf">call_api</span><span class="p">(</span><span class="n">msg</span><span class="p">):</span>
+   <span class="k">async</span> <span class="k">with</span> <span class="n">websockets</span><span class="p">.</span><span class="n">connect</span><span class="p">(</span><span class="s">'wss://test.deribit.com/ws/api/v2'</span><span class="p">)</span> <span class="k">as</span> <span class="n">websocket</span><span class="p">:</span>
+       <span class="c1">###############
+</span>       <span class="c1"># Before sending message, make sure that your connection
+</span>       <span class="c1"># is authenticated (use public/auth call before) 
+</span>       <span class="c1">###############
+</span>       <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">send</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+       <span class="k">while</span> <span class="n">websocket</span><span class="p">.</span><span class="nb">open</span><span class="p">:</span>
+           <span class="n">response</span> <span class="o">=</span> <span class="k">await</span> <span class="n">websocket</span><span class="p">.</span><span class="n">recv</span><span class="p">()</span>
+           <span class="c1"># do something with the response...
+</span>           <span class="k">print</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+<span class="n">asyncio</span><span class="p">.</span><span class="n">get_event_loop</span><span class="p">().</span><span class="n">run_until_complete</span><span class="p">(</span><span class="n">call_api</span><span class="p">(</span><span class="n">json</span><span class="p">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">msg</span><span class="p">)))</span>
+</code></pre></div>
+<blockquote>
+<p>The above command returns JSON structured like this (real example):</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"creation_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1730798381504</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"expiration_timestamp"</span><span class="p">:</span><span class="w"> </span><span class="mi">1730798481504</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"block_rfq_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"role"</span><span class="p">:</span><span class="w"> </span><span class="s2">"taker"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"taker_rating"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1-2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"makers"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"maker1"</span><span class="p">,</span><span class="w"> </span><span class="s2">"maker2"</span><span class="p">],</span><span class="w">
+    </span><span class="nl">"amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">100</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"min_trade_amount"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"legs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-8NOV24-70000-C"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"instrument_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-8NOV24-72000-C"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"ratio"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="w">
+      </span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"combo_id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"BTC-CS-8NOV24-70000_72000"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"My Block RFQ"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"app_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Example Application"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"mark_price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.025</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"disclosed"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"trade_trigger"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"state"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cancelled"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"price"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.01</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"direction"</span><span class="p">:</span><span class="w"> </span><span class="s2">"buy"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"cancel_reason"</span><span class="p">:</span><span class="w"> </span><span class="s2">"User cancelled"</span><span class="w">
+    </span><span class="p">}</span><span class="w">
+  </span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w"> 
+</span></code></pre></div>
+<p><b>Taker method</b> <p>This method allows Block RFQ taker to cancel an active trigger for a Block RFQ. The response includes the full Block RFQ object with the trade trigger state set to cancelled.</p></p>
+
+<p><strong>Scope: </strong> <code>block_rfq:read_write</code></p>
+
+<p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_block_rfq_trigger" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
+
+<aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
+<h3 id='parameters-109'>Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Required</th>
+<th>Type</th>
+<th>Enum</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>block_rfq_id</td>
+<td>true</td>
+<td>integer</td>
+<td></td>
+<td>ID of the Block RFQ</td>
+</tr>
+</tbody></table>
+<h3 id='response-109'>Response</h3>
+<table><thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>app_name</td>
+<td>string</td>
+<td>The name of the application that created the Block RFQ on behalf of the user (optional, visible only to taker).</td>
+</tr>
+<tr>
+<td>asks</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
+<td>string</td>
+<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
+<td>integer</td>
+<td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;makers</td>
+<td>array of string</td>
+<td>Maker of the quote</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of a quote</td>
+</tr>
+<tr>
+<td>bids</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>number</td>
+<td>This value multiplied by the ratio of a leg gives trade size on that leg.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;execution_instruction</td>
+<td>string</td>
+<td><p>Execution instruction of the quote. Default - <code>any_part_of</code></p> <ul> <li><code>&quot;all_or_none (AON)&quot;</code> - The quote can only be filled entirely or not at all, ensuring that its amount matches the amount specified in the Block RFQ. Additionally, &#39;all_or_none&#39; quotes have priority over &#39;any_part_of&#39; quotes at the same price level.</li> <li><code>&quot;any_part_of (APO)&quot;</code> - The quote can be filled either partially or fully, with the filled amount potentially being less than the Block RFQ amount. </li> </ul></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;expires_at</td>
+<td>integer</td>
+<td>The timestamp when the quote expires (milliseconds since the Unix epoch), equal to the earliest expiry of placed quotes</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;last_update_timestamp</td>
+<td>integer</td>
+<td>Timestamp of the last update of the quote (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;makers</td>
+<td>array of string</td>
+<td>Maker of the quote</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of a quote</td>
+</tr>
+<tr>
+<td>block_rfq_id</td>
+<td>integer</td>
+<td>ID of the Block RFQ</td>
+</tr>
+<tr>
+<td>combo_id</td>
+<td>string</td>
+<td>Unique combo identifier</td>
+</tr>
+<tr>
+<td>creation_timestamp</td>
+<td>integer</td>
+<td>The timestamp when Block RFQ was created (milliseconds since the Unix epoch)</td>
+</tr>
+<tr>
+<td>disclosed</td>
+<td>boolean</td>
+<td>Indicates whether the RFQ was created as non-anonymous, meaning taker and maker aliases are visible to counterparties.</td>
+</tr>
+<tr>
+<td>expiration_timestamp</td>
+<td>integer</td>
+<td>The timestamp when the Block RFQ will expire (milliseconds since the UNIX epoch)</td>
+</tr>
+<tr>
+<td>hedge</td>
+<td><em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>integer</td>
+<td>It represents the requested hedge leg size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price for a hedge leg</td>
+</tr>
+<tr>
+<td>included_in_taker_rating</td>
+<td>boolean</td>
+<td>Indicates whether the RFQ is included in the taker&#39;s rating calculation. Present only for closed RFQs created by the requesting taker.</td>
+</tr>
+<tr>
+<td>index_prices</td>
+<td>array of number</td>
+<td>A list of index prices for the underlying instrument(s) at the time of trade execution.</td>
+</tr>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>User defined label for the Block RFQ (maximum 64 characters)</td>
+</tr>
+<tr>
+<td>legs</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;instrument_name</td>
+<td>string</td>
+<td>Unique instrument identifier</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;ratio</td>
+<td>integer</td>
+<td>Ratio of amount between legs</td>
+</tr>
+<tr>
+<td>makers</td>
+<td>array of string</td>
+<td>List of targeted Block RFQ makers</td>
+</tr>
+<tr>
+<td>mark_price</td>
+<td>number</td>
+<td>The mark price for the instrument</td>
+</tr>
+<tr>
+<td>min_trade_amount</td>
+<td>number</td>
+<td>Minimum amount for trading</td>
+</tr>
+<tr>
+<td>role</td>
+<td>string</td>
+<td>Role of the user in Block RFQ</td>
+</tr>
+<tr>
+<td>state</td>
+<td>string</td>
+<td>State of the Block RFQ</td>
+</tr>
+<tr>
+<td>taker_rating</td>
+<td>string</td>
+<td>Rating of the taker</td>
+</tr>
+<tr>
+<td>trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
+</tr>
+<tr>
+<td>trades</td>
+<td>array of <em>object</em></td>
+<td></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;amount</td>
+<td>number</td>
+<td>Trade amount. For options, linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction: <code>buy</code>, or <code>sell</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;hedge_amount</td>
+<td>number</td>
+<td>Amount of the hedge leg. For linear futures, linear perpetuals and spots the amount is denominated in the underlying base currency coin. The inverse perpetuals and inverse futures are denominated in USD units.</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;maker</td>
+<td>string</td>
+<td>Alias of the maker (optional)</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price in base currency</td>
+</tr>
+</tbody></table>
 <h2 id='private-create_block_rfq'>/private/create_block_rfq</h2><div class="highlight"><pre class="highlight shell tab-shell"><code>curl <span class="nt">-X</span> GET <span class="s2">"https://test.deribit.com/api/v2/private/create_block_rfq?hedge=%7B%22price%22%3A70000%2C%22instrument_name%22%3A%22BTC-PERPETUAL%22%2C%22direction%22%3A%22buy%22%2C%22amount%22%3A10%7D&amp;label=example&amp;legs=%5B%7B%22instrument_name%22%3A%22BTC-15NOV24%22%2C%22direction%22%3A%22sell%22%2C%22amount%22%3A20000%7D%5D&amp;makers=%5B%22MAKER1%22%5D"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Authorization: Bearer 1529453804065.h2QrBgvn.oS36pCOmuK9EX7954lzCSkUioEtTMg7F5ShToM0ZfYlqU05OquXkQIe2_DDEkPhzmoPp1fBp0ycXShR_0jf-SMSXEdVqxLRWuOw-_StG5BMjToiAl27CbHY4P92MPhlMblTOtTImE81-5dFdyDVydpBwmlfKM3OSQ39kulP9bbfw-2jhyegOL0AgqJTY_tj554oHCQFTbq0A0ZWukukmxL2yu6iy34XdzaJB26Igy-3UxGBMwFu53EhjKBweh7xyP2nDm57-wybndJMtSyTGDXH3vjBVclo1iup5yRP"</span> <span class="se">\</span>
 <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span>
@@ -28037,7 +28961,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcreate_block_rfq" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-108'>Parameters</h3>
+<h3 id='parameters-110'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -28132,7 +29056,7 @@ in what form.</p>
 <td>Determines whether the RFQ is non-anonymous, revealing both taker and maker aliases. It can be set to <code>false</code> (anonymous mode) only when at least 5 makers are targeted. Default value is <code>true</code>.</td>
 </tr>
 </tbody></table>
-<h3 id='response-108'>Response</h3>
+<h3 id='response-110'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -28349,6 +29273,31 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker_rating</td>
 <td>string</td>
 <td>Rating of the taker</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
@@ -28512,7 +29461,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fedit_block_rfq_quote" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-109'>Parameters</h3>
+<h3 id='parameters-111'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -28628,7 +29577,7 @@ in what form.</p>
 <td>Aggregated price used for quoting future spreads.</td>
 </tr>
 </tbody></table>
-<h3 id='response-109'>Response</h3>
+<h3 id='response-111'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -28844,9 +29793,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_block_rfq_makers" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-110'>Parameters</h3>
+<h3 id='parameters-112'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-110'>Response</h3>
+<h3 id='response-112'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -28966,7 +29915,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_block_rfq_quotes" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-111'>Parameters</h3>
+<h3 id='parameters-113'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -28998,7 +29947,7 @@ in what form.</p>
 <td>ID of the Block RFQ quote</td>
 </tr>
 </tbody></table>
-<h3 id='response-111'>Response</h3>
+<h3 id='response-113'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -29227,9 +30176,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_block_rfq_user_info" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-112'>Parameters</h3>
+<h3 id='parameters-114'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-112'>Response</h3>
+<h3 id='response-114'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -29392,7 +30341,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_block_rfqs" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-113'>Parameters</h3>
+<h3 id='parameters-115'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -29445,7 +30394,7 @@ in what form.</p>
 <td>The currency symbol</td>
 </tr>
 </tbody></table>
-<h3 id='response-113'>Response</h3>
+<h3 id='response-115'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -29669,6 +30618,31 @@ in what form.</p>
 <td>Rating of the taker</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
 <td>array of <em>object</em></td>
 <td></td>
@@ -29864,14 +30838,14 @@ in what form.</p>
   </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p><b>Taker method</b> <p>This method allows Block RFQ taker to trade with the response by sending a single crossing price. Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.</p></p>
+<p><b>Taker method</b> (Deprecated) <p><b>This method is deprecated and will be removed in the future. Please use <code>private/accept_block_rfq</code> instead.</b></p> <p>This method allows Block RFQ taker to trade with the response by sending a single crossing price. Please note that after Block RFQ creation, a grace period of 5 seconds begins, during which the taker cannot see quotes or trade the Block RFQ.</p></p>
 
 <p><strong>Scope: </strong> <code>block_rfq:read_write</code></p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Ftrade_block_rfq" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-114'>Parameters</h3>
+<h3 id='parameters-116'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -29973,7 +30947,7 @@ in what form.</p>
 <td>Ratio of amount between legs</td>
 </tr>
 </tbody></table>
-<h3 id='response-114'>Response</h3>
+<h3 id='response-116'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -30305,7 +31279,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fadd_to_address_book" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-115'>Parameters</h3>
+<h3 id='parameters-117'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -30414,7 +31388,7 @@ in what form.</p>
 <td>The user can pass a list of currencies to add the address for. It is currently available ONLY for ERC20 currencies. Without passing this paramater for an ERC20 currency, the address will be added to ALL of the ERC20 currencies.</td>
 </tr>
 </tbody></table>
-<h3 id='response-115'>Response</h3>
+<h3 id='response-117'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -30614,7 +31588,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_transfer_by_id" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-116'>Parameters</h3>
+<h3 id='parameters-118'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -30639,7 +31613,7 @@ in what form.</p>
 <td>Id of transfer</td>
 </tr>
 </tbody></table>
-<h3 id='response-116'>Response</h3>
+<h3 id='response-118'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -30791,7 +31765,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcancel_withdrawal" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-117'>Parameters</h3>
+<h3 id='parameters-119'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -30816,7 +31790,7 @@ in what form.</p>
 <td>The withdrawal id</td>
 </tr>
 </tbody></table>
-<h3 id='response-117'>Response</h3>
+<h3 id='response-119'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -30969,7 +31943,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcreate_deposit_address" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-118'>Parameters</h3>
+<h3 id='parameters-120'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -30987,7 +31961,7 @@ in what form.</p>
 <td>The currency symbol</td>
 </tr>
 </tbody></table>
-<h3 id='response-118'>Response</h3>
+<h3 id='response-120'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -31136,7 +32110,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_address_book" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-119'>Parameters</h3>
+<h3 id='parameters-121'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -31161,7 +32135,7 @@ in what form.</p>
 <td>Address book type</td>
 </tr>
 </tbody></table>
-<h3 id='response-119'>Response</h3>
+<h3 id='response-121'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -31355,7 +32329,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_current_deposit_address" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-120'>Parameters</h3>
+<h3 id='parameters-122'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -31373,7 +32347,7 @@ in what form.</p>
 <td>The currency symbol</td>
 </tr>
 </tbody></table>
-<h3 id='response-120'>Response</h3>
+<h3 id='response-122'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -31503,7 +32477,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_deposits" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-121'>Parameters</h3>
+<h3 id='parameters-123'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -31535,7 +32509,7 @@ in what form.</p>
 <td>The offset for pagination, default - <code>0</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-121'>Response</h3>
+<h3 id='response-123'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -31721,7 +32695,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_transfers" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-122'>Parameters</h3>
+<h3 id='parameters-124'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -31753,7 +32727,7 @@ in what form.</p>
 <td>The offset for pagination, default - <code>0</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-122'>Response</h3>
+<h3 id='response-124'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -31922,7 +32896,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_withdrawals" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-123'>Parameters</h3>
+<h3 id='parameters-125'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -31954,7 +32928,7 @@ in what form.</p>
 <td>The offset for pagination, default - <code>0</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-123'>Response</h3>
+<h3 id='response-125'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -32116,7 +33090,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fremove_from_address_book" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-124'>Parameters</h3>
+<h3 id='parameters-126'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -32148,7 +33122,7 @@ in what form.</p>
 <td>Address in currency format, it must be in address book</td>
 </tr>
 </tbody></table>
-<h3 id='response-124'>Response</h3>
+<h3 id='response-126'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -32277,7 +33251,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_clearance_originator" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-125'>Parameters</h3>
+<h3 id='parameters-127'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -32365,7 +33339,7 @@ in what form.</p>
 <td>Geographical address of the originator</td>
 </tr>
 </tbody></table>
-<h3 id='response-125'>Response</h3>
+<h3 id='response-127'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -32513,7 +33487,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubmit_transfer_between_subaccounts" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-126'>Parameters</h3>
+<h3 id='parameters-128'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -32552,7 +33526,7 @@ in what form.</p>
 <td>Id of the source (sub)account. Can be found in <code>My Account &gt;&gt; Subaccounts</code> tab. By default, it is the Id of the account which made the request. However, if a different &quot;source&quot; is specified, the user must possess the mainaccount scope, and only other subaccounts can be designated as the source.</td>
 </tr>
 </tbody></table>
-<h3 id='response-126'>Response</h3>
+<h3 id='response-128'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -32703,7 +33677,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubmit_transfer_to_subaccount" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-127'>Parameters</h3>
+<h3 id='parameters-129'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -32735,7 +33709,7 @@ in what form.</p>
 <td>Id of destination subaccount. Can be found in <code>My Account &gt;&gt; Subaccounts</code> tab</td>
 </tr>
 </tbody></table>
-<h3 id='response-127'>Response</h3>
+<h3 id='response-129'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -32886,7 +33860,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubmit_transfer_to_user" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-128'>Parameters</h3>
+<h3 id='parameters-130'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -32918,7 +33892,7 @@ in what form.</p>
 <td>Destination wallet&#39;s address taken from address book</td>
 </tr>
 </tbody></table>
-<h3 id='response-128'>Response</h3>
+<h3 id='response-130'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -33076,7 +34050,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fupdate_in_address_book" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-129'>Parameters</h3>
+<h3 id='parameters-131'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -33178,7 +34152,7 @@ in what form.</p>
 <td>Label of the address book entry</td>
 </tr>
 </tbody></table>
-<h3 id='response-129'>Response</h3>
+<h3 id='response-131'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -33289,7 +34263,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fwithdraw" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-130'>Parameters</h3>
+<h3 id='parameters-132'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -33328,7 +34302,7 @@ in what form.</p>
 <td>Withdrawal priority, optional for BTC, default: <code>high</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-130'>Response</h3>
+<h3 id='response-132'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -33471,7 +34445,7 @@ in what form.</p>
 <p>Retrieves announcements. Default &quot;start_timestamp&quot; parameter value is current timestamp, &quot;count&quot; parameter value must be between 1 and 50, default is 5.</p>
 
 <p><a href="https://test.deribit.com/api_console?method=%2Fpublic%2Fget_announcements" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
-<h3 id='parameters-131'>Parameters</h3>
+<h3 id='parameters-133'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -33496,7 +34470,7 @@ in what form.</p>
 <td>Maximum count of returned announcements</td>
 </tr>
 </tbody></table>
-<h3 id='response-131'>Response</h3>
+<h3 id='response-133'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -33629,7 +34603,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fchange_api_key_name" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-132'>Parameters</h3>
+<h3 id='parameters-134'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -33654,7 +34628,7 @@ in what form.</p>
 <td>Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)</td>
 </tr>
 </tbody></table>
-<h3 id='response-132'>Response</h3>
+<h3 id='response-134'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -33831,7 +34805,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fchange_margin_model" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-133'>Parameters</h3>
+<h3 id='parameters-135'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -33863,7 +34837,7 @@ in what form.</p>
 <td>If <code>true</code> request returns the result without switching the margining model. Default: <code>false</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-133'>Response</h3>
+<h3 id='response-135'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34011,7 +34985,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fchange_scope_in_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-134'>Parameters</h3>
+<h3 id='parameters-136'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -34036,7 +35010,7 @@ in what form.</p>
 <td>Id of key</td>
 </tr>
 </tbody></table>
-<h3 id='response-134'>Response</h3>
+<h3 id='response-136'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34186,7 +35160,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fchange_subaccount_name" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-135'>Parameters</h3>
+<h3 id='parameters-137'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -34211,7 +35185,7 @@ in what form.</p>
 <td>The new user name</td>
 </tr>
 </tbody></table>
-<h3 id='response-135'>Response</h3>
+<h3 id='response-137'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34319,7 +35293,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcreate_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-136'>Parameters</h3>
+<h3 id='parameters-138'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -34358,7 +35332,7 @@ in what form.</p>
 <td>List of enabled advanced on-key features. Available options:<br> - <code>restricted_block_trades</code>: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key<br> - <code>block_trade_approval</code>: Block trades created using this API key require additional user approval. Methods that use <code>block_rfq</code> scope are not affected by Block Trade approval feature<br></td>
 </tr>
 </tbody></table>
-<h3 id='response-136'>Response</h3>
+<h3 id='response-138'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34496,7 +35470,7 @@ in what form.</p>
     </span><span class="nl">"jsonrpc"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2.0"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">5414</span><span class="p">,</span><span class="w">
     </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="5c292f392e031d1d1d1c39313d3530723f3331">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="afdadccaddf0eeeeeeefcac2cec6c381ccc0c2">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">13</span><span class="p">,</span><span class="w">
         </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
         </span><span class="nl">"login_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -34538,9 +35512,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fcreate_subaccount" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-137'>Parameters</h3>
+<h3 id='parameters-139'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-137'>Response</h3>
+<h3 id='response-139'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34801,7 +35775,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fdisable_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-138'>Parameters</h3>
+<h3 id='parameters-140'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -34819,7 +35793,7 @@ in what form.</p>
 <td>Id of key</td>
 </tr>
 </tbody></table>
-<h3 id='response-138'>Response</h3>
+<h3 id='response-140'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -34979,7 +35953,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fedit_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-139'>Parameters</h3>
+<h3 id='parameters-141'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -35032,7 +36006,7 @@ in what form.</p>
 <td>Whitelist provided IP address on a selected key</td>
 </tr>
 </tbody></table>
-<h3 id='response-139'>Response</h3>
+<h3 id='response-141'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -35179,9 +36153,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fenable_affiliate_program" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-140'>Parameters</h3>
+<h3 id='parameters-142'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-140'>Response</h3>
+<h3 id='response-142'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -35282,7 +36256,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fenable_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-141'>Parameters</h3>
+<h3 id='parameters-143'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -35300,7 +36274,7 @@ in what form.</p>
 <td>Id of key</td>
 </tr>
 </tbody></table>
-<h3 id='response-141'>Response</h3>
+<h3 id='response-143'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -35481,7 +36455,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_access_log" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-142'>Parameters</h3>
+<h3 id='parameters-144'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -35506,7 +36480,7 @@ in what form.</p>
 <td>Number of requested items, default - <code>10</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-142'>Response</h3>
+<h3 id='response-144'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -35625,7 +36599,7 @@ in what form.</p>
   </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2515</span><span class="p">,</span><span class="w">
   </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b6c3c5d3c4f6d3ced7dbc6dad398d5d9db">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="8efbfdebfcceebf6efe3fee2eba0ede1e3">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"system_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"block_rfq_self_match_prevention"</span><span class="p">:</span><span class="kc">true</span><span class="p">,</span><span class="w">
@@ -35847,7 +36821,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_account_summaries" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-143'>Parameters</h3>
+<h3 id='parameters-145'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -35872,7 +36846,7 @@ in what form.</p>
 <td>Include additional fields</td>
 </tr>
 </tbody></table>
-<h3 id='response-143'>Response</h3>
+<h3 id='response-145'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -36312,7 +37286,7 @@ in what form.</p>
       </span><span class="nl">"btc_usd"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.1009872222854525</span><span class="w">
     </span><span class="p">},</span><span class="w">
     </span><span class="nl">"session_upl"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.05271555</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b2c7c1d7c0f2d7cad3dfc2ded79cd1dddf">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c0b5b3a5b280a5b8a1adb0aca5eea3afad">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"system_name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"interuser_transfers_enabled"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
@@ -36427,7 +37401,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_account_summary" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-144'>Parameters</h3>
+<h3 id='parameters-146'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -36459,7 +37433,7 @@ in what form.</p>
 <td>Include additional fields</td>
 </tr>
 </tbody></table>
-<h3 id='response-144'>Response</h3>
+<h3 id='response-146'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -36894,9 +37868,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_affiliate_program_info" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-145'>Parameters</h3>
+<h3 id='parameters-147'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-145'>Response</h3>
+<h3 id='response-147'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -37019,9 +37993,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_email_language" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-146'>Parameters</h3>
+<h3 id='parameters-148'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-146'>Response</h3>
+<h3 id='response-148'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -37122,9 +38096,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_new_announcements" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-147'>Parameters</h3>
+<h3 id='parameters-149'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-147'>Response</h3>
+<h3 id='response-149'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -37267,7 +38241,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_position" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-148'>Parameters</h3>
+<h3 id='parameters-150'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -37285,7 +38259,7 @@ in what form.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-148'>Response</h3>
+<h3 id='response-150'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -37528,7 +38502,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_positions" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-149'>Parameters</h3>
+<h3 id='parameters-151'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -37560,7 +38534,7 @@ in what form.</p>
 <td>The user id for the subaccount</td>
 </tr>
 </tbody></table>
-<h3 id='response-149'>Response</h3>
+<h3 id='response-151'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -37769,7 +38743,7 @@ in what form.</p>
     </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">4947</span><span class="p">,</span><span class="w">
     </span><span class="nl">"result"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="2b5e584e59746a6a6a6b4e464a424705484446">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0c5c3d5c2eff1f1f1f0d5ddd1d9dc9ed3dfdd">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
             </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
             </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
             </span><span class="nl">"margin_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"segregated_sm"</span><span class="p">,</span><span class="w">
@@ -37808,7 +38782,7 @@ in what form.</p>
             </span><span class="nl">"username"</span><span class="p">:</span><span class="w"> </span><span class="s2">"user_1"</span><span class="w">
         </span><span class="p">},</span><span class="w">
         </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f085839582afb1b1b1b0979d91999cde939f9d">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"email"</span><span class="p">:</span><span class="w"> </span><span class="s2">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="44313721361b050505042329252d286a272b29">[email&#160;protected]</a>"</span><span class="p">,</span><span class="w">
             </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="p">,</span><span class="w">
             </span><span class="nl">"is_password"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
             </span><span class="nl">"margin_model"</span><span class="p">:</span><span class="w"> </span><span class="s2">"cross_pm"</span><span class="p">,</span><span class="w">
@@ -37858,7 +38832,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_subaccounts" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-150'>Parameters</h3>
+<h3 id='parameters-152'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -37876,7 +38850,7 @@ in what form.</p>
 <td>Portfolio flag: <code>true</code> for portfolio information, <code>false</code> for subaccount information only. <code>false</code> by default</td>
 </tr>
 </tbody></table>
-<h3 id='response-150'>Response</h3>
+<h3 id='response-152'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -38200,7 +39174,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_subaccounts_details" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-151'>Parameters</h3>
+<h3 id='parameters-153'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -38225,7 +39199,7 @@ in what form.</p>
 <td>Optional parameter to ask for open orders list, default: <code>false</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-151'>Response</h3>
+<h3 id='response-153'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -38859,7 +39833,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_transaction_log" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-152'>Parameters</h3>
+<h3 id='parameters-154'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -38919,7 +39893,7 @@ in what form.</p>
 <td>Continuation token for pagination</td>
 </tr>
 </tbody></table>
-<h3 id='response-152'>Response</h3>
+<h3 id='response-154'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -39006,6 +39980,11 @@ in what form.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;user_role</td>
 <td>string</td>
 <td>Trade role of the user: <code>maker</code> or <code>taker</code></td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;fee_role</td>
+<td>string</td>
+<td>Fee role of the user: <code>maker</code> or <code>taker</code>. Can be different from trade role of the user when iceberg order was involved in matching.</td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;id</td>
@@ -39202,9 +40181,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fget_user_locks" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-153'>Parameters</h3>
+<h3 id='parameters-155'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-153'>Response</h3>
+<h3 id='response-155'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -39329,9 +40308,9 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Flist_api_keys" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-154'>Parameters</h3>
+<h3 id='parameters-156'>Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-154'>Response</h3>
+<h3 id='response-156'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -39486,7 +40465,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Flist_custody_accounts" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-155'>Parameters</h3>
+<h3 id='parameters-157'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -39504,7 +40483,7 @@ in what form.</p>
 <td>The currency symbol</td>
 </tr>
 </tbody></table>
-<h3 id='response-155'>Response</h3>
+<h3 id='response-157'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -39867,7 +40846,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fpme%2Fsimulate" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-156'>Parameters</h3>
+<h3 id='parameters-158'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -39899,7 +40878,7 @@ in what form.</p>
 <td>Object with positions in following form: <code>{InstrumentName1: Position1, InstrumentName2: Position2...}</code>, for example <code>{&quot;BTC-PERPETUAL&quot;: -1.0}</code> (or corresponding URI-encoding for GET). Size in base currency.</td>
 </tr>
 </tbody></table>
-<h3 id='response-156'>Response</h3>
+<h3 id='response-158'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -39991,7 +40970,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fremove_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-157'>Parameters</h3>
+<h3 id='parameters-159'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40009,7 +40988,7 @@ in what form.</p>
 <td>Id of key</td>
 </tr>
 </tbody></table>
-<h3 id='response-157'>Response</h3>
+<h3 id='response-159'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40101,7 +41080,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fremove_subaccount" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-158'>Parameters</h3>
+<h3 id='parameters-160'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40119,7 +41098,7 @@ in what form.</p>
 <td>The user id for the subaccount</td>
 </tr>
 </tbody></table>
-<h3 id='response-158'>Response</h3>
+<h3 id='response-160'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40220,7 +41199,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Freset_api_key" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-159'>Parameters</h3>
+<h3 id='parameters-161'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40238,7 +41217,7 @@ in what form.</p>
 <td>Id of key</td>
 </tr>
 </tbody></table>
-<h3 id='response-159'>Response</h3>
+<h3 id='response-161'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40386,7 +41365,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_announcement_as_read" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-160'>Parameters</h3>
+<h3 id='parameters-162'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40404,7 +41383,7 @@ in what form.</p>
 <td>the ID of the announcement</td>
 </tr>
 </tbody></table>
-<h3 id='response-160'>Response</h3>
+<h3 id='response-162'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40504,7 +41483,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_disabled_trading_products" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-161'>Parameters</h3>
+<h3 id='parameters-163'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40536,7 +41515,7 @@ in what form.</p>
 <td></td>
 </tr>
 </tbody></table>
-<h3 id='response-161'>Response</h3>
+<h3 id='response-163'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40570,7 +41549,7 @@ in what form.</p>
   <span class="dl">"</span><span class="s2">method</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2">private/set_email_for_subaccount</span><span class="dl">"</span><span class="p">,</span>
   <span class="dl">"</span><span class="s2">params</span><span class="dl">"</span> <span class="p">:</span> <span class="p">{</span>
     <span class="dl">"</span><span class="s2">sid</span><span class="dl">"</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="285d5b4d5a77197719684d45494144064b4745">[email&#160;protected]</a></span><span class="dl">"</span>
+    <span class="dl">"</span><span class="s2">email</span><span class="dl">"</span> <span class="p">:</span> <span class="dl">"</span><span class="s2"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="fa8f899f88a5cba5cbba9f979b9396d4999597">[email&#160;protected]</a></span><span class="dl">"</span>
   <span class="p">}</span>
 <span class="p">};</span>
 <span class="kd">var</span> <span class="nx">ws</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">WebSocket</span><span class="p">(</span><span class="dl">'</span><span class="s1">wss://test.deribit.com/ws/api/v2</span><span class="dl">'</span><span class="p">);</span>
@@ -40596,7 +41575,7 @@ in what form.</p>
   <span class="s">"method"</span> <span class="p">:</span> <span class="s">"private/set_email_for_subaccount"</span><span class="p">,</span>
   <span class="s">"params"</span> <span class="p">:</span> <span class="p">{</span>
     <span class="s">"sid"</span> <span class="p">:</span> <span class="mi">7</span><span class="p">,</span>
-    <span class="s">"email"</span> <span class="p">:</span> <span class="s">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="c4b1b7a1b69bf59bf584a1a9a5ada8eaa7aba9">[email&#160;protected]</a>"</span>
+    <span class="s">"email"</span> <span class="p">:</span> <span class="s">"<a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="71040214032e402e4031141c10181d5f121e1c">[email&#160;protected]</a>"</span>
   <span class="p">}</span>
 <span class="p">}</span>
 
@@ -40631,7 +41610,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_email_for_subaccount" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-162'>Parameters</h3>
+<h3 id='parameters-164'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40656,7 +41635,7 @@ in what form.</p>
 <td>The email address for the subaccount</td>
 </tr>
 </tbody></table>
-<h3 id='response-162'>Response</h3>
+<h3 id='response-164'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40749,7 +41728,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_email_language" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-163'>Parameters</h3>
+<h3 id='parameters-165'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40767,7 +41746,7 @@ in what form.</p>
 <td>The abbreviated language name. Valid values include <code>&quot;en&quot;</code>, <code>&quot;ko&quot;</code>, <code>&quot;zh&quot;</code>,  <code>&quot;ja&quot;</code>, <code>&quot;ru&quot;</code></td>
 </tr>
 </tbody></table>
-<h3 id='response-163'>Response</h3>
+<h3 id='response-165'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -40863,7 +41842,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fset_self_trading_config" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-164'>Parameters</h3>
+<h3 id='parameters-166'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -40895,7 +41874,7 @@ in what form.</p>
 <td>When Block RFQ Self Match Prevention is enabled, it ensures that RFQs cannot be executed between accounts that belong to the same legal entity. This setting is independent of the general self-match prevention settings and must be configured separately.</td>
 </tr>
 </tbody></table>
-<h3 id='response-164'>Response</h3>
+<h3 id='response-166'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41051,7 +42030,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsimulate_portfolio" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-165'>Parameters</h3>
+<h3 id='parameters-167'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -41083,7 +42062,7 @@ in what form.</p>
 <td>Object with positions in following form: <code>{InstrumentName1: Position1, InstrumentName2: Position2...}</code>, for example <code>{&quot;BTC-PERPETUAL&quot;: -1000.0}</code> (or corresponding URI-encoding for GET). For futures in USD, for options in base currency.</td>
 </tr>
 </tbody></table>
-<h3 id='response-165'>Response</h3>
+<h3 id='response-167'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41177,7 +42156,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Ftoggle_notifications_from_subaccount" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-166'>Parameters</h3>
+<h3 id='parameters-168'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -41202,7 +42181,7 @@ in what form.</p>
 <td>enable (<code>true</code>) or disable (<code>false</code>) notifications</td>
 </tr>
 </tbody></table>
-<h3 id='response-166'>Response</h3>
+<h3 id='response-168'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41297,7 +42276,7 @@ in what form.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Ftoggle_subaccount_login" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 
 <aside class='multi-notice'><div>  This is a private method; it can only be used after authentication.</div></aside>
-<h3 id='parameters-167'>Parameters</h3>
+<h3 id='parameters-169'>Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -41322,7 +42301,7 @@ in what form.</p>
 <td>enable or disable login.</td>
 </tr>
 </tbody></table>
-<h3 id='response-167'>Response</h3>
+<h3 id='response-169'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41477,7 +42456,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=announcements" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='channel-parameters'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-168'>Response</h3>
+<h3 id='response-170'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41631,7 +42610,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-169'>Response</h3>
+<h3 id='response-171'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -41859,7 +42838,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-170'>Response</h3>
+<h3 id='response-172'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42066,6 +43045,31 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;taker_rating</td>
 <td>string</td>
 <td>Rating of the taker</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
 </tr>
 <tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
@@ -42223,7 +43227,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-171'>Response</h3>
+<h3 id='response-173'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42432,6 +43436,31 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Rating of the taker</td>
 </tr>
 <tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trade_trigger</td>
+<td><em>object</em></td>
+<td>Contains information about the trade trigger state</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;cancel_reason</td>
+<td>string</td>
+<td>Reason for cancellation, present only when state is cancelled</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;direction</td>
+<td>string</td>
+<td>Direction of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;price</td>
+<td>number</td>
+<td>Price of the trade trigger</td>
+</tr>
+<tr>
+<td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;state</td>
+<td>string</td>
+<td>Trade trigger state: <code>&quot;untriggered&quot;</code> or <code>&quot;cancelled&quot;</code></td>
+</tr>
+<tr>
 <td>&nbsp;&nbsp;&rsaquo;&nbsp;&nbsp;trades</td>
 <td>array of <em>object</em></td>
 <td></td>
@@ -42560,7 +43589,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-172'>Response</h3>
+<h3 id='response-174'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42756,7 +43785,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=block_trade_confirmations" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='channel-parameters-6'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-173'>Response</h3>
+<h3 id='response-175'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -42943,7 +43972,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-174'>Response</h3>
+<h3 id='response-176'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43155,7 +44184,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-175'>Response</h3>
+<h3 id='response-177'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43346,7 +44375,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-176'>Response</h3>
+<h3 id='response-178'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43486,7 +44515,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Chart bars resolution given in full minutes or keyword <code>1D</code> (only some specific resolutions are supported)</td>
 </tr>
 </tbody></table>
-<h3 id='response-177'>Response</h3>
+<h3 id='response-179'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43615,7 +44644,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-178'>Response</h3>
+<h3 id='response-180'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43777,7 +44806,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-179'>Response</h3>
+<h3 id='response-181'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -43903,7 +44932,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-180'>Response</h3>
+<h3 id='response-182'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44022,7 +45051,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier supported for DVOL</td>
 </tr>
 </tbody></table>
-<h3 id='response-181'>Response</h3>
+<h3 id='response-183'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44131,7 +45160,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-182'>Response</h3>
+<h3 id='response-184'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44298,7 +45327,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-183'>Response</h3>
+<h3 id='response-185'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44584,7 +45613,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-184'>Response</h3>
+<h3 id='response-186'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44720,7 +45749,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier, matches (base) cryptocurrency with quote currency</td>
 </tr>
 </tbody></table>
-<h3 id='response-185'>Response</h3>
+<h3 id='response-187'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44841,7 +45870,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-186'>Response</h3>
+<h3 id='response-188'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -44933,7 +45962,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=platform_state" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='channel-parameters-20'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-187'>Response</h3>
+<h3 id='response-189'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45024,7 +46053,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <p><a href="https://test.deribit.com/api_console?method=%2Fprivate%2Fsubscribe&channels=platform_state.public_methods_state" target="_blank" rel="noopener noreferrer">Try in API console</a></p>
 <h3 id='channel-parameters-21'>Channel Parameters</h3>
 <p><em>This channel takes no parameters</em></p>
-<h3 id='response-188'>Response</h3>
+<h3 id='response-190'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45126,7 +46155,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-189'>Response</h3>
+<h3 id='response-191'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45252,7 +46281,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-190'>Response</h3>
+<h3 id='response-192'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45405,7 +46434,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-191'>Response</h3>
+<h3 id='response-193'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45700,7 +46729,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-192'>Response</h3>
+<h3 id='response-194'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -45908,7 +46937,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-193'>Response</h3>
+<h3 id='response-195'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -46081,7 +47110,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
 <h3 id='channel-parameters-27'>Channel Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-194'>Response</h3>
+<h3 id='response-196'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -46288,7 +47317,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-195'>Response</h3>
+<h3 id='response-197'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -47052,7 +48081,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-196'>Response</h3>
+<h3 id='response-198'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -47818,7 +48847,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-197'>Response</h3>
+<h3 id='response-199'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48191,7 +49220,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-198'>Response</h3>
+<h3 id='response-200'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48455,7 +49484,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <aside class='multi-notice'><div>  This is a private subscription; subscribing is only possible when authenticated.</div></aside>
 <h3 id='channel-parameters-32'>Channel Parameters</h3>
 <p><em>This method takes no parameters</em></p>
-<h3 id='response-199'>Response</h3>
+<h3 id='response-201'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48561,7 +49590,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Index identifier of derivative instrument on the platform</td>
 </tr>
 </tbody></table>
-<h3 id='response-200'>Response</h3>
+<h3 id='response-202'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -48695,7 +49724,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Instrument name</td>
 </tr>
 </tbody></table>
-<h3 id='response-201'>Response</h3>
+<h3 id='response-203'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -49083,7 +50112,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-202'>Response</h3>
+<h3 id='response-204'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -49469,7 +50498,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-203'>Response</h3>
+<h3 id='response-205'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -49862,7 +50891,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval.</td>
 </tr>
 </tbody></table>
-<h3 id='response-204'>Response</h3>
+<h3 id='response-206'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50268,7 +51297,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>The currency symbol or <code>&quot;any&quot;</code> for all</td>
 </tr>
 </tbody></table>
-<h3 id='response-205'>Response</h3>
+<h3 id='response-207'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50620,7 +51649,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-206'>Response</h3>
+<h3 id='response-208'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -50933,7 +51962,7 @@ required by JSON-RPC and part dedicated for subscription data.</p>
 <td>Frequency of notifications. Events will be aggregated over this interval. The value <code>raw</code> means no aggregation will be applied <strong>(Please note that <code>raw</code> interval is only available to authorized users)</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-207'>Response</h3>
+<h3 id='response-209'>Response</h3>
 <table><thead>
 <tr>
 <th>Name</th>
@@ -52172,6 +53201,13 @@ client. If authentication fails, the exchange will respond with a
 <td>Custom tag. Default - false (<code>N</code>). If the tag is present and set to &#39;Y&#39; this connection will receive notificational Execution Reports only for order created in this connection, it won&#39;t receive notification for orders created in other connections even within the same subaccount. This tag can be used to split Execution Reports between several connections to the same subaccount</td>
 </tr>
 <tr>
+<td>9015</td>
+<td><code>ReportFillsAsExecReports</code></td>
+<td>Boolean</td>
+<td>No</td>
+<td>Custom tag, default is false (N). If the tag is present and set to &#39;Y&#39;, then <code>FillsGrp</code> is not included into Execution Report, and reported as Execution Reports with <code>ExecType</code> = <code>F</code>(<code>TRADE</code>)</td>
+</tr>
+<tr>
 <td>9018</td>
 <td><code>DisplayIncrementSteps</code></td>
 <td>Boolean</td>
@@ -52201,7 +53237,7 @@ only.</p>
 
 <p><code>CancelOnDisconnect</code>(<code>9001</code>) controls &quot;Close on Disconnect&quot;. If this tag is not
 provided, the default setting from the account is used.</p>
-<h3 id='response-208'>Response</h3>
+<h3 id='response-210'>Response</h3>
 <p>When the login is successful, the server will echo back the request.</p>
 
 <p>If the login was not successful, the server will respond with a
@@ -52261,7 +53297,7 @@ session should be considered lost and corrective action should be initiated.</p>
 <td>The identifier when responding to the <a href="#test-request-1"><code>Test Request</code>(<code>1</code>)</a> message. When not responding to a <code>Test Request</code>(<code>1</code>) message, this tag can be left out</td>
 </tr>
 </tbody></table>
-<h3 id='response-209'>Response</h3>
+<h3 id='response-211'>Response</h3>
 <p>When the heartbeat has been received successfully, the server will echo back the
 request as confirmation.</p>
 <h2 id='test-request-1'><code>Test Request</code>(<code>1</code>)</h2>
@@ -52383,7 +53419,7 @@ header is ignored.</p>
 <td>New Sequence Number</td>
 </tr>
 </tbody></table>
-<h3 id='response-210'>Response</h3>
+<h3 id='response-212'>Response</h3>
 <p>In reply to <code>Sequence Reset</code>(<code>4</code>), the exchange replies with <code>Resend
 Request</code>(<code>2</code>) with <code>BeginSeqNo</code>(<code>7</code>) and <code>EndSeqNo</code>(<code>16</code>) equal to the passed
 <code>NewSeqNo</code>(<code>36</code>) in case of success. In case of wrong arguments, the server
@@ -52467,7 +53503,7 @@ messages starting from the sequence number equal to the <code>NewSeqNo</code>(<c
 <td>Optional parameter for limiting output by the <code>SecurityType</code>. Describes type of security.<p> Possible values: <ul><li><code>FXSPOT</code> for currency exchange spot</li><li><code>FUT</code> for futures,</li><li> <code>OPT</code> for options,</li> <li> <code>FUTCO</code> for future combo,</li> <li><code>OPTCO</code> for option combo</li><li><code>INDEX</code> for indexes</li></ul></td>
 </tr>
 </tbody></table>
-<h3 id='response-211'>Response</h3>
+<h3 id='response-213'>Response</h3>
 <p>The server will respond with a <a href="#security-list-y"><code>Security List</code>(<code>y</code>)</a> message,
 where the <code>SecurityReq</code>(<code>320</code>) is equal to that of the request.</p>
 <h2 id='security-list-y'><code>Security List</code>(<code>y</code>)</h2>
@@ -52840,7 +53876,7 @@ combinations are:</p>
 
 <p>If multiple instrument symbols are specified then the system responds with
 multiple market data messages corresponding to those instruments.</p>
-<h3 id='response-212'>Response</h3>
+<h3 id='response-214'>Response</h3>
 <p>If the server is unable to supply the requested data, it will respond with a
 <a href="#market-data-request-reject-y"><code>Market Data Request Reject</code>(<code>Y</code>)</a> message.</p>
 
@@ -53421,7 +54457,7 @@ exchange.</p>
 <td>Selects condition trigger method for algo orders. Valid values:<p><ul><li><code>1</code> = mark price,</li><li><code>2</code> = trade,</li><li><code>3</code> = index</li></ul></p></td>
 </tr>
 </tbody></table>
-<h3 id='response-213'>Response</h3>
+<h3 id='response-215'>Response</h3>
 <p>Upon receiving a new order, the exchange responds with the <code>Execution
 Report</code>(<code>8</code>) message communicating whether the order was accepted or rejected.</p>
 
@@ -54007,7 +55043,7 @@ option <code>10</code> of the <code>MassCancelRequestType</code>(<code>530</code
 <td>Whether or not to reject incoming quotes for 1 second after cancelling</td>
 </tr>
 </tbody></table>
-<h3 id='response-214'>Response</h3>
+<h3 id='response-216'>Response</h3>
 <p>After the cancellation, the server responds with
 an <code>Order Mass Cancel Report</code>(<code>r</code>).</p>
 <h2 id='order-mass-cancel-report-r'><code>Order Mass Cancel Report</code>(<code>r</code>)</h2>
@@ -54196,7 +55232,7 @@ to closed orders.</p>
 <!-- *To request historical orders*: set `MassStatusReqType=10` and specify `Currency` or `Symbol` for the request. To include fully unfilled orders in the response, set custom tag `OrderHistoryIncludeUnfilled` (`9037`) to `Y`. The default maximum number of reports is 100, use `TotNumReports` in the request for the different number if required (maximum 1000 reports is allowed, and `OrderHistoryOffset` (`9039`) custom tag can be used for the pagination). The server will respond with a series of `Execution Reports`(`8`) messages, where the first message contains `MassStatusReqType=7`
 and `TotNumReports` will be set to the number of reports to be expected as a
 follow-up. Open unfilled orders are not included in the historical data.  -->
-<h3 id='response-215'>Response</h3>
+<h3 id='response-217'>Response</h3>
 <p>When the client requests the status of current orders, the exchange should reply
 with a series of special <code>Execution Reports</code>(<code>8</code>), one for every order
 requested.</p>
@@ -54562,7 +55598,7 @@ Position Report.</p>
 <td>To request for certain currency only. If it is missing, all currencies are reported</td>
 </tr>
 </tbody></table>
-<h3 id='response-216'>Response</h3>
+<h3 id='response-218'>Response</h3>
 <p>The server will respond with a <a href="#position-report-ap"><code>Position Report</code>(<code>AP</code>)</a>
 message.</p>
 <h2 id='position-report-ap'><code>Position Report</code>(<code>AP</code>)</h2>
@@ -54747,12 +55783,12 @@ info.</p>
 <td>Currency of the report. See <a href="#security-list-request-x"><code>Security List Request</code>(<code>x</code>)</a>. Default is BTC. <p>If <code>CROSS</code> is given as currency and user has cross collateral enabled, only the following fields are returned:</p><p><ul><li>100001 <code>DeribitUserEquity</code></li><li>100003 <code>DeribitUserInitialMargin</code></li><li>100004 <code>DeribitUserMaintenanceMargin</code></li><li>100013 <code>DeribitMarginBalance</code></li></ul></p></td>
 </tr>
 </tbody></table>
-<h3 id='response-217'>Response</h3>
+<h3 id='response-219'>Response</h3>
 <p>The server will respond with a <code>User Response</code>(<code>BF</code>) message.</p>
 <h2 id='user-response-bf'><code>User Response</code>(<code>BF</code>)</h2>
 <p>This message is used to respond to a <a href="#user-request-be"><code>USER REQUEST</code>(<code>BE</code>)</a>
 message, it reports the status of the user and user&#39;s account info.</p>
-<h3 id='response-218'>Response</h3>
+<h3 id='response-220'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -54960,7 +55996,7 @@ orders by <code>OrigClOrdId</code> is noticeably faster.</p>
 <td>Order Market Maker Protection (MMP) flag, if it is absent then the current MMP flag of the order is not changed. <code>N</code> removes the flag if it is set. <strong>Important: manual admin action is necessary to activate Market Maker Protection (MMP) for an account</strong></td>
 </tr>
 </tbody></table>
-<h3 id='response-219'>Response</h3>
+<h3 id='response-221'>Response</h3>
 <p>See <code>New Order Single</code>(<code>D</code>) response</p>
 <h2 id='execution-reports-8-about-order-changes'><code>Execution Reports</code>(<code>8</code>) about order changes</h2><h3 id='notification'>Notification</h3>
 <p>The report <code>Execution Reports</code>(<code>8</code>) is similar to New Order Single or
@@ -55186,6 +56222,13 @@ Cancel/Replace responses</p>
 <td>Quantity bought/sold on this last fill</td>
 </tr>
 <tr>
+<td>880</td>
+<td><code>TrdMatchID</code></td>
+<td>String</td>
+<td>No</td>
+<td>Identifier assigned to a trade by a matching system. It can be present for trade execution reports if Logon <code>9015=Y</code></td>
+</tr>
+<tr>
 <td>100010</td>
 <td><code>DeribitLabel</code></td>
 <td>String</td>
@@ -55304,13 +56347,13 @@ Cancel/Replace responses</p>
 <td><code>0</code> = <code>Snapshot</code>, <code>1</code> = <code>Snapshot + Updates</code> (<code>Subscribe</code>), <code>2</code> = <code>Unsubscribe</code> <p>(Please note that our system does not send notifications when currencies are <b>locked</b>. Users are advised to subscribe to the <a href="https://docs.deribit.com/#platform_state">platform_state</a> channel to monitor the state of currencies actively.)</p></td>
 </tr>
 </tbody></table>
-<h3 id='response-220'>Response</h3>
+<h3 id='response-222'>Response</h3>
 <p>The server will respond with a <a href="#security-status-f"><code>Security Status</code> (<code>f</code>)</a>
 message.</p>
 <h2 id='security-status-f'><code>Security Status</code> (<code>f</code>)</h2>
 <p>The <code>Security Status</code> (<code>f</code>) message provides for the ability to report changes
 in status to a security.</p>
-<h3 id='response-221'>Response</h3>
+<h3 id='response-223'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -55471,7 +56514,7 @@ used to set or get the limits for Market Maker Protection (MMP) for a currency p
 <p><strong>Important: manual admin action is necessary to activate Market Maker
 Protection (MMP) for an account.</strong> This message is sent by the server in reply
 to <a href="#mmprotection-limits-mm"><code>MMProtection Limits</code> (<code>MM</code>)</a> or <a href="#mmprotection-reset-mz"><code>MMProtectionReset</code> (<code>MZ</code>)</a></p>
-<h3 id='response-222'>Response</h3>
+<h3 id='response-224'>Response</h3>
 <table><thead>
 <tr>
 <th>Tag</th>
@@ -55546,7 +56589,7 @@ Protection (MMP) for an account.</strong> This message resets Market Maker Prote
 <td>A custom tag of MMP Group</td>
 </tr>
 </tbody></table>
-<h3 id='response-223'>Response</h3>
+<h3 id='response-225'>Response</h3>
 <p>The server sends <code>MMProtection Result (MR)</code> message as a response.</p>
 <h2 id='security-definition-request-c'><code>Security Definition Request</code> (<code>c</code>)</h2>
 <p>Request a specific Security to be traded with the second party. The request
@@ -55629,7 +56672,7 @@ end-points depending on <code>SecurityRequestType (321)</code> tag value).</p>
 <td>Positive integer for the strategy</td>
 </tr>
 </tbody></table>
-<h3 id='response-224'>Response</h3>
+<h3 id='response-226'>Response</h3>
 <p>The server sends <a href="#security-definition-d"><code>Security Definition (d)</code></a> message as
 a response, or rejects the request</p>
 <h2 id='security-definition-d'><code>Security Definition</code> (<code>d</code>)</h2>
@@ -55854,7 +56897,7 @@ via RFQ subscription or in the snapshots.</p>
 <td>Order quantity in contracts</td>
 </tr>
 </tbody></table>
-<h3 id='response-225'>Response</h3>
+<h3 id='response-227'>Response</h3>
 <p>In case of success, the response will be
 a <a href="#quote-status-report-ai"><code>Quote Status Report (AI)</code></a>. If the request fails,
 the <a href="#quote-request-reject-ag"><code>Quote Request Reject (AG)</code></a> will be sent, or session level
@@ -56019,7 +57062,7 @@ of the current quotes in the system.</p>
 <td>Subscription Request Type to get notifications about new or terminated instruments. Valid values: <ul><li> <code>0</code> = Snapshot,</li> <li><code>1</code> = Snapshot + Updates (Subscribe),</li> <li><code>2</code> = Disable previous Snapshot + Update Request (Unsubscribe)</li></ul></td>
 </tr>
 </tbody></table>
-<h3 id='response-226'>Response</h3>
+<h3 id='response-228'>Response</h3>
 <p>RFQ request can be used to request existing
 <a href="#quote-request-r"><code>Quote Requests (R)</code></a> as well as to subscribe for new
 <a href="#quote-request-r"><code>Quote Requests (R)</code></a> and <a href="#quote-status-report-ai"><code>Quote Status Reports (AI)</code></a>

@@ -27,7 +27,7 @@ create type deribit.private_get_block_trades_request as (
     "block_rfq_id" bigint
 );
 
-comment on column deribit.private_get_block_trades_request."currency" is '(Required) The currency symbol';
+comment on column deribit.private_get_block_trades_request."currency" is 'The currency symbol';
 comment on column deribit.private_get_block_trades_request."count" is 'Number of requested items, default - 20';
 comment on column deribit.private_get_block_trades_request."start_id" is 'Response will contain block trades older than the one provided in this field';
 comment on column deribit.private_get_block_trades_request."end_id" is 'The id of the oldest block trade to be returned, start_id is required with end_id';
@@ -132,7 +132,7 @@ comment on column deribit.private_get_block_trades_response."id" is 'The id that
 comment on column deribit.private_get_block_trades_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
 create function deribit.private_get_block_trades(
-    "currency" deribit.private_get_block_trades_request_currency,
+    "currency" deribit.private_get_block_trades_request_currency default null,
     "count" bigint default null,
     "start_id" text default null,
     "end_id" text default null,
@@ -179,4 +179,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_block_trades is 'Returns list of users block trades. block_rfq_id can be provided to receive block trades related to that particular Block RFQ.';
+comment on function deribit.private_get_block_trades is 'Returns list of users block trades. If currency is not provided, returns block trades for all currencies. block_rfq_id can be provided to receive block trades related to that particular Block RFQ.';
