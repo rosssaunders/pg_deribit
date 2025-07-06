@@ -58,6 +58,7 @@ create type deribit.private_get_transaction_log_response_log as (
     "contracts" double precision,
     "interest_pl" double precision,
     "user_role" text,
+    "fee_role" text,
     "id" bigint,
     "index_price" double precision,
     "info" jsonb,
@@ -93,6 +94,7 @@ comment on column deribit.private_get_transaction_log_response_log."side" is 'On
 comment on column deribit.private_get_transaction_log_response_log."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_transaction_log_response_log."interest_pl" is 'Actual funding rate of trades and settlements on perpetual instruments';
 comment on column deribit.private_get_transaction_log_response_log."user_role" is 'Trade role of the user: maker or taker';
+comment on column deribit.private_get_transaction_log_response_log."fee_role" is 'Fee role of the user: maker or taker. Can be different from trade role of the user when iceberg order was involved in matching.';
 comment on column deribit.private_get_transaction_log_response_log."id" is 'Unique identifier';
 comment on column deribit.private_get_transaction_log_response_log."index_price" is 'The index price for the instrument during the delivery';
 comment on column deribit.private_get_transaction_log_response_log."info" is 'Additional information regarding transaction. Strongly dependent on the log entry type';
