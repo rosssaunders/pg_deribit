@@ -24,7 +24,8 @@ create type deribit.private_get_block_trades_request as (
     "count" bigint,
     "start_id" text,
     "end_id" text,
-    "block_rfq_id" bigint
+    "block_rfq_id" bigint,
+    "broker_code" text
 );
 
 comment on column deribit.private_get_block_trades_request."currency" is 'The currency symbol';
@@ -32,6 +33,7 @@ comment on column deribit.private_get_block_trades_request."count" is 'Number of
 comment on column deribit.private_get_block_trades_request."start_id" is 'Response will contain block trades older than the one provided in this field';
 comment on column deribit.private_get_block_trades_request."end_id" is 'The id of the oldest block trade to be returned, start_id is required with end_id';
 comment on column deribit.private_get_block_trades_request."block_rfq_id" is 'ID of the Block RFQ';
+comment on column deribit.private_get_block_trades_request."broker_code" is 'Broker code to filter block trades. Only broker clients can use broker_code to filter broker block trades. Use any for all block trades.';
 
 create type deribit.private_get_block_trades_response_trade as (
     "trade_id" text,
@@ -113,12 +115,16 @@ comment on column deribit.private_get_block_trades_response_trade."legs" is 'Opt
 
 create type deribit.private_get_block_trades_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_get_block_trades_response_trade[]
 );
 
 comment on column deribit.private_get_block_trades_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trades_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trades_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_get_block_trades_response_result."id" is 'Block trade id';
 comment on column deribit.private_get_block_trades_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -136,7 +142,8 @@ create function deribit.private_get_block_trades(
     "count" bigint default null,
     "start_id" text default null,
     "end_id" text default null,
-    "block_rfq_id" bigint default null
+    "block_rfq_id" bigint default null,
+    "broker_code" text default null
 )
 returns setof deribit.private_get_block_trades_response_result
 language sql
@@ -148,7 +155,8 @@ as $$
             "count",
             "start_id",
             "end_id",
-            "block_rfq_id"
+            "block_rfq_id",
+            "broker_code"
         )::deribit.private_get_block_trades_request as payload
     ), 
     http_response as (
@@ -169,6 +177,8 @@ as $$
     )
     select
         (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
         (b)."id"::text,
         (b)."timestamp"::bigint,
         (b)."trades"::deribit.private_get_block_trades_response_trade[]

@@ -35,6 +35,7 @@ create type deribit.private_reset_mmp_request_index_name as enum (
     'paxg_usdc',
     'shib_usdc',
     'sol_usdc',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',

@@ -76,6 +76,7 @@ create type deribit.private_cancel_quotes_request_currency_pair as enum (
     'steth_eth',
     'steth_usdc',
     'steth_usdt',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',

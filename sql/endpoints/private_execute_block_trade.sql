@@ -127,12 +127,16 @@ comment on column deribit.private_execute_block_trade_response_trade."legs" is '
 
 create type deribit.private_execute_block_trade_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_execute_block_trade_response_trade[]
 );
 
 comment on column deribit.private_execute_block_trade_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_execute_block_trade_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_execute_block_trade_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_execute_block_trade_response_result."id" is 'Block trade id';
 comment on column deribit.private_execute_block_trade_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
