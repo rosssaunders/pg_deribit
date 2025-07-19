@@ -61,7 +61,7 @@ comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_
 comment on column deribit.private_add_to_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
-comment on column deribit.private_add_to_address_book_request."beneficiary_address" is '(Required) nan';
+comment on column deribit.private_add_to_address_book_request."beneficiary_address" is '(Required) Geographical address of the beneficiary';
 comment on column deribit.private_add_to_address_book_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_add_to_address_book_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
 comment on column deribit.private_add_to_address_book_request."extra_currencies" is 'The user can pass a list of currencies to add the address for. It is currently available ONLY for ERC20 currencies. Without passing this paramater for an ERC20 currency, the address will be added to ALL of the ERC20 currencies.';
@@ -91,6 +91,7 @@ create type deribit.private_add_to_address_book_response_result as (
 comment on column deribit.private_add_to_address_book_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_add_to_address_book_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_add_to_address_book_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';

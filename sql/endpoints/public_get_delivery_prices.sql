@@ -48,6 +48,7 @@ create type deribit.public_get_delivery_prices_request_index_name as enum (
     'steth_eth',
     'steth_usdc',
     'steth_usdt',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',
