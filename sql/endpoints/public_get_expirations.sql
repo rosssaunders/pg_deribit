@@ -63,6 +63,7 @@ create type deribit.public_get_expirations_request_currency_pair as enum (
     'steth_eth',
     'steth_usdc',
     'steth_usdt',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',

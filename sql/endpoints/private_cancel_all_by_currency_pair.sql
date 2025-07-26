@@ -48,6 +48,7 @@ create type deribit.private_cancel_all_by_currency_pair_request_currency_pair as
     'steth_eth',
     'steth_usdc',
     'steth_usdt',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',
