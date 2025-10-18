@@ -11,46 +11,15 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_reset_mmp_request_index_name as enum (
-    'ada_usdc',
-    'algo_usdc',
-    'all',
-    'avax_usdc',
-    'bch_usdc',
-    'bnb_usdc',
-    'btc_usd',
-    'btc_usdc',
-    'btc_usdt',
-    'btcdvol_usdc',
-    'buidl_usdc',
-    'doge_usdc',
-    'dot_usdc',
-    'eth_usd',
-    'eth_usdc',
-    'eth_usdt',
-    'ethdvol_usdc',
-    'link_usdc',
-    'ltc_usdc',
-    'near_usdc',
-    'paxg_usdc',
-    'shib_usdc',
-    'sol_usdc',
-    'trump_usdc',
-    'trx_usdc',
-    'uni_usdc',
-    'usde_usdc',
-    'xrp_usdc'
-);
-
 create type deribit.private_reset_mmp_request as (
-    "index_name" deribit.private_reset_mmp_request_index_name,
+    "index_name" text,
     "mmp_group" text,
     "block_rfq" boolean
 );
 
-comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
-comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the endpoint resets the traditional (no group) MMP limits';
-comment on column deribit.private_reset_mmp_request."block_rfq" is 'If true, resets MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
+comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Currency pair for which to reset MMP limits.  For regular MMP (block_rfq = false): Must be a specific currency pair (e.g., "btc_usd", "eth_usd"). The value "all" is not allowed.  For Block RFQ MMP (block_rfq = true): Can be either a specific currency pair or "all" to reset MMP limits across all currency pairs.';
+comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the method resets the traditional (no group) MMP limits. 📖 Related Support Article: Mass Quotes Specifications';
+comment on column deribit.private_reset_mmp_request."block_rfq" is 'If true, resets MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings. When block_rfq = true, the index_name parameter can be set to "all" to reset limits across all currency pairs.';
 
 create type deribit.private_reset_mmp_response as (
     "id" bigint,
@@ -63,7 +32,7 @@ comment on column deribit.private_reset_mmp_response."jsonrpc" is 'The JSON-RPC 
 comment on column deribit.private_reset_mmp_response."result" is 'Result of method execution. ok in case of success';
 
 create function deribit.private_reset_mmp(
-    "index_name" deribit.private_reset_mmp_request_index_name,
+    "index_name" text,
     "mmp_group" text default null,
     "block_rfq" boolean default null
 )
@@ -97,4 +66,6 @@ as $$
 
 $$;
 
-comment on function deribit.private_reset_mmp is 'Reset MMP';
+comment on function deribit.private_reset_mmp is 'Reset Market Maker Protection (MMP) limits for the specified currency pair or group.
+
+📖 Related Support Article: Market Maker Protection API Configuration';

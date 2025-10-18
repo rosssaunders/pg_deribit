@@ -12,7 +12,9 @@
 * AND IS STRONGLY DISCOURAGED.
 */
 create type deribit.public_get_apr_history_request_currency as enum (
+    'build',
     'steth',
+    'usdc',
     'usde'
 );
 
@@ -84,4 +86,4 @@ as $$
 
 $$;
 
-comment on function deribit.public_get_apr_history is 'Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (USDE, STETH).';
+comment on function deribit.public_get_apr_history is 'Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD).';

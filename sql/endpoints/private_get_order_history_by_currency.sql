@@ -43,13 +43,13 @@ create type deribit.private_get_order_history_by_currency_request as (
 
 comment on column deribit.private_get_order_history_by_currency_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_order_history_by_currency_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
-comment on column deribit.private_get_order_history_by_currency_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_order_history_by_currency_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_order_history_by_currency_request."offset" is 'The offset for pagination, default - 0';
 comment on column deribit.private_get_order_history_by_currency_request."include_old" is 'Include in result orders older than 2 days, default - false';
 comment on column deribit.private_get_order_history_by_currency_request."include_unfilled" is 'Include in result fully unfilled closed orders, default - false';
 comment on column deribit.private_get_order_history_by_currency_request."with_continuation" is 'When set to true, the API response format changes from a simple list of orders to an object containing the orders and a continuation token.';
 comment on column deribit.private_get_order_history_by_currency_request."continuation" is 'Continuation token for pagination';
-comment on column deribit.private_get_order_history_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_order_history_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
 
 create type deribit.private_get_order_history_by_currency_response_result as (
     "quote" boolean,
@@ -126,13 +126,13 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_order_history_by_currency_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_order_history_by_currency_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_history_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_order_history_by_currency_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_currency_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_currency_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_order_history_by_currency_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_history_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_order_history_by_currency_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_order_history_by_currency_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -150,7 +150,7 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_order_history_by_currency_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_order_history_by_currency_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_history_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_order_history_by_currency_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
 comment on column deribit.private_get_order_history_by_currency_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';

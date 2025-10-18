@@ -153,6 +153,28 @@ comment on column deribit.private_sell_request."linked_order_type" is 'The type 
 comment on column deribit.private_sell_request."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';
 comment on column deribit.private_sell_request."otoco_config" is 'List of trades to create or cancel when this order is filled.';
 
+create type deribit.private_sell_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_sell_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_sell_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_sell_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_sell_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_sell_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_sell_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_sell_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_sell_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_sell_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_sell_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -174,6 +196,7 @@ create type deribit.private_sell_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_sell_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -213,6 +236,7 @@ comment on column deribit.private_sell_response_trade."price" is 'Price in base 
 comment on column deribit.private_sell_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_sell_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_sell_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_sell_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_sell_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_sell_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_sell_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -306,13 +330,13 @@ comment on column deribit.private_sell_response_order."direction" is 'Direction:
 comment on column deribit.private_sell_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_sell_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_sell_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_sell_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_sell_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_sell_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_sell_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_sell_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_sell_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_sell_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_sell_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -330,7 +354,7 @@ comment on column deribit.private_sell_response_order."block_trade" is 'true if 
 comment on column deribit.private_sell_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_sell_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_sell_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_sell_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_sell_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
 comment on column deribit.private_sell_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';

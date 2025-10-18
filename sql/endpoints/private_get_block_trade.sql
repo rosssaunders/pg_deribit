@@ -17,6 +17,28 @@ create type deribit.private_get_block_trade_request as (
 
 comment on column deribit.private_get_block_trade_request."id" is '(Required) Block trade id';
 
+create type deribit.private_get_block_trade_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_block_trade_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_block_trade_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_block_trade_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_block_trade_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_block_trade_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_block_trade_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_get_block_trade_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -38,6 +60,7 @@ create type deribit.private_get_block_trade_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_block_trade_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -77,6 +100,7 @@ comment on column deribit.private_get_block_trade_response_trade."price" is 'Pri
 comment on column deribit.private_get_block_trade_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_block_trade_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_block_trade_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_block_trade_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_block_trade_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_block_trade_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_block_trade_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -97,12 +121,16 @@ comment on column deribit.private_get_block_trade_response_trade."legs" is 'Opti
 
 create type deribit.private_get_block_trade_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_get_block_trade_response_trade[]
 );
 
 comment on column deribit.private_get_block_trade_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trade_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trade_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_get_block_trade_response_result."id" is 'Block trade id';
 comment on column deribit.private_get_block_trade_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 

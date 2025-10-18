@@ -70,4 +70,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_cancel_by_label is 'Cancels orders by label. All user''s orders (trigger orders too), with a given label are cancelled in all currencies or in one given currency (in this case currency queue is used) ';
+comment on function deribit.private_cancel_by_label is 'Cancels orders by label. All user''s orders (trigger orders too), with a given label are cancelled in all currencies or in one given currency (in this case currency queue is used). Rate Limits: When called without the currency parameter, this method is subject to cancel_all rate limits. Different rate limit values may apply for per-currency cancels versus calls without providing the currency parameter.';

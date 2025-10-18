@@ -32,7 +32,7 @@ comment on column deribit.public_get_last_trades_by_instrument_request."start_se
 comment on column deribit.public_get_last_trades_by_instrument_request."end_seq" is 'The sequence number of the last trade to be returned';
 comment on column deribit.public_get_last_trades_by_instrument_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_instrument_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_instrument_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_instrument_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_instrument_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_instrument_response_trade as (

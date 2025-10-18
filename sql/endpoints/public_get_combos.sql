@@ -46,7 +46,7 @@ create type deribit.public_get_combos_response_result as (
 comment on column deribit.public_get_combos_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.public_get_combos_response_result."id" is 'Unique combo identifier';
 comment on column deribit.public_get_combos_response_result."instrument_id" is 'Instrument ID';
-comment on column deribit.public_get_combos_response_result."state" is 'Combo state: "rfq", "active", "inactive"';
+comment on column deribit.public_get_combos_response_result."state" is 'Combo state: "active", "inactive"';
 comment on column deribit.public_get_combos_response_result."state_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.public_get_combos_response as (

@@ -17,7 +17,7 @@ create type deribit.public_get_announcements_request as (
 );
 
 comment on column deribit.public_get_announcements_request."start_timestamp" is 'The most recent timestamp to return the results for (milliseconds since the UNIX epoch)';
-comment on column deribit.public_get_announcements_request."count" is 'Maximum count of returned announcements';
+comment on column deribit.public_get_announcements_request."count" is 'Maximum count of returned announcements, default - 5, maximum - 50';
 
 create type deribit.public_get_announcements_response_result as (
     "body" text,
