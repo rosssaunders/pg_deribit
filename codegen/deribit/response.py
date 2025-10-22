@@ -34,7 +34,7 @@ class response_row:
         return pd.isna(self.enum) is False
 
     def enum_items(self) -> List[str]:
-        return list(set(self.enum.split(' ')))
+        return sorted(set(self.enum.split(' ')))
 
     def to_enum(self) -> Enum_:
         return Enum_(type_name=self.name, items=self.enum_items())
