@@ -15,45 +15,22 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 - [Docker](https://www.docker.com/)
 - [Deribit account](https://www.deribit.com/) (Production or Testnet)
 - [psql](https://www.postgresql.org/docs/current/app-psql.html)
-- [GitHub account](https://github.com) with a Personal Access Token (PAT) that has `read:packages` scope
-
-### Installation
-
-pg_deribit currently ships as source code.
-
-1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/rosssaunders/pg_deribit
-   ```
-
-2. Authenticate with GitHub Container Registry:
-
-   ```bash
-   # Replace YOUR_PAT with your GitHub Personal Access Token
-   # Replace YOUR_GITHUB_USERNAME with your GitHub username
-   echo YOUR_PAT | docker login ghcr.io -u YOUR_GITHUB_USERNAME --password-stdin
-   ```
 
 ## Quickstart
 
-Run the following commands to start a fresh container changing the port number as needed.
+Run the following commands to start a fresh container using the pre-built image:
 
 ```bash
-# stop existing container called pg_deribit
+# stop and remove any existing container called pg_deribit
 docker stop pg_deribit 2>/dev/null || true
-
-# remove any existing container called pg_deribit
 docker rm -f pg_deribit 2>/dev/null || true
 
-# launch the new one
-docker build . -t pg_deribit
-
+# pull and run the latest image from GitHub Container Registry
 docker run -d --name pg_deribit -p 5433:5432 \
   -e POSTGRES_PASSWORD=deribitpwd \
   -e POSTGRES_USER=deribit \
   -e POSTGRES_DB=deribit \
-  pg_deribit
+  ghcr.io/rosssaunders/pg_deribit:latest
 
 # connect to the container
 PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
@@ -71,6 +48,29 @@ order by currency;
 ```
 
 Connect using your favourite Postgres GUI and get going. For how to use it, see the examples in the doc folder.
+
+## Building from Source
+
+If you want to build the Docker image from source (for development or customization):
+
+```bash
+# clone the repository
+git clone https://github.com/rosssaunders/pg_deribit
+cd pg_deribit
+
+# build the Docker image
+docker build . -t pg_deribit
+
+# run the container
+docker run -d --name pg_deribit -p 5433:5432 \
+  -e POSTGRES_PASSWORD=deribitpwd \
+  -e POSTGRES_USER=deribit \
+  -e POSTGRES_DB=deribit \
+  pg_deribit
+
+# connect to the container
+PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
+```
 
 ## Usage
 
