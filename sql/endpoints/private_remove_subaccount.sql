@@ -58,4 +58,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_remove_subaccount is 'Remove empty subaccount.';
+comment on function deribit.private_remove_subaccount is 'Remove empty subaccount. TFA required';

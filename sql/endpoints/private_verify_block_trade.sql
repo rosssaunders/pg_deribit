@@ -97,4 +97,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signature';
+comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signatureNote: In the API, the direction field is always expressed from the maker''s perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker''s perspective), and you will be verifying and accepting a "sell put" block trade.📖 Related Support Article: Block Trading';

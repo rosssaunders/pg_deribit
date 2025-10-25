@@ -62,4 +62,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_set_disabled_trading_products is 'Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts.';
+comment on function deribit.private_set_disabled_trading_products is 'Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts. TFA required';

@@ -21,8 +21,7 @@ create type deribit.public_get_combo_ids_request_currency as enum (
 
 create type deribit.public_get_combo_ids_request_state as enum (
     'active',
-    'inactive',
-    'rfq'
+    'inactive'
 );
 
 create type deribit.public_get_combo_ids_request as (

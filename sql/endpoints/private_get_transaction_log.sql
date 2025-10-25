@@ -42,7 +42,7 @@ comment on column deribit.private_get_transaction_log_request."currency" is '(Re
 comment on column deribit.private_get_transaction_log_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_transaction_log_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_transaction_log_request."query" is 'The following keywords can be used to filter the results: trade, maker, taker, open, close, liquidation, buy, sell, withdrawal, delivery, settlement, deposit, transfer, option, future, correction, block_trade, swap. Plus withdrawal or transfer addresses';
-comment on column deribit.private_get_transaction_log_request."count" is 'Number of requested items, default - 100';
+comment on column deribit.private_get_transaction_log_request."count" is 'Count of transaction log entries returned, default - 100, maximum - 250';
 comment on column deribit.private_get_transaction_log_request."subaccount_id" is 'Id of a subaccount';
 comment on column deribit.private_get_transaction_log_request."continuation" is 'Continuation token for pagination';
 
