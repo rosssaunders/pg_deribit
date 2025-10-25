@@ -28,7 +28,7 @@ create type deribit.public_get_order_book_by_instrument_id_request as (
 );
 
 comment on column deribit.public_get_order_book_by_instrument_id_request."instrument_id" is '(Required) The instrument ID for which to retrieve the order book, see public/get_instruments to obtain instrument IDs.';
-comment on column deribit.public_get_order_book_by_instrument_id_request."depth" is 'The number of entries to return for bids and asks.';
+comment on column deribit.public_get_order_book_by_instrument_id_request."depth" is 'The number of entries to return for bids and asks, maximum - 10000.';
 
 create type deribit.public_get_order_book_by_instrument_id_response_stats as (
     "high" double precision,

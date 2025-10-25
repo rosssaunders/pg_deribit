@@ -26,7 +26,7 @@ create type deribit.private_get_withdrawals_request as (
 );
 
 comment on column deribit.private_get_withdrawals_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_withdrawals_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_withdrawals_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_withdrawals_request."offset" is 'The offset for pagination, default - 0';
 
 create type deribit.private_get_withdrawals_response_datum as (

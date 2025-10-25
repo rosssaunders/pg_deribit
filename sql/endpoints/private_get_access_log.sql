@@ -17,7 +17,7 @@ create type deribit.private_get_access_log_request as (
 );
 
 comment on column deribit.private_get_access_log_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.private_get_access_log_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_access_log_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 
 create type deribit.private_get_access_log_response_result as (
     "city" text,

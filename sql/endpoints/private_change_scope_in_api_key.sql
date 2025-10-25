@@ -87,4 +87,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_change_scope_in_api_key is 'Changes scope for key with given id. Important notes.';
+comment on function deribit.private_change_scope_in_api_key is 'Changes scope for key with given id. Important notes. TFA required';

@@ -26,7 +26,7 @@ create type deribit.private_get_transfers_request as (
 );
 
 comment on column deribit.private_get_transfers_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_transfers_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_transfers_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_transfers_request."offset" is 'The offset for pagination, default - 0';
 
 create type deribit.private_get_transfers_response_datum as (

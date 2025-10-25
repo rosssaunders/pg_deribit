@@ -23,10 +23,20 @@ create type deribit.public_get_supported_index_names_request as (
 
 comment on column deribit.public_get_supported_index_names_request."type" is 'Type of a cryptocurrency price index';
 
+create type deribit.public_get_supported_index_names_response_result as (
+    "future_combo_creation_enabled" boolean,
+    "name" text,
+    "option_combo_creation_enabled" boolean
+);
+
+comment on column deribit.public_get_supported_index_names_response_result."future_combo_creation_enabled" is 'Whether future combo creation is enabled for this index (only present when extended=true)';
+comment on column deribit.public_get_supported_index_names_response_result."name" is 'Index name';
+comment on column deribit.public_get_supported_index_names_response_result."option_combo_creation_enabled" is 'Whether option combo creation is enabled for this index (only present when extended=true)';
+
 create type deribit.public_get_supported_index_names_response as (
     "id" bigint,
     "jsonrpc" text,
-    "result" text[]
+    "result" deribit.public_get_supported_index_names_response_result[]
 );
 
 comment on column deribit.public_get_supported_index_names_response."id" is 'The id that was sent in the request';
@@ -35,7 +45,7 @@ comment on column deribit.public_get_supported_index_names_response."jsonrpc" is
 create function deribit.public_get_supported_index_names(
     "type" deribit.public_get_supported_index_names_request_type default null
 )
-returns setof text
+returns setof deribit.public_get_supported_index_names_response_result
 language sql
 as $$
     
@@ -60,7 +70,9 @@ as $$
         from http_response
     )
     select
-        a.b
+        (b)."future_combo_creation_enabled"::boolean,
+        (b)."name"::text,
+        (b)."option_combo_creation_enabled"::boolean
     from (
         select (unnest(r.data)) b
         from result r(data)

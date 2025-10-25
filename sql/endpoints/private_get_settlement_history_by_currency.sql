@@ -35,7 +35,7 @@ create type deribit.private_get_settlement_history_by_currency_request as (
 
 comment on column deribit.private_get_settlement_history_by_currency_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_settlement_history_by_currency_request."type" is 'Settlement type';
-comment on column deribit.private_get_settlement_history_by_currency_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_settlement_history_by_currency_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_settlement_history_by_currency_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.private_get_settlement_history_by_currency_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 

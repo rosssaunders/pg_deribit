@@ -84,4 +84,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_list_api_keys is 'Retrieves list of api keys. Important notes.';
+comment on function deribit.private_list_api_keys is 'Retrieves list of api keys. Important notes.  TFA required';

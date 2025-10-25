@@ -67,6 +67,7 @@ create type deribit.private_get_address_book_response_result as (
 comment on column deribit.private_get_address_book_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_address_book_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_get_address_book_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_get_address_book_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';

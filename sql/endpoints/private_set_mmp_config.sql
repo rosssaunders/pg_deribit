@@ -35,6 +35,7 @@ create type deribit.private_set_mmp_config_request_index_name as enum (
     'paxg_usdc',
     'shib_usdc',
     'sol_usdc',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',
@@ -57,12 +58,12 @@ create type deribit.private_set_mmp_config_request as (
 comment on column deribit.private_set_mmp_config_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
 comment on column deribit.private_set_mmp_config_request."interval" is '(Required) MMP Interval in seconds, if set to 0 MMP is removed';
 comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Required) MMP frozen time in seconds, if set to 0 manual reset is required';
-comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name';
+comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name. Maximum 64 characters. Case sensitive. Cannot be empty string. 📖 Related Support Article: Mass Quotes Specifications';
 comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
 comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
 comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
 comment on column deribit.private_set_mmp_config_request."block_rfq" is 'If true, configures MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
-comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all".';
+comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all". Maximum - 1000.';
 
 create type deribit.private_set_mmp_config_response_result as (
     "block_rfq" boolean,

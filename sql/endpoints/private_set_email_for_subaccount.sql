@@ -62,4 +62,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_set_email_for_subaccount is 'Assign an email address to a subaccount. User will receive an email with a confirmation link.';
+comment on function deribit.private_set_email_for_subaccount is 'Assign an email address to a subaccount. User will receive an email with a confirmation link. TFA required';

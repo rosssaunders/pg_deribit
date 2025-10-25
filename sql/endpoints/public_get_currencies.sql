@@ -21,22 +21,26 @@ create type deribit.public_get_currencies_response_result as (
     "coin_type" text,
     "currency" text,
     "currency_long" text,
-    "fee_precision" bigint,
+    "decimals" bigint,
     "in_cross_collateral_pool" boolean,
     "min_confirmations" bigint,
     "min_withdrawal_fee" double precision,
+    "network_currency" text,
+    "network_fee" double precision,
     "withdrawal_fee" double precision,
     "withdrawal_priorities" deribit.public_get_currencies_response_withdrawal_priority[]
 );
 
-comment on column deribit.public_get_currencies_response_result."apr" is 'Simple Moving Average (SMA) of the last 7 days of rewards. If fewer than 7 days of reward data are available, the APR is calculated as the average of the available rewards. Only applicable to yield-generating tokens (USDE, STETH).';
+comment on column deribit.public_get_currencies_response_result."apr" is 'Simple Moving Average (SMA) of the last 7 days of rewards. If fewer than 7 days of reward data are available, the APR is calculated as the average of the available rewards. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD).';
 comment on column deribit.public_get_currencies_response_result."coin_type" is 'The type of the currency.';
 comment on column deribit.public_get_currencies_response_result."currency" is 'The abbreviation of the currency. This abbreviation is used elsewhere in the API to identify the currency.';
 comment on column deribit.public_get_currencies_response_result."currency_long" is 'The full name for the currency.';
-comment on column deribit.public_get_currencies_response_result."fee_precision" is 'fee precision';
+comment on column deribit.public_get_currencies_response_result."decimals" is 'The number of decimal places for the currency';
 comment on column deribit.public_get_currencies_response_result."in_cross_collateral_pool" is 'true if the currency is part of the cross collateral pool';
 comment on column deribit.public_get_currencies_response_result."min_confirmations" is 'Minimum number of block chain confirmations before deposit is accepted.';
 comment on column deribit.public_get_currencies_response_result."min_withdrawal_fee" is 'The minimum transaction fee paid for withdrawals';
+comment on column deribit.public_get_currencies_response_result."network_currency" is 'The currency of the network';
+comment on column deribit.public_get_currencies_response_result."network_fee" is 'The network fee';
 comment on column deribit.public_get_currencies_response_result."withdrawal_fee" is 'The total transaction fee paid for withdrawals';
 
 create type deribit.public_get_currencies_response as (
@@ -71,10 +75,12 @@ as $$
         (b)."coin_type"::text,
         (b)."currency"::text,
         (b)."currency_long"::text,
-        (b)."fee_precision"::bigint,
+        (b)."decimals"::bigint,
         (b)."in_cross_collateral_pool"::boolean,
         (b)."min_confirmations"::bigint,
         (b)."min_withdrawal_fee"::double precision,
+        (b)."network_currency"::text,
+        (b)."network_fee"::double precision,
         (b)."withdrawal_fee"::double precision,
         (b)."withdrawal_priorities"::deribit.public_get_currencies_response_withdrawal_priority[]
     from (

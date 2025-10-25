@@ -27,6 +27,8 @@ create type deribit.public_get_delivery_prices_request_index_name as enum (
     'buidl_usdc',
     'doge_usdc',
     'dot_usdc',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
     'eth_btc',
     'eth_eurr',
     'eth_usd',
@@ -48,6 +50,7 @@ create type deribit.public_get_delivery_prices_request_index_name as enum (
     'steth_eth',
     'steth_usdc',
     'steth_usdt',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',
@@ -66,7 +69,7 @@ create type deribit.public_get_delivery_prices_request as (
 
 comment on column deribit.public_get_delivery_prices_request."index_name" is '(Required) Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.public_get_delivery_prices_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.public_get_delivery_prices_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_delivery_prices_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 
 create type deribit.public_get_delivery_prices_response_datum as (
     "date" text,

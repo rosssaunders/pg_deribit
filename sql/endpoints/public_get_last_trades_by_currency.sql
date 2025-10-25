@@ -52,7 +52,7 @@ comment on column deribit.public_get_last_trades_by_currency_request."start_id" 
 comment on column deribit.public_get_last_trades_by_currency_request."end_id" is 'The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
 comment on column deribit.public_get_last_trades_by_currency_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_currency_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_currency_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_currency_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_currency_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_currency_response_trade as (

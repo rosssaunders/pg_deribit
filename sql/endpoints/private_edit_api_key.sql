@@ -103,4 +103,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_edit_api_key is 'Edits existing API key. At least one parameter is required. Important notes';
+comment on function deribit.private_edit_api_key is 'Edits existing API key. At least one parameter is required. Important notes TFA required';

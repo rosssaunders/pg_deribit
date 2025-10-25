@@ -27,7 +27,7 @@ create type deribit.private_get_settlement_history_by_instrument_request as (
 
 comment on column deribit.private_get_settlement_history_by_instrument_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_get_settlement_history_by_instrument_request."type" is 'Settlement type';
-comment on column deribit.private_get_settlement_history_by_instrument_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_settlement_history_by_instrument_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_settlement_history_by_instrument_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.private_get_settlement_history_by_instrument_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 

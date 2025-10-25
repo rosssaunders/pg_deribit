@@ -35,7 +35,7 @@ create type deribit.private_create_deposit_address_response_result as (
 comment on column deribit.private_create_deposit_address_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_create_deposit_address_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_create_deposit_address_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
-comment on column deribit.private_create_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit, withdrawal, transfer';
+comment on column deribit.private_create_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit';
 
 create type deribit.private_create_deposit_address_response as (
     "id" bigint,

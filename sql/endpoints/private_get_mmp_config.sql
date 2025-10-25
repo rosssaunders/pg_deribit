@@ -35,6 +35,7 @@ create type deribit.private_get_mmp_config_request_index_name as enum (
     'paxg_usdc',
     'shib_usdc',
     'sol_usdc',
+    'ton_usdc',
     'trump_usdc',
     'trx_usdc',
     'uni_usdc',
@@ -49,7 +50,7 @@ create type deribit.private_get_mmp_config_request as (
 );
 
 comment on column deribit.private_get_mmp_config_request."index_name" is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
-comment on column deribit.private_get_mmp_config_request."mmp_group" is 'Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the endpoint returns the configuration for the MMP settings for regular orders. The index_name must be specified before using this parameter';
+comment on column deribit.private_get_mmp_config_request."mmp_group" is 'Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the method returns the configuration for the MMP settings for regular orders. The index_name must be specified before using this parameter. 📖 Related Support Article: Mass Quotes Specifications';
 comment on column deribit.private_get_mmp_config_request."block_rfq" is 'If true, retrieves MMP configuration for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 
 create type deribit.private_get_mmp_config_response_result as (

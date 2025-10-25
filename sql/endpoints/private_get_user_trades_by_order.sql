@@ -25,7 +25,29 @@ create type deribit.private_get_user_trades_by_order_request as (
 
 comment on column deribit.private_get_user_trades_by_order_request."order_id" is '(Required) The order id';
 comment on column deribit.private_get_user_trades_by_order_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_order_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_order_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
+
+create type deribit.private_get_user_trades_by_order_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_order_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_order_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_order_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_order_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_order_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_order_response_result as (
     "tick_direction" bigint,
@@ -47,6 +69,7 @@ create type deribit.private_get_user_trades_by_order_response_result as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_order_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -85,6 +108,7 @@ comment on column deribit.private_get_user_trades_by_order_response_result."pric
 comment on column deribit.private_get_user_trades_by_order_response_result."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_order_response_result."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_order_response_result."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_order_response_result."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_order_response_result."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_order_response_result."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_order_response_result."iv" is 'Option implied volatility for the price (Option only)';
@@ -164,6 +188,7 @@ as $$
         (b)."combo_id"::text,
         (b)."matching_id"::text,
         (b)."order_type"::text,
+        (b)."trade_allocations"::deribit.private_get_user_trades_by_order_response_trade_allocation[],
         (b)."profit_loss"::double precision,
         (b)."timestamp"::bigint,
         (b)."iv"::double precision,

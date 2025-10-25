@@ -11,25 +11,50 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.public_get_index_price_names_request as (
+    "extended" boolean
+);
+
+comment on column deribit.public_get_index_price_names_request."extended" is 'When set to true, returns additional information including future_combo_creation_enabled and option_combo_creation_enabled for each index';
+
+create type deribit.public_get_index_price_names_response_result as (
+    "future_combo_creation_enabled" boolean,
+    "name" text,
+    "option_combo_creation_enabled" boolean
+);
+
+comment on column deribit.public_get_index_price_names_response_result."future_combo_creation_enabled" is 'Whether future combo creation is enabled for this index (only present when extended=true)';
+comment on column deribit.public_get_index_price_names_response_result."name" is 'Index name';
+comment on column deribit.public_get_index_price_names_response_result."option_combo_creation_enabled" is 'Whether option combo creation is enabled for this index (only present when extended=true)';
+
 create type deribit.public_get_index_price_names_response as (
     "id" bigint,
     "jsonrpc" text,
-    "result" text[]
+    "result" deribit.public_get_index_price_names_response_result[]
 );
 
 comment on column deribit.public_get_index_price_names_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_index_price_names_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
-create function deribit.public_get_index_price_names()
-returns setof text
+create function deribit.public_get_index_price_names(
+    "extended" boolean default null
+)
+returns setof deribit.public_get_index_price_names_response_result
 language sql
 as $$
-    with http_response as (
+    
+    with request as (
+        select row(
+            "extended"
+        )::deribit.public_get_index_price_names_request as payload
+    ), 
+    http_response as (
         select deribit.public_jsonrpc_request(
             url := '/public/get_index_price_names'::deribit.endpoint,
-            request := null::text,
+            request := request.payload,
             rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
+        from request
     ),
     result as (
         select (jsonb_populate_record(
@@ -39,7 +64,9 @@ as $$
         from http_response
     )
     select
-        a.b
+        (b)."future_combo_creation_enabled"::boolean,
+        (b)."name"::text,
+        (b)."option_combo_creation_enabled"::boolean
     from (
         select (unnest(r.data)) b
         from result r(data)

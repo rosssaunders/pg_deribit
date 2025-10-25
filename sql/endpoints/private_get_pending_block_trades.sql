@@ -41,22 +41,30 @@ comment on column deribit.private_get_pending_block_trades_response_counterparty
 
 create type deribit.private_get_pending_block_trades_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
+    "combo_id" text,
     "counterparty_state" deribit.private_get_pending_block_trades_response_counterparty_state,
     "nonce" text,
     "role" text,
     "state" deribit.private_get_pending_block_trades_response_state,
     "timestamp" bigint,
     "trades" deribit.private_get_pending_block_trades_response_trade[],
-    "user_id" bigint
+    "user_id" bigint,
+    "username" text
 );
 
 comment on column deribit.private_get_pending_block_trades_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_pending_block_trades_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_pending_block_trades_response_result."broker_name" is 'Name of the broker associated with the block trade.';
+comment on column deribit.private_get_pending_block_trades_response_result."combo_id" is 'Combo instrument identifier';
 comment on column deribit.private_get_pending_block_trades_response_result."counterparty_state" is 'State of the pending block trade for the other party (optional).';
 comment on column deribit.private_get_pending_block_trades_response_result."nonce" is 'Nonce that can be used to approve or reject pending block trade.';
 comment on column deribit.private_get_pending_block_trades_response_result."role" is 'Trade role of the user: maker or taker';
 comment on column deribit.private_get_pending_block_trades_response_result."state" is 'State of the pending block trade for current user.';
 comment on column deribit.private_get_pending_block_trades_response_result."timestamp" is 'Timestamp that can be used to approve or reject pending block trade.';
 comment on column deribit.private_get_pending_block_trades_response_result."user_id" is 'Unique user identifier';
+comment on column deribit.private_get_pending_block_trades_response_result."username" is 'Username of the user who initiated the block trade.';
 
 create type deribit.private_get_pending_block_trades_response as (
     "id" bigint,
@@ -88,13 +96,17 @@ as $$
     )
     select
         (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
+        (b)."combo_id"::text,
         (b)."counterparty_state"::deribit.private_get_pending_block_trades_response_counterparty_state,
         (b)."nonce"::text,
         (b)."role"::text,
         (b)."state"::deribit.private_get_pending_block_trades_response_state,
         (b)."timestamp"::bigint,
         (b)."trades"::deribit.private_get_pending_block_trades_response_trade[],
-        (b)."user_id"::bigint
+        (b)."user_id"::bigint,
+        (b)."username"::text
     from (
         select (unnest(r.data)) b
         from result r(data)
@@ -102,4 +114,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_pending_block_trades is 'Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';
+comment on function deribit.private_get_pending_block_trades is 'DEPRECATED: This method is deprecated. Please use private/get_block_trade_requests instead.Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';

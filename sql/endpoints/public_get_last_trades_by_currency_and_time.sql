@@ -48,7 +48,7 @@ comment on column deribit.public_get_last_trades_by_currency_and_time_request."c
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_currency_and_time_response_trade as (

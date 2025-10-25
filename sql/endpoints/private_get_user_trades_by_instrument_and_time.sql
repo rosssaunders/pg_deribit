@@ -29,9 +29,31 @@ create type deribit.private_get_user_trades_by_instrument_and_time_request as (
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_instrument_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
+
+create type deribit.private_get_user_trades_by_instrument_and_time_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_instrument_and_time_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_instrument_and_time_response_trade as (
     "trade_id" text,
@@ -54,6 +76,7 @@ create type deribit.private_get_user_trades_by_instrument_and_time_response_trad
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -93,6 +116,7 @@ comment on column deribit.private_get_user_trades_by_instrument_and_time_respons
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."iv" is 'Option implied volatility for the price (Option only)';
