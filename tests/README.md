@@ -5,6 +5,7 @@ This directory contains both SQL (pgTAP) and Python (pytest) tests for the pg_de
 ## Test Overview
 
 ### SQL Tests (This Directory)
+
 pgTAP tests for the PostgreSQL extension - verifying endpoint functions exist and work correctly.
 
 - **Total**: 77 tests across 13 files
@@ -13,6 +14,7 @@ pgTAP tests for the PostgreSQL extension - verifying endpoint functions exist an
 - **Coverage**: 100% of endpoint functions verified
 
 ### Python Tests (Code Generator)
+
 Located in `../codegen/tests/` - pytest tests for the Python code generator.
 
 - **Total**: 128 tests
@@ -22,6 +24,7 @@ Located in `../codegen/tests/` - pytest tests for the Python code generator.
 ## pgTAP Test Structure
 
 - **unit/**: Fast, isolated tests that don't require external API access
+
   - `00-setup.sql` - Extension loading (1 test)
   - `01-auth-tests.sql` - Authentication (6 tests)
   - `02-helper-tests.sql` - Helper functions (3 tests)
@@ -141,6 +144,7 @@ See [pgTAP documentation](https://pgtap.org/) for more.
 ## CI/CD
 
 Tests run automatically via GitHub Actions on:
+
 - Pull requests
 - Pushes to main
 - Manual workflow dispatch
@@ -150,18 +154,21 @@ See `.github/workflows/test.yml` for the CI configuration.
 ## Test Strategy
 
 **Level 1: Function Existence** (All tests)
+
 - Verifies each endpoint function exists with correct signature
 - Uses `has_function()` and `hasnt_function()` pgTAP assertions
 - Fast: <1 second per file
 - No authentication required
 
 **Level 2: Basic Response** (Public endpoint tests)
+
 - Calls public endpoints and validates responses
 - Tests `public_get_instruments()` and `public_get_time()`
 - Requires network access to Deribit API
 - No authentication required
 
 **Level 3: Full Integration** (Future)
+
 - Set TestNet credentials for authenticated testing
 - Test actual order placement/cancellation
 - Verify complete workflows
@@ -170,21 +177,25 @@ See `.github/workflows/test.yml` for the CI configuration.
 ## Manual Testing Examples
 
 **Connect to database:**
+
 ```bash
 PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
 ```
 
 **Load extension:**
+
 ```sql
 CREATE EXTENSION IF NOT EXISTS pg_deribit CASCADE;
 ```
 
 **Test endpoint exists:**
+
 ```sql
 \df deribit.private_get_reward_eligibility
 ```
 
 **Test live public endpoint:**
+
 ```sql
 SELECT * FROM deribit.public_test();
 SELECT * FROM deribit.public_get_currencies() ORDER BY currency LIMIT 5;
