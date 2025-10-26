@@ -17,17 +17,13 @@ create type deribit.public_get_instrument_request as (
 
 comment on column deribit.public_get_instrument_request."instrument_name" is '(Required) Instrument name';
 
-create type deribit.public_get_instrument_response_above_price as (
-    "tick_size" double precision
+create type deribit.public_get_instrument_response_tick_size_step as (
+    "tick_size" double precision,
+    "above_price" double precision
 );
 
-comment on column deribit.public_get_instrument_response_above_price."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
-
-create type deribit.public_get_instrument_response_tick_size_steps as (
-    "above_price" deribit.public_get_instrument_response_above_price[]
-);
-
-comment on column deribit.public_get_instrument_response_tick_size_steps."above_price" is 'The price from which the increased tick size applies';
+comment on column deribit.public_get_instrument_response_tick_size_step."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+comment on column deribit.public_get_instrument_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 
 create type deribit.public_get_instrument_response_result as (
     "base_currency" text,
@@ -56,7 +52,7 @@ create type deribit.public_get_instrument_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instrument_response_tick_size_steps
+    "tick_size_steps" deribit.public_get_instrument_response_tick_size_step[]
 );
 
 comment on column deribit.public_get_instrument_response_result."base_currency" is 'The underlying currency being traded.';

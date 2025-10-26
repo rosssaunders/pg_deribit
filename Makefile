@@ -32,3 +32,16 @@ endif
 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
+
+# Test targets
+.PHONY: test test-unit test-integration
+
+test: test-unit test-integration
+
+test-unit:
+	@echo "Running unit tests..."
+	@cd tests && ./run-tests.sh unit
+
+test-integration:
+	@echo "Running integration tests..."
+	@cd tests && ./run-tests.sh integration

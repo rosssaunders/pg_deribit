@@ -1,33 +1,35 @@
 # converts from the documented type to the postgres type
 from typing import List
 
-from models.models import Field, Function, Type_
+from models.models import Field, Function, TypeDefinition
 from postgres.documentation import escape_comment, required_to_string
 from postgres.keywords import escape_postgres_keyword
 
 
-def convert_type_postgres(schema: str, parent_type: str, field_type: Type_) -> str:
+def convert_type_postgres(
+    schema: str, parent_type: str, field_type: TypeDefinition
+) -> str:
     type_name = field_type.name
     type_dict = {
-        'number or string': 'text',
-        'string': 'text',
-        'text': 'text',
-        'float': 'double precision',
-        'number': 'double precision',
-        'decimal': 'numeric',
-        'integer': 'bigint',
-        'boolean': 'boolean',
-        'object': 'jsonb',
-        'json': 'jsonb',
-        'timestamp': 'timestamp',
-        'map': 'jsonb'
+        "number or string": "text",
+        "string": "text",
+        "text": "text",
+        "float": "double precision",
+        "number": "double precision",
+        "decimal": "numeric",
+        "integer": "bigint",
+        "boolean": "boolean",
+        "object": "jsonb",
+        "json": "jsonb",
+        "timestamp": "timestamp",
+        "map": "jsonb",
     }
 
     if field_type.is_array:
-        if type_name == 'float[]':
-            return 'double precision[][]'
+        if type_name == "float[]":
+            return "double precision[][]"
         else:
-            t = Type_(type_name)
+            t = TypeDefinition(type_name)
             t.is_class = field_type.is_class
             t.is_enum = field_type.is_enum
             data_type = convert_type_postgres(schema, parent_type, t)
@@ -42,13 +44,20 @@ def convert_type_postgres(schema: str, parent_type: str, field_type: Type_) -> s
         return f"UNKNOWN - {type_name} - {field_type.is_array} - {field_type.is_class} - {field_type.is_enum}"
 
 
-def type_to_type(schema: str, type_: Type_) -> str:
-    #res = f"drop type if exists {schema}.{type_.name} cascade;\n\n"
+def type_to_type(schema: str, type_: TypeDefinition) -> str:
+    # res = f"drop type if exists {schema}.{type_.name} cascade;\n\n"
     res = f"create type {schema}.{type_.name} as (\n"
-    res += ',\n'.join(f'    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type_.name, e.type)}' for e in type_.fields)
+    res += ",\n".join(
+        f"    {escape_postgres_keyword(e.name)} {convert_type_postgres(schema, type_.name, e.type)}"
+        for e in type_.fields
+    )
     res += f"\n);"
 
-    comments = '\n'.join(f'comment on column {schema}.{type_.name}.{escape_postgres_keyword(e.name)} is \'{required_to_string(e.required)}{escape_comment(e.documentation)}\';' for e in type_.fields if e.documentation != '')
+    comments = "\n".join(
+        f"comment on column {schema}.{type_.name}.{escape_postgres_keyword(e.name)} is '{required_to_string(e.required)}{escape_comment(e.documentation)}';"
+        for e in type_.fields
+        if e.documentation != ""
+    )
     if len(comments) > 0:
         res += "\n\n" + comments
 
@@ -57,9 +66,9 @@ def type_to_type(schema: str, type_: Type_) -> str:
 
 def default_to_null(field: Field) -> str:
     if field.required:
-        return ''
+        return ""
     else:
-        return ' default null'
+        return " default null"
 
 
 def sort_fields_by_required(fields: List[Field]) -> List[Field]:
@@ -78,7 +87,10 @@ def invoke_endpoint(schema: str, function: Function) -> str:
 
     if function.endpoint.request_type is not None:
         res += "\n"
-        res += ',\n'.join(f'    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}' for f in sort_fields_by_required(function.endpoint.request_type.fields))
+        res += ",\n".join(
+            f"    {escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null(f)}"
+            for f in sort_fields_by_required(function.endpoint.request_type.fields)
+        )
         res += "\n"
     res += f""")"""
 
@@ -91,7 +103,7 @@ returns void"""
 
     elif function.response_type.is_array and function.response_type.is_primitive:
         res += f"""
-returns setof {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))}"""
+returns setof {convert_type_postgres(schema, function.response_type.name, TypeDefinition(name=function.response_type.name))}"""
 
     elif function.response_type.is_array and not function.response_type.is_primitive:
         res += f"""
@@ -99,7 +111,7 @@ returns setof {schema}.{function.response_type.name}"""
 
     elif function.response_type.is_primitive:
         res += f"""
-returns {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))}"""
+returns {convert_type_postgres(schema, function.response_type.name, TypeDefinition(name=function.response_type.name))}"""
 
     else:
         res += f"""
@@ -119,16 +131,19 @@ as $$"""
     with request as (
         select row(
 """
-        res += ',\n'.join(f'            {escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
+        res += ",\n".join(
+            f"            {escape_postgres_keyword(e.name)}"
+            for e in function.endpoint.request_type.fields
+        )
         res += f"""
         )::{schema}.{function.endpoint.request_type.name} as payload
     ), 
     http_response as (
     """
-        
+
         res += f"""    select {schema}.{public_private}_jsonrpc_request("""
 
-        if public_private == 'private':
+        if public_private == "private":
             res += """
             auth := deribit.get_auth(),"""
 
@@ -144,7 +159,7 @@ as $$"""
     with http_response as (
         select {schema}.{public_private}_jsonrpc_request("""
 
-        if public_private == 'private':
+        if public_private == "private":
             res += """
             auth := deribit.get_auth(),"""
 
@@ -177,8 +192,10 @@ as $$"""
     )
     select
 """
-            res += ',\n'.join(
-        f'        (b.x)[{i+1}]::{convert_type_postgres(schema, "", e.type)} as {escape_postgres_keyword(e.name)}' for i, e in enumerate(function.response_type.fields))
+            res += ",\n".join(
+                f'        (b.x)[{i+1}]::{convert_type_postgres(schema, "", e.type)} as {escape_postgres_keyword(e.name)}'
+                for i, e in enumerate(function.response_type.fields)
+            )
             res += """
     from unnested b(x)"""
 
@@ -189,7 +206,10 @@ as $$"""
             if len(function.response_type.fields) == 0:
                 res += """        a.b"""
             else:
-                res += ',\n'.join(f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres(schema, "", e.type)}' for e in function.response_type.fields)
+                res += ",\n".join(
+                    f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres(schema, "", e.type)}'
+                    for e in function.response_type.fields
+                )
             res += f"""
     from (
         select (unnest(r.data)) b

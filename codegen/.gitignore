@@ -1,0 +1,21 @@
+# Test coverage
+.coverage
+htmlcov/
+coverage.xml
+.pytest_cache/
+
+# Virtual environment
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Snapshot test artifacts (will be committed when stable)
+tests/__snapshots__/

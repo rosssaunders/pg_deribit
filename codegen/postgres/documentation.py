@@ -1,8 +1,8 @@
 def required_to_string(required: bool) -> str:
     if required:
-        return '(Required) '
+        return "(Required) "
     else:
-        return ''
+        return ""
 
 
 def escape_comment(comment: str) -> str:
