@@ -17,4 +17,4 @@ RUN export PATH=$PATH:$PGBINDIR/bin && cd pgtap-1.1.0 && make && make install
 # Install pg_deribit
 COPY . /usr/src/extension
 WORKDIR /usr/src/extension
-RUN make && make install
+RUN make PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config && make install PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config
