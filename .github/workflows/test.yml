@@ -60,8 +60,18 @@ jobs:
             export PGPASSWORD=deribitpwd
             export DERIBIT_CLIENT_ID='${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}'
             export DERIBIT_CLIENT_SECRET='${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}'
+
+            echo 'Setting database configuration...'
+            echo \"Client ID length: \${#DERIBIT_CLIENT_ID}\"
+            echo \"Client Secret length: \${#DERIBIT_CLIENT_SECRET}\"
+
             psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_id = '\${DERIBIT_CLIENT_ID}'\"
             psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_secret = '\${DERIBIT_CLIENT_SECRET}'\"
+
+            echo 'Verifying settings were stored...'
+            psql -U deribit -d deribit -c \"SELECT current_setting('deribit.test_client_id', true) as client_id_set\"
+
+            echo 'Running authenticated tests...'
             cd /tmp/tests/integration
             psql -U deribit -d deribit -f 09-authenticated-tests.sql
           "
