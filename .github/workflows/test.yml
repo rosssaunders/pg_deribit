@@ -74,6 +74,9 @@ jobs:
             echo 'Running authenticated tests...'
             cd /tmp/tests/integration
             psql -U deribit -d deribit -f 09-authenticated-tests.sql
+
+            echo 'Running order operation tests...'
+            psql -U deribit -d deribit -f 10-order-tests.sql
           "
 
       - name: Test Summary
