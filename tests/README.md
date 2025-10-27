@@ -8,9 +8,10 @@ This directory contains both SQL (pgTAP) and Python (pytest) tests for the pg_de
 
 pgTAP tests for the PostgreSQL extension - verifying endpoint functions exist and work correctly.
 
-- **Total**: 77 tests across 13 files
+- **Total**: 112 tests across 14 files
 - **Unit tests**: 20 tests (extension, auth, helpers, schema)
-- **Integration tests**: 57 tests (endpoint verification)
+- **Integration tests**: 77 tests (endpoint verification, function existence)
+- **Authenticated tests**: 15 tests (TestNet with real API calls) 🆕
 - **Coverage**: 100% of endpoint functions verified
 
 ### Python Tests (Code Generator)
@@ -40,6 +41,7 @@ Located in `../codegen/tests/` - pytest tests for the Python code generator.
   - `06-api-key-endpoints-tests.sql` - API key management (6 tests)
   - `07-block-trade-endpoints-tests.sql` - Block trades (4 tests)
   - `08-public-endpoints-tests.sql` - Public endpoints (10 tests)
+  - `09-authenticated-tests.sql` - **Authenticated TestNet tests (15 tests)** 🆕
 
 ## Running Tests
 
@@ -167,12 +169,26 @@ See `.github/workflows/test.yml` for the CI configuration.
 - Requires network access to Deribit API
 - No authentication required
 
-**Level 3: Full Integration** (Future)
+**Level 3: Authenticated Integration** (15 tests) 🆕
 
-- Set TestNet credentials for authenticated testing
-- Test actual order placement/cancellation
-- Verify complete workflows
-- Validate response data structures
+- Uses TestNet credentials from environment variables
+- Tests critical read-only endpoints:
+  - Authentication (`public_auth`)
+  - Account data (`private_get_account_summary`)
+  - Positions (`private_get_positions`)
+  - Order history (`private_get_order_history_by_currency`)
+  - Trade history (`private_get_user_trades_by_currency`)
+  - Deposits/Withdrawals/Transfers
+  - Address book, subaccounts, API keys
+- No side effects (read-only operations)
+- Requires DERIBIT_CLIENT_ID and DERIBIT_CLIENT_SECRET environment variables
+
+**Level 4: Full E2E** (Future)
+
+- Test actual order placement with immediate cancellation
+- Test block trade workflows
+- Test withdrawal/deposit scenarios
+- Verify complete multi-step workflows
 
 ## Manual Testing Examples
 
@@ -199,6 +215,24 @@ CREATE EXTENSION IF NOT EXISTS pg_deribit CASCADE;
 ```sql
 SELECT * FROM deribit.public_test();
 SELECT * FROM deribit.public_get_currencies() ORDER BY currency LIMIT 5;
+```
+
+**Run authenticated tests with TestNet credentials:**
+
+```bash
+# Set credentials
+export DERIBIT_CLIENT_ID="your-testnet-client-id"
+export DERIBIT_CLIENT_SECRET="your-testnet-client-secret"
+
+# Configure PostgreSQL database
+PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit <<EOF
+ALTER DATABASE deribit SET deribit.test_client_id = '$DERIBIT_CLIENT_ID';
+ALTER DATABASE deribit SET deribit.test_client_secret = '$DERIBIT_CLIENT_SECRET';
+EOF
+
+# Reconnect to pick up new settings, then run authenticated tests
+PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit \
+  -f integration/09-authenticated-tests.sql
 ```
 
 The `../doc/examples/` directory contains comprehensive manual testing scripts that demonstrate real-world usage patterns.

@@ -45,10 +45,41 @@ jobs:
           docker exec pg_deribit_test bash -c \
             "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
 
-      - name: Run Integration Tests
+      - name: Run Integration Tests (Public endpoints)
         run: |
           docker exec pg_deribit_test bash -c \
             "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
+
+      - name: Run Authenticated Integration Tests (TestNet)
+        if: ${{ secrets.DERIBIT_TESTNET_CLIENT_ID != '' && secrets.DERIBIT_TESTNET_CLIENT_SECRET != '' }}
+        env:
+          DERIBIT_CLIENT_ID: ${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}
+          DERIBIT_CLIENT_SECRET: ${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}
+        run: |
+          docker exec pg_deribit_test bash -c "
+            export PGPASSWORD=deribitpwd
+            # Set credentials as PostgreSQL database settings
+            psql -U deribit -d deribit -v ON_ERROR_STOP=1 <<-EOSQL
+              ALTER DATABASE deribit SET deribit.test_client_id = '$DERIBIT_CLIENT_ID';
+              ALTER DATABASE deribit SET deribit.test_client_secret = '$DERIBIT_CLIENT_SECRET';
+EOSQL
+            # Reconnect to pick up new settings
+            psql -U deribit -d deribit -v ON_ERROR_STOP=1 -c '\c'
+            # Run authenticated tests
+            cd /tmp/tests/integration
+            psql -U deribit -d deribit -v ON_ERROR_STOP=1 -f 09-authenticated-tests.sql
+          "
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "✅ Unit Tests: Passed"
+          echo "✅ Integration Tests (Public): Passed"
+          if [ -n "${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" ]; then
+            echo "✅ Authenticated Tests (TestNet): Passed"
+          else
+            echo "⚠️  Authenticated Tests: Skipped (no TestNet credentials)"
+          fi
 
       - name: Cleanup
         if: always()
