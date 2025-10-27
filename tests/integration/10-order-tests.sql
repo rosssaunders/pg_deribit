@@ -14,7 +14,7 @@ create extension if not exists pg_deribit cascade;
 
 begin;
 
-select plan(8);
+select plan(10);
 
 -- Setup: Enable TestNet and set authentication
 select deribit.enable_test_net();
@@ -132,6 +132,49 @@ select ok(
     (SELECT count(*) = 0
      FROM deribit.private_get_open_orders_by_instrument('BTC-PERPETUAL', null)),
     'Should have no open orders after cancel_all'
+);
+
+-- Test 9: Verify buy response includes new trade allocation fields
+-- Place an order and verify the response structure includes the new fields
+select lives_ok(
+    $$
+    WITH order_response AS (
+        SELECT t.*
+        FROM deribit.private_buy(
+            instrument_name := 'BTC-PERPETUAL',
+            amount := 10,
+            type := 'limit',
+            time_in_force := 'good_til_cancelled',
+            post_only := true,
+            price := 10000.0,
+            reject_post_only := false,
+            label := 'test_allocation_check'
+        ) as t
+    )
+    SELECT
+        (order_response."order").order_id,
+        -- Verify trades field exists (will be empty array for unfilled order)
+        (order_response).trades
+    FROM order_response
+    $$,
+    'Should retrieve order response with trades structure (new allocation support)'
+);
+
+-- Test 10: Clean up the test order
+select lives_ok(
+    $$
+    WITH order_to_cancel AS (
+        SELECT order_id
+        FROM deribit.private_get_open_orders_by_instrument('BTC-PERPETUAL', null)
+        WHERE label = 'test_allocation_check'
+        LIMIT 1
+    )
+    SELECT *
+    FROM order_to_cancel,
+         deribit.private_cancel(order_to_cancel.order_id)
+    WHERE order_to_cancel.order_id IS NOT NULL
+    $$,
+    'Should clean up allocation test order'
 );
 
 select * from finish();

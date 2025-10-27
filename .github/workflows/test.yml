@@ -77,6 +77,9 @@ jobs:
 
             echo 'Running order operation tests...'
             psql -U deribit -d deribit -f 10-order-tests.sql
+
+            echo 'Running new features tests...'
+            psql -U deribit -d deribit -f 12-new-features-tests.sql
           "
 
       - name: Test Summary
