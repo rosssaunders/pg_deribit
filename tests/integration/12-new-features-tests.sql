@@ -53,7 +53,7 @@ select lives_ok(
 -- Expect permission error for accounts without broker/block trade scope
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_get_broker_trade_requests();
@@ -63,7 +63,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should handle broker trade requests endpoint (requires block_trade:read scope)'
 );
@@ -71,7 +71,7 @@ select lives_ok(
 -- Test 4: Get broker trades (requires block_trade:read scope)
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_get_broker_trades('BTC', null, null, null, null);
@@ -81,7 +81,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should handle broker trades endpoint (requires block_trade:read scope)'
 );
@@ -91,7 +91,7 @@ select lives_ok(
 -- Test 5: Get block trade requests (requires block_trade:read scope)
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_get_block_trade_requests();
@@ -101,7 +101,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should handle block trade requests endpoint (requires block_trade:read scope)'
 );
@@ -109,7 +109,7 @@ select lives_ok(
 -- Test 6: Get block trades (requires block_trade:read scope)
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_get_block_trades('BTC', null, null, null);
@@ -119,7 +119,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should handle block trades endpoint (requires block_trade:read scope)'
 );
@@ -127,7 +127,7 @@ select lives_ok(
 -- Test 7: Get pending block trades (requires block_trade:read scope)
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_get_pending_block_trades();
@@ -137,7 +137,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should handle pending block trades endpoint (requires block_trade:read scope)'
 );
@@ -170,7 +170,7 @@ select lives_ok(
 -- This will likely return an error if no quotes exist, but verifies the enum accepts the new value
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_cancel_quotes('drbfix-btc_usdc');
@@ -180,7 +180,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should accept new currency pair drbfix-btc_usdc in cancel_quotes'
 );
@@ -188,7 +188,7 @@ select lives_ok(
 -- Test 12: Cancel all by currency pair with new currency pair
 select lives_ok(
     $$
-    DO $$
+    DO $func$
     BEGIN
         BEGIN
             PERFORM deribit.private_cancel_all_by_currency_pair('drbfix-eth_usdc', null);
@@ -198,7 +198,7 @@ select lives_ok(
                 RAISE;
             END IF;
         END;
-    END $$
+    END $func$
     $$,
     'Should accept new currency pair drbfix-eth_usdc in cancel_all_by_currency_pair'
 );
