@@ -43,61 +43,61 @@ END $$;
 
 -- Test 1: Authentication - Verify credentials work by calling an authenticated endpoint
 select lives_ok(
-    $$SELECT deribit.private_get_account_summary('BTC', false)$$,
+    $$SELECT deribit.private_get_account_summary('BTC'::text, false::boolean)$$,
     'Should successfully authenticate and call private endpoint on TestNet'
 );
 
 -- Test 2: Account Summary - Core account data
 select ok(
-    (select jsonb_typeof(deribit.private_get_account_summary('BTC', false)) = 'object'),
+    (select jsonb_typeof(deribit.private_get_account_summary('BTC'::text, false::boolean)) = 'object'),
     'Should retrieve account summary for BTC'
 );
 
 -- Test 3: Positions - Get all positions
 select lives_ok(
-    $$select * from deribit.private_get_positions('BTC', 'option')$$,
+    $$select * from deribit.private_get_positions('BTC'::text, 'option'::text)$$,
     'Should retrieve positions without error'
 );
 
 -- Test 4: Open Orders - Get open orders
 select lives_ok(
-    $$select * from deribit.private_get_open_orders_by_currency('BTC', 'option', null)$$,
+    $$select * from deribit.private_get_open_orders_by_currency('BTC'::text, 'option'::text, null)$$,
     'Should retrieve open orders by currency'
 );
 
 -- Test 5: Order History - Get order history
 select lives_ok(
-    $$select * from deribit.private_get_order_history_by_currency('BTC', 'option', null, null, null, null, null)$$,
+    $$select * from deribit.private_get_order_history_by_currency('BTC'::text, 'option'::text, null, null, null, null, null)$$,
     'Should retrieve order history by currency'
 );
 
 -- Test 6: User Trades - Get user trades
 select lives_ok(
-    $$select * from deribit.private_get_user_trades_by_currency('BTC', 'option', null, null, null, null, null)$$,
+    $$select * from deribit.private_get_user_trades_by_currency('BTC'::text, 'option'::text, null, null, null, null, null)$$,
     'Should retrieve user trades by currency'
 );
 
 -- Test 7: Deposits - Get deposit history
 select lives_ok(
-    $$select * from deribit.private_get_deposits('BTC', null, null)$$,
+    $$select * from deribit.private_get_deposits('BTC'::text, null, null)$$,
     'Should retrieve deposit history'
 );
 
 -- Test 8: Withdrawals - Get withdrawal history
 select lives_ok(
-    $$select * from deribit.private_get_withdrawals('BTC', null, null)$$,
+    $$select * from deribit.private_get_withdrawals('BTC'::text, null, null)$$,
     'Should retrieve withdrawal history'
 );
 
 -- Test 9: Transfers - Get transfer history
 select lives_ok(
-    $$select * from deribit.private_get_transfers('BTC', null, null)$$,
+    $$select * from deribit.private_get_transfers('BTC'::text, null, null)$$,
     'Should retrieve transfer history'
 );
 
 -- Test 10: Instruments - Public data works with auth
 select ok(
-    (select count(*) > 0 from deribit.public_get_instruments('BTC', 'option', false)),
+    (select count(*) > 0 from deribit.public_get_instruments('BTC'::text, 'option'::text, false::boolean)),
     'Should retrieve instruments (public endpoint with auth session)'
 );
 
@@ -115,7 +115,7 @@ select ok(
 
 -- Test 13: Address Book - Get address book
 select lives_ok(
-    $$select * from deribit.private_get_address_book('BTC', null)$$,
+    $$select * from deribit.private_get_address_book('BTC'::text, null)$$,
     'Should retrieve address book'
 );
 
