@@ -59,7 +59,7 @@ comment on column deribit.private_update_in_address_book_request."beneficiary_va
 comment on column deribit.private_update_in_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
-comment on column deribit.private_update_in_address_book_request."beneficiary_address" is '(Required) nan';
+comment on column deribit.private_update_in_address_book_request."beneficiary_address" is '(Required) Geographical address of the beneficiary';
 comment on column deribit.private_update_in_address_book_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_update_in_address_book_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
 comment on column deribit.private_update_in_address_book_request."label" is '(Required) Label of the address book entry';

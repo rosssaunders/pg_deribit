@@ -27,6 +27,7 @@ create type deribit.endpoint as enum (
     '/private/create_combo',
     '/private/create_deposit_address',
     '/private/create_subaccount',
+    '/private/delete_address_beneficiary',
     '/private/disable_api_key',
     '/private/disable_cancel_on_disconnect',
     '/private/edit',
@@ -39,10 +40,14 @@ create type deribit.endpoint as enum (
     '/private/get_access_log',
     '/private/get_account_summaries',
     '/private/get_account_summary',
+    '/private/get_address_beneficiary',
     '/private/get_address_book',
     '/private/get_affiliate_program_info',
     '/private/get_block_trade',
+    '/private/get_block_trade_requests',
     '/private/get_block_trades',
+    '/private/get_broker_trade_requests',
+    '/private/get_broker_trades',
     '/private/get_cancel_on_disconnect',
     '/private/get_current_deposit_address',
     '/private/get_deposits',
@@ -64,6 +69,7 @@ create type deribit.endpoint as enum (
     '/private/get_pending_block_trades',
     '/private/get_position',
     '/private/get_positions',
+    '/private/get_reward_eligibility',
     '/private/get_settlement_history_by_currency',
     '/private/get_settlement_history_by_instrument',
     '/private/get_subaccounts',
@@ -79,6 +85,7 @@ create type deribit.endpoint as enum (
     '/private/get_user_trades_by_order',
     '/private/get_withdrawals',
     '/private/invalidate_block_trade_signature',
+    '/private/list_address_beneficiaries',
     '/private/list_api_keys',
     '/private/list_custody_accounts',
     '/private/logout',
@@ -90,8 +97,8 @@ create type deribit.endpoint as enum (
     '/private/remove_subaccount',
     '/private/reset_api_key',
     '/private/reset_mmp',
+    '/private/save_address_beneficiary',
     '/private/sell',
-    '/private/send_rfq',
     '/private/set_announcement_as_read',
     '/private/set_disabled_trading_products',
     '/private/set_email_for_subaccount',
@@ -112,6 +119,7 @@ create type deribit.endpoint as enum (
     '/public/exchange_token',
     '/public/fork_token',
     '/public/get_announcements',
+    '/public/get_apr_history',
     '/public/get_book_summary_by_currency',
     '/public/get_book_summary_by_instrument',
     '/public/get_combo_details',
@@ -138,7 +146,6 @@ create type deribit.endpoint as enum (
     '/public/get_mark_price_history',
     '/public/get_order_book',
     '/public/get_order_book_by_instrument_id',
-    '/public/get_rfqs',
     '/public/get_supported_index_names',
     '/public/get_time',
     '/public/get_trade_volumes',
@@ -580,6 +587,7 @@ values
 ('/private/create_combo'),
 ('/private/create_deposit_address'),
 ('/private/create_subaccount'),
+('/private/delete_address_beneficiary'),
 ('/private/disable_api_key'),
 ('/private/disable_cancel_on_disconnect'),
 ('/private/edit'),
@@ -592,10 +600,14 @@ values
 ('/private/get_access_log'),
 ('/private/get_account_summaries'),
 ('/private/get_account_summary'),
+('/private/get_address_beneficiary'),
 ('/private/get_address_book'),
 ('/private/get_affiliate_program_info'),
 ('/private/get_block_trade'),
+('/private/get_block_trade_requests'),
 ('/private/get_block_trades'),
+('/private/get_broker_trade_requests'),
+('/private/get_broker_trades'),
 ('/private/get_cancel_on_disconnect'),
 ('/private/get_current_deposit_address'),
 ('/private/get_deposits'),
@@ -617,6 +629,7 @@ values
 ('/private/get_pending_block_trades'),
 ('/private/get_position'),
 ('/private/get_positions'),
+('/private/get_reward_eligibility'),
 ('/private/get_settlement_history_by_currency'),
 ('/private/get_settlement_history_by_instrument'),
 ('/private/get_subaccounts'),
@@ -632,6 +645,7 @@ values
 ('/private/get_user_trades_by_order'),
 ('/private/get_withdrawals'),
 ('/private/invalidate_block_trade_signature'),
+('/private/list_address_beneficiaries'),
 ('/private/list_api_keys'),
 ('/private/list_custody_accounts'),
 ('/private/logout'),
@@ -643,8 +657,8 @@ values
 ('/private/remove_subaccount'),
 ('/private/reset_api_key'),
 ('/private/reset_mmp'),
+('/private/save_address_beneficiary'),
 ('/private/sell'),
-('/private/send_rfq'),
 ('/private/set_announcement_as_read'),
 ('/private/set_disabled_trading_products'),
 ('/private/set_email_for_subaccount'),
@@ -665,6 +679,7 @@ values
 ('/public/exchange_token'),
 ('/public/fork_token'),
 ('/public/get_announcements'),
+('/public/get_apr_history'),
 ('/public/get_book_summary_by_currency'),
 ('/public/get_book_summary_by_instrument'),
 ('/public/get_combo_details'),
@@ -691,7 +706,6 @@ values
 ('/public/get_mark_price_history'),
 ('/public/get_order_book'),
 ('/public/get_order_book_by_instrument_id'),
-('/public/get_rfqs'),
 ('/public/get_supported_index_names'),
 ('/public/get_time'),
 ('/public/get_trade_volumes'),
@@ -743,12 +757,14 @@ create type deribit.private_add_to_address_book_request as (
     "label" text,
     "beneficiary_vasp_name" text,
     "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
     "beneficiary_first_name" text,
     "beneficiary_last_name" text,
     "beneficiary_company_name" text,
     "beneficiary_address" text,
     "agreed" boolean,
-    "personal" boolean
+    "personal" boolean,
+    "extra_currencies" text[]
 );
 
 comment on column deribit.private_add_to_address_book_request."currency" is '(Required) The currency symbol';
@@ -757,12 +773,14 @@ comment on column deribit.private_add_to_address_book_request."address" is '(Req
 comment on column deribit.private_add_to_address_book_request."label" is '(Required) Label of the address book entry';
 comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_name" is '(Required) Name of beneficiary VASP';
 comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_did" is '(Required) DID of beneficiary VASP';
+comment on column deribit.private_add_to_address_book_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
 comment on column deribit.private_add_to_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
-comment on column deribit.private_add_to_address_book_request."beneficiary_address" is '(Required) nan';
+comment on column deribit.private_add_to_address_book_request."beneficiary_address" is '(Required) Geographical address of the beneficiary';
 comment on column deribit.private_add_to_address_book_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_add_to_address_book_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_add_to_address_book_request."extra_currencies" is 'The user can pass a list of currencies to add the address for. It is currently available ONLY for ERC20 currencies. Without passing this paramater for an ERC20 currency, the address will be added to ALL of the ERC20 currencies.';
 
 create type deribit.private_add_to_address_book_response_result as (
     "address" text,
@@ -773,6 +791,7 @@ create type deribit.private_add_to_address_book_response_result as (
     "beneficiary_last_name" text,
     "beneficiary_vasp_did" text,
     "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
     "creation_timestamp" bigint,
     "currency" text,
     "info_required" boolean,
@@ -788,10 +807,12 @@ create type deribit.private_add_to_address_book_response_result as (
 comment on column deribit.private_add_to_address_book_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_add_to_address_book_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_add_to_address_book_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
 comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_add_to_address_book_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
 comment on column deribit.private_add_to_address_book_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_add_to_address_book_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_add_to_address_book_response_result."info_required" is 'Signalises that addition information regarding the beneficiary of the address is required';
@@ -822,9 +843,11 @@ create function deribit.private_add_to_address_book(
     "beneficiary_address" text,
     "agreed" boolean,
     "personal" boolean,
+    "beneficiary_vasp_website" text default null,
     "beneficiary_first_name" text default null,
     "beneficiary_last_name" text default null,
-    "beneficiary_company_name" text default null
+    "beneficiary_company_name" text default null,
+    "extra_currencies" text[] default null
 )
 returns deribit.private_add_to_address_book_response_result
 language sql
@@ -838,12 +861,14 @@ as $$
             "label",
             "beneficiary_vasp_name",
             "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
             "beneficiary_first_name",
             "beneficiary_last_name",
             "beneficiary_company_name",
             "beneficiary_address",
             "agreed",
-            "personal"
+            "personal",
+            "extra_currencies"
         )::deribit.private_add_to_address_book_request as payload
     ), 
     http_response as (
@@ -1059,7 +1084,7 @@ create type deribit.private_buy_request as (
     "label" text,
     "price" double precision,
     "time_in_force" deribit.private_buy_request_time_in_force,
-    "max_show" double precision,
+    "display_amount" double precision,
     "post_only" boolean,
     "reject_post_only" boolean,
     "reduce_only" boolean,
@@ -1081,7 +1106,7 @@ comment on column deribit.private_buy_request."type" is 'The order type, default
 comment on column deribit.private_buy_request."label" is 'user defined label for the order (maximum 64 characters)';
 comment on column deribit.private_buy_request."price" is 'The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
 comment on column deribit.private_buy_request."time_in_force" is 'Specifies how long the order remains in effect. Default "good_til_cancelled" "good_til_cancelled" - unfilled order remains in order book until cancelled "good_til_day" - unfilled order remains in order book till the end of the trading session "fill_or_kill" - execute a transaction immediately and completely or not at all "immediate_or_cancel" - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled';
-comment on column deribit.private_buy_request."max_show" is 'Maximum amount within an order to be shown to other customers, 0 for invisible order';
+comment on column deribit.private_buy_request."display_amount" is 'Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.';
 comment on column deribit.private_buy_request."post_only" is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just below the spread. Only valid in combination with time_in_force="good_til_cancelled"';
 comment on column deribit.private_buy_request."reject_post_only" is 'If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with "post_only" set to true';
 comment on column deribit.private_buy_request."reduce_only" is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
@@ -1094,6 +1119,28 @@ comment on column deribit.private_buy_request."valid_until" is 'Timestamp, when 
 comment on column deribit.private_buy_request."linked_order_type" is 'The type of the linked order. "one_triggers_other" - Execution of primary order triggers the placement of one or more secondary orders. "one_cancels_other" - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously. "one_triggers_one_cancels_other" - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.';
 comment on column deribit.private_buy_request."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';
 comment on column deribit.private_buy_request."otoco_config" is 'List of trades to create or cancel when this order is filled.';
+
+create type deribit.private_buy_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_buy_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_buy_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_buy_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_buy_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_buy_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_buy_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_buy_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_buy_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_buy_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_buy_response_trade as (
     "trade_id" text,
@@ -1116,6 +1163,7 @@ create type deribit.private_buy_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_buy_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -1155,6 +1203,7 @@ comment on column deribit.private_buy_response_trade."price" is 'Price in base c
 comment on column deribit.private_buy_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_buy_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_buy_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_buy_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_buy_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_buy_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_buy_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -1179,6 +1228,7 @@ create type deribit.private_buy_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -1209,6 +1259,7 @@ create type deribit.private_buy_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -1219,7 +1270,6 @@ create type deribit.private_buy_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -1232,6 +1282,7 @@ comment on column deribit.private_buy_response_order."triggered" is 'Whether the
 comment on column deribit.private_buy_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_buy_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_buy_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_buy_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_buy_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_buy_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_buy_response_order."api" is 'true if created with API';
@@ -1246,13 +1297,13 @@ comment on column deribit.private_buy_response_order."direction" is 'Direction: 
 comment on column deribit.private_buy_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_buy_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_buy_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_buy_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_buy_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_buy_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_buy_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_buy_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_buy_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_buy_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_buy_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_buy_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_buy_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_buy_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_buy_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -1262,6 +1313,7 @@ comment on column deribit.private_buy_response_order."price" is 'Price in base c
 comment on column deribit.private_buy_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_buy_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_buy_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_buy_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_buy_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_buy_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_buy_response_order."original_order_type" is 'Original order type. Optional field';
@@ -1269,10 +1321,9 @@ comment on column deribit.private_buy_response_order."block_trade" is 'true if o
 comment on column deribit.private_buy_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_buy_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_buy_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_buy_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_buy_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_buy_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_buy_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_buy_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_buy_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_buy_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_buy_response_order."instrument_name" is 'Unique instrument identifier';
@@ -1301,7 +1352,7 @@ create function deribit.private_buy(
     "label" text default null,
     "price" double precision default null,
     "time_in_force" deribit.private_buy_request_time_in_force default null,
-    "max_show" double precision default null,
+    "display_amount" double precision default null,
     "post_only" boolean default null,
     "reject_post_only" boolean default null,
     "reduce_only" boolean default null,
@@ -1328,7 +1379,7 @@ as $$
             "label",
             "price",
             "time_in_force",
-            "max_show",
+            "display_amount",
             "post_only",
             "reject_post_only",
             "reduce_only",
@@ -1388,6 +1439,7 @@ create type deribit.private_cancel_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -1418,6 +1470,7 @@ create type deribit.private_cancel_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -1428,7 +1481,6 @@ create type deribit.private_cancel_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -1441,6 +1493,7 @@ comment on column deribit.private_cancel_response_result."triggered" is 'Whether
 comment on column deribit.private_cancel_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_cancel_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_cancel_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_cancel_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_cancel_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_cancel_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_cancel_response_result."api" is 'true if created with API';
@@ -1455,13 +1508,13 @@ comment on column deribit.private_cancel_response_result."direction" is 'Directi
 comment on column deribit.private_cancel_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_cancel_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_cancel_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_cancel_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_cancel_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_cancel_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_cancel_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_cancel_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_cancel_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_cancel_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_cancel_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_cancel_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_cancel_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_cancel_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_cancel_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -1471,6 +1524,7 @@ comment on column deribit.private_cancel_response_result."price" is 'Price in ba
 comment on column deribit.private_cancel_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_cancel_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_cancel_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_cancel_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_cancel_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_cancel_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_cancel_response_result."original_order_type" is 'Original order type. Optional field';
@@ -1478,10 +1532,9 @@ comment on column deribit.private_cancel_response_result."block_trade" is 'true 
 comment on column deribit.private_cancel_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_cancel_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_cancel_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_cancel_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_cancel_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_cancel_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_cancel_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_cancel_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_cancel_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_cancel_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_cancel_response_result."instrument_name" is 'Unique instrument identifier';
@@ -1712,78 +1765,53 @@ comment on function deribit.private_cancel_all_by_currency is 'Cancels all order
 * AND IS STRONGLY DISCOURAGED.
 */
 create type deribit.private_cancel_all_by_currency_pair_request_currency_pair as enum (
-    'ada_usd',
     'ada_usdc',
-    'ada_usdt',
-    'algo_usd',
     'algo_usdc',
-    'algo_usdt',
-    'avax_usd',
     'avax_usdc',
-    'avax_usdt',
-    'bch_usd',
     'bch_usdc',
-    'bch_usdt',
-    'bnb_usdt',
+    'bnb_usdc',
+    'btc_eurr',
     'btc_usd',
     'btc_usdc',
     'btc_usde',
     'btc_usdt',
     'btc_usyc',
     'btcdvol_usdc',
-    'doge_usd',
+    'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
-    'dot_usd',
     'dot_usdc',
-    'dot_usdt',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
+    'eth_btc',
+    'eth_eurr',
     'eth_usd',
     'eth_usdc',
     'eth_usde',
     'eth_usdt',
     'eth_usyc',
     'ethdvol_usdc',
-    'link_usd',
+    'eurr_usdc',
+    'eurr_usdt',
     'link_usdc',
-    'link_usdt',
-    'ltc_usd',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usd',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usd',
     'near_usdc',
-    'near_usdt',
     'paxg_btc',
-    'paxg_usd',
     'paxg_usdc',
-    'paxg_usdt',
-    'shib_usd',
     'shib_usdc',
-    'shib_usdt',
-    'sol_usd',
     'sol_usdc',
     'sol_usdt',
     'steth_eth',
-    'steth_usd',
     'steth_usdc',
     'steth_usdt',
-    'trx_usd',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
-    'uni_usd',
     'uni_usdc',
-    'uni_usdt',
-    'usdc_usd',
-    'usde_usd',
+    'usdc_usdt',
     'usde_usdc',
     'usde_usdt',
     'usyc_usdc',
-    'xrp_usd',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_cancel_all_by_currency_pair_request_kind as enum (
@@ -2123,7 +2151,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_cancel_by_label is 'Cancels orders by label. All user''s orders (trigger orders too), with a given label are cancelled in all currencies or in one given currency (in this case currency queue is used) ';
+comment on function deribit.private_cancel_by_label is 'Cancels orders by label. All user''s orders (trigger orders too), with a given label are cancelled in all currencies or in one given currency (in this case currency queue is used). Rate Limits: When called without the currency parameter, this method is subject to cancel_all rate limits. Different rate limit values may apply for per-currency cancels versus calls without providing the currency parameter.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -2166,78 +2194,53 @@ create type deribit.private_cancel_quotes_request_currency as enum (
 );
 
 create type deribit.private_cancel_quotes_request_currency_pair as enum (
-    'ada_usd',
     'ada_usdc',
-    'ada_usdt',
-    'algo_usd',
     'algo_usdc',
-    'algo_usdt',
-    'avax_usd',
     'avax_usdc',
-    'avax_usdt',
-    'bch_usd',
     'bch_usdc',
-    'bch_usdt',
-    'bnb_usdt',
+    'bnb_usdc',
+    'btc_eurr',
     'btc_usd',
     'btc_usdc',
     'btc_usde',
     'btc_usdt',
     'btc_usyc',
     'btcdvol_usdc',
-    'doge_usd',
+    'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
-    'dot_usd',
     'dot_usdc',
-    'dot_usdt',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
+    'eth_btc',
+    'eth_eurr',
     'eth_usd',
     'eth_usdc',
     'eth_usde',
     'eth_usdt',
     'eth_usyc',
     'ethdvol_usdc',
-    'link_usd',
+    'eurr_usdc',
+    'eurr_usdt',
     'link_usdc',
-    'link_usdt',
-    'ltc_usd',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usd',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usd',
     'near_usdc',
-    'near_usdt',
     'paxg_btc',
-    'paxg_usd',
     'paxg_usdc',
-    'paxg_usdt',
-    'shib_usd',
     'shib_usdc',
-    'shib_usdt',
-    'sol_usd',
     'sol_usdc',
     'sol_usdt',
     'steth_eth',
-    'steth_usd',
     'steth_usdc',
     'steth_usdt',
-    'trx_usd',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
-    'uni_usd',
     'uni_usdc',
-    'uni_usdt',
-    'usdc_usd',
-    'usde_usd',
+    'usdc_usdt',
     'usde_usdc',
     'usde_usdt',
     'usyc_usdc',
-    'xrp_usd',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_cancel_quotes_request as (
@@ -2808,7 +2811,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_change_scope_in_api_key is 'Changes scope for key with given id. Important notes.';
+comment on function deribit.private_change_scope_in_api_key is 'Changes scope for key with given id. Important notes. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -2902,6 +2905,28 @@ comment on column deribit.private_close_position_request."instrument_name" is '(
 comment on column deribit.private_close_position_request."type" is '(Required) The order type';
 comment on column deribit.private_close_position_request."price" is 'Optional price for limit order.';
 
+create type deribit.private_close_position_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_close_position_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_close_position_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_close_position_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_close_position_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_close_position_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_close_position_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_close_position_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_close_position_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_close_position_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_close_position_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -2923,6 +2948,7 @@ create type deribit.private_close_position_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_close_position_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -2962,6 +2988,7 @@ comment on column deribit.private_close_position_response_trade."price" is 'Pric
 comment on column deribit.private_close_position_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_close_position_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_close_position_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_close_position_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_close_position_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_close_position_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_close_position_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -2986,6 +3013,7 @@ create type deribit.private_close_position_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -3016,6 +3044,7 @@ create type deribit.private_close_position_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -3026,7 +3055,6 @@ create type deribit.private_close_position_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -3039,6 +3067,7 @@ comment on column deribit.private_close_position_response_order."triggered" is '
 comment on column deribit.private_close_position_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_close_position_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_close_position_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_close_position_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_close_position_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_close_position_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_close_position_response_order."api" is 'true if created with API';
@@ -3053,13 +3082,13 @@ comment on column deribit.private_close_position_response_order."direction" is '
 comment on column deribit.private_close_position_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_close_position_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_close_position_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_close_position_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_close_position_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_close_position_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_close_position_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_close_position_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_close_position_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_close_position_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_close_position_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_close_position_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_close_position_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_close_position_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_close_position_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -3069,6 +3098,7 @@ comment on column deribit.private_close_position_response_order."price" is 'Pric
 comment on column deribit.private_close_position_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_close_position_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_close_position_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_close_position_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_close_position_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_close_position_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_close_position_response_order."original_order_type" is 'Original order type. Optional field';
@@ -3076,10 +3106,9 @@ comment on column deribit.private_close_position_response_order."block_trade" is
 comment on column deribit.private_close_position_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_close_position_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_close_position_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_close_position_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_close_position_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_close_position_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_close_position_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_close_position_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_close_position_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_close_position_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_close_position_response_order."instrument_name" is 'Unique instrument identifier';
@@ -3158,7 +3187,7 @@ create type deribit.private_create_api_key_request as (
 
 comment on column deribit.private_create_api_key_request."max_scope" is '(Required) Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, its value is set as none. Please check details described in Access scope';
 comment on column deribit.private_create_api_key_request."name" is 'Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)';
-comment on column deribit.private_create_api_key_request."public_key" is 'ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user''s private key.';
+comment on column deribit.private_create_api_key_request."public_key" is 'ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user''s private key.  📖 Related Support Article: Asymmetric API keys';
 comment on column deribit.private_create_api_key_request."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 
 create type deribit.private_create_api_key_response_result as (
@@ -3233,7 +3262,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_create_api_key is 'Creates a new api key with a given scope. Important notes';
+comment on function deribit.private_create_api_key is 'Creates a new api key with a given scope. Important notes TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -3288,7 +3317,7 @@ create type deribit.private_create_combo_response_result as (
 comment on column deribit.private_create_combo_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_create_combo_response_result."id" is 'Unique combo identifier';
 comment on column deribit.private_create_combo_response_result."instrument_id" is 'Instrument ID';
-comment on column deribit.private_create_combo_response_result."state" is 'Combo state: "rfq", "active", "inactive"';
+comment on column deribit.private_create_combo_response_result."state" is 'Combo state: "active", "inactive"';
 comment on column deribit.private_create_combo_response_result."state_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.private_create_combo_response as (
@@ -3369,7 +3398,7 @@ create type deribit.private_create_deposit_address_response_result as (
 comment on column deribit.private_create_deposit_address_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_create_deposit_address_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_create_deposit_address_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
-comment on column deribit.private_create_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit, withdrawal, transfer';
+comment on column deribit.private_create_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit';
 
 create type deribit.private_create_deposit_address_response as (
     "id" bigint,
@@ -3517,6 +3546,92 @@ as $$
 $$;
 
 comment on function deribit.private_create_subaccount is 'Create a new subaccount';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
+create type deribit.private_delete_address_beneficiary_request_currency as enum (
+    'BNB',
+    'BTC',
+    'ETH',
+    'ETHW',
+    'EURR',
+    'MATIC',
+    'PAXG',
+    'SOL',
+    'STETH',
+    'USDC',
+    'USDE',
+    'USDT',
+    'USYC',
+    'XRP'
+);
+
+create type deribit.private_delete_address_beneficiary_request as (
+    "currency" deribit.private_delete_address_beneficiary_request_currency,
+    "address" text,
+    "tag" text
+);
+
+comment on column deribit.private_delete_address_beneficiary_request."currency" is '(Required) The currency symbol';
+comment on column deribit.private_delete_address_beneficiary_request."address" is '(Required) Address in currency format';
+comment on column deribit.private_delete_address_beneficiary_request."tag" is 'Tag for XRP addresses';
+
+create type deribit.private_delete_address_beneficiary_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" text
+);
+
+comment on column deribit.private_delete_address_beneficiary_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_delete_address_beneficiary_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+comment on column deribit.private_delete_address_beneficiary_response."result" is 'ok';
+
+create function deribit.private_delete_address_beneficiary(
+    "currency" deribit.private_delete_address_beneficiary_request_currency,
+    "address" text,
+    "tag" text default null
+)
+returns text
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "address",
+            "tag"
+        )::deribit.private_delete_address_beneficiary_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/delete_address_beneficiary'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_delete_address_beneficiary_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_delete_address_beneficiary is 'Deletes address beneficiary information';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -3699,7 +3814,8 @@ create type deribit.private_edit_request as (
     "trigger_price" double precision,
     "trigger_offset" double precision,
     "mmp" boolean,
-    "valid_until" bigint
+    "valid_until" bigint,
+    "display_amount" double precision
 );
 
 comment on column deribit.private_edit_request."order_id" is '(Required) The order id';
@@ -3714,6 +3830,29 @@ comment on column deribit.private_edit_request."trigger_price" is 'Trigger price
 comment on column deribit.private_edit_request."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered';
 comment on column deribit.private_edit_request."mmp" is 'Order MMP flag, only for order_type ''limit''';
 comment on column deribit.private_edit_request."valid_until" is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
+comment on column deribit.private_edit_request."display_amount" is 'Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.';
+
+create type deribit.private_edit_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_edit_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_edit_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_edit_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_edit_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_edit_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_edit_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_edit_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_edit_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_edit_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_edit_response_trade as (
     "trade_id" text,
@@ -3736,6 +3875,7 @@ create type deribit.private_edit_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_edit_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -3775,6 +3915,7 @@ comment on column deribit.private_edit_response_trade."price" is 'Price in base 
 comment on column deribit.private_edit_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_edit_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_edit_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_edit_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_edit_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_edit_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_edit_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -3799,6 +3940,7 @@ create type deribit.private_edit_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -3829,6 +3971,7 @@ create type deribit.private_edit_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -3839,7 +3982,6 @@ create type deribit.private_edit_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -3852,6 +3994,7 @@ comment on column deribit.private_edit_response_order."triggered" is 'Whether th
 comment on column deribit.private_edit_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_edit_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_edit_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_edit_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_edit_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_edit_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_edit_response_order."api" is 'true if created with API';
@@ -3866,13 +4009,13 @@ comment on column deribit.private_edit_response_order."direction" is 'Direction:
 comment on column deribit.private_edit_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_edit_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_edit_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_edit_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_edit_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_edit_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_edit_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_edit_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_edit_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_edit_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_edit_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -3882,6 +4025,7 @@ comment on column deribit.private_edit_response_order."price" is 'Price in base 
 comment on column deribit.private_edit_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_edit_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_edit_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_edit_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_edit_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_edit_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_edit_response_order."original_order_type" is 'Original order type. Optional field';
@@ -3889,10 +4033,9 @@ comment on column deribit.private_edit_response_order."block_trade" is 'true if 
 comment on column deribit.private_edit_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_edit_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_edit_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_edit_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_edit_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_edit_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_edit_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_edit_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_edit_response_order."instrument_name" is 'Unique instrument identifier';
@@ -3925,7 +4068,8 @@ create function deribit.private_edit(
     "trigger_price" double precision default null,
     "trigger_offset" double precision default null,
     "mmp" boolean default null,
-    "valid_until" bigint default null
+    "valid_until" bigint default null,
+    "display_amount" double precision default null
 )
 returns deribit.private_edit_response_result
 language sql
@@ -3944,7 +4088,8 @@ as $$
             "trigger_price",
             "trigger_offset",
             "mmp",
-            "valid_until"
+            "valid_until",
+            "display_amount"
         )::deribit.private_edit_request as payload
     ), 
     http_response as (
@@ -4072,7 +4217,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_edit_api_key is 'Edits existing API key. At least one parameter is required. Important notes';
+comment on function deribit.private_edit_api_key is 'Edits existing API key. At least one parameter is required. Important notes TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -4119,6 +4264,28 @@ comment on column deribit.private_edit_by_label_request."trigger_price" is 'Trig
 comment on column deribit.private_edit_by_label_request."mmp" is 'Order MMP flag, only for order_type ''limit''';
 comment on column deribit.private_edit_by_label_request."valid_until" is 'Timestamp, when provided server will start processing request in Matching Engine only before given timestamp, in other cases timed_out error will be responded. Remember that the given timestamp should be consistent with the server''s time, use /public/time method to obtain current server time.';
 
+create type deribit.private_edit_by_label_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_edit_by_label_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_edit_by_label_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_edit_by_label_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_edit_by_label_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_edit_by_label_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_edit_by_label_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_edit_by_label_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_edit_by_label_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_edit_by_label_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_edit_by_label_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -4140,6 +4307,7 @@ create type deribit.private_edit_by_label_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_edit_by_label_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -4179,6 +4347,7 @@ comment on column deribit.private_edit_by_label_response_trade."price" is 'Price
 comment on column deribit.private_edit_by_label_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_edit_by_label_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_edit_by_label_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_edit_by_label_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_edit_by_label_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_edit_by_label_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_edit_by_label_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -4203,6 +4372,7 @@ create type deribit.private_edit_by_label_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -4233,6 +4403,7 @@ create type deribit.private_edit_by_label_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -4243,7 +4414,6 @@ create type deribit.private_edit_by_label_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -4256,6 +4426,7 @@ comment on column deribit.private_edit_by_label_response_order."triggered" is 'W
 comment on column deribit.private_edit_by_label_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_edit_by_label_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_edit_by_label_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_edit_by_label_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_edit_by_label_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_edit_by_label_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_edit_by_label_response_order."api" is 'true if created with API';
@@ -4270,13 +4441,13 @@ comment on column deribit.private_edit_by_label_response_order."direction" is 'D
 comment on column deribit.private_edit_by_label_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_edit_by_label_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_edit_by_label_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_edit_by_label_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_by_label_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_by_label_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_edit_by_label_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_edit_by_label_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_edit_by_label_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_edit_by_label_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_edit_by_label_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_by_label_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_by_label_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_edit_by_label_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_edit_by_label_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -4286,6 +4457,7 @@ comment on column deribit.private_edit_by_label_response_order."price" is 'Price
 comment on column deribit.private_edit_by_label_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_edit_by_label_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_edit_by_label_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_edit_by_label_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_edit_by_label_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_edit_by_label_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_edit_by_label_response_order."original_order_type" is 'Original order type. Optional field';
@@ -4293,10 +4465,9 @@ comment on column deribit.private_edit_by_label_response_order."block_trade" is 
 comment on column deribit.private_edit_by_label_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_edit_by_label_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_edit_by_label_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_edit_by_label_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_edit_by_label_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_edit_by_label_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_edit_by_label_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_edit_by_label_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_edit_by_label_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_edit_by_label_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_edit_by_label_response_order."instrument_name" is 'Unique instrument identifier';
@@ -4568,7 +4739,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_enable_cancel_on_disconnect is 'Enable Cancel On Disconnect for the connection. After enabling Cancel On Disconnect all orders created by the connection will be removed when the connection is closed.  NOTICE It does not affect orders created by other connections - they will remain active ! When change is applied for the account, then every newly opened connection will start with active Cancel on Disconnect.';
+comment on function deribit.private_enable_cancel_on_disconnect is 'Enable Cancel On Disconnect for the connection. After enabling, all orders created via this connection will be automatically cancelled when the connection is closed. Cancel is triggered in the following cases: when the TCP connection is properly terminated, when the connection is closed due to 10 minutes of inactivity, or when a heartbeat detects a disconnection. To reduce the inactivity timeout, consider using public/set_heartbeat. Note: If the connection is gracefully closed using private/logout, cancel-on-disconnect will not be triggered. Notice: Cancel-on-Disconnect does not affect orders created by other connections - they will remain active! When change is applied on the account scope, then every newly opened connection will start with active Cancel on Disconnect.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -4618,6 +4789,28 @@ comment on column deribit.private_execute_block_trade_request."role" is '(Requir
 comment on column deribit.private_execute_block_trade_request."trades" is '(Required) List of trades for block trade';
 comment on column deribit.private_execute_block_trade_request."counterparty_signature" is '(Required) Signature of block trade generated by private/verify_block_trade_method';
 
+create type deribit.private_execute_block_trade_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_execute_block_trade_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_execute_block_trade_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_execute_block_trade_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_execute_block_trade_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_execute_block_trade_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_execute_block_trade_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_execute_block_trade_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_execute_block_trade_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_execute_block_trade_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_execute_block_trade_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -4639,6 +4832,7 @@ create type deribit.private_execute_block_trade_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_execute_block_trade_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -4678,6 +4872,7 @@ comment on column deribit.private_execute_block_trade_response_trade."price" is 
 comment on column deribit.private_execute_block_trade_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_execute_block_trade_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_execute_block_trade_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_execute_block_trade_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_execute_block_trade_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_execute_block_trade_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_execute_block_trade_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -4698,12 +4893,16 @@ comment on column deribit.private_execute_block_trade_response_trade."legs" is '
 
 create type deribit.private_execute_block_trade_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_execute_block_trade_response_trade[]
 );
 
 comment on column deribit.private_execute_block_trade_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_execute_block_trade_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_execute_block_trade_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_execute_block_trade_response_result."id" is 'Block trade id';
 comment on column deribit.private_execute_block_trade_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -4755,7 +4954,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_execute_block_trade is 'Creates block tradeThe whole request have to be exact the same as in private/verify_block_trade, only role field should be set appropriately - it basically means that both sides have to agree on the same timestamp, nonce, trades fields and server will assure that role field is different between sides (each party accepted own role). Using the same timestamp and nonce by both sides in private/verify_block_trade assures that even if unintentionally both sides execute given block trade with valid counterparty_signature, the given block trade will be executed only once.';
+comment on function deribit.private_execute_block_trade is 'Creates block tradeThe whole request have to be exact the same as in private/verify_block_trade, only role field should be set appropriately - it basically means that both sides have to agree on the same timestamp, nonce, trades fields and server will assure that role field is different between sides (each party accepted own role).Using the same timestamp and nonce by both sides in private/verify_block_trade assures that even if unintentionally both sides execute given block trade with valid counterparty_signature, the given block trade will be executed only once.Note: In the API, the direction field is always expressed from the maker''s perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker''s perspective), and you will be verifying and accepting a "sell put" block trade.📖 Related Support Article: Block Trading';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -4775,7 +4974,7 @@ create type deribit.private_get_access_log_request as (
 );
 
 comment on column deribit.private_get_access_log_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.private_get_access_log_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_access_log_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 
 create type deribit.private_get_access_log_response_result as (
     "city" text,
@@ -4871,34 +5070,29 @@ create type deribit.private_get_account_summaries_request as (
 comment on column deribit.private_get_account_summaries_request."subaccount_id" is 'The user id for the subaccount';
 comment on column deribit.private_get_account_summaries_request."extended" is 'Include additional fields';
 
-create type deribit.private_get_account_summaries_response_fee as (
-    "currency" text,
-    "fee_type" text,
-    "instrument_type" text,
-    "maker_fee" double precision,
-    "taker_fee" double precision
+create type deribit.private_get_account_summaries_response_default as (
+    "maker" double precision,
+    "taker" double precision,
+    "type" text
 );
 
-comment on column deribit.private_get_account_summaries_response_fee."currency" is 'The currency the fee applies to';
-comment on column deribit.private_get_account_summaries_response_fee."fee_type" is 'Fee type - relative if fee is calculated as a fraction of base instrument fee, fixed if fee is calculated solely using user fee';
-comment on column deribit.private_get_account_summaries_response_fee."instrument_type" is 'Type of the instruments the fee applies to - future for future instruments (excluding perpetual), perpetual for future perpetual instruments, option for options';
-comment on column deribit.private_get_account_summaries_response_fee."maker_fee" is 'User fee as a maker';
-comment on column deribit.private_get_account_summaries_response_fee."taker_fee" is 'User fee as a taker';
+comment on column deribit.private_get_account_summaries_response_default."maker" is 'Maker fee';
+comment on column deribit.private_get_account_summaries_response_default."taker" is 'Taker fee';
+comment on column deribit.private_get_account_summaries_response_default."type" is 'Fee calculation type (e.g., fixed, relative)';
 
-create type deribit.private_get_account_summaries_response_summary as (
-    "options_pl" double precision,
-    "projected_delta_total" double precision,
-    "options_theta_map" jsonb,
-    "has_non_block_chain_equity" boolean,
-    "total_margin_balance_usd" double precision,
-    "limits" jsonb,
-    "total_delta_total_usd" double precision,
-    "available_withdrawal_funds" double precision,
-    "options_session_rpl" double precision,
-    "futures_session_rpl" double precision,
-    "total_pl" double precision,
-    "spot_reserve" double precision,
-    "fees" deribit.private_get_account_summaries_response_fee[],
+create type deribit.private_get_account_summaries_response_value as (
+    "block_trade" double precision,
+    "default" deribit.private_get_account_summaries_response_default,
+    "settlement" double precision
+);
+
+comment on column deribit.private_get_account_summaries_response_value."block_trade" is 'Block trade fee (if applicable)';
+comment on column deribit.private_get_account_summaries_response_value."settlement" is 'Settlement fee';
+
+create type deribit.private_get_account_summaries_response_fee as (
+    "index_name" text,
+    "kind" text,
+    "value" deribit.private_get_account_summaries_response_value,
     "additional_reserve" double precision,
     "options_session_upl" double precision,
     "cross_collateral_enabled" boolean,
@@ -4933,6 +5127,60 @@ create type deribit.private_get_account_summaries_response_summary as (
     "delta_total" double precision
 );
 
+comment on column deribit.private_get_account_summaries_response_fee."index_name" is 'The currency pair this fee applies to';
+comment on column deribit.private_get_account_summaries_response_fee."kind" is 'Instrument type (e.g., future, perpetual, option)';
+comment on column deribit.private_get_account_summaries_response_fee."additional_reserve" is 'The account''s balance reserved in other orders';
+comment on column deribit.private_get_account_summaries_response_fee."options_session_upl" is 'Options session unrealized profit and Loss';
+comment on column deribit.private_get_account_summaries_response_fee."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
+comment on column deribit.private_get_account_summaries_response_fee."options_value" is 'Options value';
+comment on column deribit.private_get_account_summaries_response_fee."options_vega_map" is 'Map of options'' vegas per index';
+comment on column deribit.private_get_account_summaries_response_fee."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."futures_session_upl" is 'Futures session unrealized profit and Loss';
+comment on column deribit.private_get_account_summaries_response_fee."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
+comment on column deribit.private_get_account_summaries_response_fee."futures_pl" is 'Futures profit and Loss';
+comment on column deribit.private_get_account_summaries_response_fee."options_gamma_map" is 'Map of options'' gammas per index';
+comment on column deribit.private_get_account_summaries_response_fee."currency" is 'Currency of the summary';
+comment on column deribit.private_get_account_summaries_response_fee."options_delta" is 'Options summary delta';
+comment on column deribit.private_get_account_summaries_response_fee."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."equity" is 'The account''s current equity';
+comment on column deribit.private_get_account_summaries_response_fee."margin_model" is 'Name of user''s currently enabled margin model';
+comment on column deribit.private_get_account_summaries_response_fee."balance" is 'The account''s balance';
+comment on column deribit.private_get_account_summaries_response_fee."session_upl" is 'Session unrealized profit and loss';
+comment on column deribit.private_get_account_summaries_response_fee."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."deposit_address" is 'The deposit address for the account (if available)';
+comment on column deribit.private_get_account_summaries_response_fee."options_theta" is 'Options summary theta';
+comment on column deribit.private_get_account_summaries_response_fee."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summaries_response_fee."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."session_rpl" is 'Session realized profit and loss';
+comment on column deribit.private_get_account_summaries_response_fee."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
+comment on column deribit.private_get_account_summaries_response_fee."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summaries_response_fee."options_vega" is 'Options summary vega';
+comment on column deribit.private_get_account_summaries_response_fee."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summaries_response_fee."options_gamma" is 'Options summary gamma';
+comment on column deribit.private_get_account_summaries_response_fee."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summaries_response_fee."delta_total" is 'The sum of position deltas';
+
+create type deribit.private_get_account_summaries_response_summary as (
+    "options_pl" double precision,
+    "projected_delta_total" double precision,
+    "options_theta_map" jsonb,
+    "has_non_block_chain_equity" boolean,
+    "total_margin_balance_usd" double precision,
+    "limits" jsonb,
+    "total_delta_total_usd" double precision,
+    "available_withdrawal_funds" double precision,
+    "options_session_rpl" double precision,
+    "futures_session_rpl" double precision,
+    "total_pl" double precision,
+    "spot_reserve" double precision,
+    "fees" deribit.private_get_account_summaries_response_fee[],
+    "system_name" text,
+    "type" text,
+    "username" text
+);
+
 comment on column deribit.private_get_account_summaries_response_summary."options_pl" is 'Options profit and Loss';
 comment on column deribit.private_get_account_summaries_response_summary."projected_delta_total" is 'The sum of position deltas without positions that will expire during closest expiration';
 comment on column deribit.private_get_account_summaries_response_summary."options_theta_map" is 'Map of options'' thetas per index';
@@ -4945,39 +5193,10 @@ comment on column deribit.private_get_account_summaries_response_summary."option
 comment on column deribit.private_get_account_summaries_response_summary."futures_session_rpl" is 'Futures session realized profit and Loss';
 comment on column deribit.private_get_account_summaries_response_summary."total_pl" is 'Profit and loss';
 comment on column deribit.private_get_account_summaries_response_summary."spot_reserve" is 'The account''s balance reserved in active spot orders';
-comment on column deribit.private_get_account_summaries_response_summary."fees" is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
-comment on column deribit.private_get_account_summaries_response_summary."additional_reserve" is 'The account''s balance reserved in other orders';
-comment on column deribit.private_get_account_summaries_response_summary."options_session_upl" is 'Options session unrealized profit and Loss';
-comment on column deribit.private_get_account_summaries_response_summary."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
-comment on column deribit.private_get_account_summaries_response_summary."options_value" is 'Options value';
-comment on column deribit.private_get_account_summaries_response_summary."options_vega_map" is 'Map of options'' vegas per index';
-comment on column deribit.private_get_account_summaries_response_summary."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."futures_session_upl" is 'Futures session unrealized profit and Loss';
-comment on column deribit.private_get_account_summaries_response_summary."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
-comment on column deribit.private_get_account_summaries_response_summary."futures_pl" is 'Futures profit and Loss';
-comment on column deribit.private_get_account_summaries_response_summary."options_gamma_map" is 'Map of options'' gammas per index';
-comment on column deribit.private_get_account_summaries_response_summary."currency" is 'Currency of the summary';
-comment on column deribit.private_get_account_summaries_response_summary."options_delta" is 'Options summary delta';
-comment on column deribit.private_get_account_summaries_response_summary."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."equity" is 'The account''s current equity';
-comment on column deribit.private_get_account_summaries_response_summary."margin_model" is 'Name of user''s currently enabled margin model';
-comment on column deribit.private_get_account_summaries_response_summary."balance" is 'The account''s balance';
-comment on column deribit.private_get_account_summaries_response_summary."session_upl" is 'Session unrealized profit and loss';
-comment on column deribit.private_get_account_summaries_response_summary."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."deposit_address" is 'The deposit address for the account (if available)';
-comment on column deribit.private_get_account_summaries_response_summary."options_theta" is 'Options summary theta';
-comment on column deribit.private_get_account_summaries_response_summary."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summaries_response_summary."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."session_rpl" is 'Session realized profit and loss';
-comment on column deribit.private_get_account_summaries_response_summary."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
-comment on column deribit.private_get_account_summaries_response_summary."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summaries_response_summary."options_vega" is 'Options summary vega';
-comment on column deribit.private_get_account_summaries_response_summary."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summaries_response_summary."options_gamma" is 'Options summary gamma';
-comment on column deribit.private_get_account_summaries_response_summary."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summaries_response_summary."delta_total" is 'The sum of position deltas';
+comment on column deribit.private_get_account_summaries_response_summary."fees" is 'List of fee objects for all currency pairs and instrument types related to the currency (available when parameter extended = true and user has any discounts)';
+comment on column deribit.private_get_account_summaries_response_summary."system_name" is 'System generated user nickname (available when parameter extended = true)';
+comment on column deribit.private_get_account_summaries_response_summary."type" is 'Account type (available when parameter extended = true)';
+comment on column deribit.private_get_account_summaries_response_summary."username" is 'Account name (given by user) (available when parameter extended = true)';
 
 create type deribit.private_get_account_summaries_response_result as (
     "block_rfq_self_match_prevention" text,
@@ -4991,10 +5210,7 @@ create type deribit.private_get_account_summaries_response_result as (
     "security_keys_enabled" boolean,
     "self_trading_extended_to_subaccounts" text,
     "self_trading_reject_mode" text,
-    "summaries" deribit.private_get_account_summaries_response_summary[],
-    "system_name" text,
-    "type" text,
-    "username" text
+    "summaries" deribit.private_get_account_summaries_response_summary[]
 );
 
 comment on column deribit.private_get_account_summaries_response_result."block_rfq_self_match_prevention" is 'When Block RFQ Self Match Prevention is enabled, it ensures that RFQs cannot be executed between accounts that belong to the same legal entity. This setting is independent of the general self-match prevention settings and must be configured separately.';
@@ -5009,9 +5225,6 @@ comment on column deribit.private_get_account_summaries_response_result."securit
 comment on column deribit.private_get_account_summaries_response_result."self_trading_extended_to_subaccounts" is 'true if self trading rejection behavior is applied to trades between subaccounts (available when parameter extended = true)';
 comment on column deribit.private_get_account_summaries_response_result."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
 comment on column deribit.private_get_account_summaries_response_result."summaries" is 'Aggregated list of per-currency account summaries';
-comment on column deribit.private_get_account_summaries_response_result."system_name" is 'System generated user nickname (available when parameter extended = true)';
-comment on column deribit.private_get_account_summaries_response_result."type" is 'Account type (available when parameter extended = true)';
-comment on column deribit.private_get_account_summaries_response_result."username" is 'Account name (given by user) (available when parameter extended = true)';
 
 create type deribit.private_get_account_summaries_response as (
     "id" bigint,
@@ -5096,35 +5309,29 @@ comment on column deribit.private_get_account_summary_request."currency" is '(Re
 comment on column deribit.private_get_account_summary_request."subaccount_id" is 'The user id for the subaccount';
 comment on column deribit.private_get_account_summary_request."extended" is 'Include additional fields';
 
-create type deribit.private_get_account_summary_response_fee as (
-    "currency" text,
-    "fee_type" text,
-    "instrument_type" text,
-    "maker_fee" double precision,
-    "taker_fee" double precision
+create type deribit.private_get_account_summary_response_default as (
+    "maker" double precision,
+    "taker" double precision,
+    "type" text
 );
 
-comment on column deribit.private_get_account_summary_response_fee."currency" is 'The currency the fee applies to';
-comment on column deribit.private_get_account_summary_response_fee."fee_type" is 'Fee type - relative if fee is calculated as a fraction of base instrument fee, fixed if fee is calculated solely using user fee';
-comment on column deribit.private_get_account_summary_response_fee."instrument_type" is 'Type of the instruments the fee applies to - future for future instruments (excluding perpetual), perpetual for future perpetual instruments, option for options';
-comment on column deribit.private_get_account_summary_response_fee."maker_fee" is 'User fee as a maker';
-comment on column deribit.private_get_account_summary_response_fee."taker_fee" is 'User fee as a taker';
+comment on column deribit.private_get_account_summary_response_default."maker" is 'Maker fee';
+comment on column deribit.private_get_account_summary_response_default."taker" is 'Taker fee';
+comment on column deribit.private_get_account_summary_response_default."type" is 'Fee type - relative if fee is calculated as a fraction of base instrument fee, fixed if fee is calculated solely using user fee';
 
-create type deribit.private_get_account_summary_response_result as (
-    "options_pl" double precision,
-    "projected_delta_total" double precision,
-    "options_theta_map" jsonb,
-    "has_non_block_chain_equity" boolean,
-    "total_margin_balance_usd" double precision,
-    "limits" jsonb,
-    "type" text,
-    "total_delta_total_usd" double precision,
-    "available_withdrawal_funds" double precision,
-    "options_session_rpl" double precision,
-    "futures_session_rpl" double precision,
-    "total_pl" double precision,
-    "spot_reserve" double precision,
-    "fees" deribit.private_get_account_summary_response_fee[],
+create type deribit.private_get_account_summary_response_value as (
+    "block_trade" double precision,
+    "default" deribit.private_get_account_summary_response_default,
+    "settlement" double precision
+);
+
+comment on column deribit.private_get_account_summary_response_value."block_trade" is 'Block trade fee (if applicable)';
+comment on column deribit.private_get_account_summary_response_value."settlement" is 'Settlement fee';
+
+create type deribit.private_get_account_summary_response_fee as (
+    "index_name" text,
+    "kind" text,
+    "value" deribit.private_get_account_summary_response_value,
     "additional_reserve" double precision,
     "options_session_upl" double precision,
     "cross_collateral_enabled" boolean,
@@ -5171,6 +5378,70 @@ create type deribit.private_get_account_summary_response_result as (
     "delta_total" double precision
 );
 
+comment on column deribit.private_get_account_summary_response_fee."index_name" is 'The currency pair this fee applies to';
+comment on column deribit.private_get_account_summary_response_fee."kind" is 'Type of the instruments the fee applies to - future for future instruments (excluding perpetual), perpetual for future perpetual instruments, option for options';
+comment on column deribit.private_get_account_summary_response_fee."additional_reserve" is 'The account''s balance reserved in other orders';
+comment on column deribit.private_get_account_summary_response_fee."options_session_upl" is 'Options session unrealized profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
+comment on column deribit.private_get_account_summary_response_fee."id" is 'Account id (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_value" is 'Options value';
+comment on column deribit.private_get_account_summary_response_fee."creation_timestamp" is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."email" is 'User email (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_vega_map" is 'Map of options'' vegas per index';
+comment on column deribit.private_get_account_summary_response_fee."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."mmp_enabled" is 'Whether MMP is enabled (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."futures_session_upl" is 'Futures session unrealized profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
+comment on column deribit.private_get_account_summary_response_fee."futures_pl" is 'Futures profit and Loss';
+comment on column deribit.private_get_account_summary_response_fee."options_gamma_map" is 'Map of options'' gammas per index';
+comment on column deribit.private_get_account_summary_response_fee."currency" is 'The selected currency';
+comment on column deribit.private_get_account_summary_response_fee."options_delta" is 'Options summary delta';
+comment on column deribit.private_get_account_summary_response_fee."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."referrer_id" is 'Optional identifier of the referrer (of the affiliation program, and available when parameter extended = true), which link was used by this account at registration. It coincides with suffix of the affiliation link path after /reg-';
+comment on column deribit.private_get_account_summary_response_fee."login_enabled" is 'Whether account is loginable using email and password (available when parameter extended = true and account is a subaccount)';
+comment on column deribit.private_get_account_summary_response_fee."equity" is 'The account''s current equity';
+comment on column deribit.private_get_account_summary_response_fee."margin_model" is 'Name of user''s currently enabled margin model';
+comment on column deribit.private_get_account_summary_response_fee."balance" is 'The account''s balance';
+comment on column deribit.private_get_account_summary_response_fee."session_upl" is 'Session unrealized profit and loss';
+comment on column deribit.private_get_account_summary_response_fee."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."security_keys_enabled" is 'Whether Security Key authentication is enabled (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."deposit_address" is 'The deposit address for the account (if available)';
+comment on column deribit.private_get_account_summary_response_fee."options_theta" is 'Options summary theta';
+comment on column deribit.private_get_account_summary_response_fee."self_trading_extended_to_subaccounts" is 'true if self trading rejection behavior is applied to trades between subaccounts (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."interuser_transfers_enabled" is 'true when the inter-user transfers are enabled for user (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."session_rpl" is 'Session realized profit and loss';
+comment on column deribit.private_get_account_summary_response_fee."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
+comment on column deribit.private_get_account_summary_response_fee."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."options_vega" is 'Options summary vega';
+comment on column deribit.private_get_account_summary_response_fee."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."system_name" is 'System generated user nickname (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."options_gamma" is 'Options summary gamma';
+comment on column deribit.private_get_account_summary_response_fee."username" is 'Account name (given by user) (available when parameter extended = true)';
+comment on column deribit.private_get_account_summary_response_fee."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
+comment on column deribit.private_get_account_summary_response_fee."delta_total" is 'The sum of position deltas';
+
+create type deribit.private_get_account_summary_response_result as (
+    "options_pl" double precision,
+    "projected_delta_total" double precision,
+    "options_theta_map" jsonb,
+    "has_non_block_chain_equity" boolean,
+    "total_margin_balance_usd" double precision,
+    "limits" jsonb,
+    "type" text,
+    "total_delta_total_usd" double precision,
+    "available_withdrawal_funds" double precision,
+    "options_session_rpl" double precision,
+    "futures_session_rpl" double precision,
+    "total_pl" double precision,
+    "spot_reserve" double precision,
+    "fees" deribit.private_get_account_summary_response_fee[]
+);
+
 comment on column deribit.private_get_account_summary_response_result."options_pl" is 'Options profit and Loss';
 comment on column deribit.private_get_account_summary_response_result."projected_delta_total" is 'The sum of position deltas without positions that will expire during closest expiration';
 comment on column deribit.private_get_account_summary_response_result."options_theta_map" is 'Map of options'' thetas per index';
@@ -5184,51 +5455,7 @@ comment on column deribit.private_get_account_summary_response_result."options_s
 comment on column deribit.private_get_account_summary_response_result."futures_session_rpl" is 'Futures session realized profit and Loss';
 comment on column deribit.private_get_account_summary_response_result."total_pl" is 'Profit and loss';
 comment on column deribit.private_get_account_summary_response_result."spot_reserve" is 'The account''s balance reserved in active spot orders';
-comment on column deribit.private_get_account_summary_response_result."fees" is 'User fees in case of any discounts (available when parameter extended = true and user has any discounts)';
-comment on column deribit.private_get_account_summary_response_result."additional_reserve" is 'The account''s balance reserved in other orders';
-comment on column deribit.private_get_account_summary_response_result."options_session_upl" is 'Options session unrealized profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."cross_collateral_enabled" is 'When true cross collateral is enabled for user';
-comment on column deribit.private_get_account_summary_response_result."id" is 'Account id (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_value" is 'Options value';
-comment on column deribit.private_get_account_summary_response_result."creation_timestamp" is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."email" is 'User email (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_vega_map" is 'Map of options'' vegas per index';
-comment on column deribit.private_get_account_summary_response_result."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."mmp_enabled" is 'Whether MMP is enabled (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."futures_session_upl" is 'Futures session unrealized profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."portfolio_margining_enabled" is 'true when portfolio margining is enabled for user';
-comment on column deribit.private_get_account_summary_response_result."futures_pl" is 'Futures profit and Loss';
-comment on column deribit.private_get_account_summary_response_result."options_gamma_map" is 'Map of options'' gammas per index';
-comment on column deribit.private_get_account_summary_response_result."currency" is 'The selected currency';
-comment on column deribit.private_get_account_summary_response_result."options_delta" is 'Options summary delta';
-comment on column deribit.private_get_account_summary_response_result."initial_margin" is 'The account''s initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."projected_maintenance_margin" is 'Projected maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."available_funds" is 'The account''s available funds. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."referrer_id" is 'Optional identifier of the referrer (of the affiliation program, and available when parameter extended = true), which link was used by this account at registration. It coincides with suffix of the affiliation link path after /reg-';
-comment on column deribit.private_get_account_summary_response_result."login_enabled" is 'Whether account is loginable using email and password (available when parameter extended = true and account is a subaccount)';
-comment on column deribit.private_get_account_summary_response_result."equity" is 'The account''s current equity';
-comment on column deribit.private_get_account_summary_response_result."margin_model" is 'Name of user''s currently enabled margin model';
-comment on column deribit.private_get_account_summary_response_result."balance" is 'The account''s balance';
-comment on column deribit.private_get_account_summary_response_result."session_upl" is 'Session unrealized profit and loss';
-comment on column deribit.private_get_account_summary_response_result."margin_balance" is 'The account''s margin balance. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."security_keys_enabled" is 'Whether Security Key authentication is enabled (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."deposit_address" is 'The deposit address for the account (if available)';
-comment on column deribit.private_get_account_summary_response_result."options_theta" is 'Options summary theta';
-comment on column deribit.private_get_account_summary_response_result."self_trading_extended_to_subaccounts" is 'true if self trading rejection behavior is applied to trades between subaccounts (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."interuser_transfers_enabled" is 'true when the inter-user transfers are enabled for user (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."total_initial_margin_usd" is 'Optional (only for users using cross margin). The account''s total initial margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."estimated_liquidation_ratio" is 'Estimated Liquidation Ratio is returned only for users without portfolio margining enabled. Multiplying it by future position''s market price returns its estimated liquidation price. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."session_rpl" is 'Session realized profit and loss';
-comment on column deribit.private_get_account_summary_response_result."fee_balance" is 'The account''s fee balance (it can be used to pay for fees)';
-comment on column deribit.private_get_account_summary_response_result."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."options_vega" is 'Options summary vega';
-comment on column deribit.private_get_account_summary_response_result."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
-comment on column deribit.private_get_account_summary_response_result."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."system_name" is 'System generated user nickname (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."options_gamma" is 'Options summary gamma';
-comment on column deribit.private_get_account_summary_response_result."username" is 'Account name (given by user) (available when parameter extended = true)';
-comment on column deribit.private_get_account_summary_response_result."total_equity_usd" is 'Optional (only for users using cross margin). The account''s total equity in all cross collateral currencies, expressed in USD';
-comment on column deribit.private_get_account_summary_response_result."delta_total" is 'The sum of position deltas';
+comment on column deribit.private_get_account_summary_response_result."fees" is 'List of fee objects for all currency pairs and instrument types related to the currency (available when parameter extended = true and user has any discounts)';
 
 create type deribit.private_get_account_summary_response as (
     "id" bigint,
@@ -5288,6 +5515,125 @@ comment on function deribit.private_get_account_summary is 'Retrieves user accou
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_get_address_beneficiary_request_currency as enum (
+    'BNB',
+    'BTC',
+    'ETH',
+    'ETHW',
+    'EURR',
+    'MATIC',
+    'PAXG',
+    'SOL',
+    'STETH',
+    'USDC',
+    'USDE',
+    'USDT',
+    'USYC',
+    'XRP'
+);
+
+create type deribit.private_get_address_beneficiary_request as (
+    "currency" deribit.private_get_address_beneficiary_request_currency,
+    "address" text,
+    "tag" text
+);
+
+comment on column deribit.private_get_address_beneficiary_request."currency" is '(Required) The currency symbol';
+comment on column deribit.private_get_address_beneficiary_request."address" is '(Required) Address in currency format';
+comment on column deribit.private_get_address_beneficiary_request."tag" is 'Tag for XRP addresses';
+
+create type deribit.private_get_address_beneficiary_response_result as (
+    "address" text,
+    "agreed" boolean,
+    "beneficiary_address" text,
+    "beneficiary_company_name" text,
+    "beneficiary_first_name" text,
+    "beneficiary_last_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
+    "creation_timestamp" bigint,
+    "currency" text,
+    "personal" boolean,
+    "tag" text,
+    "unhosted" boolean,
+    "update_timestamp" bigint
+);
+
+comment on column deribit.private_get_address_beneficiary_response_result."address" is 'Address in proper format for currency';
+comment on column deribit.private_get_address_beneficiary_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_get_address_beneficiary_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
+comment on column deribit.private_get_address_beneficiary_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_address_beneficiary_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_get_address_beneficiary_response_result."personal" is 'The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_get_address_beneficiary_response_result."tag" is 'Tag for XRP addresses (optional)';
+comment on column deribit.private_get_address_beneficiary_response_result."unhosted" is 'Indicates if the address belongs to an unhosted wallet';
+comment on column deribit.private_get_address_beneficiary_response_result."update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+
+create type deribit.private_get_address_beneficiary_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_get_address_beneficiary_response_result
+);
+
+comment on column deribit.private_get_address_beneficiary_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_get_address_beneficiary_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_get_address_beneficiary(
+    "currency" deribit.private_get_address_beneficiary_request_currency,
+    "address" text,
+    "tag" text default null
+)
+returns deribit.private_get_address_beneficiary_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "address",
+            "tag"
+        )::deribit.private_get_address_beneficiary_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/get_address_beneficiary'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_get_address_beneficiary_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_get_address_beneficiary is 'Retrieves address beneficiary information';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
 create type deribit.private_get_address_book_request_currency as enum (
     'BNB',
     'BTC',
@@ -5328,6 +5674,7 @@ create type deribit.private_get_address_book_response_result as (
     "beneficiary_last_name" text,
     "beneficiary_vasp_did" text,
     "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
     "creation_timestamp" bigint,
     "currency" text,
     "info_required" boolean,
@@ -5343,10 +5690,12 @@ create type deribit.private_get_address_book_response_result as (
 comment on column deribit.private_get_address_book_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_address_book_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_get_address_book_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_get_address_book_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
 comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
 comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_get_address_book_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
 comment on column deribit.private_get_address_book_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_address_book_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_get_address_book_response_result."info_required" is 'Signalises that addition information regarding the beneficiary of the address is required';
@@ -5406,6 +5755,7 @@ as $$
         (b)."beneficiary_last_name"::text,
         (b)."beneficiary_vasp_did"::text,
         (b)."beneficiary_vasp_name"::text,
+        (b)."beneficiary_vasp_website"::text,
         (b)."creation_timestamp"::bigint,
         (b)."currency"::text,
         (b)."info_required"::boolean,
@@ -5507,6 +5857,28 @@ create type deribit.private_get_block_trade_request as (
 
 comment on column deribit.private_get_block_trade_request."id" is '(Required) Block trade id';
 
+create type deribit.private_get_block_trade_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_block_trade_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_block_trade_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_block_trade_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_block_trade_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_block_trade_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_block_trade_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_block_trade_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
 create type deribit.private_get_block_trade_response_trade as (
     "trade_id" text,
     "tick_direction" bigint,
@@ -5528,6 +5900,7 @@ create type deribit.private_get_block_trade_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_block_trade_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -5567,6 +5940,7 @@ comment on column deribit.private_get_block_trade_response_trade."price" is 'Pri
 comment on column deribit.private_get_block_trade_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_block_trade_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_block_trade_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_block_trade_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_block_trade_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_block_trade_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_block_trade_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -5587,12 +5961,16 @@ comment on column deribit.private_get_block_trade_response_trade."legs" is 'Opti
 
 create type deribit.private_get_block_trade_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_get_block_trade_response_trade[]
 );
 
 comment on column deribit.private_get_block_trade_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trade_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trade_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_get_block_trade_response_result."id" is 'Block trade id';
 comment on column deribit.private_get_block_trade_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -5650,6 +6028,138 @@ comment on function deribit.private_get_block_trade is 'Returns information abou
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_get_block_trade_requests_request as (
+    "broker_code" text
+);
+
+comment on column deribit.private_get_block_trade_requests_request."broker_code" is 'Broker code to filter block trade requests. Only broker clients can use broker_code to query for their executed broker block trades.';
+
+create type deribit.private_get_block_trade_requests_response_trade as (
+    "amount" double precision,
+    "direction" text,
+    "instrument_name" text,
+    "price" double precision
+);
+
+comment on column deribit.private_get_block_trade_requests_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_block_trade_requests_response_trade."direction" is 'Direction: buy, or sell';
+comment on column deribit.private_get_block_trade_requests_response_trade."instrument_name" is 'Unique instrument identifier';
+comment on column deribit.private_get_block_trade_requests_response_trade."price" is 'Price in base currency';
+
+create type deribit.private_get_block_trade_requests_response_state as (
+    "timestamp" bigint,
+    "value" text
+);
+
+comment on column deribit.private_get_block_trade_requests_response_state."timestamp" is 'State timestamp.';
+comment on column deribit.private_get_block_trade_requests_response_state."value" is 'State value.';
+
+create type deribit.private_get_block_trade_requests_response_counterparty_state as (
+    "timestamp" bigint,
+    "value" text
+);
+
+comment on column deribit.private_get_block_trade_requests_response_counterparty_state."timestamp" is 'State timestamp.';
+comment on column deribit.private_get_block_trade_requests_response_counterparty_state."value" is 'State value.';
+
+create type deribit.private_get_block_trade_requests_response_result as (
+    "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
+    "combo_id" text,
+    "counterparty_state" deribit.private_get_block_trade_requests_response_counterparty_state,
+    "nonce" text,
+    "role" text,
+    "state" deribit.private_get_block_trade_requests_response_state,
+    "timestamp" bigint,
+    "trades" deribit.private_get_block_trade_requests_response_trade[],
+    "user_id" bigint,
+    "username" text
+);
+
+comment on column deribit.private_get_block_trade_requests_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trade_requests_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trade_requests_response_result."broker_name" is 'Name of the broker associated with the block trade.';
+comment on column deribit.private_get_block_trade_requests_response_result."combo_id" is 'Combo instrument identifier';
+comment on column deribit.private_get_block_trade_requests_response_result."counterparty_state" is 'State of the pending block trade for the other party (optional).';
+comment on column deribit.private_get_block_trade_requests_response_result."nonce" is 'Nonce that can be used to approve or reject pending block trade.';
+comment on column deribit.private_get_block_trade_requests_response_result."role" is 'Trade role of the user: maker or taker';
+comment on column deribit.private_get_block_trade_requests_response_result."state" is 'State of the pending block trade for current user.';
+comment on column deribit.private_get_block_trade_requests_response_result."timestamp" is 'Timestamp that can be used to approve or reject pending block trade.';
+comment on column deribit.private_get_block_trade_requests_response_result."user_id" is 'Unique user identifier';
+comment on column deribit.private_get_block_trade_requests_response_result."username" is 'Username of the user who initiated the block trade.';
+
+create type deribit.private_get_block_trade_requests_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_get_block_trade_requests_response_result[]
+);
+
+comment on column deribit.private_get_block_trade_requests_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_get_block_trade_requests_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_get_block_trade_requests(
+    "broker_code" text default null
+)
+returns setof deribit.private_get_block_trade_requests_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "broker_code"
+        )::deribit.private_get_block_trade_requests_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/get_block_trade_requests'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    ),
+    result as (
+        select (jsonb_populate_record(
+            null::deribit.private_get_block_trade_requests_response,
+            convert_from((http_response.http_response).body, 'utf-8')::jsonb)
+        ).result
+        from http_response
+    )
+    select
+        (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
+        (b)."combo_id"::text,
+        (b)."counterparty_state"::deribit.private_get_block_trade_requests_response_counterparty_state,
+        (b)."nonce"::text,
+        (b)."role"::text,
+        (b)."state"::deribit.private_get_block_trade_requests_response_state,
+        (b)."timestamp"::bigint,
+        (b)."trades"::deribit.private_get_block_trade_requests_response_trade[],
+        (b)."user_id"::bigint,
+        (b)."username"::text
+    from (
+        select (unnest(r.data)) b
+        from result r(data)
+    ) a
+    
+$$;
+
+comment on function deribit.private_get_block_trade_requests is 'Provides a list of block trade requests including pending approvals, declined trades, and expired trades. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled. Only broker clients can use broker_code to query for their broker block trade requests.';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
 create type deribit.private_get_block_trades_request_currency as enum (
     'BTC',
     'ETH',
@@ -5663,14 +6173,38 @@ create type deribit.private_get_block_trades_request as (
     "count" bigint,
     "start_id" text,
     "end_id" text,
-    "block_rfq_id" bigint
+    "block_rfq_id" bigint,
+    "broker_code" text
 );
 
-comment on column deribit.private_get_block_trades_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_block_trades_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_block_trades_request."currency" is 'The currency symbol';
+comment on column deribit.private_get_block_trades_request."count" is 'Count of Block Trades returned, maximum - 101';
 comment on column deribit.private_get_block_trades_request."start_id" is 'Response will contain block trades older than the one provided in this field';
 comment on column deribit.private_get_block_trades_request."end_id" is 'The id of the oldest block trade to be returned, start_id is required with end_id';
 comment on column deribit.private_get_block_trades_request."block_rfq_id" is 'ID of the Block RFQ';
+comment on column deribit.private_get_block_trades_request."broker_code" is 'Broker code to filter block trades. Only broker clients can use broker_code to filter broker block trades. Use any for all block trades.';
+
+create type deribit.private_get_block_trades_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_block_trades_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_block_trades_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_block_trades_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_block_trades_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_block_trades_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_block_trades_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_block_trades_response_trade as (
     "trade_id" text,
@@ -5693,6 +6227,7 @@ create type deribit.private_get_block_trades_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_block_trades_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -5732,6 +6267,7 @@ comment on column deribit.private_get_block_trades_response_trade."price" is 'Pr
 comment on column deribit.private_get_block_trades_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_block_trades_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_block_trades_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_block_trades_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_block_trades_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_block_trades_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_block_trades_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -5752,12 +6288,16 @@ comment on column deribit.private_get_block_trades_response_trade."legs" is 'Opt
 
 create type deribit.private_get_block_trades_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_get_block_trades_response_trade[]
 );
 
 comment on column deribit.private_get_block_trades_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trades_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trades_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_get_block_trades_response_result."id" is 'Block trade id';
 comment on column deribit.private_get_block_trades_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -5771,11 +6311,12 @@ comment on column deribit.private_get_block_trades_response."id" is 'The id that
 comment on column deribit.private_get_block_trades_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
 create function deribit.private_get_block_trades(
-    "currency" deribit.private_get_block_trades_request_currency,
+    "currency" deribit.private_get_block_trades_request_currency default null,
     "count" bigint default null,
     "start_id" text default null,
     "end_id" text default null,
-    "block_rfq_id" bigint default null
+    "block_rfq_id" bigint default null,
+    "broker_code" text default null
 )
 returns setof deribit.private_get_block_trades_response_result
 language sql
@@ -5787,7 +6328,8 @@ as $$
             "count",
             "start_id",
             "end_id",
-            "block_rfq_id"
+            "block_rfq_id",
+            "broker_code"
         )::deribit.private_get_block_trades_request as payload
     ), 
     http_response as (
@@ -5808,6 +6350,8 @@ as $$
     )
     select
         (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
         (b)."id"::text,
         (b)."timestamp"::bigint,
         (b)."trades"::deribit.private_get_block_trades_response_trade[]
@@ -5818,7 +6362,347 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_block_trades is 'Returns list of users block trades. block_rfq_id can be provided to receive block trades related to that particular Block RFQ.';
+comment on function deribit.private_get_block_trades is 'Returns list of users block trades. If currency is not provided, returns block trades for all currencies. block_rfq_id can be provided to receive block trades related to that particular Block RFQ.';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
+create type deribit.private_get_broker_trade_requests_response_trade as (
+    "amount" double precision,
+    "direction" text,
+    "instrument_name" text,
+    "price" double precision
+);
+
+comment on column deribit.private_get_broker_trade_requests_response_trade."amount" is 'Trade amount.';
+comment on column deribit.private_get_broker_trade_requests_response_trade."direction" is 'Trade direction (buy or sell).';
+comment on column deribit.private_get_broker_trade_requests_response_trade."instrument_name" is 'Name of the traded instrument.';
+comment on column deribit.private_get_broker_trade_requests_response_trade."price" is 'Trade price.';
+
+create type deribit.private_get_broker_trade_requests_response_taker as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "client_link_name" text,
+    "client_name" text,
+    "state" text,
+    "user_id" text
+);
+
+comment on column deribit.private_get_broker_trade_requests_response_taker."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_broker_trade_requests_response_taker."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_taker."client_link_name" is 'Name of the linked user within the client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_taker."client_name" is 'Name of the client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_taker."state" is 'State of the request from the taker side: initial, approved, or rejected.';
+comment on column deribit.private_get_broker_trade_requests_response_taker."user_id" is 'Obscured user id of the taker.';
+
+create type deribit.private_get_broker_trade_requests_response_maker as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "client_link_name" text,
+    "client_name" text,
+    "state" text,
+    "user_id" text
+);
+
+comment on column deribit.private_get_broker_trade_requests_response_maker."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_broker_trade_requests_response_maker."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_maker."client_link_name" is 'Name of the linked user within the client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_maker."client_name" is 'Name of the client; available to broker.';
+comment on column deribit.private_get_broker_trade_requests_response_maker."state" is 'State of the request from the maker side: initial, approved, or rejected.';
+comment on column deribit.private_get_broker_trade_requests_response_maker."user_id" is 'Obscured user id of the maker.';
+
+create type deribit.private_get_broker_trade_requests_response_result as (
+    "maker" deribit.private_get_broker_trade_requests_response_maker,
+    "nonce" text,
+    "state" text,
+    "taker" deribit.private_get_broker_trade_requests_response_taker,
+    "timestamp" bigint,
+    "trades" deribit.private_get_broker_trade_requests_response_trade[]
+);
+
+comment on column deribit.private_get_broker_trade_requests_response_result."nonce" is 'Nonce for approving or rejecting the broker block trade request.';
+comment on column deribit.private_get_broker_trade_requests_response_result."state" is 'State of the broker block trade request.';
+comment on column deribit.private_get_broker_trade_requests_response_result."timestamp" is 'Timestamp of the broker block trade request (milliseconds since the UNIX epoch).';
+
+create type deribit.private_get_broker_trade_requests_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_get_broker_trade_requests_response_result[]
+);
+
+comment on column deribit.private_get_broker_trade_requests_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_get_broker_trade_requests_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_get_broker_trade_requests()
+returns setof deribit.private_get_broker_trade_requests_response_result
+language sql
+as $$
+    with http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/get_broker_trade_requests'::deribit.endpoint,
+            request := null::text,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+    ),
+    result as (
+        select (jsonb_populate_record(
+            null::deribit.private_get_broker_trade_requests_response,
+            convert_from((http_response.http_response).body, 'utf-8')::jsonb)
+        ).result
+        from http_response
+    )
+    select
+        (b)."maker"::deribit.private_get_broker_trade_requests_response_maker,
+        (b)."nonce"::text,
+        (b)."state"::text,
+        (b)."taker"::deribit.private_get_broker_trade_requests_response_taker,
+        (b)."timestamp"::bigint,
+        (b)."trades"::deribit.private_get_broker_trade_requests_response_trade[]
+    from (
+        select (unnest(r.data)) b
+        from result r(data)
+    ) a
+    
+$$;
+
+comment on function deribit.private_get_broker_trade_requests is 'Broker Method Provides a list of broker block trade requests including pending approvals, declined trades, and expired trades. timestamp and nonce received in response can be used to approve or reject the pending broker block trade.';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
+create type deribit.private_get_broker_trades_request_currency as enum (
+    'BTC',
+    'ETH',
+    'EURR',
+    'USDC',
+    'USDT'
+);
+
+create type deribit.private_get_broker_trades_request as (
+    "currency" deribit.private_get_broker_trades_request_currency,
+    "count" bigint,
+    "start_id" text,
+    "end_id" text
+);
+
+comment on column deribit.private_get_broker_trades_request."currency" is 'The currency symbol';
+comment on column deribit.private_get_broker_trades_request."count" is 'Number of requested items, default - 20, maximum - 1000';
+comment on column deribit.private_get_broker_trades_request."start_id" is 'Response will contain block trades older than the one provided in this field';
+comment on column deribit.private_get_broker_trades_request."end_id" is 'The id of the oldest block trade to be returned, start_id is required with end_id';
+
+create type deribit.private_get_broker_trades_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_broker_trades_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_broker_trades_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_broker_trades_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_broker_trades_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_broker_trades_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_broker_trades_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_broker_trades_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_broker_trades_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
+
+create type deribit.private_get_broker_trades_response_trade as (
+    "trade_id" text,
+    "tick_direction" bigint,
+    "fee_currency" text,
+    "api" boolean,
+    "advanced" text,
+    "order_id" text,
+    "liquidity" text,
+    "post_only" text,
+    "direction" text,
+    "contracts" double precision,
+    "mmp" boolean,
+    "fee" double precision,
+    "quote_id" text,
+    "index_price" double precision,
+    "label" text,
+    "block_trade_id" text,
+    "price" double precision,
+    "combo_id" text,
+    "matching_id" text,
+    "order_type" text,
+    "trade_allocations" deribit.private_get_broker_trades_response_trade_allocation[],
+    "profit_loss" double precision,
+    "timestamp" bigint,
+    "iv" double precision,
+    "state" text,
+    "underlying_price" double precision,
+    "block_rfq_quote_id" bigint,
+    "quote_set_id" text,
+    "mark_price" double precision,
+    "block_rfq_id" bigint,
+    "combo_trade_id" double precision,
+    "reduce_only" text,
+    "amount" double precision,
+    "liquidation" text,
+    "trade_seq" bigint,
+    "risk_reducing" boolean,
+    "instrument_name" text,
+    "legs" text[],
+    "next_start_id" bigint
+);
+
+comment on column deribit.private_get_broker_trades_response_trade."trade_id" is 'Unique (per currency) trade identifier';
+comment on column deribit.private_get_broker_trades_response_trade."tick_direction" is 'Direction of the "tick" (0 = Plus Tick, 1 = Zero-Plus Tick, 2 = Minus Tick, 3 = Zero-Minus Tick).';
+comment on column deribit.private_get_broker_trades_response_trade."fee_currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_get_broker_trades_response_trade."api" is 'true if user order was created with API';
+comment on column deribit.private_get_broker_trades_response_trade."advanced" is 'Advanced type of user order: "usd" or "implv" (only for options; omitted if not applicable)';
+comment on column deribit.private_get_broker_trades_response_trade."order_id" is 'Id of the user order (maker or taker), i.e. subscriber''s order id that took part in the trade';
+comment on column deribit.private_get_broker_trades_response_trade."liquidity" is 'Describes what was role of users order: "M" when it was maker order, "T" when it was taker order';
+comment on column deribit.private_get_broker_trades_response_trade."post_only" is 'true if user order is post-only';
+comment on column deribit.private_get_broker_trades_response_trade."direction" is 'Direction: buy, or sell';
+comment on column deribit.private_get_broker_trades_response_trade."contracts" is 'Trade size in contract units (optional, may be absent in historical trades)';
+comment on column deribit.private_get_broker_trades_response_trade."mmp" is 'true if user order is MMP';
+comment on column deribit.private_get_broker_trades_response_trade."fee" is 'User''s fee in units of the specified fee_currency';
+comment on column deribit.private_get_broker_trades_response_trade."quote_id" is 'QuoteID of the user order (optional, present only for orders placed with private/mass_quote)';
+comment on column deribit.private_get_broker_trades_response_trade."index_price" is 'Index Price at the moment of trade';
+comment on column deribit.private_get_broker_trades_response_trade."label" is 'User defined label (presented only when previously set for order by user)';
+comment on column deribit.private_get_broker_trades_response_trade."block_trade_id" is 'Block trade id - when trade was part of a block trade';
+comment on column deribit.private_get_broker_trades_response_trade."price" is 'Price in base currency';
+comment on column deribit.private_get_broker_trades_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
+comment on column deribit.private_get_broker_trades_response_trade."matching_id" is 'Always null';
+comment on column deribit.private_get_broker_trades_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_broker_trades_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
+comment on column deribit.private_get_broker_trades_response_trade."profit_loss" is 'Profit and loss in base currency.';
+comment on column deribit.private_get_broker_trades_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
+comment on column deribit.private_get_broker_trades_response_trade."iv" is 'Option implied volatility for the price (Option only)';
+comment on column deribit.private_get_broker_trades_response_trade."state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered" or "archive" (if order was archived)';
+comment on column deribit.private_get_broker_trades_response_trade."underlying_price" is 'Underlying price for implied volatility calculations (Options only)';
+comment on column deribit.private_get_broker_trades_response_trade."block_rfq_quote_id" is 'ID of the Block RFQ quote - when trade was part of the Block RFQ';
+comment on column deribit.private_get_broker_trades_response_trade."quote_set_id" is 'QuoteSet of the user order (optional, present only for orders placed with private/mass_quote)';
+comment on column deribit.private_get_broker_trades_response_trade."mark_price" is 'Mark Price at the moment of trade';
+comment on column deribit.private_get_broker_trades_response_trade."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
+comment on column deribit.private_get_broker_trades_response_trade."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
+comment on column deribit.private_get_broker_trades_response_trade."reduce_only" is 'true if user order is reduce-only';
+comment on column deribit.private_get_broker_trades_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_broker_trades_response_trade."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
+comment on column deribit.private_get_broker_trades_response_trade."trade_seq" is 'The sequence number of the trade within instrument';
+comment on column deribit.private_get_broker_trades_response_trade."risk_reducing" is 'true if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)';
+comment on column deribit.private_get_broker_trades_response_trade."instrument_name" is 'Unique instrument identifier';
+comment on column deribit.private_get_broker_trades_response_trade."legs" is 'Optional field containing leg trades if trade is a combo trade (present when querying for only combo trades and in combo_trades events)';
+comment on column deribit.private_get_broker_trades_response_trade."next_start_id" is 'The next start ID for pagination.';
+
+create type deribit.private_get_broker_trades_response_taker as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "client_link_name" text,
+    "client_name" text,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_broker_trades_response_taker."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_broker_trades_response_taker."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_taker."client_link_name" is 'Name of the linked user within the client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_taker."client_name" is 'Name of the client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_taker."user_id" is 'Obscured user id of the taker.';
+
+create type deribit.private_get_broker_trades_response_maker as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "client_link_name" text,
+    "client_name" text,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_broker_trades_response_maker."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_broker_trades_response_maker."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_maker."client_link_name" is 'Name of the linked user within the client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_maker."client_name" is 'Name of the client; available to broker.';
+comment on column deribit.private_get_broker_trades_response_maker."user_id" is 'Obscured user id of the maker.';
+
+create type deribit.private_get_broker_trades_response_history as (
+    "id" text,
+    "maker" deribit.private_get_broker_trades_response_maker,
+    "taker" deribit.private_get_broker_trades_response_taker,
+    "timestamp" bigint,
+    "trades" deribit.private_get_broker_trades_response_trade[]
+);
+
+comment on column deribit.private_get_broker_trades_response_history."id" is 'Unique identifier of the block trade history entry.';
+comment on column deribit.private_get_broker_trades_response_history."timestamp" is 'Timestamp of the block trade history entry (milliseconds since the UNIX epoch).';
+
+create type deribit.private_get_broker_trades_response_result as (
+    "history" deribit.private_get_broker_trades_response_history[]
+);
+
+create type deribit.private_get_broker_trades_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_get_broker_trades_response_result
+);
+
+comment on column deribit.private_get_broker_trades_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_get_broker_trades_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_get_broker_trades(
+    "currency" deribit.private_get_broker_trades_request_currency default null,
+    "count" bigint default null,
+    "start_id" text default null,
+    "end_id" text default null
+)
+returns deribit.private_get_broker_trades_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "count",
+            "start_id",
+            "end_id"
+        )::deribit.private_get_broker_trades_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/get_broker_trades'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_get_broker_trades_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_get_broker_trades is 'Broker Method Returns list of broker block trades. If currency is not provided, returns broker block trades for all currencies.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -5929,7 +6813,7 @@ create type deribit.private_get_current_deposit_address_response_result as (
 comment on column deribit.private_get_current_deposit_address_response_result."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_current_deposit_address_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_current_deposit_address_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
-comment on column deribit.private_get_current_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit, withdrawal, transfer';
+comment on column deribit.private_get_current_deposit_address_response_result."type" is 'Address type/purpose, allowed values : deposit';
 
 create type deribit.private_get_current_deposit_address_response as (
     "id" bigint,
@@ -6001,7 +6885,7 @@ create type deribit.private_get_deposits_request as (
 );
 
 comment on column deribit.private_get_deposits_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_deposits_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_deposits_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_deposits_request."offset" is 'The offset for pagination, default - 0';
 
 create type deribit.private_get_deposits_response_datum as (
@@ -6020,12 +6904,12 @@ create type deribit.private_get_deposits_response_datum as (
 
 comment on column deribit.private_get_deposits_response_datum."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_deposits_response_datum."amount" is 'Amount of funds in given currency';
-comment on column deribit.private_get_deposits_response_datum."clearance_state" is 'Clearance state, allowed values : in_progress, pending_admin_decision, pending_user_input, success, failed, cancelled, refund_initiated, refunded';
+comment on column deribit.private_get_deposits_response_datum."clearance_state" is 'Clearance state indicating the current status of the transaction clearance process. Allowed values: in_progress: clearance process is in progress pending_admin_decision: transaction is under manual review by Deribit admin pending_user_input: user should provide additional information regarding the transaction success: clearance process completed successfully failed: clearance process failed, transaction is rejected cancelled: transaction is cancelled (currently used only for withdrawals, meaning the withdrawal is cancelled) refund_initiated: clearance process failed, transaction refund is initiated, funds are removed from Deribit balance (valid for deposits only) refunded: clearance process failed, deposit amount is refunded back to the client (valid for deposits only)';
 comment on column deribit.private_get_deposits_response_datum."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_get_deposits_response_datum."received_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_deposits_response_datum."refund_transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_deposits_response_datum."source_address" is 'Address in proper format for currency';
-comment on column deribit.private_get_deposits_response_datum."state" is 'Deposit state, allowed values : pending, completed, rejected, replaced';
+comment on column deribit.private_get_deposits_response_datum."state" is 'Deposit state. Allowed values: pending: deposit detected on blockchain/system, compliance not yet finished completed: compliance check finished successfully rejected: deposit failed compliance and must be handled manually replaced: deposit transaction was replaced on the blockchain and should have a new transaction hash';
 comment on column deribit.private_get_deposits_response_datum."transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_deposits_response_datum."updated_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -6320,75 +7204,66 @@ comment on function deribit.private_get_margins is 'Get margins for a given inst
 */
 create type deribit.private_get_mmp_config_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_get_mmp_config_request as (
     "index_name" deribit.private_get_mmp_config_request_index_name,
-    "mmp_group" text
+    "mmp_group" text,
+    "block_rfq" boolean
 );
 
 comment on column deribit.private_get_mmp_config_request."index_name" is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
-comment on column deribit.private_get_mmp_config_request."mmp_group" is 'Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the endpoint returns the configuration for the MMP settings for regular orders. The index_name must be specified before using this parameter';
+comment on column deribit.private_get_mmp_config_request."mmp_group" is 'Specifies the MMP group for which the configuration is being retrieved. MMP groups are used for Mass Quotes. If MMP group is not provided, the method returns the configuration for the MMP settings for regular orders. The index_name must be specified before using this parameter. 📖 Related Support Article: Mass Quotes Specifications';
+comment on column deribit.private_get_mmp_config_request."block_rfq" is 'If true, retrieves MMP configuration for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 
 create type deribit.private_get_mmp_config_response_result as (
+    "block_rfq" boolean,
     "delta_limit" double precision,
     "frozen_time" bigint,
     "index_name" text,
     "interval" bigint,
     "mmp_group" text,
     "quantity_limit" double precision,
+    "trade_count_limit" bigint,
     "vega_limit" double precision
 );
 
+comment on column deribit.private_get_mmp_config_response_result."block_rfq" is 'If true, indicates MMP configuration for Block RFQ. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 comment on column deribit.private_get_mmp_config_response_result."delta_limit" is 'Delta limit';
 comment on column deribit.private_get_mmp_config_response_result."frozen_time" is 'MMP frozen time in seconds, if set to 0 manual reset is required';
 comment on column deribit.private_get_mmp_config_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_get_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_get_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
 comment on column deribit.private_get_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_get_mmp_config_response_result."trade_count_limit" is 'For Block RFQ only. The maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs.';
 comment on column deribit.private_get_mmp_config_response_result."vega_limit" is 'Vega limit';
 
 create type deribit.private_get_mmp_config_response as (
@@ -6402,7 +7277,8 @@ comment on column deribit.private_get_mmp_config_response."jsonrpc" is 'The JSON
 
 create function deribit.private_get_mmp_config(
     "index_name" deribit.private_get_mmp_config_request_index_name default null,
-    "mmp_group" text default null
+    "mmp_group" text default null,
+    "block_rfq" boolean default null
 )
 returns setof deribit.private_get_mmp_config_response_result
 language sql
@@ -6411,7 +7287,8 @@ as $$
     with request as (
         select row(
             "index_name",
-            "mmp_group"
+            "mmp_group",
+            "block_rfq"
         )::deribit.private_get_mmp_config_request as payload
     ), 
     http_response as (
@@ -6431,12 +7308,14 @@ as $$
         from http_response
     )
     select
+        (b)."block_rfq"::boolean,
         (b)."delta_limit"::double precision,
         (b)."frozen_time"::bigint,
         (b)."index_name"::text,
         (b)."interval"::bigint,
         (b)."mmp_group"::text,
         (b)."quantity_limit"::double precision,
+        (b)."trade_count_limit"::bigint,
         (b)."vega_limit"::double precision
     from (
         select (unnest(r.data)) b
@@ -6461,65 +7340,54 @@ comment on function deribit.private_get_mmp_config is 'Get MMP configuration for
 */
 create type deribit.private_get_mmp_status_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_get_mmp_status_request as (
     "index_name" deribit.private_get_mmp_status_request_index_name,
-    "mmp_group" text
+    "mmp_group" text,
+    "block_rfq" boolean
 );
 
 comment on column deribit.private_get_mmp_status_request."index_name" is 'Index identifier of derivative instrument on the platform; skipping this parameter will return all configurations';
-comment on column deribit.private_get_mmp_status_request."mmp_group" is 'Specifies the MMP group for which the status is being retrieved. The index_name must be specified before using this parameter.';
+comment on column deribit.private_get_mmp_status_request."mmp_group" is 'Specifies the MMP group for which the status is being retrieved. The index_name must be specified before using this parameter. 📖 Related Support Article: Mass Quotes Specifications';
+comment on column deribit.private_get_mmp_status_request."block_rfq" is 'If true, retrieves MMP status for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP status is completely separate from normal order/quote MMP status.';
 
 create type deribit.private_get_mmp_status_response_result as (
+    "block_rfq" boolean,
     "frozen_until" bigint,
     "index_name" text,
     "mmp_group" text
 );
 
+comment on column deribit.private_get_mmp_status_response_result."block_rfq" is 'If true, indicates that the MMP status is for Block RFQ. Block RFQ MMP status is completely separate from normal order/quote MMP status.';
 comment on column deribit.private_get_mmp_status_response_result."frozen_until" is 'Timestamp (milliseconds since the UNIX epoch) until the user will be frozen - 0 means that the user is frozen until manual reset.';
 comment on column deribit.private_get_mmp_status_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_get_mmp_status_response_result."mmp_group" is 'Triggered mmp group, this parameter is optional (appears only for Mass Quote orders trigger)';
@@ -6535,7 +7403,8 @@ comment on column deribit.private_get_mmp_status_response."jsonrpc" is 'The JSON
 
 create function deribit.private_get_mmp_status(
     "index_name" deribit.private_get_mmp_status_request_index_name default null,
-    "mmp_group" text default null
+    "mmp_group" text default null,
+    "block_rfq" boolean default null
 )
 returns setof deribit.private_get_mmp_status_response_result
 language sql
@@ -6544,7 +7413,8 @@ as $$
     with request as (
         select row(
             "index_name",
-            "mmp_group"
+            "mmp_group",
+            "block_rfq"
         )::deribit.private_get_mmp_status_request as payload
     ), 
     http_response as (
@@ -6564,6 +7434,7 @@ as $$
         from http_response
     )
     select
+        (b)."block_rfq"::boolean,
         (b)."frozen_until"::bigint,
         (b)."index_name"::text,
         (b)."mmp_group"::text
@@ -6574,7 +7445,7 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_mmp_status is 'Get MMP status for triggred index (or group). If the parameter is not provided, a list of all triggered MMP statuses is returned.';
+comment on function deribit.private_get_mmp_status is 'Get MMP status for triggered index (or group). If the parameter is not provided, a list of all triggered MMP statuses is returned.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -6696,6 +7567,7 @@ create type deribit.private_get_open_orders_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -6726,6 +7598,7 @@ create type deribit.private_get_open_orders_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -6736,7 +7609,6 @@ create type deribit.private_get_open_orders_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -6749,6 +7621,7 @@ comment on column deribit.private_get_open_orders_response_result."triggered" is
 comment on column deribit.private_get_open_orders_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_open_orders_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_open_orders_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_open_orders_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_open_orders_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_open_orders_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_open_orders_response_result."api" is 'true if created with API';
@@ -6763,13 +7636,13 @@ comment on column deribit.private_get_open_orders_response_result."direction" is
 comment on column deribit.private_get_open_orders_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_open_orders_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_open_orders_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_open_orders_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_open_orders_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_open_orders_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_open_orders_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_open_orders_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_open_orders_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -6779,6 +7652,7 @@ comment on column deribit.private_get_open_orders_response_result."price" is 'Pr
 comment on column deribit.private_get_open_orders_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_open_orders_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_open_orders_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_open_orders_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_open_orders_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_open_orders_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_open_orders_response_result."original_order_type" is 'Original order type. Optional field';
@@ -6786,10 +7660,9 @@ comment on column deribit.private_get_open_orders_response_result."block_trade" 
 comment on column deribit.private_get_open_orders_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_open_orders_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_open_orders_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_open_orders_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_open_orders_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_open_orders_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_open_orders_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_open_orders_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_open_orders_response_result."instrument_name" is 'Unique instrument identifier';
@@ -6841,6 +7714,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -6871,6 +7745,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -6881,7 +7756,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -6954,6 +7828,7 @@ create type deribit.private_get_open_orders_by_currency_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -6984,6 +7859,7 @@ create type deribit.private_get_open_orders_by_currency_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -6994,7 +7870,6 @@ create type deribit.private_get_open_orders_by_currency_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -7007,6 +7882,7 @@ comment on column deribit.private_get_open_orders_by_currency_response_result."t
 comment on column deribit.private_get_open_orders_by_currency_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_open_orders_by_currency_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_open_orders_by_currency_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_open_orders_by_currency_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_open_orders_by_currency_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_open_orders_by_currency_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_open_orders_by_currency_response_result."api" is 'true if created with API';
@@ -7021,13 +7897,13 @@ comment on column deribit.private_get_open_orders_by_currency_response_result."d
 comment on column deribit.private_get_open_orders_by_currency_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_open_orders_by_currency_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_open_orders_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_currency_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_currency_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_open_orders_by_currency_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_open_orders_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_open_orders_by_currency_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_open_orders_by_currency_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -7037,6 +7913,7 @@ comment on column deribit.private_get_open_orders_by_currency_response_result."p
 comment on column deribit.private_get_open_orders_by_currency_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_open_orders_by_currency_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_open_orders_by_currency_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_open_orders_by_currency_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_open_orders_by_currency_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."original_order_type" is 'Original order type. Optional field';
@@ -7044,10 +7921,9 @@ comment on column deribit.private_get_open_orders_by_currency_response_result."b
 comment on column deribit.private_get_open_orders_by_currency_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_open_orders_by_currency_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_open_orders_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_open_orders_by_currency_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_open_orders_by_currency_response_result."instrument_name" is 'Unique instrument identifier';
@@ -7101,6 +7977,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -7131,6 +8008,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -7141,7 +8019,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -7196,6 +8073,7 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -7226,6 +8104,7 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -7236,7 +8115,6 @@ create type deribit.private_get_open_orders_by_instrument_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -7249,6 +8127,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."api" is 'true if created with API';
@@ -7263,13 +8142,13 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_open_orders_by_instrument_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_open_orders_by_instrument_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -7279,6 +8158,7 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."original_order_type" is 'Original order type. Optional field';
@@ -7286,10 +8166,9 @@ comment on column deribit.private_get_open_orders_by_instrument_response_result.
 comment on column deribit.private_get_open_orders_by_instrument_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_open_orders_by_instrument_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_instrument_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_open_orders_by_instrument_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_open_orders_by_instrument_response_result."instrument_name" is 'Unique instrument identifier';
@@ -7341,6 +8220,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -7371,6 +8251,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -7381,7 +8262,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -7430,6 +8310,7 @@ create type deribit.private_get_open_orders_by_label_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -7460,6 +8341,7 @@ create type deribit.private_get_open_orders_by_label_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -7470,7 +8352,6 @@ create type deribit.private_get_open_orders_by_label_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -7483,6 +8364,7 @@ comment on column deribit.private_get_open_orders_by_label_response_result."trig
 comment on column deribit.private_get_open_orders_by_label_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_open_orders_by_label_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_open_orders_by_label_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_open_orders_by_label_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_open_orders_by_label_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_open_orders_by_label_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_open_orders_by_label_response_result."api" is 'true if created with API';
@@ -7497,13 +8379,13 @@ comment on column deribit.private_get_open_orders_by_label_response_result."dire
 comment on column deribit.private_get_open_orders_by_label_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_open_orders_by_label_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_label_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_open_orders_by_label_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_label_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_label_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_open_orders_by_label_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_label_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_open_orders_by_label_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_open_orders_by_label_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_open_orders_by_label_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_label_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_label_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_open_orders_by_label_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_open_orders_by_label_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -7513,6 +8395,7 @@ comment on column deribit.private_get_open_orders_by_label_response_result."pric
 comment on column deribit.private_get_open_orders_by_label_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_open_orders_by_label_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_open_orders_by_label_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_open_orders_by_label_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_open_orders_by_label_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_open_orders_by_label_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_open_orders_by_label_response_result."original_order_type" is 'Original order type. Optional field';
@@ -7520,10 +8403,9 @@ comment on column deribit.private_get_open_orders_by_label_response_result."bloc
 comment on column deribit.private_get_open_orders_by_label_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_open_orders_by_label_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_open_orders_by_label_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_open_orders_by_label_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_open_orders_by_label_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_open_orders_by_label_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_open_orders_by_label_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_open_orders_by_label_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_open_orders_by_label_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_open_orders_by_label_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_open_orders_by_label_response_result."instrument_name" is 'Unique instrument identifier';
@@ -7575,6 +8457,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -7605,6 +8488,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -7615,7 +8499,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -7674,13 +8557,13 @@ create type deribit.private_get_order_history_by_currency_request as (
 
 comment on column deribit.private_get_order_history_by_currency_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_order_history_by_currency_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
-comment on column deribit.private_get_order_history_by_currency_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_order_history_by_currency_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_order_history_by_currency_request."offset" is 'The offset for pagination, default - 0';
 comment on column deribit.private_get_order_history_by_currency_request."include_old" is 'Include in result orders older than 2 days, default - false';
 comment on column deribit.private_get_order_history_by_currency_request."include_unfilled" is 'Include in result fully unfilled closed orders, default - false';
 comment on column deribit.private_get_order_history_by_currency_request."with_continuation" is 'When set to true, the API response format changes from a simple list of orders to an object containing the orders and a continuation token.';
 comment on column deribit.private_get_order_history_by_currency_request."continuation" is 'Continuation token for pagination';
-comment on column deribit.private_get_order_history_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_order_history_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
 
 create type deribit.private_get_order_history_by_currency_response_result as (
     "quote" boolean,
@@ -7688,6 +8571,7 @@ create type deribit.private_get_order_history_by_currency_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -7718,6 +8602,7 @@ create type deribit.private_get_order_history_by_currency_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -7728,7 +8613,6 @@ create type deribit.private_get_order_history_by_currency_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -7741,6 +8625,7 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_order_history_by_currency_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_order_history_by_currency_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_order_history_by_currency_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_order_history_by_currency_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_order_history_by_currency_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_order_history_by_currency_response_result."api" is 'true if created with API';
@@ -7755,13 +8640,13 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_order_history_by_currency_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_order_history_by_currency_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_history_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_order_history_by_currency_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_currency_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_currency_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_order_history_by_currency_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_history_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_order_history_by_currency_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_order_history_by_currency_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -7771,6 +8656,7 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_order_history_by_currency_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_order_history_by_currency_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_history_by_currency_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_order_history_by_currency_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_order_history_by_currency_response_result."original_order_type" is 'Original order type. Optional field';
@@ -7778,10 +8664,9 @@ comment on column deribit.private_get_order_history_by_currency_response_result.
 comment on column deribit.private_get_order_history_by_currency_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_order_history_by_currency_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_order_history_by_currency_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_history_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_currency_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_currency_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_order_history_by_currency_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_order_history_by_currency_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_order_history_by_currency_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_order_history_by_currency_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_order_history_by_currency_response_result."instrument_name" is 'Unique instrument identifier';
@@ -7847,6 +8732,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -7877,6 +8763,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -7887,7 +8774,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -7926,13 +8812,13 @@ create type deribit.private_get_order_history_by_instrument_request as (
 );
 
 comment on column deribit.private_get_order_history_by_instrument_request."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_get_order_history_by_instrument_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_order_history_by_instrument_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_order_history_by_instrument_request."offset" is 'The offset for pagination, default - 0';
 comment on column deribit.private_get_order_history_by_instrument_request."include_old" is 'Include in result orders older than 2 days, default - false';
 comment on column deribit.private_get_order_history_by_instrument_request."include_unfilled" is 'Include in result fully unfilled closed orders, default - false';
 comment on column deribit.private_get_order_history_by_instrument_request."with_continuation" is 'When set to true, the API response format changes from a simple list of orders to an object containing the orders and a continuation token.';
 comment on column deribit.private_get_order_history_by_instrument_request."continuation" is 'Continuation token for pagination';
-comment on column deribit.private_get_order_history_by_instrument_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_order_history_by_instrument_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
 
 create type deribit.private_get_order_history_by_instrument_response_result as (
     "quote" boolean,
@@ -7940,6 +8826,7 @@ create type deribit.private_get_order_history_by_instrument_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -7970,6 +8857,7 @@ create type deribit.private_get_order_history_by_instrument_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -7980,7 +8868,6 @@ create type deribit.private_get_order_history_by_instrument_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -7993,6 +8880,7 @@ comment on column deribit.private_get_order_history_by_instrument_response_resul
 comment on column deribit.private_get_order_history_by_instrument_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_order_history_by_instrument_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_order_history_by_instrument_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_order_history_by_instrument_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_order_history_by_instrument_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_order_history_by_instrument_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_order_history_by_instrument_response_result."api" is 'true if created with API';
@@ -8007,13 +8895,13 @@ comment on column deribit.private_get_order_history_by_instrument_response_resul
 comment on column deribit.private_get_order_history_by_instrument_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_order_history_by_instrument_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_history_by_instrument_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_instrument_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_instrument_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_history_by_instrument_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_order_history_by_instrument_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_history_by_instrument_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_instrument_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_order_history_by_instrument_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_order_history_by_instrument_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -8023,6 +8911,7 @@ comment on column deribit.private_get_order_history_by_instrument_response_resul
 comment on column deribit.private_get_order_history_by_instrument_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_order_history_by_instrument_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_order_history_by_instrument_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_history_by_instrument_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_order_history_by_instrument_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."original_order_type" is 'Original order type. Optional field';
@@ -8030,10 +8919,9 @@ comment on column deribit.private_get_order_history_by_instrument_response_resul
 comment on column deribit.private_get_order_history_by_instrument_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_order_history_by_instrument_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_history_by_instrument_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_history_by_instrument_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_order_history_by_instrument_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_order_history_by_instrument_response_result."instrument_name" is 'Unique instrument identifier';
@@ -8097,6 +8985,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -8127,6 +9016,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -8137,7 +9027,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -8254,6 +9143,7 @@ create type deribit.private_get_order_state_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -8284,6 +9174,7 @@ create type deribit.private_get_order_state_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -8294,7 +9185,6 @@ create type deribit.private_get_order_state_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -8307,6 +9197,7 @@ comment on column deribit.private_get_order_state_response_result."triggered" is
 comment on column deribit.private_get_order_state_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_order_state_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_order_state_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_order_state_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_order_state_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_order_state_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_order_state_response_result."api" is 'true if created with API';
@@ -8321,13 +9212,13 @@ comment on column deribit.private_get_order_state_response_result."direction" is
 comment on column deribit.private_get_order_state_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_order_state_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_order_state_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_state_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_order_state_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_state_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_state_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_order_state_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_state_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_order_state_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_order_state_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -8337,6 +9228,7 @@ comment on column deribit.private_get_order_state_response_result."price" is 'Pr
 comment on column deribit.private_get_order_state_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_order_state_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_order_state_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_state_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_order_state_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_order_state_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_order_state_response_result."original_order_type" is 'Original order type. Optional field';
@@ -8344,10 +9236,9 @@ comment on column deribit.private_get_order_state_response_result."block_trade" 
 comment on column deribit.private_get_order_state_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_order_state_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_order_state_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_state_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_order_state_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_order_state_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_order_state_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_order_state_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_order_state_response_result."instrument_name" is 'Unique instrument identifier';
@@ -8430,6 +9321,7 @@ create type deribit.private_get_order_state_by_label_response_result as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -8460,6 +9352,7 @@ create type deribit.private_get_order_state_by_label_response_result as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -8470,7 +9363,6 @@ create type deribit.private_get_order_state_by_label_response_result as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -8483,6 +9375,7 @@ comment on column deribit.private_get_order_state_by_label_response_result."trig
 comment on column deribit.private_get_order_state_by_label_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_order_state_by_label_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_order_state_by_label_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_order_state_by_label_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_order_state_by_label_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_order_state_by_label_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_order_state_by_label_response_result."api" is 'true if created with API';
@@ -8497,13 +9390,13 @@ comment on column deribit.private_get_order_state_by_label_response_result."dire
 comment on column deribit.private_get_order_state_by_label_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_order_state_by_label_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_order_state_by_label_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_state_by_label_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_by_label_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_by_label_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_order_state_by_label_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_state_by_label_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_order_state_by_label_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_order_state_by_label_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_state_by_label_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_by_label_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_by_label_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_order_state_by_label_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_order_state_by_label_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -8513,6 +9406,7 @@ comment on column deribit.private_get_order_state_by_label_response_result."pric
 comment on column deribit.private_get_order_state_by_label_response_result."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_order_state_by_label_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_order_state_by_label_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_state_by_label_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_order_state_by_label_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_order_state_by_label_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_order_state_by_label_response_result."original_order_type" is 'Original order type. Optional field';
@@ -8520,10 +9414,9 @@ comment on column deribit.private_get_order_state_by_label_response_result."bloc
 comment on column deribit.private_get_order_state_by_label_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_order_state_by_label_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_order_state_by_label_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_state_by_label_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_order_state_by_label_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_order_state_by_label_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_order_state_by_label_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_order_state_by_label_response_result."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_order_state_by_label_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_order_state_by_label_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_order_state_by_label_response_result."instrument_name" is 'Unique instrument identifier';
@@ -8575,6 +9468,7 @@ as $$
         (b)."mobile"::boolean,
         (b)."app_name"::text,
         (b)."implv"::double precision,
+        (b)."refresh_amount"::double precision,
         (b)."usd"::double precision,
         (b)."oto_order_ids"::text[],
         (b)."api"::boolean,
@@ -8605,6 +9499,7 @@ as $$
         (b)."web"::boolean,
         (b)."time_in_force"::text,
         (b)."trigger_reference_price"::double precision,
+        (b)."display_amount"::double precision,
         (b)."order_type"::text,
         (b)."is_primary_otoco"::boolean,
         (b)."original_order_type"::text,
@@ -8615,7 +9510,6 @@ as $$
         (b)."quote_set_id"::text,
         (b)."auto_replaced"::boolean,
         (b)."reduce_only"::boolean,
-        (b)."max_show"::double precision,
         (b)."amount"::double precision,
         (b)."risk_reducing"::boolean,
         (b)."instrument_name"::text,
@@ -8672,22 +9566,30 @@ comment on column deribit.private_get_pending_block_trades_response_counterparty
 
 create type deribit.private_get_pending_block_trades_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
+    "combo_id" text,
     "counterparty_state" deribit.private_get_pending_block_trades_response_counterparty_state,
     "nonce" text,
     "role" text,
     "state" deribit.private_get_pending_block_trades_response_state,
     "timestamp" bigint,
     "trades" deribit.private_get_pending_block_trades_response_trade[],
-    "user_id" bigint
+    "user_id" bigint,
+    "username" text
 );
 
 comment on column deribit.private_get_pending_block_trades_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_pending_block_trades_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_pending_block_trades_response_result."broker_name" is 'Name of the broker associated with the block trade.';
+comment on column deribit.private_get_pending_block_trades_response_result."combo_id" is 'Combo instrument identifier';
 comment on column deribit.private_get_pending_block_trades_response_result."counterparty_state" is 'State of the pending block trade for the other party (optional).';
 comment on column deribit.private_get_pending_block_trades_response_result."nonce" is 'Nonce that can be used to approve or reject pending block trade.';
 comment on column deribit.private_get_pending_block_trades_response_result."role" is 'Trade role of the user: maker or taker';
 comment on column deribit.private_get_pending_block_trades_response_result."state" is 'State of the pending block trade for current user.';
 comment on column deribit.private_get_pending_block_trades_response_result."timestamp" is 'Timestamp that can be used to approve or reject pending block trade.';
 comment on column deribit.private_get_pending_block_trades_response_result."user_id" is 'Unique user identifier';
+comment on column deribit.private_get_pending_block_trades_response_result."username" is 'Username of the user who initiated the block trade.';
 
 create type deribit.private_get_pending_block_trades_response as (
     "id" bigint,
@@ -8719,13 +9621,17 @@ as $$
     )
     select
         (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
+        (b)."combo_id"::text,
         (b)."counterparty_state"::deribit.private_get_pending_block_trades_response_counterparty_state,
         (b)."nonce"::text,
         (b)."role"::text,
         (b)."state"::deribit.private_get_pending_block_trades_response_state,
         (b)."timestamp"::bigint,
         (b)."trades"::deribit.private_get_pending_block_trades_response_trade[],
-        (b)."user_id"::bigint
+        (b)."user_id"::bigint,
+        (b)."username"::text
     from (
         select (unnest(r.data)) b
         from result r(data)
@@ -8733,7 +9639,7 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_pending_block_trades is 'Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';
+comment on function deribit.private_get_pending_block_trades is 'DEPRECATED: This method is deprecated. Please use private/get_block_trade_requests instead.Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -9030,6 +9936,59 @@ comment on function deribit.private_get_positions is 'Retrieve user positions. T
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_get_reward_eligibility_response_result as (
+    "apr_sma7" double precision,
+    "eligibility_status" text
+);
+
+comment on column deribit.private_get_reward_eligibility_response_result."apr_sma7" is 'Simple Moving Average (SMA) of the last 7 days of rewards for the currency';
+comment on column deribit.private_get_reward_eligibility_response_result."eligibility_status" is 'eligible: User can get reward for specific currency for all its equity partially_eligible: User can get reward for specific currency, but custody balance is excluded non_eligible: User can not get reward for specific currency';
+
+create type deribit.private_get_reward_eligibility_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_get_reward_eligibility_response_result
+);
+
+comment on column deribit.private_get_reward_eligibility_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_get_reward_eligibility_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_get_reward_eligibility()
+returns deribit.private_get_reward_eligibility_response_result
+language sql
+as $$
+    with http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/get_reward_eligibility'::deribit.endpoint,
+            request := null::text,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_get_reward_eligibility_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_get_reward_eligibility is 'Returns reward eligibility status and APR data for all supported currencies.';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
 create type deribit.private_get_settlement_history_by_currency_request_currency as enum (
     'BTC',
     'ETH',
@@ -9054,7 +10013,7 @@ create type deribit.private_get_settlement_history_by_currency_request as (
 
 comment on column deribit.private_get_settlement_history_by_currency_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_settlement_history_by_currency_request."type" is 'Settlement type';
-comment on column deribit.private_get_settlement_history_by_currency_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_settlement_history_by_currency_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_settlement_history_by_currency_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.private_get_settlement_history_by_currency_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 
@@ -9175,7 +10134,7 @@ create type deribit.private_get_settlement_history_by_instrument_request as (
 
 comment on column deribit.private_get_settlement_history_by_instrument_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_get_settlement_history_by_instrument_request."type" is 'Settlement type';
-comment on column deribit.private_get_settlement_history_by_instrument_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_settlement_history_by_instrument_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_settlement_history_by_instrument_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.private_get_settlement_history_by_instrument_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 
@@ -9491,6 +10450,7 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -9521,6 +10481,7 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -9531,7 +10492,6 @@ create type deribit.private_get_subaccounts_details_response_open_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -9544,6 +10504,7 @@ comment on column deribit.private_get_subaccounts_details_response_open_order."t
 comment on column deribit.private_get_subaccounts_details_response_open_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_get_subaccounts_details_response_open_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_get_subaccounts_details_response_open_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_get_subaccounts_details_response_open_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_get_subaccounts_details_response_open_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_get_subaccounts_details_response_open_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_get_subaccounts_details_response_open_order."api" is 'true if created with API';
@@ -9558,13 +10519,13 @@ comment on column deribit.private_get_subaccounts_details_response_open_order."d
 comment on column deribit.private_get_subaccounts_details_response_open_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_subaccounts_details_response_open_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_subaccounts_details_response_open_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_get_subaccounts_details_response_open_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_subaccounts_details_response_open_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_subaccounts_details_response_open_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_get_subaccounts_details_response_open_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_subaccounts_details_response_open_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_get_subaccounts_details_response_open_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_get_subaccounts_details_response_open_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_get_subaccounts_details_response_open_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -9574,6 +10535,7 @@ comment on column deribit.private_get_subaccounts_details_response_open_order."p
 comment on column deribit.private_get_subaccounts_details_response_open_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_get_subaccounts_details_response_open_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_get_subaccounts_details_response_open_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_subaccounts_details_response_open_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_get_subaccounts_details_response_open_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."original_order_type" is 'Original order type. Optional field';
@@ -9581,10 +10543,9 @@ comment on column deribit.private_get_subaccounts_details_response_open_order."b
 comment on column deribit.private_get_subaccounts_details_response_open_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_get_subaccounts_details_response_open_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_subaccounts_details_response_open_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_get_subaccounts_details_response_open_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_get_subaccounts_details_response_open_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_get_subaccounts_details_response_open_order."instrument_name" is 'Unique instrument identifier';
@@ -9694,7 +10655,7 @@ comment on column deribit.private_get_transaction_log_request."currency" is '(Re
 comment on column deribit.private_get_transaction_log_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_transaction_log_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_transaction_log_request."query" is 'The following keywords can be used to filter the results: trade, maker, taker, open, close, liquidation, buy, sell, withdrawal, delivery, settlement, deposit, transfer, option, future, correction, block_trade, swap. Plus withdrawal or transfer addresses';
-comment on column deribit.private_get_transaction_log_request."count" is 'Number of requested items, default - 100';
+comment on column deribit.private_get_transaction_log_request."count" is 'Count of transaction log entries returned, default - 100, maximum - 250';
 comment on column deribit.private_get_transaction_log_request."subaccount_id" is 'Id of a subaccount';
 comment on column deribit.private_get_transaction_log_request."continuation" is 'Continuation token for pagination';
 
@@ -9710,6 +10671,7 @@ create type deribit.private_get_transaction_log_response_log as (
     "contracts" double precision,
     "interest_pl" double precision,
     "user_role" text,
+    "fee_role" text,
     "id" bigint,
     "index_price" double precision,
     "info" jsonb,
@@ -9745,6 +10707,7 @@ comment on column deribit.private_get_transaction_log_response_log."side" is 'On
 comment on column deribit.private_get_transaction_log_response_log."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_get_transaction_log_response_log."interest_pl" is 'Actual funding rate of trades and settlements on perpetual instruments';
 comment on column deribit.private_get_transaction_log_response_log."user_role" is 'Trade role of the user: maker or taker';
+comment on column deribit.private_get_transaction_log_response_log."fee_role" is 'Fee role of the user: maker or taker. Can be different from trade role of the user when iceberg order was involved in matching.';
 comment on column deribit.private_get_transaction_log_response_log."id" is 'Unique identifier';
 comment on column deribit.private_get_transaction_log_response_log."index_price" is 'The index price for the instrument during the delivery';
 comment on column deribit.private_get_transaction_log_response_log."info" is 'Additional information regarding transaction. Strongly dependent on the log entry type';
@@ -9856,7 +10819,7 @@ create type deribit.private_get_transfers_request as (
 );
 
 comment on column deribit.private_get_transfers_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_transfers_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_transfers_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_transfers_request."offset" is 'The offset for pagination, default - 0';
 
 create type deribit.private_get_transfers_response_datum as (
@@ -9963,7 +10926,7 @@ create type deribit.private_get_trigger_order_history_request as (
 
 comment on column deribit.private_get_trigger_order_history_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_trigger_order_history_request."instrument_name" is 'Instrument name';
-comment on column deribit.private_get_trigger_order_history_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_trigger_order_history_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_trigger_order_history_request."continuation" is 'Continuation token for pagination';
 
 create type deribit.private_get_trigger_order_history_response_entry as (
@@ -10181,12 +11144,34 @@ comment on column deribit.private_get_user_trades_by_currency_request."currency"
 comment on column deribit.private_get_user_trades_by_currency_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
 comment on column deribit.private_get_user_trades_by_currency_request."start_id" is 'The ID of the first trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
 comment on column deribit.private_get_user_trades_by_currency_request."end_id" is 'The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
-comment on column deribit.private_get_user_trades_by_currency_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_currency_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_user_trades_by_currency_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.private_get_user_trades_by_currency_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
 comment on column deribit.private_get_user_trades_by_currency_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_currency_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
 comment on column deribit.private_get_user_trades_by_currency_request."subaccount_id" is 'The user id for the subaccount';
+
+create type deribit.private_get_user_trades_by_currency_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_currency_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_currency_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_currency_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_currency_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_currency_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_currency_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_currency_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_currency_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_currency_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_currency_response_trade as (
     "trade_id" text,
@@ -10209,6 +11194,7 @@ create type deribit.private_get_user_trades_by_currency_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_currency_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -10248,6 +11234,7 @@ comment on column deribit.private_get_user_trades_by_currency_response_trade."pr
 comment on column deribit.private_get_user_trades_by_currency_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_currency_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_currency_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_currency_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_currency_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_currency_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_currency_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -10381,9 +11368,31 @@ comment on column deribit.private_get_user_trades_by_currency_and_time_request."
 comment on column deribit.private_get_user_trades_by_currency_and_time_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
 comment on column deribit.private_get_user_trades_by_currency_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.private_get_user_trades_by_currency_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_user_trades_by_currency_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_currency_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
+
+create type deribit.private_get_user_trades_by_currency_and_time_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_currency_and_time_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_currency_and_time_response_trade as (
     "trade_id" text,
@@ -10406,6 +11415,7 @@ create type deribit.private_get_user_trades_by_currency_and_time_response_trade 
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_currency_and_time_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -10445,6 +11455,7 @@ comment on column deribit.private_get_user_trades_by_currency_and_time_response_
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_currency_and_time_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -10554,11 +11565,33 @@ create type deribit.private_get_user_trades_by_instrument_request as (
 comment on column deribit.private_get_user_trades_by_instrument_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_get_user_trades_by_instrument_request."start_seq" is 'The sequence number of the first trade to be returned';
 comment on column deribit.private_get_user_trades_by_instrument_request."end_seq" is 'The sequence number of the last trade to be returned';
-comment on column deribit.private_get_user_trades_by_instrument_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_instrument_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_user_trades_by_instrument_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.private_get_user_trades_by_instrument_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_instrument_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_instrument_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
 comment on column deribit.private_get_user_trades_by_instrument_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
+
+create type deribit.private_get_user_trades_by_instrument_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_instrument_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_instrument_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_instrument_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_instrument_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_instrument_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_instrument_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_instrument_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_instrument_response_trade as (
     "trade_id" text,
@@ -10581,6 +11614,7 @@ create type deribit.private_get_user_trades_by_instrument_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_instrument_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -10620,6 +11654,7 @@ comment on column deribit.private_get_user_trades_by_instrument_response_trade."
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_instrument_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_instrument_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -10729,9 +11764,31 @@ create type deribit.private_get_user_trades_by_instrument_and_time_request as (
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.private_get_user_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_instrument_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
+
+create type deribit.private_get_user_trades_by_instrument_and_time_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_instrument_and_time_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_instrument_and_time_response_trade as (
     "trade_id" text,
@@ -10754,6 +11811,7 @@ create type deribit.private_get_user_trades_by_instrument_and_time_response_trad
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_instrument_and_time_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -10793,6 +11851,7 @@ comment on column deribit.private_get_user_trades_by_instrument_and_time_respons
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_instrument_and_time_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -10894,7 +11953,29 @@ create type deribit.private_get_user_trades_by_order_request as (
 
 comment on column deribit.private_get_user_trades_by_order_request."order_id" is '(Required) The order id';
 comment on column deribit.private_get_user_trades_by_order_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
-comment on column deribit.private_get_user_trades_by_order_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included.';
+comment on column deribit.private_get_user_trades_by_order_request."historical" is 'Determines whether historical trade and order records should be retrieved. false (default): Returns recent records: orders for 30 min, trades for 24h. true: Fetches historical records, available after a short delay due to indexing. Recent data is not included. 📖 Related Support Article: Accessing historical trades and orders using API';
+
+create type deribit.private_get_user_trades_by_order_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_user_trades_by_order_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_user_trades_by_order_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_user_trades_by_order_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_user_trades_by_order_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_user_trades_by_order_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_user_trades_by_order_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_user_trades_by_order_response_result as (
     "tick_direction" bigint,
@@ -10916,6 +11997,7 @@ create type deribit.private_get_user_trades_by_order_response_result as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_user_trades_by_order_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -10954,6 +12036,7 @@ comment on column deribit.private_get_user_trades_by_order_response_result."pric
 comment on column deribit.private_get_user_trades_by_order_response_result."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_order_response_result."matching_id" is 'Always null';
 comment on column deribit.private_get_user_trades_by_order_response_result."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_user_trades_by_order_response_result."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_user_trades_by_order_response_result."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_user_trades_by_order_response_result."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_user_trades_by_order_response_result."iv" is 'Option implied volatility for the price (Option only)';
@@ -11033,6 +12116,7 @@ as $$
         (b)."combo_id"::text,
         (b)."matching_id"::text,
         (b)."order_type"::text,
+        (b)."trade_allocations"::deribit.private_get_user_trades_by_order_response_trade_allocation[],
         (b)."profit_loss"::double precision,
         (b)."timestamp"::bigint,
         (b)."iv"::double precision,
@@ -11086,7 +12170,7 @@ create type deribit.private_get_withdrawals_request as (
 );
 
 comment on column deribit.private_get_withdrawals_request."currency" is '(Required) The currency symbol';
-comment on column deribit.private_get_withdrawals_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.private_get_withdrawals_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.private_get_withdrawals_request."offset" is 'The offset for pagination, default - 0';
 
 create type deribit.private_get_withdrawals_response_datum as (
@@ -11241,6 +12325,178 @@ comment on function deribit.private_invalidate_block_trade_signature is 'User at
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_list_address_beneficiaries_request_currency as enum (
+    'BNB',
+    'BTC',
+    'ETH',
+    'ETHW',
+    'EURR',
+    'MATIC',
+    'PAXG',
+    'SOL',
+    'STETH',
+    'USDC',
+    'USDE',
+    'USDT',
+    'USYC',
+    'XRP'
+);
+
+create type deribit.private_list_address_beneficiaries_request as (
+    "currency" deribit.private_list_address_beneficiaries_request_currency,
+    "address" text,
+    "tag" text,
+    "created_before" bigint,
+    "created_after" bigint,
+    "updated_before" bigint,
+    "updated_after" bigint,
+    "personal" boolean,
+    "unhosted" boolean,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
+    "limit" bigint,
+    "continuation" text
+);
+
+comment on column deribit.private_list_address_beneficiaries_request."currency" is 'The currency symbol';
+comment on column deribit.private_list_address_beneficiaries_request."address" is 'Address in currency format';
+comment on column deribit.private_list_address_beneficiaries_request."tag" is 'Tag for XRP addresses';
+comment on column deribit.private_list_address_beneficiaries_request."created_before" is 'Filter by creation timestamp (before)';
+comment on column deribit.private_list_address_beneficiaries_request."created_after" is 'Filter by creation timestamp (after)';
+comment on column deribit.private_list_address_beneficiaries_request."updated_before" is 'Filter by update timestamp (before)';
+comment on column deribit.private_list_address_beneficiaries_request."updated_after" is 'Filter by update timestamp (after)';
+comment on column deribit.private_list_address_beneficiaries_request."personal" is 'Filter by personal wallet flag';
+comment on column deribit.private_list_address_beneficiaries_request."unhosted" is 'Filter by unhosted wallet flag';
+comment on column deribit.private_list_address_beneficiaries_request."beneficiary_vasp_name" is 'Filter by beneficiary VASP name';
+comment on column deribit.private_list_address_beneficiaries_request."beneficiary_vasp_did" is 'Filter by beneficiary VASP DID';
+comment on column deribit.private_list_address_beneficiaries_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
+comment on column deribit.private_list_address_beneficiaries_request."limit" is 'Maximum number of results to return';
+comment on column deribit.private_list_address_beneficiaries_request."continuation" is 'Continuation token for pagination';
+
+create type deribit.private_list_address_beneficiaries_response_datum as (
+    "address" text,
+    "agreed" boolean,
+    "beneficiary_address" text,
+    "beneficiary_company_name" text,
+    "beneficiary_first_name" text,
+    "beneficiary_last_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
+    "creation_timestamp" bigint,
+    "currency" text,
+    "personal" boolean,
+    "tag" text,
+    "unhosted" boolean,
+    "update_timestamp" bigint
+);
+
+comment on column deribit.private_list_address_beneficiaries_response_datum."address" is 'Address in proper format for currency';
+comment on column deribit.private_list_address_beneficiaries_response_datum."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_did" is 'DID of beneficiary VASP';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
+comment on column deribit.private_list_address_beneficiaries_response_datum."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_list_address_beneficiaries_response_datum."personal" is 'The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_list_address_beneficiaries_response_datum."tag" is 'Tag for XRP addresses (optional)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."unhosted" is 'Indicates if the address belongs to an unhosted wallet';
+comment on column deribit.private_list_address_beneficiaries_response_datum."update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+
+create type deribit.private_list_address_beneficiaries_response_result as (
+    "continuation" text,
+    "count" bigint,
+    "data" deribit.private_list_address_beneficiaries_response_datum[]
+);
+
+comment on column deribit.private_list_address_beneficiaries_response_result."continuation" is 'Continuation token for pagination.';
+comment on column deribit.private_list_address_beneficiaries_response_result."count" is 'Total number of results available';
+
+create type deribit.private_list_address_beneficiaries_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_list_address_beneficiaries_response_result
+);
+
+comment on column deribit.private_list_address_beneficiaries_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_list_address_beneficiaries_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_list_address_beneficiaries(
+    "currency" deribit.private_list_address_beneficiaries_request_currency default null,
+    "address" text default null,
+    "tag" text default null,
+    "created_before" bigint default null,
+    "created_after" bigint default null,
+    "updated_before" bigint default null,
+    "updated_after" bigint default null,
+    "personal" boolean default null,
+    "unhosted" boolean default null,
+    "beneficiary_vasp_name" text default null,
+    "beneficiary_vasp_did" text default null,
+    "beneficiary_vasp_website" text default null,
+    "limit" bigint default null,
+    "continuation" text default null
+)
+returns deribit.private_list_address_beneficiaries_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "address",
+            "tag",
+            "created_before",
+            "created_after",
+            "updated_before",
+            "updated_after",
+            "personal",
+            "unhosted",
+            "beneficiary_vasp_name",
+            "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
+            "limit",
+            "continuation"
+        )::deribit.private_list_address_beneficiaries_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/list_address_beneficiaries'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_list_address_beneficiaries_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_list_address_beneficiaries is 'Lists address beneficiaries with optional filtering and pagination';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
 create type deribit.private_list_api_keys_response_result as (
     "client_id" text,
     "client_secret" text,
@@ -11314,7 +12570,7 @@ as $$
     
 $$;
 
-comment on function deribit.private_list_api_keys is 'Retrieves list of api keys. Important notes.';
+comment on function deribit.private_list_api_keys is 'Retrieves list of api keys. Important notes.  TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -11585,7 +12841,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount';
+comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount Note:In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -11625,7 +12881,7 @@ create type deribit.private_pme_simulate_response as (
 
 comment on column deribit.private_pme_simulate_response."id" is 'The id that was sent in the request';
 comment on column deribit.private_pme_simulate_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_pme_simulate_response."result" is 'PM details';
+comment on column deribit.private_pme_simulate_response."result" is 'Simulation details';
 
 create function deribit.private_pme_simulate(
     "currency" deribit.private_pme_simulate_request_currency,
@@ -11950,7 +13206,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_remove_subaccount is 'Remove empty subaccount.';
+comment on function deribit.private_remove_subaccount is 'Remove empty subaccount. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -12050,60 +13306,15 @@ comment on function deribit.private_reset_api_key is 'Resets secret in api key. 
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_reset_mmp_request_index_name as enum (
-    'ada_usdc',
-    'ada_usdt',
-    'algo_usdc',
-    'algo_usdt',
-    'avax_usdc',
-    'avax_usdt',
-    'bch_usdc',
-    'bch_usdt',
-    'bnb_usdc',
-    'bnb_usdt',
-    'btc_usd',
-    'btc_usdc',
-    'btc_usdt',
-    'btcdvol_usdc',
-    'buidl_usdc',
-    'doge_usdc',
-    'doge_usdt',
-    'dot_usdc',
-    'dot_usdt',
-    'eth_usd',
-    'eth_usdc',
-    'eth_usdt',
-    'ethdvol_usdc',
-    'link_usdc',
-    'link_usdt',
-    'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usdc',
-    'near_usdt',
-    'paxg_usdc',
-    'shib_usdc',
-    'shib_usdt',
-    'sol_usdc',
-    'sol_usdt',
-    'trx_usdc',
-    'trx_usdt',
-    'uni_usdc',
-    'uni_usdt',
-    'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
-);
-
 create type deribit.private_reset_mmp_request as (
-    "index_name" deribit.private_reset_mmp_request_index_name,
-    "mmp_group" text
+    "index_name" text,
+    "mmp_group" text,
+    "block_rfq" boolean
 );
 
-comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
-comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the endpoint resets the traditional (no group) MMP limits';
+comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Currency pair for which to reset MMP limits.  For regular MMP (block_rfq = false): Must be a specific currency pair (e.g., "btc_usd", "eth_usd"). The value "all" is not allowed.  For Block RFQ MMP (block_rfq = true): Can be either a specific currency pair or "all" to reset MMP limits across all currency pairs.';
+comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the method resets the traditional (no group) MMP limits. 📖 Related Support Article: Mass Quotes Specifications';
+comment on column deribit.private_reset_mmp_request."block_rfq" is 'If true, resets MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings. When block_rfq = true, the index_name parameter can be set to "all" to reset limits across all currency pairs.';
 
 create type deribit.private_reset_mmp_response as (
     "id" bigint,
@@ -12116,8 +13327,9 @@ comment on column deribit.private_reset_mmp_response."jsonrpc" is 'The JSON-RPC 
 comment on column deribit.private_reset_mmp_response."result" is 'Result of method execution. ok in case of success';
 
 create function deribit.private_reset_mmp(
-    "index_name" deribit.private_reset_mmp_request_index_name,
-    "mmp_group" text default null
+    "index_name" text,
+    "mmp_group" text default null,
+    "block_rfq" boolean default null
 )
 returns text
 language sql
@@ -12126,7 +13338,8 @@ as $$
     with request as (
         select row(
             "index_name",
-            "mmp_group"
+            "mmp_group",
+            "block_rfq"
         )::deribit.private_reset_mmp_request as payload
     ), 
     http_response as (
@@ -12148,7 +13361,168 @@ as $$
 
 $$;
 
-comment on function deribit.private_reset_mmp is 'Reset MMP';
+comment on function deribit.private_reset_mmp is 'Reset Market Maker Protection (MMP) limits for the specified currency pair or group.
+
+📖 Related Support Article: Market Maker Protection API Configuration';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
+create type deribit.private_save_address_beneficiary_request_currency as enum (
+    'BNB',
+    'BTC',
+    'ETH',
+    'ETHW',
+    'EURR',
+    'MATIC',
+    'PAXG',
+    'SOL',
+    'STETH',
+    'USDC',
+    'USDE',
+    'USDT',
+    'USYC',
+    'XRP'
+);
+
+create type deribit.private_save_address_beneficiary_request as (
+    "currency" deribit.private_save_address_beneficiary_request_currency,
+    "address" text,
+    "tag" text,
+    "agreed" boolean,
+    "personal" boolean,
+    "unhosted" boolean,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
+    "beneficiary_first_name" text,
+    "beneficiary_last_name" text,
+    "beneficiary_company_name" text,
+    "beneficiary_address" text
+);
+
+comment on column deribit.private_save_address_beneficiary_request."currency" is '(Required) The currency symbol';
+comment on column deribit.private_save_address_beneficiary_request."address" is '(Required) Address in currency format';
+comment on column deribit.private_save_address_beneficiary_request."tag" is 'Tag for XRP addresses';
+comment on column deribit.private_save_address_beneficiary_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
+comment on column deribit.private_save_address_beneficiary_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_save_address_beneficiary_request."unhosted" is '(Required) Indicates if the address belongs to an unhosted wallet';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_vasp_name" is '(Required) Name of beneficiary VASP';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_vasp_did" is '(Required) DID of beneficiary VASP';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
+comment on column deribit.private_save_address_beneficiary_request."beneficiary_address" is '(Required) Geographical address of the beneficiary';
+
+create type deribit.private_save_address_beneficiary_response_result as (
+    "address" text,
+    "agreed" boolean,
+    "beneficiary_address" text,
+    "beneficiary_company_name" text,
+    "beneficiary_first_name" text,
+    "beneficiary_last_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_website" text,
+    "creation_timestamp" bigint,
+    "currency" text,
+    "personal" boolean,
+    "tag" text,
+    "unhosted" boolean,
+    "update_timestamp" bigint
+);
+
+comment on column deribit.private_save_address_beneficiary_response_result."address" is 'Address in proper format for currency';
+comment on column deribit.private_save_address_beneficiary_response_result."agreed" is 'Indicates that the user agreed to shared provided information with 3rd parties';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_address" is 'Geographical address of the beneficiary';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_company_name" is 'Company name of the beneficiary (if beneficiary is a company)';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_first_name" is 'First name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_last_name" is 'Last name of the beneficiary (if beneficiary is a person)';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_vasp_did" is 'DID of beneficiary VASP';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_vasp_name" is 'Name of beneficiary VASP';
+comment on column deribit.private_save_address_beneficiary_response_result."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
+comment on column deribit.private_save_address_beneficiary_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_save_address_beneficiary_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_save_address_beneficiary_response_result."personal" is 'The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
+comment on column deribit.private_save_address_beneficiary_response_result."tag" is 'Tag for XRP addresses (optional)';
+comment on column deribit.private_save_address_beneficiary_response_result."unhosted" is 'Indicates if the address belongs to an unhosted wallet';
+comment on column deribit.private_save_address_beneficiary_response_result."update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+
+create type deribit.private_save_address_beneficiary_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.private_save_address_beneficiary_response_result
+);
+
+comment on column deribit.private_save_address_beneficiary_response."id" is 'The id that was sent in the request';
+comment on column deribit.private_save_address_beneficiary_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.private_save_address_beneficiary(
+    "currency" deribit.private_save_address_beneficiary_request_currency,
+    "address" text,
+    "agreed" boolean,
+    "personal" boolean,
+    "unhosted" boolean,
+    "beneficiary_vasp_name" text,
+    "beneficiary_vasp_did" text,
+    "beneficiary_address" text,
+    "tag" text default null,
+    "beneficiary_vasp_website" text default null,
+    "beneficiary_first_name" text default null,
+    "beneficiary_last_name" text default null,
+    "beneficiary_company_name" text default null
+)
+returns deribit.private_save_address_beneficiary_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "address",
+            "tag",
+            "agreed",
+            "personal",
+            "unhosted",
+            "beneficiary_vasp_name",
+            "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
+            "beneficiary_first_name",
+            "beneficiary_last_name",
+            "beneficiary_company_name",
+            "beneficiary_address"
+        )::deribit.private_save_address_beneficiary_request as payload
+    ), 
+    http_response as (
+        select deribit.private_jsonrpc_request(
+            auth := deribit.get_auth(),
+            url := '/private/save_address_beneficiary'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.private_save_address_beneficiary_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.private_save_address_beneficiary is 'Saves address beneficiary information';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -12268,7 +13642,7 @@ create type deribit.private_sell_request as (
     "label" text,
     "price" double precision,
     "time_in_force" deribit.private_sell_request_time_in_force,
-    "max_show" double precision,
+    "display_amount" double precision,
     "post_only" boolean,
     "reject_post_only" boolean,
     "reduce_only" boolean,
@@ -12290,7 +13664,7 @@ comment on column deribit.private_sell_request."type" is 'The order type, defaul
 comment on column deribit.private_sell_request."label" is 'user defined label for the order (maximum 64 characters)';
 comment on column deribit.private_sell_request."price" is 'The order price in base currency (Only for limit and stop_limit orders) When adding an order with advanced=usd, the field price should be the option price value in USD. When adding an order with advanced=implv, the field price should be a value of implied volatility in percentages. For example, price=100, means implied volatility of 100%';
 comment on column deribit.private_sell_request."time_in_force" is 'Specifies how long the order remains in effect. Default "good_til_cancelled" "good_til_cancelled" - unfilled order remains in order book until cancelled "good_til_day" - unfilled order remains in order book till the end of the trading session "fill_or_kill" - execute a transaction immediately and completely or not at all "immediate_or_cancel" - execute a transaction immediately, and any portion of the order that cannot be immediately filled is cancelled';
-comment on column deribit.private_sell_request."max_show" is 'Maximum amount within an order to be shown to other customers, 0 for invisible order';
+comment on column deribit.private_sell_request."display_amount" is 'Initial display amount for iceberg order. Has to be at least 100 times minimum amount for instrument and ratio of hidden part vs visible part has to be less than 100 as well.';
 comment on column deribit.private_sell_request."post_only" is 'If true, the order is considered post-only. If the new price would cause the order to be filled immediately (as taker), the price will be changed to be just above the spread. Only valid in combination with time_in_force="good_til_cancelled"';
 comment on column deribit.private_sell_request."reject_post_only" is 'If an order is considered post-only and this field is set to true then the order is put to the order book unmodified or the request is rejected. Only valid in combination with "post_only" set to true';
 comment on column deribit.private_sell_request."reduce_only" is 'If true, the order is considered reduce-only which is intended to only reduce a current position';
@@ -12303,6 +13677,28 @@ comment on column deribit.private_sell_request."valid_until" is 'Timestamp, when
 comment on column deribit.private_sell_request."linked_order_type" is 'The type of the linked order. "one_triggers_other" - Execution of primary order triggers the placement of one or more secondary orders. "one_cancels_other" - The execution of one order in a pair automatically cancels the other, typically used to set a stop-loss and take-profit simultaneously. "one_triggers_one_cancels_other" - The execution of a primary order triggers two secondary orders (a stop-loss and take-profit pair), where the execution of one secondary order cancels the other.';
 comment on column deribit.private_sell_request."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';
 comment on column deribit.private_sell_request."otoco_config" is 'List of trades to create or cancel when this order is filled.';
+
+create type deribit.private_sell_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_sell_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_sell_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_sell_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_sell_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_sell_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_sell_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_sell_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_sell_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_sell_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_sell_response_trade as (
     "trade_id" text,
@@ -12325,6 +13721,7 @@ create type deribit.private_sell_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_sell_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -12364,6 +13761,7 @@ comment on column deribit.private_sell_response_trade."price" is 'Price in base 
 comment on column deribit.private_sell_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_sell_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_sell_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_sell_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_sell_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_sell_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_sell_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -12388,6 +13786,7 @@ create type deribit.private_sell_response_order as (
     "mobile" boolean,
     "app_name" text,
     "implv" double precision,
+    "refresh_amount" double precision,
     "usd" double precision,
     "oto_order_ids" text[],
     "api" boolean,
@@ -12418,6 +13817,7 @@ create type deribit.private_sell_response_order as (
     "web" boolean,
     "time_in_force" text,
     "trigger_reference_price" double precision,
+    "display_amount" double precision,
     "order_type" text,
     "is_primary_otoco" boolean,
     "original_order_type" text,
@@ -12428,7 +13828,6 @@ create type deribit.private_sell_response_order as (
     "quote_set_id" text,
     "auto_replaced" boolean,
     "reduce_only" boolean,
-    "max_show" double precision,
     "amount" double precision,
     "risk_reducing" boolean,
     "instrument_name" text,
@@ -12441,6 +13840,7 @@ comment on column deribit.private_sell_response_order."triggered" is 'Whether th
 comment on column deribit.private_sell_response_order."mobile" is 'optional field with value true added only when created with Mobile Application';
 comment on column deribit.private_sell_response_order."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
 comment on column deribit.private_sell_response_order."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
+comment on column deribit.private_sell_response_order."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
 comment on column deribit.private_sell_response_order."usd" is 'Option price in USD (Only if advanced="usd")';
 comment on column deribit.private_sell_response_order."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
 comment on column deribit.private_sell_response_order."api" is 'true if created with API';
@@ -12455,13 +13855,13 @@ comment on column deribit.private_sell_response_order."direction" is 'Direction:
 comment on column deribit.private_sell_response_order."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
 comment on column deribit.private_sell_response_order."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
 comment on column deribit.private_sell_response_order."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_sell_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."mmp" is 'true if the order is a MMP order, otherwise false.';
 comment on column deribit.private_sell_response_order."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_sell_response_order."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_sell_response_order."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
 comment on column deribit.private_sell_response_order."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_sell_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
 comment on column deribit.private_sell_response_order."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
 comment on column deribit.private_sell_response_order."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
@@ -12471,6 +13871,7 @@ comment on column deribit.private_sell_response_order."price" is 'Price in base 
 comment on column deribit.private_sell_response_order."web" is 'true if created via Deribit frontend (optional)';
 comment on column deribit.private_sell_response_order."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
 comment on column deribit.private_sell_response_order."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_sell_response_order."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
 comment on column deribit.private_sell_response_order."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
 comment on column deribit.private_sell_response_order."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
 comment on column deribit.private_sell_response_order."original_order_type" is 'Original order type. Optional field';
@@ -12478,10 +13879,9 @@ comment on column deribit.private_sell_response_order."block_trade" is 'true if 
 comment on column deribit.private_sell_response_order."trigger_price" is 'Trigger price (Only for future trigger orders)';
 comment on column deribit.private_sell_response_order."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
 comment on column deribit.private_sell_response_order."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_sell_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request.';
+comment on column deribit.private_sell_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_sell_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_sell_response_order."max_show" is 'Maximum amount within an order to be shown to other traders, 0 for invisible order.';
 comment on column deribit.private_sell_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
 comment on column deribit.private_sell_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_sell_response_order."instrument_name" is 'Unique instrument identifier';
@@ -12510,7 +13910,7 @@ create function deribit.private_sell(
     "label" text default null,
     "price" double precision default null,
     "time_in_force" deribit.private_sell_request_time_in_force default null,
-    "max_show" double precision default null,
+    "display_amount" double precision default null,
     "post_only" boolean default null,
     "reject_post_only" boolean default null,
     "reduce_only" boolean default null,
@@ -12537,7 +13937,7 @@ as $$
             "label",
             "price",
             "time_in_force",
-            "max_show",
+            "display_amount",
             "post_only",
             "reject_post_only",
             "reduce_only",
@@ -12572,80 +13972,6 @@ as $$
 $$;
 
 comment on function deribit.private_sell is 'Places a sell order for an instrument.';
-/*
-* AUTO-GENERATED FILE - DO NOT MODIFY
-*
-* This SQL file was generated by a code generation tool. Any modifications
-* made to this file may be overwritten by subsequent code generation
-* processes and could lead to inconsistencies or errors in the application.
-*
-* For any required changes, please modify the source templates or the
-* code generation tool's configurations and regenerate this file.
-*
-* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
-* AND IS STRONGLY DISCOURAGED.
-*/
-create type deribit.private_send_rfq_request_side as enum (
-    'buy',
-    'sell'
-);
-
-create type deribit.private_send_rfq_request as (
-    "instrument_name" text,
-    "amount" double precision,
-    "side" deribit.private_send_rfq_request_side
-);
-
-comment on column deribit.private_send_rfq_request."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_send_rfq_request."amount" is 'Amount';
-comment on column deribit.private_send_rfq_request."side" is 'Side - buy or sell';
-
-create type deribit.private_send_rfq_response as (
-    "id" bigint,
-    "jsonrpc" text,
-    "result" text
-);
-
-comment on column deribit.private_send_rfq_response."id" is 'The id that was sent in the request';
-comment on column deribit.private_send_rfq_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_send_rfq_response."result" is 'Result of method execution. ok in case of success';
-
-create function deribit.private_send_rfq(
-    "instrument_name" text,
-    "amount" double precision default null,
-    "side" deribit.private_send_rfq_request_side default null
-)
-returns text
-language sql
-as $$
-    
-    with request as (
-        select row(
-            "instrument_name",
-            "amount",
-            "side"
-        )::deribit.private_send_rfq_request as payload
-    ), 
-    http_response as (
-        select deribit.private_jsonrpc_request(
-            auth := deribit.get_auth(),
-            url := '/private/send_rfq'::deribit.endpoint,
-            request := request.payload,
-            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
-        ) as http_response
-        from request
-    )
-    select (
-        jsonb_populate_record(
-            null::deribit.private_send_rfq_response,
-            convert_from((a.http_response).body, 'utf-8')::jsonb
-        )
-    ).result
-    from http_response a
-
-$$;
-
-comment on function deribit.private_send_rfq is 'Sends RFQ on a given instrument.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -12771,7 +14097,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_set_disabled_trading_products is 'Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts.';
+comment on function deribit.private_set_disabled_trading_products is 'Configure disabled trading products for subaccounts. Only main accounts can modify this for subaccounts. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -12836,7 +14162,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_set_email_for_subaccount is 'Assign an email address to a subaccount. User will receive an email with a confirmation link.';
+comment on function deribit.private_set_email_for_subaccount is 'Assign an email address to a subaccount. User will receive an email with a confirmation link. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -12913,49 +14239,34 @@ comment on function deribit.private_set_email_language is 'Changes the language 
 */
 create type deribit.private_set_mmp_config_request_index_name as enum (
     'ada_usdc',
-    'ada_usdt',
     'algo_usdc',
-    'algo_usdt',
+    'all',
     'avax_usdc',
-    'avax_usdt',
     'bch_usdc',
-    'bch_usdt',
     'bnb_usdc',
-    'bnb_usdt',
     'btc_usd',
     'btc_usdc',
     'btc_usdt',
     'btcdvol_usdc',
     'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
     'dot_usdc',
-    'dot_usdt',
     'eth_usd',
     'eth_usdc',
     'eth_usdt',
     'ethdvol_usdc',
     'link_usdc',
-    'link_usdt',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usdc',
-    'matic_usdt',
     'near_usdc',
-    'near_usdt',
     'paxg_usdc',
     'shib_usdc',
-    'shib_usdt',
     'sol_usdc',
-    'sol_usdt',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
     'uni_usdc',
-    'uni_usdt',
     'usde_usdc',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.private_set_mmp_config_request as (
@@ -12965,33 +14276,41 @@ create type deribit.private_set_mmp_config_request as (
     "mmp_group" text,
     "quantity_limit" double precision,
     "delta_limit" double precision,
-    "vega_limit" double precision
+    "vega_limit" double precision,
+    "block_rfq" boolean,
+    "trade_count_limit" bigint
 );
 
 comment on column deribit.private_set_mmp_config_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
 comment on column deribit.private_set_mmp_config_request."interval" is '(Required) MMP Interval in seconds, if set to 0 MMP is removed';
 comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Required) MMP frozen time in seconds, if set to 0 manual reset is required';
-comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name';
+comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name. Maximum 64 characters. Case sensitive. Cannot be empty string. 📖 Related Support Article: Mass Quotes Specifications';
 comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
 comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
 comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
+comment on column deribit.private_set_mmp_config_request."block_rfq" is 'If true, configures MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
+comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all". Maximum - 1000.';
 
 create type deribit.private_set_mmp_config_response_result as (
+    "block_rfq" boolean,
     "delta_limit" double precision,
     "frozen_time" bigint,
     "index_name" text,
     "interval" bigint,
     "mmp_group" text,
     "quantity_limit" double precision,
+    "trade_count_limit" bigint,
     "vega_limit" double precision
 );
 
+comment on column deribit.private_set_mmp_config_response_result."block_rfq" is 'If true, indicates MMP configuration for Block RFQ. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit';
 comment on column deribit.private_set_mmp_config_response_result."frozen_time" is 'MMP frozen time in seconds, if set to 0 manual reset is required';
 comment on column deribit.private_set_mmp_config_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
 comment on column deribit.private_set_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
 comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_set_mmp_config_response_result."trade_count_limit" is 'For Block RFQ only. The maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs.';
 comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit';
 
 create type deribit.private_set_mmp_config_response as (
@@ -13010,7 +14329,9 @@ create function deribit.private_set_mmp_config(
     "mmp_group" text default null,
     "quantity_limit" double precision default null,
     "delta_limit" double precision default null,
-    "vega_limit" double precision default null
+    "vega_limit" double precision default null,
+    "block_rfq" boolean default null,
+    "trade_count_limit" bigint default null
 )
 returns setof deribit.private_set_mmp_config_response_result
 language sql
@@ -13024,7 +14345,9 @@ as $$
             "mmp_group",
             "quantity_limit",
             "delta_limit",
-            "vega_limit"
+            "vega_limit",
+            "block_rfq",
+            "trade_count_limit"
         )::deribit.private_set_mmp_config_request as payload
     ), 
     http_response as (
@@ -13044,12 +14367,14 @@ as $$
         from http_response
     )
     select
+        (b)."block_rfq"::boolean,
         (b)."delta_limit"::double precision,
         (b)."frozen_time"::bigint,
         (b)."index_name"::text,
         (b)."interval"::bigint,
         (b)."mmp_group"::text,
         (b)."quantity_limit"::double precision,
+        (b)."trade_count_limit"::bigint,
         (b)."vega_limit"::double precision
     from (
         select (unnest(r.data)) b
@@ -13259,7 +14584,7 @@ create type deribit.private_simulate_portfolio_response as (
 
 comment on column deribit.private_simulate_portfolio_response."id" is 'The id that was sent in the request';
 comment on column deribit.private_simulate_portfolio_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_simulate_portfolio_response."result" is 'PM details';
+comment on column deribit.private_simulate_portfolio_response."result" is 'Portfolio details';
 
 create function deribit.private_simulate_portfolio(
     "currency" deribit.private_simulate_portfolio_request_currency,
@@ -13659,7 +14984,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_toggle_notifications_from_subaccount is 'Enable or disable sending of notifications for the subaccount.';
+comment on function deribit.private_toggle_notifications_from_subaccount is 'Enable or disable sending of notifications for the subaccount. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -13729,7 +15054,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_toggle_subaccount_login is 'Enable or disable login for a subaccount. If login is disabled and a session for the subaccount exists, this session will be terminated.';
+comment on function deribit.private_toggle_subaccount_login is 'Enable or disable login for a subaccount. If login is disabled and a session for the subaccount exists, this session will be terminated. TFA required';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -13772,6 +15097,7 @@ create type deribit.private_update_in_address_book_request as (
     "address" text,
     "beneficiary_vasp_name" text,
     "beneficiary_vasp_did" text,
+    "beneficiary_vasp_website" text,
     "beneficiary_first_name" text,
     "beneficiary_last_name" text,
     "beneficiary_company_name" text,
@@ -13786,10 +15112,11 @@ comment on column deribit.private_update_in_address_book_request."type" is '(Req
 comment on column deribit.private_update_in_address_book_request."address" is '(Required) Address in currency format, it must be in address book';
 comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_name" is '(Required) Name of beneficiary VASP';
 comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_did" is '(Required) DID of beneficiary VASP';
+comment on column deribit.private_update_in_address_book_request."beneficiary_vasp_website" is 'Website of the beneficiary VASP. Required if the address book entry is associated with a VASP that is not included in the list of known VASPs';
 comment on column deribit.private_update_in_address_book_request."beneficiary_first_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_last_name" is 'First name of beneficiary (if beneficiary is a person)';
 comment on column deribit.private_update_in_address_book_request."beneficiary_company_name" is 'Beneficiary company name (if beneficiary is a company)';
-comment on column deribit.private_update_in_address_book_request."beneficiary_address" is '(Required) nan';
+comment on column deribit.private_update_in_address_book_request."beneficiary_address" is '(Required) Geographical address of the beneficiary';
 comment on column deribit.private_update_in_address_book_request."agreed" is '(Required) Indicates that the user agreed to shared provided information with 3rd parties';
 comment on column deribit.private_update_in_address_book_request."personal" is '(Required) The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
 comment on column deribit.private_update_in_address_book_request."label" is '(Required) Label of the address book entry';
@@ -13814,6 +15141,7 @@ create function deribit.private_update_in_address_book(
     "agreed" boolean,
     "personal" boolean,
     "label" text,
+    "beneficiary_vasp_website" text default null,
     "beneficiary_first_name" text default null,
     "beneficiary_last_name" text default null,
     "beneficiary_company_name" text default null
@@ -13829,6 +15157,7 @@ as $$
             "address",
             "beneficiary_vasp_name",
             "beneficiary_vasp_did",
+            "beneficiary_vasp_website",
             "beneficiary_first_name",
             "beneficiary_last_name",
             "beneficiary_company_name",
@@ -13909,7 +15238,7 @@ create type deribit.private_verify_block_trade_response_result as (
     "signature" text
 );
 
-comment on column deribit.private_verify_block_trade_response_result."signature" is 'Signature of block trade It is valid only for 5 minutes “around” given timestamp';
+comment on column deribit.private_verify_block_trade_response_result."signature" is 'Signature of block trade It is valid only for 5 minutes around given timestamp';
 
 create type deribit.private_verify_block_trade_response as (
     "id" bigint,
@@ -13957,7 +15286,7 @@ as $$
 
 $$;
 
-comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signature';
+comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signatureNote: In the API, the direction field is always expressed from the maker''s perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker''s perspective), and you will be verifying and accepting a "sell put" block trade.📖 Related Support Article: Block Trading';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -14213,11 +15542,13 @@ comment on function deribit.public_auth is 'Retrieve an Oauth access token, to b
 */
 create type deribit.public_exchange_token_request as (
     "refresh_token" text,
-    "subject_id" bigint
+    "subject_id" bigint,
+    "scope" text
 );
 
 comment on column deribit.public_exchange_token_request."refresh_token" is '(Required) Refresh token';
 comment on column deribit.public_exchange_token_request."subject_id" is '(Required) New subject id';
+comment on column deribit.public_exchange_token_request."scope" is 'Optional scope override for the new session. Cannot exceed caller''s permissions. Supports session scope for direct session creation during token exchange.';
 
 create type deribit.public_exchange_token_response_result as (
     "access_token" text,
@@ -14245,7 +15576,8 @@ comment on column deribit.public_exchange_token_response."jsonrpc" is 'The JSON-
 
 create function deribit.public_exchange_token(
     "refresh_token" text,
-    "subject_id" bigint
+    "subject_id" bigint,
+    "scope" text default null
 )
 returns deribit.public_exchange_token_response_result
 language sql
@@ -14254,7 +15586,8 @@ as $$
     with request as (
         select row(
             "refresh_token",
-            "subject_id"
+            "subject_id",
+            "scope"
         )::deribit.public_exchange_token_request as payload
     ), 
     http_response as (
@@ -14373,7 +15706,7 @@ create type deribit.public_get_announcements_request as (
 );
 
 comment on column deribit.public_get_announcements_request."start_timestamp" is 'The most recent timestamp to return the results for (milliseconds since the UNIX epoch)';
-comment on column deribit.public_get_announcements_request."count" is 'Maximum count of returned announcements';
+comment on column deribit.public_get_announcements_request."count" is 'Maximum count of returned announcements, default - 5, maximum - 50';
 
 create type deribit.public_get_announcements_response_result as (
     "body" text,
@@ -14444,6 +15777,95 @@ as $$
 $$;
 
 comment on function deribit.public_get_announcements is 'Retrieves announcements. Default "start_timestamp" parameter value is current timestamp, "count" parameter value must be between 1 and 50, default is 5.';
+/*
+* AUTO-GENERATED FILE - DO NOT MODIFY
+*
+* This SQL file was generated by a code generation tool. Any modifications
+* made to this file may be overwritten by subsequent code generation
+* processes and could lead to inconsistencies or errors in the application.
+*
+* For any required changes, please modify the source templates or the
+* code generation tool's configurations and regenerate this file.
+*
+* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
+* AND IS STRONGLY DISCOURAGED.
+*/
+create type deribit.public_get_apr_history_request_currency as enum (
+    'build',
+    'steth',
+    'usdc',
+    'usde'
+);
+
+create type deribit.public_get_apr_history_request as (
+    "currency" deribit.public_get_apr_history_request_currency,
+    "limit" bigint,
+    "before" bigint
+);
+
+comment on column deribit.public_get_apr_history_request."currency" is '(Required) Currency for which to retrieve APR history';
+comment on column deribit.public_get_apr_history_request."limit" is 'Number of days to retrieve (default 365, maximum 365)';
+comment on column deribit.public_get_apr_history_request."before" is 'Used to receive APR history before given epoch day';
+
+create type deribit.public_get_apr_history_response_datum as (
+    "apr" double precision,
+    "day" bigint
+);
+
+comment on column deribit.public_get_apr_history_response_datum."apr" is 'The APR of the day';
+comment on column deribit.public_get_apr_history_response_datum."day" is 'The full epoch day';
+
+create type deribit.public_get_apr_history_response_result as (
+    "continuation" text,
+    "data" deribit.public_get_apr_history_response_datum[]
+);
+
+comment on column deribit.public_get_apr_history_response_result."continuation" is 'Continuation token for pagination.';
+
+create type deribit.public_get_apr_history_response as (
+    "id" bigint,
+    "jsonrpc" text,
+    "result" deribit.public_get_apr_history_response_result
+);
+
+comment on column deribit.public_get_apr_history_response."id" is 'The id that was sent in the request';
+comment on column deribit.public_get_apr_history_response."jsonrpc" is 'The JSON-RPC version (2.0)';
+
+create function deribit.public_get_apr_history(
+    "currency" deribit.public_get_apr_history_request_currency,
+    "limit" bigint default null,
+    "before" bigint default null
+)
+returns deribit.public_get_apr_history_response_result
+language sql
+as $$
+    
+    with request as (
+        select row(
+            "currency",
+            "limit",
+            "before"
+        )::deribit.public_get_apr_history_request as payload
+    ), 
+    http_response as (
+        select deribit.public_jsonrpc_request(
+            url := '/public/get_apr_history'::deribit.endpoint,
+            request := request.payload,
+            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
+        ) as http_response
+        from request
+    )
+    select (
+        jsonb_populate_record(
+            null::deribit.public_get_apr_history_response,
+            convert_from((a.http_response).body, 'utf-8')::jsonb
+        )
+    ).result
+    from http_response a
+
+$$;
+
+comment on function deribit.public_get_apr_history is 'Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD).';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -14600,7 +16022,8 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_book_summary_by_currency is 'Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).';
+comment on function deribit.public_get_book_summary_by_currency is 'Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).
+Note - For real-time updates, we recommend using the WebSocket subscription to ticker.{instrument_name}.{interval} instead of polling this endpoint.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -14777,7 +16200,7 @@ create type deribit.public_get_combo_details_response_result as (
 comment on column deribit.public_get_combo_details_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.public_get_combo_details_response_result."id" is 'Unique combo identifier';
 comment on column deribit.public_get_combo_details_response_result."instrument_id" is 'Instrument ID';
-comment on column deribit.public_get_combo_details_response_result."state" is 'Combo state: "rfq", "active", "inactive"';
+comment on column deribit.public_get_combo_details_response_result."state" is 'Combo state: "active", "inactive"';
 comment on column deribit.public_get_combo_details_response_result."state_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.public_get_combo_details_response as (
@@ -14843,8 +16266,7 @@ create type deribit.public_get_combo_ids_request_currency as enum (
 
 create type deribit.public_get_combo_ids_request_state as enum (
     'active',
-    'inactive',
-    'rfq'
+    'inactive'
 );
 
 create type deribit.public_get_combo_ids_request as (
@@ -14952,7 +16374,7 @@ create type deribit.public_get_combos_response_result as (
 comment on column deribit.public_get_combos_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.public_get_combos_response_result."id" is 'Unique combo identifier';
 comment on column deribit.public_get_combos_response_result."instrument_id" is 'Instrument ID';
-comment on column deribit.public_get_combos_response_result."state" is 'Combo state: "rfq", "active", "inactive"';
+comment on column deribit.public_get_combos_response_result."state" is 'Combo state: "active", "inactive"';
 comment on column deribit.public_get_combos_response_result."state_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.public_get_combos_response as (
@@ -15090,24 +16512,30 @@ create type deribit.public_get_currencies_response_withdrawal_priority as (
 );
 
 create type deribit.public_get_currencies_response_result as (
+    "apr" double precision,
     "coin_type" text,
     "currency" text,
     "currency_long" text,
-    "fee_precision" bigint,
+    "decimals" bigint,
     "in_cross_collateral_pool" boolean,
     "min_confirmations" bigint,
     "min_withdrawal_fee" double precision,
+    "network_currency" text,
+    "network_fee" double precision,
     "withdrawal_fee" double precision,
     "withdrawal_priorities" deribit.public_get_currencies_response_withdrawal_priority[]
 );
 
+comment on column deribit.public_get_currencies_response_result."apr" is 'Simple Moving Average (SMA) of the last 7 days of rewards. If fewer than 7 days of reward data are available, the APR is calculated as the average of the available rewards. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD).';
 comment on column deribit.public_get_currencies_response_result."coin_type" is 'The type of the currency.';
 comment on column deribit.public_get_currencies_response_result."currency" is 'The abbreviation of the currency. This abbreviation is used elsewhere in the API to identify the currency.';
 comment on column deribit.public_get_currencies_response_result."currency_long" is 'The full name for the currency.';
-comment on column deribit.public_get_currencies_response_result."fee_precision" is 'fee precision';
+comment on column deribit.public_get_currencies_response_result."decimals" is 'The number of decimal places for the currency';
 comment on column deribit.public_get_currencies_response_result."in_cross_collateral_pool" is 'true if the currency is part of the cross collateral pool';
 comment on column deribit.public_get_currencies_response_result."min_confirmations" is 'Minimum number of block chain confirmations before deposit is accepted.';
 comment on column deribit.public_get_currencies_response_result."min_withdrawal_fee" is 'The minimum transaction fee paid for withdrawals';
+comment on column deribit.public_get_currencies_response_result."network_currency" is 'The currency of the network';
+comment on column deribit.public_get_currencies_response_result."network_fee" is 'The network fee';
 comment on column deribit.public_get_currencies_response_result."withdrawal_fee" is 'The total transaction fee paid for withdrawals';
 
 create type deribit.public_get_currencies_response as (
@@ -15138,13 +16566,16 @@ as $$
         from http_response
     )
     select
+        (b)."apr"::double precision,
         (b)."coin_type"::text,
         (b)."currency"::text,
         (b)."currency_long"::text,
-        (b)."fee_precision"::bigint,
+        (b)."decimals"::bigint,
         (b)."in_cross_collateral_pool"::boolean,
         (b)."min_confirmations"::bigint,
         (b)."min_withdrawal_fee"::double precision,
+        (b)."network_currency"::text,
+        (b)."network_fee"::double precision,
         (b)."withdrawal_fee"::double precision,
         (b)."withdrawal_priorities"::deribit.public_get_currencies_response_withdrawal_priority[]
     from (
@@ -15169,78 +16600,53 @@ comment on function deribit.public_get_currencies is 'Retrieves all cryptocurren
 * AND IS STRONGLY DISCOURAGED.
 */
 create type deribit.public_get_delivery_prices_request_index_name as enum (
-    'ada_usd',
     'ada_usdc',
-    'ada_usdt',
-    'algo_usd',
     'algo_usdc',
-    'algo_usdt',
-    'avax_usd',
     'avax_usdc',
-    'avax_usdt',
-    'bch_usd',
     'bch_usdc',
-    'bch_usdt',
-    'bnb_usdt',
+    'bnb_usdc',
+    'btc_eurr',
     'btc_usd',
     'btc_usdc',
     'btc_usde',
     'btc_usdt',
     'btc_usyc',
     'btcdvol_usdc',
-    'doge_usd',
+    'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
-    'dot_usd',
     'dot_usdc',
-    'dot_usdt',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
+    'eth_btc',
+    'eth_eurr',
     'eth_usd',
     'eth_usdc',
     'eth_usde',
     'eth_usdt',
     'eth_usyc',
     'ethdvol_usdc',
-    'link_usd',
+    'eurr_usdc',
+    'eurr_usdt',
     'link_usdc',
-    'link_usdt',
-    'ltc_usd',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usd',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usd',
     'near_usdc',
-    'near_usdt',
     'paxg_btc',
-    'paxg_usd',
     'paxg_usdc',
-    'paxg_usdt',
-    'shib_usd',
     'shib_usdc',
-    'shib_usdt',
-    'sol_usd',
     'sol_usdc',
     'sol_usdt',
     'steth_eth',
-    'steth_usd',
     'steth_usdc',
     'steth_usdt',
-    'trx_usd',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
-    'uni_usd',
     'uni_usdc',
-    'uni_usdt',
-    'usdc_usd',
-    'usde_usd',
+    'usdc_usdt',
     'usde_usdc',
     'usde_usdt',
     'usyc_usdc',
-    'xrp_usd',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.public_get_delivery_prices_request as (
@@ -15251,7 +16657,7 @@ create type deribit.public_get_delivery_prices_request as (
 
 comment on column deribit.public_get_delivery_prices_request."index_name" is '(Required) Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.public_get_delivery_prices_request."offset" is 'The offset for pagination, default - 0';
-comment on column deribit.public_get_delivery_prices_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_delivery_prices_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 
 create type deribit.public_get_delivery_prices_response_datum as (
     "date" text,
@@ -15341,78 +16747,53 @@ create type deribit.public_get_expirations_request_kind as enum (
 );
 
 create type deribit.public_get_expirations_request_currency_pair as enum (
-    'ada_usd',
     'ada_usdc',
-    'ada_usdt',
-    'algo_usd',
     'algo_usdc',
-    'algo_usdt',
-    'avax_usd',
     'avax_usdc',
-    'avax_usdt',
-    'bch_usd',
     'bch_usdc',
-    'bch_usdt',
-    'bnb_usdt',
+    'bnb_usdc',
+    'btc_eurr',
     'btc_usd',
     'btc_usdc',
     'btc_usde',
     'btc_usdt',
     'btc_usyc',
     'btcdvol_usdc',
-    'doge_usd',
+    'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
-    'dot_usd',
     'dot_usdc',
-    'dot_usdt',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
+    'eth_btc',
+    'eth_eurr',
     'eth_usd',
     'eth_usdc',
     'eth_usde',
     'eth_usdt',
     'eth_usyc',
     'ethdvol_usdc',
-    'link_usd',
+    'eurr_usdc',
+    'eurr_usdt',
     'link_usdc',
-    'link_usdt',
-    'ltc_usd',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usd',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usd',
     'near_usdc',
-    'near_usdt',
     'paxg_btc',
-    'paxg_usd',
     'paxg_usdc',
-    'paxg_usdt',
-    'shib_usd',
     'shib_usdc',
-    'shib_usdt',
-    'sol_usd',
     'sol_usdc',
     'sol_usdt',
     'steth_eth',
-    'steth_usd',
     'steth_usdc',
     'steth_usdt',
-    'trx_usd',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
-    'uni_usd',
     'uni_usdc',
-    'uni_usdt',
-    'usdc_usd',
-    'usde_usd',
+    'usdc_usdt',
     'usde_usdc',
     'usde_usdt',
     'usyc_usdc',
-    'xrp_usd',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.public_get_expirations_request as (
@@ -15824,78 +17205,53 @@ comment on function deribit.public_get_historical_volatility is 'Provides inform
 * AND IS STRONGLY DISCOURAGED.
 */
 create type deribit.public_get_index_price_request_index_name as enum (
-    'ada_usd',
     'ada_usdc',
-    'ada_usdt',
-    'algo_usd',
     'algo_usdc',
-    'algo_usdt',
-    'avax_usd',
     'avax_usdc',
-    'avax_usdt',
-    'bch_usd',
     'bch_usdc',
-    'bch_usdt',
-    'bnb_usdt',
+    'bnb_usdc',
+    'btc_eurr',
     'btc_usd',
     'btc_usdc',
     'btc_usde',
     'btc_usdt',
     'btc_usyc',
     'btcdvol_usdc',
-    'doge_usd',
+    'buidl_usdc',
     'doge_usdc',
-    'doge_usdt',
-    'dot_usd',
     'dot_usdc',
-    'dot_usdt',
+    'drbfix-btc_usdc',
+    'drbfix-eth_usdc',
+    'eth_btc',
+    'eth_eurr',
     'eth_usd',
     'eth_usdc',
     'eth_usde',
     'eth_usdt',
     'eth_usyc',
     'ethdvol_usdc',
-    'link_usd',
+    'eurr_usdc',
+    'eurr_usdt',
     'link_usdc',
-    'link_usdt',
-    'ltc_usd',
     'ltc_usdc',
-    'ltc_usdt',
-    'luna_usdt',
-    'matic_usd',
-    'matic_usdc',
-    'matic_usdt',
-    'near_usd',
     'near_usdc',
-    'near_usdt',
     'paxg_btc',
-    'paxg_usd',
     'paxg_usdc',
-    'paxg_usdt',
-    'shib_usd',
     'shib_usdc',
-    'shib_usdt',
-    'sol_usd',
     'sol_usdc',
     'sol_usdt',
     'steth_eth',
-    'steth_usd',
     'steth_usdc',
     'steth_usdt',
-    'trx_usd',
+    'ton_usdc',
+    'trump_usdc',
     'trx_usdc',
-    'trx_usdt',
-    'uni_usd',
     'uni_usdc',
-    'uni_usdt',
-    'usdc_usd',
-    'usde_usd',
+    'usdc_usdt',
     'usde_usdc',
     'usde_usdt',
     'usyc_usdc',
-    'xrp_usd',
-    'xrp_usdc',
-    'xrp_usdt'
+    'xrp_usdc'
 );
 
 create type deribit.public_get_index_price_request as (
@@ -15965,25 +17321,52 @@ comment on function deribit.public_get_index_price is 'Retrieves the current ind
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.public_get_index_price_names_request as (
+    "extended" boolean
+);
+
+comment on column deribit.public_get_index_price_names_request."extended" is 'When set to true, returns additional information including future_combo_creation_enabled and option_combo_creation_enabled for each index';
+
+create type deribit.public_get_index_price_names_response_result as (
+    "future_combo_creation_enabled" boolean,
+    "name" text,
+    "option_combo_creation_enabled" boolean
+);
+
+comment on column deribit.public_get_index_price_names_response_result."future_combo_creation_enabled" is 'Whether future combo creation is enabled for this index (only present when extended=true)';
+comment on column deribit.public_get_index_price_names_response_result."name" is 'Index name';
+comment on column deribit.public_get_index_price_names_response_result."option_combo_creation_enabled" is 'Whether option combo creation is enabled for this index (only present when extended=true)';
+
 create type deribit.public_get_index_price_names_response as (
     "id" bigint,
     "jsonrpc" text,
-    "result" text[]
+    "result" deribit.public_get_index_price_names_response_result[]
 );
 
 comment on column deribit.public_get_index_price_names_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_index_price_names_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
 create function deribit.public_get_index_price_names()
-returns setof text
+returns setof deribit.public_get_index_price_names_response_result
 language sql
 as $$
-    with http_response as (
+    -- Note: The Deribit API 'extended' parameter is always set to true internally
+    -- because when extended=false, the API returns an array of strings which cannot
+    -- be parsed as the composite type structure. If you only need index names,
+    -- select just the 'name' column from the result.
+
+    with request as (
+        select row(
+            true  -- Always use extended=true for consistent object structure
+        )::deribit.public_get_index_price_names_request as payload
+    ), 
+    http_response as (
         select deribit.public_jsonrpc_request(
             url := '/public/get_index_price_names'::deribit.endpoint,
-            request := null::text,
+            request := request.payload,
             rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
         ) as http_response
+        from request
     ),
     result as (
         select (jsonb_populate_record(
@@ -15993,7 +17376,9 @@ as $$
         from http_response
     )
     select
-        a.b
+        (b)."future_combo_creation_enabled"::boolean,
+        (b)."name"::text,
+        (b)."option_combo_creation_enabled"::boolean
     from (
         select (unnest(r.data)) b
         from result r(data)
@@ -16022,12 +17407,12 @@ create type deribit.public_get_instrument_request as (
 comment on column deribit.public_get_instrument_request."instrument_name" is '(Required) Instrument name';
 
 create type deribit.public_get_instrument_response_tick_size_step as (
-    "above_price" double precision,
-    "tick_size" double precision
+    "tick_size" double precision,
+    "above_price" double precision
 );
 
-comment on column deribit.public_get_instrument_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 comment on column deribit.public_get_instrument_response_tick_size_step."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+comment on column deribit.public_get_instrument_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 
 create type deribit.public_get_instrument_response_result as (
     "base_currency" text,
@@ -16051,7 +17436,6 @@ create type deribit.public_get_instrument_response_result as (
     "option_type" text,
     "price_index" text,
     "quote_currency" text,
-    "rfq" boolean,
     "settlement_currency" text,
     "settlement_period" text,
     "strike" double precision,
@@ -16081,7 +17465,6 @@ comment on column deribit.public_get_instrument_response_result."min_trade_amoun
 comment on column deribit.public_get_instrument_response_result."option_type" is 'The option type (only for options).';
 comment on column deribit.public_get_instrument_response_result."price_index" is 'Name of price index that is used for this instrument';
 comment on column deribit.public_get_instrument_response_result."quote_currency" is 'The currency in which the instrument prices are quoted.';
-comment on column deribit.public_get_instrument_response_result."rfq" is 'Whether or not RFQ is active on the instrument.';
 comment on column deribit.public_get_instrument_response_result."settlement_currency" is 'Optional (not added for spot). Settlement currency for the instrument.';
 comment on column deribit.public_get_instrument_response_result."settlement_period" is 'Optional (not added for spot). The settlement period.';
 comment on column deribit.public_get_instrument_response_result."strike" is 'The strike value (only for options).';
@@ -16169,12 +17552,12 @@ comment on column deribit.public_get_instruments_request."kind" is 'Instrument k
 comment on column deribit.public_get_instruments_request."expired" is 'Set to true to show recently expired instruments instead of active ones.';
 
 create type deribit.public_get_instruments_response_tick_size_step as (
-    "above_price" double precision,
-    "tick_size" double precision
+    "tick_size" double precision,
+    "above_price" double precision
 );
 
-comment on column deribit.public_get_instruments_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 comment on column deribit.public_get_instruments_response_tick_size_step."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+comment on column deribit.public_get_instruments_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 
 create type deribit.public_get_instruments_response_result as (
     "base_currency" text,
@@ -16198,7 +17581,6 @@ create type deribit.public_get_instruments_response_result as (
     "option_type" text,
     "price_index" text,
     "quote_currency" text,
-    "rfq" boolean,
     "settlement_currency" text,
     "settlement_period" text,
     "strike" double precision,
@@ -16228,7 +17610,6 @@ comment on column deribit.public_get_instruments_response_result."min_trade_amou
 comment on column deribit.public_get_instruments_response_result."option_type" is 'The option type (only for options).';
 comment on column deribit.public_get_instruments_response_result."price_index" is 'Name of price index that is used for this instrument';
 comment on column deribit.public_get_instruments_response_result."quote_currency" is 'The currency in which the instrument prices are quoted.';
-comment on column deribit.public_get_instruments_response_result."rfq" is 'Whether or not RFQ is active on the instrument.';
 comment on column deribit.public_get_instruments_response_result."settlement_currency" is 'Optional (not added for spot). Settlement currency for the instrument.';
 comment on column deribit.public_get_instruments_response_result."settlement_period" is 'Optional (not added for spot). The settlement period.';
 comment on column deribit.public_get_instruments_response_result."strike" is 'The strike value (only for options).';
@@ -16297,7 +17678,6 @@ as $$
         (b)."option_type"::text,
         (b)."price_index"::text,
         (b)."quote_currency"::text,
-        (b)."rfq"::boolean,
         (b)."settlement_currency"::text,
         (b)."settlement_period"::text,
         (b)."strike"::double precision,
@@ -16311,7 +17691,8 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.';
+comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.
+Note - This endpoint has distinct API rate limiting requirements: 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to instrument_state.{kind}.{currency} for real-time updates. For more information, see Rate Limits.';
 /*
 * AUTO-GENERATED FILE - DO NOT MODIFY
 *
@@ -16349,7 +17730,7 @@ create type deribit.public_get_last_settlements_by_currency_request as (
 
 comment on column deribit.public_get_last_settlements_by_currency_request."currency" is '(Required) The currency symbol';
 comment on column deribit.public_get_last_settlements_by_currency_request."type" is 'Settlement type';
-comment on column deribit.public_get_last_settlements_by_currency_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.public_get_last_settlements_by_currency_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.public_get_last_settlements_by_currency_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.public_get_last_settlements_by_currency_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 
@@ -16469,7 +17850,7 @@ create type deribit.public_get_last_settlements_by_instrument_request as (
 
 comment on column deribit.public_get_last_settlements_by_instrument_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.public_get_last_settlements_by_instrument_request."type" is 'Settlement type';
-comment on column deribit.public_get_last_settlements_by_instrument_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.public_get_last_settlements_by_instrument_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.public_get_last_settlements_by_instrument_request."continuation" is 'Continuation token for pagination';
 comment on column deribit.public_get_last_settlements_by_instrument_request."search_start_timestamp" is 'The latest timestamp to return result from (milliseconds since the UNIX epoch)';
 
@@ -16614,7 +17995,7 @@ comment on column deribit.public_get_last_trades_by_currency_request."start_id" 
 comment on column deribit.public_get_last_trades_by_currency_request."end_id" is 'The ID of the last trade to be returned. Number for BTC trades, or hyphen name in ex. "ETH-15" # "ETH_USDC-16"';
 comment on column deribit.public_get_last_trades_by_currency_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_currency_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_currency_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_currency_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_currency_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_currency_response_trade as (
@@ -16766,7 +18147,7 @@ comment on column deribit.public_get_last_trades_by_currency_and_time_request."c
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."kind" is 'Instrument kind, "combo" for any combo or "any" for all. If not provided instruments of all kinds are considered';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_currency_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_currency_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_currency_and_time_response_trade as (
@@ -16898,7 +18279,7 @@ comment on column deribit.public_get_last_trades_by_instrument_request."start_se
 comment on column deribit.public_get_last_trades_by_instrument_request."end_seq" is 'The sequence number of the last trade to be returned';
 comment on column deribit.public_get_last_trades_by_instrument_request."start_timestamp" is 'The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_instrument_request."end_timestamp" is 'The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_instrument_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_instrument_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_instrument_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_instrument_response_trade as (
@@ -17028,7 +18409,7 @@ create type deribit.public_get_last_trades_by_instrument_and_time_request as (
 comment on column deribit.public_get_last_trades_by_instrument_and_time_request."instrument_name" is '(Required) Instrument name';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_request."start_timestamp" is '(Required) The earliest timestamp to return result from (milliseconds since the UNIX epoch). When param is provided trades are returned from the earliest';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_request."end_timestamp" is '(Required) The most recent timestamp to return result from (milliseconds since the UNIX epoch). Only one of params: start_timestamp, end_timestamp is truly required';
-comment on column deribit.public_get_last_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10';
+comment on column deribit.public_get_last_trades_by_instrument_and_time_request."count" is 'Number of requested items, default - 10, maximum - 1000';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_request."sorting" is 'Direction of results sorting (default value means no sorting, results will be returned in order in which they left the database)';
 
 create type deribit.public_get_last_trades_by_instrument_and_time_response_trade as (
@@ -17228,7 +18609,7 @@ create type deribit.public_get_order_book_request as (
 );
 
 comment on column deribit.public_get_order_book_request."instrument_name" is '(Required) The instrument name for which to retrieve the order book, see public/get_instruments to obtain instrument names.';
-comment on column deribit.public_get_order_book_request."depth" is 'The number of entries to return for bids and asks.';
+comment on column deribit.public_get_order_book_request."depth" is 'The number of entries to return for bids and asks, maximum - 10000.';
 
 create type deribit.public_get_order_book_response_stats as (
     "high" double precision,
@@ -17387,7 +18768,7 @@ create type deribit.public_get_order_book_by_instrument_id_request as (
 );
 
 comment on column deribit.public_get_order_book_by_instrument_id_request."instrument_id" is '(Required) The instrument ID for which to retrieve the order book, see public/get_instruments to obtain instrument IDs.';
-comment on column deribit.public_get_order_book_by_instrument_id_request."depth" is 'The number of entries to return for bids and asks.';
+comment on column deribit.public_get_order_book_by_instrument_id_request."depth" is 'The number of entries to return for bids and asks, maximum - 10000.';
 
 create type deribit.public_get_order_book_by_instrument_id_response_stats as (
     "high" double precision,
@@ -17529,109 +18910,6 @@ comment on function deribit.public_get_order_book_by_instrument_id is 'Retrieves
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.public_get_rfqs_request_currency as enum (
-    'BTC',
-    'ETH',
-    'EURR',
-    'USDC',
-    'USDT'
-);
-
-create type deribit.public_get_rfqs_request_kind as enum (
-    'future',
-    'future_combo',
-    'option',
-    'option_combo',
-    'spot'
-);
-
-create type deribit.public_get_rfqs_request as (
-    "currency" deribit.public_get_rfqs_request_currency,
-    "kind" deribit.public_get_rfqs_request_kind
-);
-
-comment on column deribit.public_get_rfqs_request."currency" is '(Required) The currency symbol';
-comment on column deribit.public_get_rfqs_request."kind" is 'Instrument kind, if not provided instruments of all kinds are considered';
-
-create type deribit.public_get_rfqs_response_result as (
-    "amount" double precision,
-    "instrument_name" text,
-    "last_rfq_timestamp" bigint,
-    "side" text,
-    "traded_volume" double precision
-);
-
-comment on column deribit.public_get_rfqs_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.public_get_rfqs_response_result."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.public_get_rfqs_response_result."last_rfq_timestamp" is 'The timestamp of last RFQ (milliseconds since the Unix epoch)';
-comment on column deribit.public_get_rfqs_response_result."side" is 'Side - buy or sell';
-comment on column deribit.public_get_rfqs_response_result."traded_volume" is 'Volume traded since last RFQ';
-
-create type deribit.public_get_rfqs_response as (
-    "id" bigint,
-    "jsonrpc" text,
-    "result" deribit.public_get_rfqs_response_result[]
-);
-
-comment on column deribit.public_get_rfqs_response."id" is 'The id that was sent in the request';
-comment on column deribit.public_get_rfqs_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-
-create function deribit.public_get_rfqs(
-    "currency" deribit.public_get_rfqs_request_currency,
-    "kind" deribit.public_get_rfqs_request_kind default null
-)
-returns setof deribit.public_get_rfqs_response_result
-language sql
-as $$
-    
-    with request as (
-        select row(
-            "currency",
-            "kind"
-        )::deribit.public_get_rfqs_request as payload
-    ), 
-    http_response as (
-        select deribit.public_jsonrpc_request(
-            url := '/public/get_rfqs'::deribit.endpoint,
-            request := request.payload,
-            rate_limiter := 'deribit.non_matching_engine_request_log_call'::name
-        ) as http_response
-        from request
-    ),
-    result as (
-        select (jsonb_populate_record(
-            null::deribit.public_get_rfqs_response,
-            convert_from((http_response.http_response).body, 'utf-8')::jsonb)
-        ).result
-        from http_response
-    )
-    select
-        (b)."amount"::double precision,
-        (b)."instrument_name"::text,
-        (b)."last_rfq_timestamp"::bigint,
-        (b)."side"::text,
-        (b)."traded_volume"::double precision
-    from (
-        select (unnest(r.data)) b
-        from result r(data)
-    ) a
-    
-$$;
-
-comment on function deribit.public_get_rfqs is 'Retrieve active RFQs for instruments in given currency.';
-/*
-* AUTO-GENERATED FILE - DO NOT MODIFY
-*
-* This SQL file was generated by a code generation tool. Any modifications
-* made to this file may be overwritten by subsequent code generation
-* processes and could lead to inconsistencies or errors in the application.
-*
-* For any required changes, please modify the source templates or the
-* code generation tool's configurations and regenerate this file.
-*
-* WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
-* AND IS STRONGLY DISCOURAGED.
-*/
 create type deribit.public_get_supported_index_names_request_type as enum (
     'all',
     'derivative',
@@ -17644,10 +18922,20 @@ create type deribit.public_get_supported_index_names_request as (
 
 comment on column deribit.public_get_supported_index_names_request."type" is 'Type of a cryptocurrency price index';
 
+create type deribit.public_get_supported_index_names_response_result as (
+    "future_combo_creation_enabled" boolean,
+    "name" text,
+    "option_combo_creation_enabled" boolean
+);
+
+comment on column deribit.public_get_supported_index_names_response_result."future_combo_creation_enabled" is 'Whether future combo creation is enabled for this index (only present when extended=true)';
+comment on column deribit.public_get_supported_index_names_response_result."name" is 'Index name';
+comment on column deribit.public_get_supported_index_names_response_result."option_combo_creation_enabled" is 'Whether option combo creation is enabled for this index (only present when extended=true)';
+
 create type deribit.public_get_supported_index_names_response as (
     "id" bigint,
     "jsonrpc" text,
-    "result" text[]
+    "result" deribit.public_get_supported_index_names_response_result[]
 );
 
 comment on column deribit.public_get_supported_index_names_response."id" is 'The id that was sent in the request';
@@ -17656,7 +18944,7 @@ comment on column deribit.public_get_supported_index_names_response."jsonrpc" is
 create function deribit.public_get_supported_index_names(
     "type" deribit.public_get_supported_index_names_request_type default null
 )
-returns setof text
+returns setof deribit.public_get_supported_index_names_response_result
 language sql
 as $$
     
@@ -17681,7 +18969,9 @@ as $$
         from http_response
     )
     select
-        a.b
+        (b)."future_combo_creation_enabled"::boolean,
+        (b)."name"::text,
+        (b)."option_combo_creation_enabled"::boolean
     from (
         select (unnest(r.data)) b
         from result r(data)

@@ -24,14 +24,38 @@ create type deribit.private_get_block_trades_request as (
     "count" bigint,
     "start_id" text,
     "end_id" text,
-    "block_rfq_id" bigint
+    "block_rfq_id" bigint,
+    "broker_code" text
 );
 
 comment on column deribit.private_get_block_trades_request."currency" is 'The currency symbol';
-comment on column deribit.private_get_block_trades_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_block_trades_request."count" is 'Count of Block Trades returned, maximum - 101';
 comment on column deribit.private_get_block_trades_request."start_id" is 'Response will contain block trades older than the one provided in this field';
 comment on column deribit.private_get_block_trades_request."end_id" is 'The id of the oldest block trade to be returned, start_id is required with end_id';
 comment on column deribit.private_get_block_trades_request."block_rfq_id" is 'ID of the Block RFQ';
+comment on column deribit.private_get_block_trades_request."broker_code" is 'Broker code to filter block trades. Only broker clients can use broker_code to filter broker block trades. Use any for all block trades.';
+
+create type deribit.private_get_block_trades_response_client_info as (
+    "client_id" bigint,
+    "client_link_id" bigint,
+    "name" text
+);
+
+comment on column deribit.private_get_block_trades_response_client_info."client_id" is 'ID of a client; available to broker. Represents a group of users under a common name.';
+comment on column deribit.private_get_block_trades_response_client_info."client_link_id" is 'ID assigned to a single user in a client; available to broker.';
+comment on column deribit.private_get_block_trades_response_client_info."name" is 'Name of the linked user within the client; available to broker.';
+
+create type deribit.private_get_block_trades_response_trade_allocation as (
+    "amount" double precision,
+    "client_info" deribit.private_get_block_trades_response_client_info,
+    "fee" double precision,
+    "user_id" bigint
+);
+
+comment on column deribit.private_get_block_trades_response_trade_allocation."amount" is 'Amount allocated to this user.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."client_info" is 'Optional client allocation info for brokers.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."fee" is 'Fee for the allocated part of the trade.';
+comment on column deribit.private_get_block_trades_response_trade_allocation."user_id" is 'User ID to which part of the trade is allocated. For brokers the User ID is obstructed.';
 
 create type deribit.private_get_block_trades_response_trade as (
     "trade_id" text,
@@ -54,6 +78,7 @@ create type deribit.private_get_block_trades_response_trade as (
     "combo_id" text,
     "matching_id" text,
     "order_type" text,
+    "trade_allocations" deribit.private_get_block_trades_response_trade_allocation[],
     "profit_loss" double precision,
     "timestamp" bigint,
     "iv" double precision,
@@ -93,6 +118,7 @@ comment on column deribit.private_get_block_trades_response_trade."price" is 'Pr
 comment on column deribit.private_get_block_trades_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.private_get_block_trades_response_trade."matching_id" is 'Always null';
 comment on column deribit.private_get_block_trades_response_trade."order_type" is 'Order type: "limit, "market", or "liquidation"';
+comment on column deribit.private_get_block_trades_response_trade."trade_allocations" is 'List of allocations for Block RFQ pre-allocation. Each allocation specifies user_id, amount, and fee for the allocated part of the trade. For broker client allocations, a client_info object will be included.';
 comment on column deribit.private_get_block_trades_response_trade."profit_loss" is 'Profit and loss in base currency.';
 comment on column deribit.private_get_block_trades_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.private_get_block_trades_response_trade."iv" is 'Option implied volatility for the price (Option only)';
@@ -113,12 +139,16 @@ comment on column deribit.private_get_block_trades_response_trade."legs" is 'Opt
 
 create type deribit.private_get_block_trades_response_result as (
     "app_name" text,
+    "broker_code" text,
+    "broker_name" text,
     "id" text,
     "timestamp" bigint,
     "trades" deribit.private_get_block_trades_response_trade[]
 );
 
 comment on column deribit.private_get_block_trades_response_result."app_name" is 'The name of the application that executed the block trade on behalf of the user (optional).';
+comment on column deribit.private_get_block_trades_response_result."broker_code" is 'Broker code associated with the broker block trade.';
+comment on column deribit.private_get_block_trades_response_result."broker_name" is 'Name of the broker associated with the block trade.';
 comment on column deribit.private_get_block_trades_response_result."id" is 'Block trade id';
 comment on column deribit.private_get_block_trades_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -136,7 +166,8 @@ create function deribit.private_get_block_trades(
     "count" bigint default null,
     "start_id" text default null,
     "end_id" text default null,
-    "block_rfq_id" bigint default null
+    "block_rfq_id" bigint default null,
+    "broker_code" text default null
 )
 returns setof deribit.private_get_block_trades_response_result
 language sql
@@ -148,7 +179,8 @@ as $$
             "count",
             "start_id",
             "end_id",
-            "block_rfq_id"
+            "block_rfq_id",
+            "broker_code"
         )::deribit.private_get_block_trades_request as payload
     ), 
     http_response as (
@@ -169,6 +201,8 @@ as $$
     )
     select
         (b)."app_name"::text,
+        (b)."broker_code"::text,
+        (b)."broker_name"::text,
         (b)."id"::text,
         (b)."timestamp"::bigint,
         (b)."trades"::deribit.private_get_block_trades_response_trade[]

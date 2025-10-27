@@ -4,7 +4,7 @@ EXTVERSION = $(shell grep default_version $(EXTENSION).control | \
 
 DATA = $(filter-out $(wildcard sql/*--*.sql),$(wildcard sql/*.sql))
 DOCS = $(wildcard doc/*.md)
-PG_CONFIG = pg_config
+PG_CONFIG ?= pg_config
 PG91 = $(shell $(PG_CONFIG) --version | egrep " 8\.| 9\.0" > /dev/null && echo no || echo yes)
 
 ifeq ($(PG91),yes)
@@ -32,3 +32,16 @@ endif
 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 include $(PGXS)
+
+# Test targets
+.PHONY: test test-unit test-integration
+
+test: test-unit test-integration
+
+test-unit:
+	@echo "Running unit tests..."
+	@cd tests && ./run-tests.sh unit
+
+test-integration:
+	@echo "Running integration tests..."
+	@cd tests && ./run-tests.sh integration

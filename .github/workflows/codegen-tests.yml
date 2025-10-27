@@ -1,0 +1,94 @@
+name: Code Generator Tests
+
+on:
+  push:
+    branches: [ main, update-deribit-api ]
+    paths:
+      - 'codegen/**'
+      - '.github/workflows/codegen-tests.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'codegen/**'
+      - '.github/workflows/codegen-tests.yml'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: ["3.11", "3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Cache pip packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/pip
+        key: ${{ runner.os }}-pip-${{ hashFiles('codegen/requirements.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+
+    - name: Install dependencies
+      run: |
+        cd codegen
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Run linters (black)
+      run: |
+        cd codegen
+        black --check --diff .
+      continue-on-error: true
+
+    - name: Run linters (ruff)
+      run: |
+        cd codegen
+        ruff check .
+      continue-on-error: true
+
+    - name: Run type checker (mypy)
+      run: |
+        cd codegen
+        mypy --install-types --non-interactive . || true
+      continue-on-error: true
+
+    - name: Run unit tests
+      run: |
+        cd codegen
+        pytest tests/ -v -m "unit" --cov=. --cov-report=xml --cov-report=term-missing
+
+    - name: Run golden master tests
+      run: |
+        cd codegen
+        pytest tests/ -v -m "golden" --cov=. --cov-append --cov-report=xml --cov-report=term-missing
+
+    - name: Run integration tests
+      run: |
+        cd codegen
+        pytest tests/ -v -m "integration" --cov=. --cov-append --cov-report=xml --cov-report=term-missing
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./codegen/coverage.xml
+        flags: codegen
+        name: codecov-codegen-${{ matrix.python-version }}
+      continue-on-error: true
+
+    - name: Generate coverage report
+      run: |
+        cd codegen
+        pytest tests/ --cov=. --cov-report=html
+
+    - name: Upload coverage HTML
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-report-${{ matrix.python-version }}
+        path: codegen/htmlcov/

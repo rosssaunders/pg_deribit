@@ -1,10 +1,13 @@
+import logging
 import os
 from typing import List
 
-from models.models import Function, Type_
+from models.models import Function, TypeDefinition
 from postgres.enum import enum_to_type
 from postgres.header import header
 from postgres.postgres import invoke_endpoint, type_to_type
+
+logger = logging.getLogger(__name__)
 
 
 class Exporter:
@@ -32,32 +35,56 @@ class Exporter:
             self.export(function)
 
         # don't treat these as code gens
-        with open(os.path.join(self.script_dir, f"../../sql/types/endpoints.sql"), 'w') as file:
+        with open(
+            os.path.join(self.script_dir, f"../../sql/types/endpoints.sql"), "w"
+        ) as file:
             file.write(f"create type deribit.endpoint as enum (\n")
-            file.write(f',\n'.join(f"    '{function.endpoint.path}'" for function in sorted_endpoints))
+            file.write(
+                f",\n".join(
+                    f"    '{function.endpoint.path}'" for function in sorted_endpoints
+                )
+            )
             file.write(f"\n);\n")
 
         # don't treat these as code gens
-        with open(os.path.join(self.script_dir, f"../../sql/static/endpoints.sql"), 'w') as file:
-            file.write(f"""insert into deribit.internal_endpoint_rate_limit (key)\nvalues\n""")
-            file.write(f',\n'.join(f"('{function.endpoint.path}')" for function in sorted_endpoints))
-            file.write(';\n')
+        with open(
+            os.path.join(self.script_dir, f"../../sql/static/endpoints.sql"), "w"
+        ) as file:
+            file.write(
+                f"""insert into deribit.internal_endpoint_rate_limit (key)\nvalues\n"""
+            )
+            file.write(
+                f",\n".join(
+                    f"('{function.endpoint.path}')" for function in sorted_endpoints
+                )
+            )
+            file.write(";\n")
 
     def export(self, function: Function):
         script_dir = os.path.dirname(__file__)
 
-        print(f'{function.endpoint.name}: generating')
+        logger.info(f"Generating {function.endpoint.name}...")
 
-        with open(os.path.join(script_dir, f"../../sql/endpoints/{function.endpoint.name}.sql"), 'w', encoding='utf-8') as file:
+        with open(
+            os.path.join(
+                script_dir, f"../../sql/endpoints/{function.endpoint.name}.sql"
+            ),
+            "w",
+            encoding="utf-8",
+        ) as file:
             sections: List[str] = []
             file.write(header())
 
             if function.endpoint.request_type is not None:
-                enums = walk_types_return_enums_in_reverse_order(function.endpoint.request_type)
+                enums = walk_types_return_enums_in_reverse_order(
+                    function.endpoint.request_type
+                )
                 for parent, e in enums:
                     sections.append(enum_to_type(self.schema, parent.name, e))
 
-                types = walk_types_return_complex_types_in_reverse_order(function.endpoint.request_type)
+                types = walk_types_return_complex_types_in_reverse_order(
+                    function.endpoint.request_type
+                )
                 for t in types:
                     sections.append(type_to_type(self.schema, t))
 
@@ -69,9 +96,12 @@ class Exporter:
             file.write("\n\n".join(sections))
             file.write("\n")
 
-        print(f'{function.endpoint.name}: generated')
+        print(f"{function.endpoint.name}: generated")
 
-def walk_types_return_enums_in_reverse_order(tpe: Type_) -> List[tuple[Type_, Type_]]:
+
+def walk_types_return_enums_in_reverse_order(
+    tpe: TypeDefinition,
+) -> List[tuple[TypeDefinition, TypeDefinition]]:
     all_types = walk_types_return_complex_types_in_reverse_order(tpe)
     res = []
     for t in all_types:
@@ -82,8 +112,10 @@ def walk_types_return_enums_in_reverse_order(tpe: Type_) -> List[tuple[Type_, Ty
     return res
 
 
-def walk_types_return_complex_types_in_reverse_order(tpe: Type_) -> List[Type_]:
-    res: List[Type_] = []
+def walk_types_return_complex_types_in_reverse_order(
+    tpe: TypeDefinition,
+) -> List[TypeDefinition]:
+    res: List[TypeDefinition] = []
 
     if tpe.is_primitive:
         return res

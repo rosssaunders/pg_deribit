@@ -18,12 +18,12 @@ create type deribit.public_get_instrument_request as (
 comment on column deribit.public_get_instrument_request."instrument_name" is '(Required) Instrument name';
 
 create type deribit.public_get_instrument_response_tick_size_step as (
-    "above_price" double precision,
-    "tick_size" double precision
+    "tick_size" double precision,
+    "above_price" double precision
 );
 
-comment on column deribit.public_get_instrument_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 comment on column deribit.public_get_instrument_response_tick_size_step."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
+comment on column deribit.public_get_instrument_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
 
 create type deribit.public_get_instrument_response_result as (
     "base_currency" text,
@@ -47,7 +47,6 @@ create type deribit.public_get_instrument_response_result as (
     "option_type" text,
     "price_index" text,
     "quote_currency" text,
-    "rfq" boolean,
     "settlement_currency" text,
     "settlement_period" text,
     "strike" double precision,
@@ -77,7 +76,6 @@ comment on column deribit.public_get_instrument_response_result."min_trade_amoun
 comment on column deribit.public_get_instrument_response_result."option_type" is 'The option type (only for options).';
 comment on column deribit.public_get_instrument_response_result."price_index" is 'Name of price index that is used for this instrument';
 comment on column deribit.public_get_instrument_response_result."quote_currency" is 'The currency in which the instrument prices are quoted.';
-comment on column deribit.public_get_instrument_response_result."rfq" is 'Whether or not RFQ is active on the instrument.';
 comment on column deribit.public_get_instrument_response_result."settlement_currency" is 'Optional (not added for spot). Settlement currency for the instrument.';
 comment on column deribit.public_get_instrument_response_result."settlement_period" is 'Optional (not added for spot). The settlement period.';
 comment on column deribit.public_get_instrument_response_result."strike" is 'The strike value (only for options).';

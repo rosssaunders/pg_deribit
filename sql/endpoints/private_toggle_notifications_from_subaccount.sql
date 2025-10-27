@@ -62,4 +62,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_toggle_notifications_from_subaccount is 'Enable or disable sending of notifications for the subaccount.';
+comment on function deribit.private_toggle_notifications_from_subaccount is 'Enable or disable sending of notifications for the subaccount. TFA required';

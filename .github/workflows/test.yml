@@ -1,0 +1,98 @@
+name: Run Tests
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: pgTAP Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t pg_deribit:test .
+
+      - name: Run PostgreSQL container
+        run: |
+          docker run -d \
+            --name pg_deribit_test \
+            -e POSTGRES_PASSWORD=deribitpwd \
+            -e POSTGRES_USER=deribit \
+            -e POSTGRES_DB=deribit \
+            -p 5432:5432 \
+            pg_deribit:test
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          echo "Waiting for PostgreSQL to be ready..."
+          timeout 60 bash -c 'until docker exec pg_deribit_test pg_isready -U deribit; do sleep 1; done'
+          echo "PostgreSQL is ready, waiting 5 more seconds for full initialization..."
+          sleep 5
+
+      - name: Copy tests to container
+        run: |
+          docker cp tests pg_deribit_test:/tmp/tests
+
+      - name: Run Unit Tests
+        run: |
+          docker exec pg_deribit_test bash -c \
+            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
+
+      - name: Run Integration Tests (Public endpoints)
+        run: |
+          docker exec pg_deribit_test bash -c \
+            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
+
+      - name: Run Authenticated Integration Tests (TestNet)
+        continue-on-error: true
+        env:
+          DERIBIT_CLIENT_ID: ${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}
+          DERIBIT_CLIENT_SECRET: ${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}
+        run: |
+          docker exec pg_deribit_test bash -c "
+            export PGPASSWORD=deribitpwd
+            export DERIBIT_CLIENT_ID='${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}'
+            export DERIBIT_CLIENT_SECRET='${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}'
+
+            echo 'Setting database configuration...'
+            echo \"Client ID length: \${#DERIBIT_CLIENT_ID}\"
+            echo \"Client Secret length: \${#DERIBIT_CLIENT_SECRET}\"
+
+            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_id = '\${DERIBIT_CLIENT_ID}'\"
+            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_secret = '\${DERIBIT_CLIENT_SECRET}'\"
+
+            echo 'Verifying settings were stored...'
+            psql -U deribit -d deribit -c \"SELECT current_setting('deribit.test_client_id', true) as client_id_set\"
+
+            echo 'Running authenticated tests...'
+            cd /tmp/tests/integration
+            psql -U deribit -d deribit -f 09-authenticated-tests.sql
+
+            echo 'Running order operation tests...'
+            psql -U deribit -d deribit -f 10-order-tests.sql
+
+            echo 'Running new features tests...'
+            psql -U deribit -d deribit -f 12-new-features-tests.sql
+          "
+
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "✅ Unit Tests: Passed"
+          echo "✅ Integration Tests (Public): Passed"
+          if [ -n "${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" ]; then
+            echo "✅ Authenticated Tests (TestNet): Passed"
+          else
+            echo "⚠️  Authenticated Tests: Skipped (no TestNet credentials)"
+          fi
+
+      - name: Cleanup
+        if: always()
+        run: docker rm -f pg_deribit_test

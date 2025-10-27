@@ -28,7 +28,7 @@ create type deribit.private_get_trigger_order_history_request as (
 
 comment on column deribit.private_get_trigger_order_history_request."currency" is '(Required) The currency symbol';
 comment on column deribit.private_get_trigger_order_history_request."instrument_name" is 'Instrument name';
-comment on column deribit.private_get_trigger_order_history_request."count" is 'Number of requested items, default - 20';
+comment on column deribit.private_get_trigger_order_history_request."count" is 'Number of requested items, default - 20, maximum - 1000';
 comment on column deribit.private_get_trigger_order_history_request."continuation" is 'Continuation token for pagination';
 
 create type deribit.private_get_trigger_order_history_response_entry as (

@@ -1,47 +1,47 @@
-from models.models import Field, Function, Type_
+from models.models import Field, Function, TypeDefinition
 from postgres.keywords import escape_postgres_keyword
 from postgres.postgres import convert_type_postgres
 
 
 def default_test_value(field: str) -> str:
     field_values = {
-        'currency': "'BTC'",
-        'currency_pair': "'BTC-USD'",
-        'instrument_name': "'BTC-PERPETUAL'",
-        'amount': '0.1::numeric',
-        'price': '10000::numeric',
-        'index_name': "'btc_usd'",
-        'length': '100',
-        'start_timestamp': '1700319764',
-        'end_timestamp': '1700406164',
-        'instrument_id': '124972',
-        'resolution': "'1D'",
-        'order_id': '19025003696',
-        'margin_model': "'cross_sm'",
-        'language': "'en'",
-        'id': '1',
-        'name': "'test'",
-        'announcement_id': "'1'",
-        'sid': '1',
-        'email': ""'test@email.com'"",
-        'max_scope': '',  # TODO
-        'subaccount_id': '1',
-        'mode': '', # TODO
-        'extended_to_subaccounts': '',
-        'state': 'false',
-        'enabled': 'false',
-        'label': "'abcde'",
-        'type': 'market',
-        '"interval"': '1',
-        'frozen_time': '1',
-        'destination': '1',
-        'address': "'123456'",
+        "currency": "'BTC'",
+        "currency_pair": "'BTC-USD'",
+        "instrument_name": "'BTC-PERPETUAL'",
+        "amount": "0.1::numeric",
+        "price": "10000::numeric",
+        "index_name": "'btc_usd'",
+        "length": "100",
+        "start_timestamp": "1700319764",
+        "end_timestamp": "1700406164",
+        "instrument_id": "124972",
+        "resolution": "'1D'",
+        "order_id": "19025003696",
+        "margin_model": "'cross_sm'",
+        "language": "'en'",
+        "id": "1",
+        "name": "'test'",
+        "announcement_id": "'1'",
+        "sid": "1",
+        "email": "" "test@email.com" "",
+        "max_scope": "",  # TODO
+        "subaccount_id": "1",
+        "mode": "",  # TODO
+        "extended_to_subaccounts": "",
+        "state": "false",
+        "enabled": "false",
+        "label": "'abcde'",
+        "type": "market",
+        '"interval"': "1",
+        "frozen_time": "1",
+        "destination": "1",
+        "address": "'123456'",
     }
-    return field_values.get(field, 'UNKNOWN')
+    return field_values.get(field, "UNKNOWN")
 
 
 def default_to_null_value(field: Field) -> str:
-    return '' if field.required else ' = null'
+    return "" if field.required else " = null"
 
 
 def test_endpoint(schema: str, function: Function) -> str:
@@ -50,13 +50,16 @@ def test_endpoint(schema: str, function: Function) -> str:
     res += f"""select * 
 from {schema}.{function.name}("""
     if function.endpoint.request_type is not None:
-        required_fields = list([x for x in function.endpoint.request_type.fields if x.required])
+        required_fields = list(
+            [x for x in function.endpoint.request_type.fields if x.required]
+        )
         if len(required_fields) > 0:
             res += """
 """
-            res += ',\n'.join(
-                f'    {escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}' for e in
-                required_fields)
+            res += ",\n".join(
+                f"    {escape_postgres_keyword(e.name)} := {default_test_value(escape_postgres_keyword(e.name))}"
+                for e in required_fields
+            )
             res += """
 """
     res += f""");"""
@@ -76,7 +79,7 @@ declare"""
     # expected type
     if function.response_type.is_primitive:
         res += f"""
-    _expected {convert_type_postgres(schema, function.response_type.name, Type_(name=function.response_type.name))};
+    _expected {convert_type_postgres(schema, function.response_type.name, TypeDefinition(name=function.response_type.name))};
     """
     elif function.response_type.is_array:
         res += f"""
@@ -93,9 +96,10 @@ declare"""
 
     if function.endpoint.request_type is not None:
         res += "\n"
-        res += ';\n'.join(
-            f'    _{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null_value(f)}'
-            for f in function.endpoint.request_type.fields)
+        res += ";\n".join(
+            f"    _{escape_postgres_keyword(f.name)} {convert_type_postgres(schema, function.endpoint.request_type.name, f.type)}{default_to_null_value(f)}"
+            for f in function.endpoint.request_type.fields
+        )
         res += ";\n"
 
     res += """
@@ -104,7 +108,10 @@ begin
     if function.endpoint.request_type is not None:
         res += f"""_expected := {schema}.{function.name}(
 """
-        res += ',\n'.join(f'        {escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}' for e in function.endpoint.request_type.fields)
+        res += ",\n".join(
+            f"        {escape_postgres_keyword(e.name)} := _{escape_postgres_keyword(e.name)}"
+            for e in function.endpoint.request_type.fields
+        )
         res += f"""
     );"""
 
