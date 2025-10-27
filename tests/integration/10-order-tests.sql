@@ -98,7 +98,7 @@ select lives_ok(
         type := 'limit',
         time_in_force := 'good_til_cancelled',
         post_only := true,
-        price := 200000.0,  -- Very high price to avoid execution
+        price := 130000.0,  -- High price to avoid execution (below max price limit)
         reject_post_only := false,
         label := 'test_sell_order'
     ) as t
