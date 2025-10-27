@@ -11,4 +11,4 @@ RUN apt-get update && apt-get install -y \
 # Install pg_deribit
 COPY . /usr/src/extension
 WORKDIR /usr/src/extension
-RUN PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config make && PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config make install
+RUN make PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config && make install PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config
