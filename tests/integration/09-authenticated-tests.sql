@@ -41,15 +41,10 @@ BEGIN
     PERFORM deribit.set_client_auth(v_client_id, v_client_secret);
 END $$;
 
--- Test 1: Authentication - Verify we can authenticate
-select ok(
-    (select jsonb_typeof(deribit.public_auth(
-        'client_credentials',
-        current_setting('env.DERIBIT_CLIENT_ID', true),
-        current_setting('env.DERIBIT_CLIENT_SECRET', true),
-        null, null, null
-    )) = 'object'),
-    'Should successfully authenticate with TestNet'
+-- Test 1: Authentication - Verify credentials work by calling an authenticated endpoint
+select lives_ok(
+    $$SELECT deribit.private_get_account_summary('BTC', false)$$,
+    'Should successfully authenticate and call private endpoint on TestNet'
 );
 
 -- Test 2: Account Summary - Core account data
