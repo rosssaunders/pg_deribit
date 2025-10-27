@@ -41,44 +41,105 @@ select lives_ok(
     'Should retrieve address beneficiaries list for BTC'
 );
 
--- Test 2: Get address book (existing endpoint, verify still works)
+-- Test 2: Get address book (existing endpoint, verify still works with required type parameter)
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_address_book('BTC', null)$$,
-    'Should retrieve address book for BTC'
+    $$SELECT * FROM deribit.private_get_address_book('BTC', 'withdrawal')$$,
+    'Should retrieve address book for BTC withdrawals'
 );
 
 -- Broker Trade Tests
 
--- Test 3: Get broker trade requests (may be empty, requires broker account)
+-- Test 3: Get broker trade requests (requires block_trade:read scope)
+-- Expect permission error for accounts without broker/block trade scope
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_broker_trade_requests()$$,
-    'Should call broker trade requests endpoint (may return empty for non-broker accounts)'
+    $$
+    DO $$
+    BEGIN
+        BEGIN
+            PERFORM deribit.private_get_broker_trade_requests();
+        EXCEPTION WHEN OTHERS THEN
+            -- Expected: 13021 forbidden (missing scope) or success
+            IF SQLERRM NOT LIKE '%13021%' AND SQLERRM NOT LIKE '%forbidden%' THEN
+                RAISE;
+            END IF;
+        END;
+    END $$
+    $$,
+    'Should handle broker trade requests endpoint (requires block_trade:read scope)'
 );
 
--- Test 4: Get broker trades (may be empty, requires broker account)
+-- Test 4: Get broker trades (requires block_trade:read scope)
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_broker_trades('BTC', null, null, null, null)$$,
-    'Should call broker trades endpoint (may return empty for non-broker accounts)'
+    $$
+    DO $$
+    BEGIN
+        BEGIN
+            PERFORM deribit.private_get_broker_trades('BTC', null, null, null, null);
+        EXCEPTION WHEN OTHERS THEN
+            -- Expected: 13021 forbidden (missing scope) or success
+            IF SQLERRM NOT LIKE '%13021%' AND SQLERRM NOT LIKE '%forbidden%' THEN
+                RAISE;
+            END IF;
+        END;
+    END $$
+    $$,
+    'Should handle broker trades endpoint (requires block_trade:read scope)'
 );
 
 -- Block Trade Tests
 
--- Test 5: Get block trade requests (may be empty)
+-- Test 5: Get block trade requests (requires block_trade:read scope)
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_block_trade_requests()$$,
-    'Should retrieve block trade requests'
+    $$
+    DO $$
+    BEGIN
+        BEGIN
+            PERFORM deribit.private_get_block_trade_requests();
+        EXCEPTION WHEN OTHERS THEN
+            -- Expected: 13021 forbidden (missing scope) or success
+            IF SQLERRM NOT LIKE '%13021%' AND SQLERRM NOT LIKE '%forbidden%' THEN
+                RAISE;
+            END IF;
+        END;
+    END $$
+    $$,
+    'Should handle block trade requests endpoint (requires block_trade:read scope)'
 );
 
--- Test 6: Get block trades (existing but updated endpoint)
+-- Test 6: Get block trades (requires block_trade:read scope)
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_block_trades('BTC', null, null, null)$$,
-    'Should retrieve block trades for BTC'
+    $$
+    DO $$
+    BEGIN
+        BEGIN
+            PERFORM deribit.private_get_block_trades('BTC', null, null, null);
+        EXCEPTION WHEN OTHERS THEN
+            -- Expected: 13021 forbidden (missing scope) or success
+            IF SQLERRM NOT LIKE '%13021%' AND SQLERRM NOT LIKE '%forbidden%' THEN
+                RAISE;
+            END IF;
+        END;
+    END $$
+    $$,
+    'Should handle block trades endpoint (requires block_trade:read scope)'
 );
 
--- Test 7: Get pending block trades (existing but updated endpoint)
+-- Test 7: Get pending block trades (requires block_trade:read scope)
 select lives_ok(
-    $$SELECT * FROM deribit.private_get_pending_block_trades()$$,
-    'Should retrieve pending block trades'
+    $$
+    DO $$
+    BEGIN
+        BEGIN
+            PERFORM deribit.private_get_pending_block_trades();
+        EXCEPTION WHEN OTHERS THEN
+            -- Expected: 13021 forbidden (missing scope) or success
+            IF SQLERRM NOT LIKE '%13021%' AND SQLERRM NOT LIKE '%forbidden%' THEN
+                RAISE;
+            END IF;
+        END;
+    END $$
+    $$,
+    'Should handle pending block trades endpoint (requires block_trade:read scope)'
 );
 
 -- Reward Tests
