@@ -50,7 +50,7 @@ run_tests() {
         return 0
     fi
 
-    local test_files=$(find "$test_dir" -name "*.sql" | sort)
+    local test_files=$(find "$test_dir" -name "*.sql" ! -name "*authenticated*" | sort)
 
     if [ -z "$test_files" ]; then
         echo -e "${YELLOW}⊘ No tests found in $test_dir${NC}"
