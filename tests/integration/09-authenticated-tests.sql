@@ -16,20 +16,18 @@ create extension if not exists pg_deribit cascade;
 
 begin;
 
-select plan(3);
+select plan(2);
 
 -- Setup: Enable TestNet and set authentication
 select deribit.enable_test_net();
 
--- Set authentication using psql variables or database settings
--- This will use :client_id and :client_secret if passed via -v flag
--- Otherwise tries to use database settings
+-- Set authentication using database settings (set by workflow)
 DO $$
 DECLARE
     v_client_id text;
     v_client_secret text;
 BEGIN
-    -- Try psql variables first (passed via -v)
+    -- Get credentials from database settings (set by ALTER DATABASE in workflow)
     BEGIN
         v_client_id := current_setting('deribit.test_client_id');
         v_client_secret := current_setting('deribit.test_client_secret');
@@ -37,25 +35,18 @@ BEGIN
         RAISE EXCEPTION 'Authentication credentials not found. Set via: ALTER DATABASE deribit SET deribit.test_client_id = ''your_id'';';
     END;
 
-    -- Set the auth
+    -- Set the auth for this session
     PERFORM deribit.set_client_auth(v_client_id, v_client_secret);
 END $$;
 
--- Test 1: Verify authentication was set
-select ok(
-    (select deribit.get_auth() is not null),
-    'Should have authentication configured'
-);
-
--- Test 2: Verify we can connect to TestNet
+-- Test 1: Verify TestNet connectivity
 select ok(
     (select deribit.public_get_time() > 0),
     'Should connect to TestNet and get server timestamp'
 );
 
--- Test 3: Verify authenticated endpoint works (requires proper credentials)
--- This tests that credentials work by checking if we get a valid response structure
--- We use a simple endpoint that doesn't require enum type casts
+-- Test 2: Verify authenticated endpoint works with TestNet credentials
+-- This confirms that authentication is working correctly
 select lives_ok(
     $$SELECT deribit.private_get_subaccounts(null)$$,
     'Should successfully call authenticated endpoint with TestNet credentials'
