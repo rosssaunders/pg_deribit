@@ -2,4 +2,4 @@ default_version = '1.0'
 comment = 'Deribit API Wrapper'
 relocatable = false
 schema = 'deribit'
-requires = 'pgcrypto, omni_http, omni_httpc'
+requires = 'pgcrypto, omni_http, omni_httpc, omni_var'

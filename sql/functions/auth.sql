@@ -4,8 +4,8 @@ language plpgsql
 as
 $$
 begin
-    execute format('set deribit.client_id = ''%s''', client_id);
-    execute format('set deribit.client_secret = ''%s''', client_secret);
+    perform omni_var.set('deribit', 'client_id', client_id);
+    perform omni_var.set('deribit', 'client_secret', client_secret);
 end
 $$;
 
@@ -17,8 +17,8 @@ language plpgsql
 as
 $$
 begin
-    execute format('set deribit.access_token = ''%s''', access_token);
-    execute format('set deribit.refresh_token = ''%s''', refresh_token);
+    perform omni_var.set('deribit', 'access_token', access_token);
+    perform omni_var.set('deribit', 'refresh_token', refresh_token);
 end
 $$;
 
@@ -26,16 +26,41 @@ comment on function deribit.set_access_token_auth is 'Internal function to set d
 
 create or replace function deribit.get_auth()
 returns deribit.auth
-language sql
+language plpgsql
 as
 $$
-    select
-        row(
-            current_setting('deribit.client_id', true), 
-            current_setting('deribit.client_secret', true),
-            current_setting('deribit.access_token', true),
-            current_setting('deribit.refresh_token', true)
-            )::deribit.auth;
+declare
+    _client_id text;
+    _client_secret text;
+    _access_token text;
+    _refresh_token text;
+begin
+    begin
+        _client_id := omni_var.get('deribit', 'client_id');
+    exception when others then
+        _client_id := null;
+    end;
+    
+    begin
+        _client_secret := omni_var.get('deribit', 'client_secret');
+    exception when others then
+        _client_secret := null;
+    end;
+    
+    begin
+        _access_token := omni_var.get('deribit', 'access_token');
+    exception when others then
+        _access_token := null;
+    end;
+    
+    begin
+        _refresh_token := omni_var.get('deribit', 'refresh_token');
+    exception when others then
+        _refresh_token := null;
+    end;
+    
+    return row(_client_id, _client_secret, _access_token, _refresh_token)::deribit.auth;
+end;
 $$;
 
 comment on function deribit.get_auth is 'Internal function to get deribit API authentication credentials';

@@ -29,18 +29,18 @@ select lives_ok(
     'Should be able to set client authentication'
 );
 
--- Test 3: Verify client_id is stored in session
+-- Test 3: Verify client_id is stored via omni_var
 select is(
-    current_setting('deribit.client_id', true),
+    omni_var.get('deribit', 'client_id'),
     'test_client_id',
-    'Client ID should be stored in session variable'
+    'Client ID should be stored in omni_var'
 );
 
--- Test 4: Verify client_secret is stored in session
+-- Test 4: Verify client_secret is stored via omni_var
 select is(
-    current_setting('deribit.client_secret', true),
+    omni_var.get('deribit', 'client_secret'),
     'test_client_secret',
-    'Client secret should be stored in session variable'
+    'Client secret should be stored in omni_var'
 );
 
 -- Test 5: Test enable_test_net function
