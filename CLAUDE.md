@@ -219,12 +219,12 @@ See `.github/workflows/test.yml` for details.
 
 **CRITICAL**: The Dockerfile must use the correct `pg_config` for the PostgreSQL version running in the container.
 
-The base image `ghcr.io/omnigres/omnigres-17:latest` has both PostgreSQL 17 (running) and 18 (default pg_config). The Makefile must specify `PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config` to ensure extension files install to the correct location (`/usr/share/postgresql/17/extension/`).
+The base image `ghcr.io/omnigres/omnigres-18:latest` should have PostgreSQL 18 as the running version. The Makefile must specify `PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config` to ensure extension files install to the correct location (`/usr/share/postgresql/18/extension/`).
 
 Current Dockerfile pattern:
 ```dockerfile
-RUN make PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config && \
-    make install PG_CONFIG=/usr/lib/postgresql/17/bin/pg_config
+RUN make PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config && \
+    make install PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config
 ```
 
 ## Build System

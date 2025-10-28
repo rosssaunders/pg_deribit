@@ -16,6 +16,10 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 - [Deribit account](https://www.deribit.com/) (Production or Testnet)
 - [psql](https://www.postgresql.org/docs/current/app-psql.html)
 
+### PostgreSQL Version
+
+This extension is built for PostgreSQL 18 and requires the [Omnigres](https://github.com/omnigres/omnigres) extensions (`omni_http` and `omni_httpc`).
+
 ## Quickstart
 
 Run the following commands to start a fresh container using the pre-built image:
