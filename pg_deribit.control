@@ -3,3 +3,4 @@ comment = 'Deribit API Wrapper'
 relocatable = false
 schema = 'deribit'
 requires = 'pgcrypto, omni_http, omni_httpc'
+# omni_credentials is optional - if available, can be used instead of session variables
