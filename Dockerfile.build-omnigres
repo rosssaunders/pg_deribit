@@ -1,0 +1,103 @@
+# Alternative Dockerfile that builds Omnigres extensions from source for PostgreSQL 18
+# This is a working alternative until ghcr.io/omnigres/omnigres-18:latest is published
+#
+# To use this Dockerfile instead of the main one:
+# docker build -f Dockerfile.build-omnigres -t pg_deribit:pg18 .
+
+# Stage 1: Build Omnigres extensions
+FROM debian:bookworm-slim AS omnigres-builder
+
+ENV DEBIAN_FRONTEND=noninteractive
+ENV PG_VERSION=18
+
+# Install build dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    curl \
+    git \
+    cmake \
+    build-essential \
+    clang-16 \
+    libc++-16-dev \
+    libc++abi-16-dev \
+    lld \
+    flex \
+    bison \
+    libreadline-dev \
+    zlib1g-dev \
+    libssl-dev \
+    libicu-dev \
+    pkg-config \
+    python3 \
+    python3-dev \
+    python3-pip \
+    ca-certificates \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set clang as default compiler
+RUN update-alternatives --install /usr/bin/clang clang /usr/bin/clang-16 100 && \
+    update-alternatives --install /usr/bin/cc cc /usr/bin/clang-16 100 && \
+    update-alternatives --install /usr/bin/clang++ clang++ /usr/bin/clang++-16 100 && \
+    update-alternatives --install /usr/bin/c++ c++ /usr/bin/clang++-16 100
+
+# Install PostgreSQL 18
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt bookworm-pgdg main" > /etc/apt/sources.list.d/pgdg.list && \
+    wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add - && \
+    apt-get update && \
+    apt-get install -y postgresql-${PG_VERSION} postgresql-server-dev-${PG_VERSION} && \
+    rm -rf /var/lib/apt/lists/*
+
+ENV PATH="/usr/lib/postgresql/${PG_VERSION}/bin:${PATH}"
+ENV PG_CONFIG="/usr/lib/postgresql/${PG_VERSION}/bin/pg_config"
+
+# Clone Omnigres repository
+WORKDIR /omnigres
+RUN git clone https://github.com/omnigres/omnigres.git . && \
+    git checkout master
+
+# Build only the extensions we need (omni_http, omni_httpc and their dependencies)
+WORKDIR /build
+RUN cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+          -DPGVER=${PG_VERSION} \
+          -DPG_CONFIG=${PG_CONFIG} \
+          /omnigres && \
+    make -j$(nproc) omni_http omni_httpc || \
+    (echo "Build failed. Building core dependencies first..." && \
+     make -j$(nproc) omni_types omni_httpc omni_http)
+
+# Package the built extensions
+RUN mkdir -p /omni-install/lib /omni-install/share && \
+    find . -name "*.so" -exec cp {} /omni-install/lib/ \; && \
+    find . -name "*.control" -exec cp {} /omni-install/share/ \; && \
+    find . -name "*--*.sql" -exec cp {} /omni-install/share/ \;
+
+# Stage 2: Final image with PostgreSQL 18
+FROM postgres:18-bookworm
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install build tools and pgtap
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    postgresql-server-dev-18 \
+    postgresql-18-pgtap \
+    libc++1-19 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Omnigres extensions from builder
+COPY --from=omnigres-builder /omni-install/lib/*.so /usr/lib/postgresql/18/lib/
+COPY --from=omnigres-builder /omni-install/share/*.control /usr/share/postgresql/18/extension/
+COPY --from=omnigres-builder /omni-install/share/*--*.sql /usr/share/postgresql/18/extension/
+
+# Install pg_deribit
+COPY . /usr/src/extension
+WORKDIR /usr/src/extension
+RUN make PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config && \
+    make install PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config
+
+# Verify extensions are installed
+RUN ls -la /usr/share/postgresql/18/extension/ | grep -E "(omni_http|omni_httpc|pg_deribit)" || \
+    echo "WARNING: Some extensions may not be properly installed"
+
+WORKDIR /

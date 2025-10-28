@@ -18,6 +18,17 @@ This document tracks the status of the PostgreSQL 18 upgrade for pg_deribit.
   - Expected: Should be available soon since PostgreSQL 18 base image (`postgres:18-bookworm`) is now available
   - Required image: `ghcr.io/omnigres/omnigres-18:latest`
 
+## Alternative Workaround (EXPERIMENTAL)
+If you need to use PostgreSQL 18 immediately before the official omnigres-18 image is available:
+
+1. Use the `Dockerfile.build-omnigres` which builds Omnigres extensions from source:
+   ```bash
+   docker build -f Dockerfile.build-omnigres -t pg_deribit:pg18-custom .
+   ```
+   **Note**: This build is significantly slower (10-20 minutes) and the image is larger, but it provides a working PostgreSQL 18 setup.
+
+2. Once the official `ghcr.io/omnigres/omnigres-18:latest` image is available, switch back to the standard Dockerfile for faster builds and smaller images.
+
 ## Next Steps
 Once the omnigres-18 image is available:
 1. Test the Docker build: `docker build -t pg_deribit:test .`
