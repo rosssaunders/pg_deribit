@@ -17346,18 +17346,16 @@ create type deribit.public_get_index_price_names_response as (
 comment on column deribit.public_get_index_price_names_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_index_price_names_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
-create function deribit.public_get_index_price_names()
+create function deribit.public_get_index_price_names(
+    "extended" boolean default null
+)
 returns setof deribit.public_get_index_price_names_response_result
 language sql
 as $$
-    -- Note: The Deribit API 'extended' parameter is always set to true internally
-    -- because when extended=false, the API returns an array of strings which cannot
-    -- be parsed as the composite type structure. If you only need index names,
-    -- select just the 'name' column from the result.
-
+    
     with request as (
         select row(
-            true  -- Always use extended=true for consistent object structure
+            "extended"
         )::deribit.public_get_index_price_names_request as payload
     ), 
     http_response as (
