@@ -19,6 +19,10 @@ All notable changes to this project will be documented in this file.
 - `deribit.get_auth()` now accepts optional `credential_name` parameter (defaults to 'deribit')
 - Enhanced documentation with detailed instructions for both authentication methods
 
+### Fixed
+
+- `deribit.set_access_token_auth()` function signature corrected from 4 parameters to 2 (only `access_token` and `refresh_token` are needed)
+
 ## [1.0.0] - 2024-01-XX
 
 ### Added
