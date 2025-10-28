@@ -56,14 +56,16 @@ RUN git clone https://github.com/omnigres/omnigres.git . && \
     git checkout master
 
 # Build only the extensions we need (omni_http, omni_httpc and their dependencies)
+# Build in stages to handle dependencies correctly
 WORKDIR /build
 RUN cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo \
           -DPGVER=${PG_VERSION} \
           -DPG_CONFIG=${PG_CONFIG} \
-          /omnigres && \
-    make -j$(nproc) omni_http omni_httpc || \
-    (echo "Build failed. Building core dependencies first..." && \
-     make -j$(nproc) omni_types omni_httpc omni_http)
+          /omnigres
+
+# Build core dependencies first, then target extensions
+RUN make -j$(nproc) omni_types omni_var omni_vfs_types_v1 || true
+RUN make -j$(nproc) omni_httpc omni_http
 
 # Package the built extensions
 RUN mkdir -p /omni-install/lib /omni-install/share && \
@@ -97,7 +99,12 @@ RUN make PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config && \
     make install PG_CONFIG=/usr/lib/postgresql/18/bin/pg_config
 
 # Verify extensions are installed
-RUN ls -la /usr/share/postgresql/18/extension/ | grep -E "(omni_http|omni_httpc|pg_deribit)" || \
-    echo "WARNING: Some extensions may not be properly installed"
+RUN for ext in omni_http omni_httpc pg_deribit; do \
+      if ! ls /usr/share/postgresql/18/extension/${ext}.control 2>/dev/null; then \
+        echo "ERROR: Extension ${ext} is not properly installed"; \
+        exit 1; \
+      fi; \
+    done && \
+    echo "All required extensions verified successfully"
 
 WORKDIR /

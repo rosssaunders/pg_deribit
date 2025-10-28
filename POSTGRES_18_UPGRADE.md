@@ -25,7 +25,7 @@ If you need to use PostgreSQL 18 immediately before the official omnigres-18 ima
    ```bash
    docker build -f Dockerfile.build-omnigres -t pg_deribit:pg18-custom .
    ```
-   **Note**: This build is significantly slower (10-20 minutes) and the image is larger, but it provides a working PostgreSQL 18 setup.
+   **Note**: This build takes 10-20 minutes on a typical development machine with 4+ CPU cores and produces a larger image, but provides a working PostgreSQL 18 setup immediately.
 
 2. Once the official `ghcr.io/omnigres/omnigres-18:latest` image is available, switch back to the standard Dockerfile for faster builds and smaller images.
 
