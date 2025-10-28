@@ -74,6 +74,40 @@ PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
 
 ## Usage
 
+### Authentication
+
+pg_deribit supports two methods for authentication:
+
+#### 1. Session Variables (Default)
+
+```sql
+-- Set credentials for the current session
+select deribit.set_client_auth('<CLIENT_ID>', '<CLIENT_SECRET>');
+```
+
+#### 2. Omnigres Credentials (Recommended for Production)
+
+If you have the `omni_credentials` extension installed, you can store credentials securely:
+
+```sql
+-- Install omni_credentials extension
+create extension if not exists omni_credentials;
+
+-- Store your Deribit credentials
+select deribit.store_credentials(
+    client_id := '<CLIENT_ID>',
+    client_secret := '<CLIENT_SECRET>',
+    credential_name := 'deribit'  -- optional, defaults to 'deribit'
+);
+
+-- Credentials are now automatically used for all API calls
+-- No need to set them in each session!
+```
+
+The extension will automatically use credentials from `omni_credentials` if available, falling back to session variables for backwards compatibility.
+
+For more details on `omni_credentials`, see the [Omnigres documentation](https://docs.omnigres.org/omni_credentials/credentials/).
+
 Refer to the docs folder for examples and the sql/endpoints folder for the full list of endpoints.
 
 ## Contributing

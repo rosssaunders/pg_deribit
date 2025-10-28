@@ -248,21 +248,187 @@ $$;
 
 comment on function deribit.set_access_token_auth is 'Internal function to set deribit API authentication credentials';
 
-create or replace function deribit.get_auth()
+create or replace function deribit.get_auth(credential_name text default 'deribit')
 returns deribit.auth
-language sql
+language plpgsql
+stable
 as
 $$
-    select
-        row(
-            current_setting('deribit.client_id', true), 
-            current_setting('deribit.client_secret', true),
-            current_setting('deribit.access_token', true),
-            current_setting('deribit.refresh_token', true)
-            )::deribit.auth;
+declare
+    _auth deribit.auth;
+    _session_client_id text;
+    _session_client_secret text;
+    _session_access_token text;
+    _session_refresh_token text;
+begin
+    -- First, try to get from session variables
+    _session_client_id := current_setting('deribit.client_id', true);
+    _session_client_secret := current_setting('deribit.client_secret', true);
+    _session_access_token := current_setting('deribit.access_token', true);
+    _session_refresh_token := current_setting('deribit.refresh_token', true);
+
+    -- If we have session variables, use them (backwards compatibility)
+    if _session_client_id is not null or _session_access_token is not null then
+        return row(
+            _session_client_id,
+            _session_client_secret,
+            _session_access_token,
+            _session_refresh_token
+        )::deribit.auth;
+    end if;
+
+    -- Otherwise, try to get from omni_credentials store
+    _auth := deribit.get_credentials_from_store(credential_name);
+    
+    if _auth is not null then
+        return _auth;
+    end if;
+
+    -- Return empty auth if nothing found
+    return row(null, null, null, null)::deribit.auth;
+end;
 $$;
 
-comment on function deribit.get_auth is 'Internal function to get deribit API authentication credentials';
+comment on function deribit.get_auth is 'Get deribit API authentication credentials from session variables or omni_credentials store';
+-- Check if omni_credentials extension is available
+create or replace function deribit.has_omni_credentials()
+returns boolean
+language sql
+stable
+as $$
+    select exists(
+        select 1
+        from pg_extension
+        where extname = 'omni_credentials'
+    );
+$$;
+
+comment on function deribit.has_omni_credentials is 'Check if omni_credentials extension is available';
+
+-- Get credentials from omni_credentials store
+-- Returns NULL if omni_credentials is not available or credentials not found
+create or replace function deribit.get_credentials_from_store(credential_name text default 'deribit')
+returns deribit.auth
+language plpgsql
+stable
+security definer
+as $$
+declare
+    _client_id text;
+    _client_secret text;
+    _access_token text;
+    _refresh_token text;
+    _has_creds boolean;
+begin
+    -- Check if omni_credentials is available
+    if not deribit.has_omni_credentials() then
+        return null;
+    end if;
+
+    -- Try to get credentials from omni_credentials
+    -- We expect credentials to be stored with specific names:
+    -- - {credential_name}_client_id
+    -- - {credential_name}_client_secret
+    -- - {credential_name}_access_token (optional)
+    -- - {credential_name}_refresh_token (optional)
+    begin
+        execute format('
+            select 
+                max(case when name = %L then convert_from(value, ''utf8'') end),
+                max(case when name = %L then convert_from(value, ''utf8'') end),
+                max(case when name = %L then convert_from(value, ''utf8'') end),
+                max(case when name = %L then convert_from(value, ''utf8'') end)
+            from omni_credentials.credentials
+            where name in (%L, %L, %L, %L)
+        ', 
+            credential_name || '_client_id',
+            credential_name || '_client_secret',
+            credential_name || '_access_token',
+            credential_name || '_refresh_token',
+            credential_name || '_client_id',
+            credential_name || '_client_secret',
+            credential_name || '_access_token',
+            credential_name || '_refresh_token'
+        ) into _client_id, _client_secret, _access_token, _refresh_token;
+
+        -- Return auth record if we have at least client credentials
+        if _client_id is not null or _access_token is not null then
+            return row(_client_id, _client_secret, _access_token, _refresh_token)::deribit.auth;
+        end if;
+    exception
+        when others then
+            -- If there's any error accessing omni_credentials, return null
+            return null;
+    end;
+
+    return null;
+end;
+$$;
+
+comment on function deribit.get_credentials_from_store is 'Get Deribit credentials from omni_credentials store';
+
+-- Store credentials in omni_credentials
+create or replace function deribit.store_credentials(
+    client_id text,
+    client_secret text,
+    credential_name text default 'deribit',
+    access_token text default null,
+    refresh_token text default null
+)
+returns void
+language plpgsql
+security definer
+as $$
+begin
+    -- Check if omni_credentials is available
+    if not deribit.has_omni_credentials() then
+        raise exception 'omni_credentials extension is not installed. Install it first with: CREATE EXTENSION omni_credentials;';
+    end if;
+
+    -- Delete existing credentials with the same name
+    execute format('
+        delete from omni_credentials.credentials
+        where name in (%L, %L, %L, %L)
+    ',
+        credential_name || '_client_id',
+        credential_name || '_client_secret',
+        credential_name || '_access_token',
+        credential_name || '_refresh_token'
+    );
+
+    -- Insert client credentials
+    if client_id is not null then
+        execute format('
+            insert into omni_credentials.credentials (name, value)
+            values (%L, %L::bytea)
+        ', credential_name || '_client_id', client_id);
+    end if;
+
+    if client_secret is not null then
+        execute format('
+            insert into omni_credentials.credentials (name, value)
+            values (%L, %L::bytea)
+        ', credential_name || '_client_secret', client_secret);
+    end if;
+
+    -- Insert access tokens if provided
+    if access_token is not null then
+        execute format('
+            insert into omni_credentials.credentials (name, value)
+            values (%L, %L::bytea)
+        ', credential_name || '_access_token', access_token);
+    end if;
+
+    if refresh_token is not null then
+        execute format('
+            insert into omni_credentials.credentials (name, value)
+            values (%L, %L::bytea)
+        ', credential_name || '_refresh_token', refresh_token);
+    end if;
+end;
+$$;
+
+comment on function deribit.store_credentials is 'Store Deribit credentials in omni_credentials. Requires omni_credentials extension.';
 create function deribit.enable_test_net()
 returns void
 language plpgsql
@@ -17346,18 +17512,16 @@ create type deribit.public_get_index_price_names_response as (
 comment on column deribit.public_get_index_price_names_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_index_price_names_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
-create function deribit.public_get_index_price_names()
+create function deribit.public_get_index_price_names(
+    "extended" boolean default null
+)
 returns setof deribit.public_get_index_price_names_response_result
 language sql
 as $$
-    -- Note: The Deribit API 'extended' parameter is always set to true internally
-    -- because when extended=false, the API returns an array of strings which cannot
-    -- be parsed as the composite type structure. If you only need index names,
-    -- select just the 'name' column from the result.
-
+    
     with request as (
         select row(
-            true  -- Always use extended=true for consistent object structure
+            "extended"
         )::deribit.public_get_index_price_names_request as payload
     ), 
     http_response as (
