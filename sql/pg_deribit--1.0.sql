@@ -235,7 +235,7 @@ $$;
 
 comment on function deribit.set_client_auth is 'Internal function to set deribit API client authentication credentials';
 
-create function deribit.set_access_token_auth(client_id text, client_secret text, access_token text, refresh_token text)
+create function deribit.set_access_token_auth(access_token text, refresh_token text)
 returns void
 language plpgsql
 as
