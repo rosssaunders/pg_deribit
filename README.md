@@ -93,18 +93,23 @@ If you have the `omni_credentials` extension installed, you can store credential
 -- Install omni_credentials extension
 create extension if not exists omni_credentials;
 
--- Store your Deribit credentials
+-- Store your Deribit credentials ONCE
 select deribit.store_credentials(
     client_id := '<CLIENT_ID>',
     client_secret := '<CLIENT_SECRET>',
     credential_name := 'deribit'  -- optional, defaults to 'deribit'
 );
 
--- Credentials are now automatically used for all API calls
--- No need to set them in each session!
+-- Credentials are now automatically retrieved for all API calls in ANY session
+-- No need to set them again!
 ```
 
-The extension will automatically use credentials from `omni_credentials` if available, falling back to session variables for backwards compatibility.
+**How it works:**
+- Credentials are stored in the `omni_credentials.credentials` table (persistent, encrypted)
+- When you call any Deribit API function, `get_auth()` is automatically invoked
+- `get_auth()` queries the database table to retrieve credentials on-demand
+- No session variables are set - credentials are fetched fresh from the database each time
+- Session variables still take priority if set (for backwards compatibility)
 
 For more details on `omni_credentials`, see the [Omnigres documentation](https://docs.omnigres.org/omni_credentials/credentials/).
 

@@ -28,6 +28,13 @@ select deribit.store_credentials(
     credential_name := 'deribit'  -- optional, defaults to 'deribit'
 );
 
+-- HOW IT WORKS:
+-- 1. Credentials are saved to omni_credentials.credentials table (database table)
+-- 2. When you call any API function, deribit.get_auth() is invoked automatically
+-- 3. get_auth() queries the credentials table to fetch your credentials
+-- 4. No session variables are set - credentials retrieved fresh each time
+-- 5. Works in any session automatically - no setup needed!
+
 -- That's it! Now all API calls will automatically use these credentials
 -- No need to set credentials in each session
 

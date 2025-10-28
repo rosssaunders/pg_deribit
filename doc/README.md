@@ -24,7 +24,7 @@ For persistent, secure credential storage, use `omni_credentials`:
 -- First, install omni_credentials extension (if not already installed)
 create extension if not exists omni_credentials;
 
--- Store your Deribit credentials securely
+-- Store your Deribit credentials securely ONCE
 select deribit.store_credentials(
     client_id := '<CLIENT_ID>',
     client_secret := '<CLIENT_SECRET>',
@@ -32,14 +32,19 @@ select deribit.store_credentials(
 );
 ```
 
+**How it works:**
+1. `store_credentials()` saves your credentials to the `omni_credentials.credentials` table (persistent database table)
+2. When you call any Deribit API function (e.g., `public_get_currencies()`), it internally calls `get_auth()`
+3. `get_auth()` queries the `omni_credentials.credentials` table to retrieve your credentials
+4. Credentials are fetched from the database on-demand - no session variables are set
+5. This happens transparently in every session without any setup
+
 **Benefits of using omni_credentials:**
-- Credentials persist across sessions
-- Encrypted storage
-- Role-based access control
+- Credentials persist across sessions (stored in database, not session memory)
+- Encrypted storage (handled by omni_credentials extension)
+- Role-based access control (PostgreSQL's built-in security)
 - No need to embed secrets in application code
 - Centralized credential management
-
-The extension automatically retrieves credentials from `omni_credentials` when available, so you don't need to call `set_client_auth()` in each session.
 
 **Multiple Environments:**
 
