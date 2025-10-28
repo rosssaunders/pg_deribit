@@ -20,6 +20,8 @@ It's designed for developers and data analysts who want to integrate Deribit's f
 
 This extension is built for PostgreSQL 18 and requires the [Omnigres](https://github.com/omnigres/omnigres) extensions (`omni_http` and `omni_httpc`).
 
+**Current Status**: The PostgreSQL 18 upgrade is complete in terms of code changes, but the extension cannot be built yet because Omnigres has not published a PostgreSQL 18 Docker image (`ghcr.io/omnigres/omnigres-18:latest`). Omnigres has code support for PostgreSQL 18 but the Docker images are pending publication. Once the omnigres-18 image is available, this extension will work out of the box.
+
 ## Quickstart
 
 Run the following commands to start a fresh container using the pre-built image:
