@@ -76,6 +76,20 @@ PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit
 
 Refer to the docs folder for examples and the sql/endpoints folder for the full list of endpoints.
 
+## Omnigres Integration
+
+pg_deribit is built on top of [Omnigres](https://github.com/omnigres/omnigres), leveraging its powerful PostgreSQL extensions. Currently using `omni_http` and `omni_httpc`, there are many additional Omnigres features that could benefit this project.
+
+**📚 See our analysis**: 
+- [Quick Reference](doc/OMNIGRES_RECOMMENDATIONS.md) - TL;DR of recommended features
+- [Full Analysis](doc/OMNIGRES_FEATURES.md) - Detailed evaluation of all Omnigres features
+
+**Key opportunities**:
+- Better session and variable management (`omni_var`, `omni_session`)
+- Enhanced JSON processing (`omni_json`)
+- Transaction helpers (`omni_txn`)
+- Modern testing framework (`omni_test`)
+
 ## Contributing
 
 Contributions are welcome! Please read our contributing guidelines in CONTRIBUTING.md before submitting pull requests.
