@@ -27,7 +27,7 @@ create type deribit.private_move_positions_request_trade as (
 
 comment on column deribit.private_move_positions_request_trade."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_move_positions_request_trade."price" is 'Price for trade - if not provided average price of the position is used';
-comment on column deribit.private_move_positions_request_trade."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. Amount can''t exceed position size.';
+comment on column deribit.private_move_positions_request_trade."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. Amount can''t exceed position size.';
 
 create type deribit.private_move_positions_request as (
     "currency" deribit.private_move_positions_request_currency,
@@ -50,7 +50,7 @@ create type deribit.private_move_positions_response_trade as (
     "target_uid" bigint
 );
 
-comment on column deribit.private_move_positions_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_move_positions_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_move_positions_response_trade."direction" is 'Direction: buy, or sell';
 comment on column deribit.private_move_positions_response_trade."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.private_move_positions_response_trade."price" is 'Price in base currency';
@@ -107,4 +107,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount Note:In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.';
+comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount';

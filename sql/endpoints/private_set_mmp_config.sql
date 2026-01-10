@@ -51,17 +51,19 @@ create type deribit.private_set_mmp_config_request as (
     "quantity_limit" double precision,
     "delta_limit" double precision,
     "vega_limit" double precision,
+    "max_quote_quantity" double precision,
     "block_rfq" boolean,
     "trade_count_limit" bigint
 );
 
 comment on column deribit.private_set_mmp_config_request."index_name" is '(Required) Index identifier of derivative instrument on the platform';
-comment on column deribit.private_set_mmp_config_request."interval" is '(Required) MMP Interval in seconds, if set to 0 MMP is removed';
-comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Required) MMP frozen time in seconds, if set to 0 manual reset is required';
+comment on column deribit.private_set_mmp_config_request."interval" is '(Required) The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is removed.';
+comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Required) Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.';
 comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name. Maximum 64 characters. Case sensitive. Cannot be empty string. 📖 Related Support Article: Mass Quotes Specifications';
-comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
-comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
-comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
+comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic—a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.';
+comment on column deribit.private_set_mmp_config_request."delta_limit" is 'The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 → MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling −5 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, "delta" actually refers to net transaction delta. Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.';
+comment on column deribit.private_set_mmp_config_request."vega_limit" is 'The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.';
+comment on column deribit.private_set_mmp_config_request."max_quote_quantity" is '(Required) Maximum Quote Quantity (MQQ) in base currency. The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ. See response description for detailed information about MQQ behavior and limitations. Maximum 4 decimal places.';
 comment on column deribit.private_set_mmp_config_request."block_rfq" is 'If true, configures MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all". Maximum - 1000.';
 
@@ -71,6 +73,7 @@ create type deribit.private_set_mmp_config_response_result as (
     "frozen_time" bigint,
     "index_name" text,
     "interval" bigint,
+    "max_quote_quantity" double precision,
     "mmp_group" text,
     "quantity_limit" double precision,
     "trade_count_limit" bigint,
@@ -78,14 +81,15 @@ create type deribit.private_set_mmp_config_response_result as (
 );
 
 comment on column deribit.private_set_mmp_config_response_result."block_rfq" is 'If true, indicates MMP configuration for Block RFQ. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
-comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit';
-comment on column deribit.private_set_mmp_config_response_result."frozen_time" is 'MMP frozen time in seconds, if set to 0 manual reset is required';
+comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 → MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling −5 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, "delta" actually refers to net transaction delta. Maximum 4 decimal places.';
+comment on column deribit.private_set_mmp_config_response_result."frozen_time" is 'Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.';
 comment on column deribit.private_set_mmp_config_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
-comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
+comment on column deribit.private_set_mmp_config_response_result."interval" is 'The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is disabled.';
+comment on column deribit.private_set_mmp_config_response_result."max_quote_quantity" is 'Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ (specified in base currency). MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin). Important Notes: - Order book = instrument, MQQ is per instrument (not sum across instruments): "Per order book" means per instrument (not per expiry). MQQ is enforced separately for each instrument and applies independently to each instrument. The limit is NOT the sum across all instruments - each instrument has its own separate MQQ limit. - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - MQQ is separate per MMP group: Each MMP group has its own independent MQQ configuration. MQQ limits are enforced separately for each MMP group. - MQQ vs Quantity Limit relationship: You can set MQQ > quantity_limit. This allows quotes to be larger than the quantity limit, and enables MMP to trigger on partial fills of quotes. This decouples the MMP reserved margin from the MMP quantity limit. - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected. For orders (not quotes), orders above MQQ are allowed in the market, but quotes that would exceed MQQ are rejected. - Precision: All MMP configuration values support maximum 4 decimal places - Latency: There are no latency benefits from MQQ if you already use mass quotes.';
 comment on column deribit.private_set_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
-comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic—a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Maximum 4 decimal places.';
 comment on column deribit.private_set_mmp_config_response_result."trade_count_limit" is 'For Block RFQ only. The maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs.';
-comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit';
+comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Maximum 4 decimal places.';
 
 create type deribit.private_set_mmp_config_response as (
     "id" bigint,
@@ -100,6 +104,7 @@ create function deribit.private_set_mmp_config(
     "index_name" deribit.private_set_mmp_config_request_index_name,
     "interval" bigint,
     "frozen_time" bigint,
+    "max_quote_quantity" double precision,
     "mmp_group" text default null,
     "quantity_limit" double precision default null,
     "delta_limit" double precision default null,
@@ -120,6 +125,7 @@ as $$
             "quantity_limit",
             "delta_limit",
             "vega_limit",
+            "max_quote_quantity",
             "block_rfq",
             "trade_count_limit"
         )::deribit.private_set_mmp_config_request as payload
@@ -146,6 +152,7 @@ as $$
         (b)."frozen_time"::bigint,
         (b)."index_name"::text,
         (b)."interval"::bigint,
+        (b)."max_quote_quantity"::double precision,
         (b)."mmp_group"::text,
         (b)."quantity_limit"::double precision,
         (b)."trade_count_limit"::bigint,

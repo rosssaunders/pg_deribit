@@ -54,7 +54,7 @@ create type deribit.private_get_trigger_order_history_response_entry as (
     "trigger_price" double precision
 );
 
-comment on column deribit.private_get_trigger_order_history_response_entry."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_trigger_order_history_response_entry."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_get_trigger_order_history_response_entry."direction" is 'Direction: buy, or sell';
 comment on column deribit.private_get_trigger_order_history_response_entry."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.private_get_trigger_order_history_response_entry."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';

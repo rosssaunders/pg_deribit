@@ -23,7 +23,7 @@ create type deribit.private_get_leg_prices_request_leg as (
 );
 
 comment on column deribit.private_get_leg_prices_request_leg."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_get_leg_prices_request_leg."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_leg_prices_request_leg."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_get_leg_prices_request_leg."direction" is '(Required) Direction of selected leg';
 
 create type deribit.private_get_leg_prices_request as (

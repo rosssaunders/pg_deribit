@@ -93,7 +93,7 @@ comment on column deribit.public_get_instruments_response_result."kind" is 'Inst
 comment on column deribit.public_get_instruments_response_result."maker_commission" is 'Maker commission for instrument.';
 comment on column deribit.public_get_instruments_response_result."max_leverage" is 'Maximal leverage for instrument (only for futures).';
 comment on column deribit.public_get_instruments_response_result."max_liquidation_commission" is 'Maximal liquidation trade commission for instrument (only for futures).';
-comment on column deribit.public_get_instruments_response_result."min_trade_amount" is 'Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.public_get_instruments_response_result."min_trade_amount" is 'Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.public_get_instruments_response_result."option_type" is 'The option type (only for options).';
 comment on column deribit.public_get_instruments_response_result."price_index" is 'Name of price index that is used for this instrument';
 comment on column deribit.public_get_instruments_response_result."quote_currency" is 'The currency in which the instrument prices are quoted.';

@@ -95,7 +95,7 @@ comment on column deribit.public_ticker_response_result."mark_iv" is '(Only for 
 comment on column deribit.public_ticker_response_result."mark_price" is 'The mark price for the instrument';
 comment on column deribit.public_ticker_response_result."max_price" is 'The maximum price for the future. Any buy orders you submit higher than this price, will be clamped to this maximum.';
 comment on column deribit.public_ticker_response_result."min_price" is 'The minimum price for the future. Any sell orders you submit lower than this price will be clamped to this minimum.';
-comment on column deribit.public_ticker_response_result."open_interest" is 'The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.public_ticker_response_result."open_interest" is 'The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.public_ticker_response_result."settlement_price" is 'Optional (not added for spot). The settlement price for the instrument. Only when state = open';
 comment on column deribit.public_ticker_response_result."state" is 'The state of the order book. Possible values are open and closed.';
 comment on column deribit.public_ticker_response_result."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';

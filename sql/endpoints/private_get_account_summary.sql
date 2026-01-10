@@ -69,6 +69,7 @@ create type deribit.private_get_account_summary_response_fee as (
     "creation_timestamp" bigint,
     "email" text,
     "options_vega_map" jsonb,
+    "affiliate_promotion_fee" double precision,
     "maintenance_margin" double precision,
     "mmp_enabled" boolean,
     "futures_session_upl" double precision,
@@ -99,6 +100,7 @@ create type deribit.private_get_account_summary_response_fee as (
     "total_maintenance_margin_usd" double precision,
     "options_vega" double precision,
     "projected_initial_margin" double precision,
+    "fee_group" text,
     "self_trading_reject_mode" text,
     "system_name" text,
     "options_gamma" double precision,
@@ -117,6 +119,7 @@ comment on column deribit.private_get_account_summary_response_fee."options_valu
 comment on column deribit.private_get_account_summary_response_fee."creation_timestamp" is 'Time at which the account was created (milliseconds since the Unix epoch; available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_fee."email" is 'User email (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_fee."options_vega_map" is 'Map of options'' vegas per index';
+comment on column deribit.private_get_account_summary_response_fee."affiliate_promotion_fee" is 'Affiliate promotion fee (if greater than 0.0)';
 comment on column deribit.private_get_account_summary_response_fee."maintenance_margin" is 'The maintenance margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
 comment on column deribit.private_get_account_summary_response_fee."mmp_enabled" is 'Whether MMP is enabled (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_fee."futures_session_upl" is 'Futures session unrealized profit and Loss';
@@ -147,6 +150,7 @@ comment on column deribit.private_get_account_summary_response_fee."fee_balance"
 comment on column deribit.private_get_account_summary_response_fee."total_maintenance_margin_usd" is 'Optional (only for users using cross margin). The account''s total maintenance margin in all cross collateral currencies, expressed in USD';
 comment on column deribit.private_get_account_summary_response_fee."options_vega" is 'Options summary vega';
 comment on column deribit.private_get_account_summary_response_fee."projected_initial_margin" is 'Projected initial margin. When cross collateral is enabled, this aggregated value is calculated by converting the sum of each cross collateral currency''s value to the given currency, using each cross collateral currency''s index.';
+comment on column deribit.private_get_account_summary_response_fee."fee_group" is 'Fee group indicates the level of fee discounts applied to an account. Use extended: true to view this field. If the field is missing, the account is not assigned to any fee group. 📖 Related Support Article: Automatically applied volume based fee discounts';
 comment on column deribit.private_get_account_summary_response_fee."self_trading_reject_mode" is 'Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_fee."system_name" is 'System generated user nickname (available when parameter extended = true)';
 comment on column deribit.private_get_account_summary_response_fee."options_gamma" is 'Options summary gamma';
@@ -157,6 +161,8 @@ comment on column deribit.private_get_account_summary_response_fee."delta_total"
 create type deribit.private_get_account_summary_response_result as (
     "options_pl" double precision,
     "projected_delta_total" double precision,
+    "trading_products_details" jsonb,
+    "receive_notifications" boolean,
     "options_theta_map" jsonb,
     "has_non_block_chain_equity" boolean,
     "total_margin_balance_usd" double precision,
@@ -173,6 +179,8 @@ create type deribit.private_get_account_summary_response_result as (
 
 comment on column deribit.private_get_account_summary_response_result."options_pl" is 'Options profit and Loss';
 comment on column deribit.private_get_account_summary_response_result."projected_delta_total" is 'The sum of position deltas without positions that will expire during closest expiration';
+comment on column deribit.private_get_account_summary_response_result."trading_products_details" is 'Which trading products are enabled or can be overwritten for the account';
+comment on column deribit.private_get_account_summary_response_result."receive_notifications" is 'Whether the account receives notifications';
 comment on column deribit.private_get_account_summary_response_result."options_theta_map" is 'Map of options'' thetas per index';
 comment on column deribit.private_get_account_summary_response_result."has_non_block_chain_equity" is 'Optional field returned with value true when user has non block chain equity that is excluded from proof of reserve calculations';
 comment on column deribit.private_get_account_summary_response_result."total_margin_balance_usd" is 'Optional (only for users using cross margin). The account''s total margin balance in all cross collateral currencies, expressed in USD';

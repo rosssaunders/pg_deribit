@@ -120,7 +120,7 @@ comment on column deribit.private_get_user_trades_by_order_response_result."mark
 comment on column deribit.private_get_user_trades_by_order_response_result."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.private_get_user_trades_by_order_response_result."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
 comment on column deribit.private_get_user_trades_by_order_response_result."reduce_only" is 'true if user order is reduce-only';
-comment on column deribit.private_get_user_trades_by_order_response_result."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_user_trades_by_order_response_result."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_get_user_trades_by_order_response_result."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.private_get_user_trades_by_order_response_result."trade_seq" is 'The sequence number of the trade within instrument';
 comment on column deribit.private_get_user_trades_by_order_response_result."risk_reducing" is 'true if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)';

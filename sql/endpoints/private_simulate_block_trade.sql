@@ -30,7 +30,7 @@ create type deribit.private_simulate_block_trade_request_trade as (
 
 comment on column deribit.private_simulate_block_trade_request_trade."instrument_name" is '(Required) Instrument name';
 comment on column deribit.private_simulate_block_trade_request_trade."price" is '(Required) Price for trade';
-comment on column deribit.private_simulate_block_trade_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_simulate_block_trade_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_simulate_block_trade_request_trade."direction" is '(Required) Direction of trade from the maker perspective';
 
 create type deribit.private_simulate_block_trade_request as (

@@ -2891,7 +2891,7 @@
                             }
                         },
                         {
-                            "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "open_interest",
                             "required": false,
                             "type": {
@@ -3203,7 +3203,7 @@
                     }
                 },
                 {
-                    "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "open_interest",
                     "required": false,
                     "type": {
@@ -3637,7 +3637,7 @@
                             }
                         },
                         {
-                            "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "open_interest",
                             "required": false,
                             "type": {
@@ -3949,7 +3949,7 @@
                     }
                 },
                 {
-                    "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "Optional (only for derivatives). The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "open_interest",
                     "required": false,
                     "type": {
@@ -7123,7 +7123,7 @@
                             }
                         },
                         {
-                            "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "min_trade_amount",
                             "required": false,
                             "type": {
@@ -7522,7 +7522,7 @@
                     }
                 },
                 {
-                    "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "min_trade_amount",
                     "required": false,
                     "type": {
@@ -8056,7 +8056,7 @@
                             }
                         },
                         {
-                            "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "min_trade_amount",
                             "required": false,
                             "type": {
@@ -8455,7 +8455,7 @@
                     }
                 },
                 {
-                    "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "Minimum amount for trading. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "min_trade_amount",
                     "required": false,
                     "type": {
@@ -9791,7 +9791,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -10330,7 +10330,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -10860,7 +10860,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -11364,7 +11364,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -12223,7 +12223,7 @@
                             }
                         },
                         {
-                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "open_interest",
                             "required": false,
                             "type": {
@@ -12735,7 +12735,7 @@
                     }
                 },
                 {
-                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "open_interest",
                     "required": false,
                     "type": {
@@ -13248,7 +13248,7 @@
                             }
                         },
                         {
-                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "open_interest",
                             "required": false,
                             "type": {
@@ -13760,7 +13760,7 @@
                     }
                 },
                 {
-                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "open_interest",
                     "required": false,
                     "type": {
@@ -15640,7 +15640,7 @@
                             }
                         },
                         {
-                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "open_interest",
                             "required": false,
                             "type": {
@@ -16152,7 +16152,7 @@
                     }
                 },
                 {
-                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "The total amount of outstanding contracts in the corresponding amount units. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "open_interest",
                     "required": false,
                     "type": {
@@ -16326,7 +16326,7 @@
                         }
                     },
                     {
-                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
+                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
                         "name": "amount",
                         "required": "false",
                         "type": {
@@ -16605,7 +16605,7 @@
                             ],
                             "fields": [
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -17520,7 +17520,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -18010,7 +18010,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -18319,7 +18319,7 @@
                         }
                     },
                     {
-                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
+                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
                         "name": "amount",
                         "required": "false",
                         "type": {
@@ -18598,7 +18598,7 @@
                             ],
                             "fields": [
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -19513,7 +19513,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -20003,7 +20003,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -20266,7 +20266,7 @@
                         }
                     },
                     {
-                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
+                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
                         "name": "amount",
                         "required": "false",
                         "type": {
@@ -21174,7 +21174,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -21664,7 +21664,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -21940,7 +21940,7 @@
                         }
                     },
                     {
-                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
+                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.",
                         "name": "amount",
                         "required": "false",
                         "type": {
@@ -22822,7 +22822,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -23312,7 +23312,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -24284,7 +24284,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -24973,7 +24973,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -27414,7 +27414,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -27904,7 +27904,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -28159,7 +28159,7 @@
                         }
                     },
                     {
-                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                        "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                         "name": "amount",
                         "required": "true",
                         "type": {
@@ -28617,7 +28617,7 @@
                             }
                         },
                         {
-                            "comment": "Delta limit",
+                            "comment": "The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 \u2192 MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling \u22125 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, \"delta\" actually refers to net transaction delta. Maximum 4 decimal places.",
                             "name": "delta_limit",
                             "required": false,
                             "type": {
@@ -28630,7 +28630,7 @@
                             }
                         },
                         {
-                            "comment": "MMP frozen time in seconds, if set to 0 manual reset is required",
+                            "comment": "Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.",
                             "name": "frozen_time",
                             "required": false,
                             "type": {
@@ -28656,7 +28656,7 @@
                             }
                         },
                         {
-                            "comment": "MMP Interval in seconds, if set to 0 MMP is disabled",
+                            "comment": "The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is disabled.",
                             "name": "interval",
                             "required": false,
                             "type": {
@@ -28666,6 +28666,19 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ (specified in base currency). MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin). Important Notes: - Order book = instrument, MQQ is per instrument (not sum across instruments): \"Per order book\" means per instrument (not per expiry). MQQ is enforced separately for each instrument and applies independently to each instrument. The limit is NOT the sum across all instruments - each instrument has its own separate MQQ limit. - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - MQQ is separate per MMP group: Each MMP group has its own independent MQQ configuration. MQQ limits are enforced separately for each MMP group. - MQQ vs Quantity Limit relationship: You can set MQQ > quantity_limit. This allows quotes to be larger than the quantity limit, and enables MMP to trigger on partial fills of quotes. This decouples the MMP reserved margin from the MMP quantity limit. - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected. For orders (not quotes), orders above MQQ are allowed in the market, but quotes that would exceed MQQ are rejected. - Precision: All MMP configuration values support maximum 4 decimal places - Latency: There are no latency benefits from MQQ if you already use mass quotes.",
+                            "name": "max_quote_quantity",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "number"
                             }
                         },
                         {
@@ -28682,7 +28695,7 @@
                             }
                         },
                         {
-                            "comment": "Quantity limit",
+                            "comment": "The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic\u2014a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Maximum 4 decimal places.",
                             "name": "quantity_limit",
                             "required": false,
                             "type": {
@@ -28708,7 +28721,7 @@
                             }
                         },
                         {
-                            "comment": "Vega limit",
+                            "comment": "The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Maximum 4 decimal places.",
                             "name": "vega_limit",
                             "required": false,
                             "type": {
@@ -28747,7 +28760,7 @@
                     }
                 },
                 {
-                    "comment": "Delta limit",
+                    "comment": "The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 \u2192 MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling \u22125 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, \"delta\" actually refers to net transaction delta. Maximum 4 decimal places.",
                     "name": "delta_limit",
                     "required": false,
                     "type": {
@@ -28760,7 +28773,7 @@
                     }
                 },
                 {
-                    "comment": "MMP frozen time in seconds, if set to 0 manual reset is required",
+                    "comment": "Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.",
                     "name": "frozen_time",
                     "required": false,
                     "type": {
@@ -28786,7 +28799,7 @@
                     }
                 },
                 {
-                    "comment": "MMP Interval in seconds, if set to 0 MMP is disabled",
+                    "comment": "The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is disabled.",
                     "name": "interval",
                     "required": false,
                     "type": {
@@ -28796,6 +28809,19 @@
                         "is_nested_array": false,
                         "is_primitive": false,
                         "name": "integer"
+                    }
+                },
+                {
+                    "comment": "Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ (specified in base currency). MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin). Important Notes: - Order book = instrument, MQQ is per instrument (not sum across instruments): \"Per order book\" means per instrument (not per expiry). MQQ is enforced separately for each instrument and applies independently to each instrument. The limit is NOT the sum across all instruments - each instrument has its own separate MQQ limit. - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - MQQ is separate per MMP group: Each MMP group has its own independent MQQ configuration. MQQ limits are enforced separately for each MMP group. - MQQ vs Quantity Limit relationship: You can set MQQ > quantity_limit. This allows quotes to be larger than the quantity limit, and enables MMP to trigger on partial fills of quotes. This decouples the MMP reserved margin from the MMP quantity limit. - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected. For orders (not quotes), orders above MQQ are allowed in the market, but quotes that would exceed MQQ are rejected. - Precision: All MMP configuration values support maximum 4 decimal places - Latency: There are no latency benefits from MQQ if you already use mass quotes.",
+                    "name": "max_quote_quantity",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "number"
                     }
                 },
                 {
@@ -28812,7 +28838,7 @@
                     }
                 },
                 {
-                    "comment": "Quantity limit",
+                    "comment": "The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic\u2014a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Maximum 4 decimal places.",
                     "name": "quantity_limit",
                     "required": false,
                     "type": {
@@ -28838,7 +28864,7 @@
                     }
                 },
                 {
-                    "comment": "Vega limit",
+                    "comment": "The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Maximum 4 decimal places.",
                     "name": "vega_limit",
                     "required": false,
                     "type": {
@@ -29950,7 +29976,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -30639,7 +30665,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -31513,7 +31539,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -32202,7 +32228,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -33043,7 +33069,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -33732,7 +33758,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -34567,7 +34593,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -35256,7 +35282,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -36194,7 +36220,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -36883,7 +36909,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -37785,7 +37811,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -38474,7 +38500,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -39511,7 +39537,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -40200,7 +40226,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -41035,7 +41061,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -41724,7 +41750,7 @@
                     }
                 },
                 {
-                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -42009,7 +42035,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -43042,7 +43068,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -43963,7 +43989,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -44875,7 +44901,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -45761,7 +45787,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -46560,7 +46586,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -47163,7 +47189,7 @@
                     }
                 },
                 {
-                    "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                    "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                     "name": "amount",
                     "required": false,
                     "type": {
@@ -47248,7 +47274,7 @@
         }
     },
     {
-        "comment": "Moves positions from source subaccount to target subaccount Note:In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.",
+        "comment": "Moves positions from source subaccount to target subaccount",
         "endpoint": {
             "name": "private_move_positions",
             "path": "/private/move_positions",
@@ -47340,7 +47366,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. Amount can't exceed position size.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. Amount can't exceed position size.",
                                     "name": "amount",
                                     "required": "true",
                                     "type": {
@@ -47488,7 +47514,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -47820,7 +47846,7 @@
                         }
                     },
                     {
-                        "comment": "MMP Interval in seconds, if set to 0 MMP is removed",
+                        "comment": "The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is removed.",
                         "name": "interval",
                         "required": "true",
                         "type": {
@@ -47833,7 +47859,7 @@
                         }
                     },
                     {
-                        "comment": "MMP frozen time in seconds, if set to 0 manual reset is required",
+                        "comment": "Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.",
                         "name": "frozen_time",
                         "required": "true",
                         "type": {
@@ -47859,7 +47885,7 @@
                         }
                     },
                     {
-                        "comment": "Quantity limit, positive value",
+                        "comment": "The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic\u2014a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.",
                         "name": "quantity_limit",
                         "required": "false",
                         "type": {
@@ -47872,7 +47898,7 @@
                         }
                     },
                     {
-                        "comment": "Delta limit, positive value",
+                        "comment": "The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 \u2192 MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling \u22125 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, \"delta\" actually refers to net transaction delta. Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.",
                         "name": "delta_limit",
                         "required": "false",
                         "type": {
@@ -47885,9 +47911,22 @@
                         }
                     },
                     {
-                        "comment": "Vega limit, positive value",
+                        "comment": "The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Positive value with maximum 4 decimal places. Precision: The precision of MMP configuration limits is restricted to a maximum of four decimal places.",
                         "name": "vega_limit",
                         "required": "false",
+                        "type": {
+                            "enums": [],
+                            "fields": [],
+                            "is_array": false,
+                            "is_nested_array": false,
+                            "is_primitive": true,
+                            "name": "number"
+                        }
+                    },
+                    {
+                        "comment": "Maximum Quote Quantity (MQQ) in base currency. The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ. See response description for detailed information about MQQ behavior and limitations. Maximum 4 decimal places.",
+                        "name": "max_quote_quantity",
+                        "required": "true",
                         "type": {
                             "enums": [],
                             "fields": [],
@@ -48043,7 +48082,7 @@
                             }
                         },
                         {
-                            "comment": "Delta limit",
+                            "comment": "The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 \u2192 MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling \u22125 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, \"delta\" actually refers to net transaction delta. Maximum 4 decimal places.",
                             "name": "delta_limit",
                             "required": false,
                             "type": {
@@ -48056,7 +48095,7 @@
                             }
                         },
                         {
-                            "comment": "MMP frozen time in seconds, if set to 0 manual reset is required",
+                            "comment": "Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.",
                             "name": "frozen_time",
                             "required": false,
                             "type": {
@@ -48082,7 +48121,7 @@
                             }
                         },
                         {
-                            "comment": "MMP Interval in seconds, if set to 0 MMP is disabled",
+                            "comment": "The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is disabled.",
                             "name": "interval",
                             "required": false,
                             "type": {
@@ -48092,6 +48131,19 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "integer"
+                            }
+                        },
+                        {
+                            "comment": "Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ (specified in base currency). MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin). Important Notes: - Order book = instrument, MQQ is per instrument (not sum across instruments): \"Per order book\" means per instrument (not per expiry). MQQ is enforced separately for each instrument and applies independently to each instrument. The limit is NOT the sum across all instruments - each instrument has its own separate MQQ limit. - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - MQQ is separate per MMP group: Each MMP group has its own independent MQQ configuration. MQQ limits are enforced separately for each MMP group. - MQQ vs Quantity Limit relationship: You can set MQQ > quantity_limit. This allows quotes to be larger than the quantity limit, and enables MMP to trigger on partial fills of quotes. This decouples the MMP reserved margin from the MMP quantity limit. - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected. For orders (not quotes), orders above MQQ are allowed in the market, but quotes that would exceed MQQ are rejected. - Precision: All MMP configuration values support maximum 4 decimal places - Latency: There are no latency benefits from MQQ if you already use mass quotes.",
+                            "name": "max_quote_quantity",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "number"
                             }
                         },
                         {
@@ -48108,7 +48160,7 @@
                             }
                         },
                         {
-                            "comment": "Quantity limit",
+                            "comment": "The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic\u2014a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Maximum 4 decimal places.",
                             "name": "quantity_limit",
                             "required": false,
                             "type": {
@@ -48134,7 +48186,7 @@
                             }
                         },
                         {
-                            "comment": "Vega limit",
+                            "comment": "The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Maximum 4 decimal places.",
                             "name": "vega_limit",
                             "required": false,
                             "type": {
@@ -48173,7 +48225,7 @@
                     }
                 },
                 {
-                    "comment": "Delta limit",
+                    "comment": "The maximum allowable net transaction delta change during the interval. Expressed in units of base currency. The delta_limit is treated as an absolute threshold: e.g., delta_limit: 10 \u2192 MMP is triggered if net transaction delta exceeds +10 or drops below -10. Direction matters: buying +5 delta and selling \u22125 delta cancels out if within the same interval. Note: Note that we use the net transaction delta instead of delta. Net Transaction Delta = Delta - Mark Price. In the rest of this document, \"delta\" actually refers to net transaction delta. Maximum 4 decimal places.",
                     "name": "delta_limit",
                     "required": false,
                     "type": {
@@ -48186,7 +48238,7 @@
                     }
                 },
                 {
-                    "comment": "MMP frozen time in seconds, if set to 0 manual reset is required",
+                    "comment": "Time in seconds that MMP remains active after being triggered. Once this frozen period has passed, MMP will automatically reset, allowing new orders to be submitted. If you want to disable automatic reset, set frozen_time to 0. In that case, a manual reset is required using the private/reset_mmp method. Manual reset is also possible during the frozen time period.",
                     "name": "frozen_time",
                     "required": false,
                     "type": {
@@ -48212,7 +48264,7 @@
                     }
                 },
                 {
-                    "comment": "MMP Interval in seconds, if set to 0 MMP is disabled",
+                    "comment": "The duration of the monitoring window in seconds. For example, an interval of 3 implies a 3-second window. The interval begins after the first trade. If a new trade is executed after the interval has ended, a new interval is started, and counters reset. If a trade occurs during an already running interval, that interval continues unaffected. This mechanism allows the platform to track activity in short, rolling windows to identify potentially risky trading behavior. If set to 0, MMP is disabled.",
                     "name": "interval",
                     "required": false,
                     "type": {
@@ -48222,6 +48274,19 @@
                         "is_nested_array": false,
                         "is_primitive": false,
                         "name": "integer"
+                    }
+                },
+                {
+                    "comment": "Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book (instrument), cannot exceed MQQ (specified in base currency). MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin). Important Notes: - Order book = instrument, MQQ is per instrument (not sum across instruments): \"Per order book\" means per instrument (not per expiry). MQQ is enforced separately for each instrument and applies independently to each instrument. The limit is NOT the sum across all instruments - each instrument has its own separate MQQ limit. - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - MQQ is separate per MMP group: Each MMP group has its own independent MQQ configuration. MQQ limits are enforced separately for each MMP group. - MQQ vs Quantity Limit relationship: You can set MQQ > quantity_limit. This allows quotes to be larger than the quantity limit, and enables MMP to trigger on partial fills of quotes. This decouples the MMP reserved margin from the MMP quantity limit. - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected. For orders (not quotes), orders above MQQ are allowed in the market, but quotes that would exceed MQQ are rejected. - Precision: All MMP configuration values support maximum 4 decimal places - Latency: There are no latency benefits from MQQ if you already use mass quotes.",
+                    "name": "max_quote_quantity",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "number"
                     }
                 },
                 {
@@ -48238,7 +48303,7 @@
                     }
                 },
                 {
-                    "comment": "Quantity limit",
+                    "comment": "The total traded quantity, measured in units of the base currency (e.g., BTC in BTC-PERPETUAL), within the interval. This count is direction-agnostic\u2014a buy followed by a sell counts double. Example: Buy 10 BTC and sell 10 BTC = 20 total quantity. Applicable to both options and futures. Note: Once this is set, an initial margin will be reserved even without any open positions. Initial Margin due to quantity_limit = quantity_limit * 0.03 Maximum 4 decimal places.",
                     "name": "quantity_limit",
                     "required": false,
                     "type": {
@@ -48264,7 +48329,7 @@
                     }
                 },
                 {
-                    "comment": "Vega limit",
+                    "comment": "The maximum change in vega exposure allowed within a given interval, measured in absolute terms. Expressed in USD, representing the change in sensitivity to implied volatility across executed trades. This parameter is primarily relevant for options traders managing risk in volatile markets. Similar to delta_limit, the vega_limit is direction-aware and evaluated on a net basis. If the exposure exceeds the set threshold (positively or negatively), MMP will be triggered. Notice: When evaluating Delta and Vega limits for MMP, Deribit uses the greeks at the moment of trade execution. The system does not re-evaluate Delta or Vega using live greeks at the time of MMP checking. Maximum 4 decimal places.",
                     "name": "vega_limit",
                     "required": false,
                     "type": {
@@ -50094,7 +50159,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -50481,7 +50546,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "true",
                                     "type": {
@@ -51035,7 +51100,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -51690,7 +51755,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -52606,7 +52671,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -53254,7 +53319,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -54189,7 +54254,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -55830,7 +55895,7 @@
                             }
                         },
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -56405,7 +56470,7 @@
                     "enums": [],
                     "fields": [
                         {
-                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -57014,7 +57079,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -57260,7 +57325,7 @@
                                     }
                                 },
                                 {
-                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                                    "comment": "It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                                     "name": "amount",
                                     "required": "false",
                                     "type": {
@@ -70854,6 +70919,19 @@
                     "enums": [],
                     "fields": [
                         {
+                            "comment": "Affiliate promotion fee (if greater than 0.0)",
+                            "name": "affiliate_promotion_fee",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "number"
+                            }
+                        },
+                        {
                             "comment": "When Block RFQ Self Match Prevention is enabled, it ensures that RFQs cannot be executed between accounts that belong to the same legal entity. This setting is independent of the general self-match prevention settings and must be configured separately.",
                             "name": "block_rfq_self_match_prevention",
                             "required": false,
@@ -70934,6 +71012,19 @@
                         {
                             "comment": "Whether MMP is enabled (available when parameter extended = true)",
                             "name": "mmp_enabled",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "boolean"
+                            }
+                        },
+                        {
+                            "comment": "Whether the account receives notifications",
+                            "name": "receive_notifications",
                             "required": false,
                             "type": {
                                 "enums": [],
@@ -71042,6 +71133,32 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Which trading products are enabled or can be overwritten for the account",
+                            "name": "trading_products_details",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "json"
+                            }
+                        },
+                        {
+                            "comment": "Whether the account receives notifications",
+                            "name": "receive_notifications",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "boolean"
                             }
                         },
                         {
@@ -71201,6 +71318,19 @@
                             }
                         },
                         {
+                            "comment": "Which trading products are enabled or can be overwritten for the account",
+                            "name": "trading_products_details",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "json"
+                            }
+                        },
+                        {
                             "comment": "Account type (available when parameter extended = true)",
                             "name": "type",
                             "required": false,
@@ -71337,6 +71467,19 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "json"
+                            }
+                        },
+                        {
+                            "comment": "Affiliate promotion fee (if greater than 0.0)",
+                            "name": "affiliate_promotion_fee",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "number"
                             }
                         },
                         {
@@ -71652,6 +71795,19 @@
                             }
                         },
                         {
+                            "comment": "Fee group indicates the level of fee discounts applied to an account. Use extended: true to view this field. If the field is missing, the account is not assigned to any fee group. \ud83d\udcd6 Related Support Article: Automatically applied volume based fee discounts",
+                            "name": "fee_group",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "string"
+                            }
+                        },
+                        {
                             "comment": "Options summary gamma",
                             "name": "options_gamma",
                             "required": false,
@@ -71800,6 +71956,19 @@
             "enums": [],
             "fields": [
                 {
+                    "comment": "Affiliate promotion fee (if greater than 0.0)",
+                    "name": "affiliate_promotion_fee",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "number"
+                    }
+                },
+                {
                     "comment": "When Block RFQ Self Match Prevention is enabled, it ensures that RFQs cannot be executed between accounts that belong to the same legal entity. This setting is independent of the general self-match prevention settings and must be configured separately.",
                     "name": "block_rfq_self_match_prevention",
                     "required": false,
@@ -71880,6 +72049,19 @@
                 {
                     "comment": "Whether MMP is enabled (available when parameter extended = true)",
                     "name": "mmp_enabled",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "boolean"
+                    }
+                },
+                {
+                    "comment": "Whether the account receives notifications",
+                    "name": "receive_notifications",
                     "required": false,
                     "type": {
                         "enums": [],
@@ -72160,6 +72342,32 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "number"
+                            }
+                        },
+                        {
+                            "comment": "Which trading products are enabled or can be overwritten for the account",
+                            "name": "trading_products_details",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "json"
+                            }
+                        },
+                        {
+                            "comment": "Whether the account receives notifications",
+                            "name": "receive_notifications",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "boolean"
                             }
                         },
                         {
@@ -72468,6 +72676,19 @@
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "json"
+                            }
+                        },
+                        {
+                            "comment": "Affiliate promotion fee (if greater than 0.0)",
+                            "name": "affiliate_promotion_fee",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "number"
                             }
                         },
                         {
@@ -72861,6 +73082,19 @@
                             }
                         },
                         {
+                            "comment": "Fee group indicates the level of fee discounts applied to an account. Use extended: true to view this field. If the field is missing, the account is not assigned to any fee group. \ud83d\udcd6 Related Support Article: Automatically applied volume based fee discounts",
+                            "name": "fee_group",
+                            "required": false,
+                            "type": {
+                                "enums": [],
+                                "fields": [],
+                                "is_array": false,
+                                "is_nested_array": false,
+                                "is_primitive": false,
+                                "name": "string"
+                            }
+                        },
+                        {
                             "comment": "Self trading rejection behavior - reject_taker or cancel_maker (available when parameter extended = true)",
                             "name": "self_trading_reject_mode",
                             "required": false,
@@ -73071,6 +73305,32 @@
                         "is_nested_array": false,
                         "is_primitive": false,
                         "name": "number"
+                    }
+                },
+                {
+                    "comment": "Which trading products are enabled or can be overwritten for the account",
+                    "name": "trading_products_details",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "json"
+                    }
+                },
+                {
+                    "comment": "Whether the account receives notifications",
+                    "name": "receive_notifications",
+                    "required": false,
+                    "type": {
+                        "enums": [],
+                        "fields": [],
+                        "is_array": false,
+                        "is_nested_array": false,
+                        "is_primitive": false,
+                        "name": "boolean"
                     }
                 },
                 {
@@ -77105,7 +77365,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {
@@ -78201,7 +78461,7 @@
                             }
                         },
                         {
-                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.",
+                            "comment": "It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.",
                             "name": "amount",
                             "required": false,
                             "type": {

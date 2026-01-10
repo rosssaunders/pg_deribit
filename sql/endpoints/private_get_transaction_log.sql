@@ -114,7 +114,7 @@ comment on column deribit.private_get_transaction_log_response_log."session_rpl"
 comment on column deribit.private_get_transaction_log_response_log."mark_price" is 'Market price during the trade';
 comment on column deribit.private_get_transaction_log_response_log."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.private_get_transaction_log_response_log."ip" is 'The IP address from which the trade was initiated';
-comment on column deribit.private_get_transaction_log_response_log."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_transaction_log_response_log."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_get_transaction_log_response_log."username" is 'System name or user defined subaccount alias';
 comment on column deribit.private_get_transaction_log_response_log."instrument_name" is 'Unique instrument identifier';
 

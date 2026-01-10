@@ -96,7 +96,7 @@ create type deribit.private_sell_request_otoco_config as (
     "trigger" deribit.private_sell_request_otoco_config_trigger
 );
 
-comment on column deribit.private_sell_request_otoco_config."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_sell_request_otoco_config."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_sell_request_otoco_config."direction" is '(Required) Direction of trade from the maker perspective';
 comment on column deribit.private_sell_request_otoco_config."type" is 'The order type, default: "limit"';
 comment on column deribit.private_sell_request_otoco_config."label" is 'user defined label for the order (maximum 64 characters)';
@@ -133,7 +133,7 @@ create type deribit.private_sell_request as (
 );
 
 comment on column deribit.private_sell_request."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_sell_request."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.';
+comment on column deribit.private_sell_request."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin. The amount is a mandatory parameter if contracts parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.';
 comment on column deribit.private_sell_request."contracts" is 'It represents the requested order size in contract units and can be passed instead of amount. The contracts is a mandatory parameter if amount parameter is missing. If both contracts and amount parameter are passed they must match each other otherwise error is returned.';
 comment on column deribit.private_sell_request."type" is 'The order type, default: "limit"';
 comment on column deribit.private_sell_request."label" is 'user defined label for the order (maximum 64 characters)';
@@ -248,7 +248,7 @@ comment on column deribit.private_sell_response_trade."mark_price" is 'Mark Pric
 comment on column deribit.private_sell_response_trade."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.private_sell_response_trade."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
 comment on column deribit.private_sell_response_trade."reduce_only" is 'true if user order is reduce-only';
-comment on column deribit.private_sell_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_sell_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_sell_response_trade."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.private_sell_response_trade."trade_seq" is 'The sequence number of the trade within instrument';
 comment on column deribit.private_sell_response_trade."risk_reducing" is 'true if user order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users)';
@@ -357,7 +357,7 @@ comment on column deribit.private_sell_response_order."trigger_offset" is 'The m
 comment on column deribit.private_sell_response_order."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
 comment on column deribit.private_sell_response_order."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
 comment on column deribit.private_sell_response_order."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
-comment on column deribit.private_sell_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_sell_response_order."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.private_sell_response_order."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
 comment on column deribit.private_sell_response_order."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.private_sell_response_order."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';

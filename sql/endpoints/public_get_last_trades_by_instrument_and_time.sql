@@ -52,7 +52,7 @@ create type deribit.public_get_last_trades_by_instrument_and_time_response_trade
     "trade_seq" bigint
 );
 
-comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures it is the underlying base currency coin.';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."block_trade_id" is 'Block trade id - when trade was part of a block trade';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."block_trade_leg_count" is 'Block trade leg count - when trade was part of a block trade';
