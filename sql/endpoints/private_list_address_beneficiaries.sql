@@ -70,12 +70,13 @@ create type deribit.private_list_address_beneficiaries_response_datum as (
     "beneficiary_vasp_did" text,
     "beneficiary_vasp_name" text,
     "beneficiary_vasp_website" text,
-    "creation_timestamp" bigint,
+    "created" bigint,
     "currency" text,
     "personal" boolean,
     "tag" text,
     "unhosted" boolean,
-    "update_timestamp" bigint
+    "updated" bigint,
+    "user_id" bigint
 );
 
 comment on column deribit.private_list_address_beneficiaries_response_datum."address" is 'Address in proper format for currency';
@@ -87,12 +88,13 @@ comment on column deribit.private_list_address_beneficiaries_response_datum."ben
 comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_did" is 'DID of beneficiary VASP';
 comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_name" is 'Name of beneficiary VASP';
 comment on column deribit.private_list_address_beneficiaries_response_datum."beneficiary_vasp_website" is 'Website of the beneficiary VASP';
-comment on column deribit.private_list_address_beneficiaries_response_datum."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."created" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_list_address_beneficiaries_response_datum."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_list_address_beneficiaries_response_datum."personal" is 'The user confirms that he provided address belongs to him and he has access to it via an un-hosted wallet software';
 comment on column deribit.private_list_address_beneficiaries_response_datum."tag" is 'Tag for XRP addresses (optional)';
 comment on column deribit.private_list_address_beneficiaries_response_datum."unhosted" is 'Indicates if the address belongs to an unhosted wallet';
-comment on column deribit.private_list_address_beneficiaries_response_datum."update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."updated" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_list_address_beneficiaries_response_datum."user_id" is 'Unique user identifier';
 
 create type deribit.private_list_address_beneficiaries_response_result as (
     "continuation" text,

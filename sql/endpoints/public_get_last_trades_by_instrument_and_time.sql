@@ -59,13 +59,13 @@ comment on column deribit.public_get_last_trades_by_instrument_and_time_response
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."combo_id" is 'Optional field containing combo instrument name if the trade is a combo trade';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."combo_trade_id" is 'Optional field containing combo trade identifier if the trade is a combo trade';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."contracts" is 'Trade size in contract units (optional, may be absent in historical trades)';
-comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."direction" is 'Direction: buy, or sell';
+comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."direction" is 'Trade direction of the taker';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."index_price" is 'Index Price at the moment of trade';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."instrument_name" is 'Unique instrument identifier';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."iv" is 'Option implied volatility for the price (Option only)';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."liquidation" is 'Optional field (only for trades caused by liquidation): "M" when maker side of trade was under liquidation, "T" when taker side was under liquidation, "MT" when both sides of trade were under liquidation';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."mark_price" is 'Mark Price at the moment of trade';
-comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."price" is 'Price in base currency';
+comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."price" is 'The price of the trade';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."tick_direction" is 'Direction of the "tick" (0 = Plus Tick, 1 = Zero-Plus Tick, 2 = Minus Tick, 3 = Zero-Minus Tick).';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."timestamp" is 'The timestamp of the trade (milliseconds since the UNIX epoch)';
 comment on column deribit.public_get_last_trades_by_instrument_and_time_response_trade."trade_id" is 'Unique (per currency) trade identifier';

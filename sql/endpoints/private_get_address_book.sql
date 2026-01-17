@@ -60,7 +60,6 @@ create type deribit.private_get_address_book_response_result as (
     "requires_confirmation" boolean,
     "requires_confirmation_change" boolean,
     "status" text,
-    "type" text,
     "waiting_timestamp" boolean
 );
 
@@ -81,7 +80,6 @@ comment on column deribit.private_get_address_book_response_result."personal" is
 comment on column deribit.private_get_address_book_response_result."requires_confirmation" is 'If address requires email confirmation for withdrawals';
 comment on column deribit.private_get_address_book_response_result."requires_confirmation_change" is 'If email confirmation change is in progress';
 comment on column deribit.private_get_address_book_response_result."status" is 'Wallet address status, values: [admin_locked, waiting, confirmed, ready]';
-comment on column deribit.private_get_address_book_response_result."type" is 'Address book type';
 comment on column deribit.private_get_address_book_response_result."waiting_timestamp" is 'Timestamp when the address will be ready';
 
 create type deribit.private_get_address_book_response as (
@@ -141,7 +139,6 @@ as $$
         (b)."requires_confirmation"::boolean,
         (b)."requires_confirmation_change"::boolean,
         (b)."status"::text,
-        (b)."type"::text,
         (b)."waiting_timestamp"::boolean
     from (
         select (unnest(r.data)) b

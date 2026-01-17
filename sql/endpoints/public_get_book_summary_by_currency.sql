@@ -154,5 +154,4 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_book_summary_by_currency is 'Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind).
-Note - For real-time updates, we recommend using the WebSocket subscription to ticker.{instrument_name}.{interval} instead of polling this endpoint.';
+comment on function deribit.public_get_book_summary_by_currency is 'Retrieves the summary information such as open interest, 24h volume, etc. for all instruments for the currency (optionally filtered by kind). Note - For real-time updates, we recommend using the WebSocket subscription to ticker.{instrument_name}.{interval} instead of polling this endpoint.';

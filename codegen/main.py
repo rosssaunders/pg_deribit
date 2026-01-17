@@ -2,18 +2,13 @@ import json
 import logging
 import os
 import sys
-import warnings
-
 from deribit.consts import sections
-from deribit.extract import extract_function_from_section
+from deribit.openapi_parser import (
+    load_endpoints_from_openapi,
+    load_endpoints_from_snapshot,
+)
+from postgres.exporter import Exporter
 from utils.json_utils import CustomJSONizer
-
-warnings.simplefilter(action="ignore", category=FutureWarning)
-warnings.simplefilter(action="ignore", category=DeprecationWarning)
-
-import requests  # noqa: E402
-from bs4 import BeautifulSoup  # noqa: E402
-from postgres.exporter import Exporter  # noqa: E402
 
 # Configure logging
 logging.basicConfig(
@@ -21,7 +16,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-deribit_local_url = "deribit.html"
 schema = "deribit"
 
 
@@ -36,63 +30,34 @@ def cleanup_endpoints():
         logger.info("Cleanup complete")
 
 
-def download_spec():
-    """Download the Deribit API documentation HTML."""
-    try:
-        response = requests.get("https://docs.deribit.com/")
-        response.raise_for_status()
-        response.encoding = "utf-8"  # Ensure the response is interpreted as UTF-8
-        with open("deribit.html", "w", encoding="utf-8") as file:
-            file.write(response.text)
-        logger.info("Successfully downloaded Deribit API documentation")
-    except requests.RequestException as e:
-        logger.error(f"Error downloading spec: {e}")
-    except UnicodeEncodeError as e:
-        logger.error(f"Encoding error: {e}")
-
-
 def main():
     os.chdir(sys.path[0])
 
     # Clean up old endpoint files first
     cleanup_endpoints()
 
-    if not os.path.isfile(deribit_local_url):
-        download_spec()
-    with open(deribit_local_url, "r", encoding="utf8") as file:
-        documentation = file.read()
-
     exporter = Exporter()
     exporter.set_schema(schema)
 
     exporter.setup()
+    snapshot_path = "deribit.json"
+    use_snapshot = os.path.isfile(snapshot_path)
+    if use_snapshot:
+        logger.info("Loading endpoints from %s for stable output", snapshot_path)
+        endpoints = load_endpoints_from_snapshot(snapshot_path)
+    else:
+        endpoints = load_endpoints_from_openapi(sections)
 
-    soup = BeautifulSoup(documentation, "html.parser")
+    if not use_snapshot:
+        # export all functions to json
+        # Use json.dumps() to convert the object to a JSON string
+        endpoint_dict = [endpoint.to_dict() for endpoint in endpoints]
+        my_json = json.dumps(endpoint_dict, indent=4, sort_keys=True, cls=CustomJSONizer)
 
-    # dict which contains all the excluded urls
-    endpoints = []
-
-    for section in sections:
-        h1_tag = soup.find("h1", text=section)
-
-        for sibling in h1_tag.find_next_siblings():
-            if sibling.name == "h1":
-                break
-
-            if sibling.name != "h2":
-                continue
-
-            function = extract_function_from_section(sibling)
-            if function is not None:
-                endpoints.append(function)
-
-    # export all functions to json
-    # Use json.dumps() to convert the object to a JSON string
-    endpoint_dict = [endpoint.to_dict() for endpoint in endpoints]
-    my_json = json.dumps(endpoint_dict, indent=4, sort_keys=True, cls=CustomJSONizer)
-
-    with open("deribit.json", "w") as json_file:
-        json_file.write(my_json)
+        with open("deribit.json", "w") as json_file:
+            json_file.write(my_json)
+    else:
+        logger.info("Snapshot mode active; skipping deribit.json rewrite")
 
     # now codegen the wrapper functions
     exporter.all(endpoints)

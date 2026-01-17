@@ -38,20 +38,20 @@ comment on column deribit.public_get_instruments_request."currency" is '(Require
 comment on column deribit.public_get_instruments_request."kind" is 'Instrument kind, if not provided instruments of all kinds are considered';
 comment on column deribit.public_get_instruments_request."expired" is 'Set to true to show recently expired instruments instead of active ones.';
 
-create type deribit.public_get_instruments_response_tick_size_step as (
-    "tick_size" double precision,
-    "above_price" double precision
+create type deribit.public_get_instruments_response_tick_size_steps as (
+    "above_price" double precision,
+    "tick_size" double precision
 );
 
-comment on column deribit.public_get_instruments_response_tick_size_step."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
-comment on column deribit.public_get_instruments_response_tick_size_step."above_price" is 'The price from which the increased tick size applies';
+comment on column deribit.public_get_instruments_response_tick_size_steps."above_price" is 'The price from which the increased tick size applies';
+comment on column deribit.public_get_instruments_response_tick_size_steps."tick_size" is 'Tick size to be used above the price. It must be multiple of the minimum tick size.';
 
 create type deribit.public_get_instruments_response_result as (
     "base_currency" text,
     "block_trade_commission" double precision,
     "block_trade_min_trade_amount" double precision,
     "block_trade_tick_size" double precision,
-    "contract_size" double precision,
+    "contract_size" bigint,
     "counter_currency" text,
     "creation_timestamp" bigint,
     "expiration_timestamp" bigint,
@@ -73,7 +73,7 @@ create type deribit.public_get_instruments_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instruments_response_tick_size_step[]
+    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps
 );
 
 comment on column deribit.public_get_instruments_response_result."base_currency" is 'The underlying currency being traded.';
@@ -148,7 +148,7 @@ as $$
         (b)."block_trade_commission"::double precision,
         (b)."block_trade_min_trade_amount"::double precision,
         (b)."block_trade_tick_size"::double precision,
-        (b)."contract_size"::double precision,
+        (b)."contract_size"::bigint,
         (b)."counter_currency"::text,
         (b)."creation_timestamp"::bigint,
         (b)."expiration_timestamp"::bigint,
@@ -170,7 +170,7 @@ as $$
         (b)."strike"::double precision,
         (b)."taker_commission"::double precision,
         (b)."tick_size"::double precision,
-        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_step[]
+        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps
     from (
         select (unnest(r.data)) b
         from result r(data)
@@ -178,5 +178,4 @@ as $$
     
 $$;
 
-comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired.
-Note - This endpoint has distinct API rate limiting requirements: 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to instrument_state.{kind}.{currency} for real-time updates. For more information, see Rate Limits.';
+comment on function deribit.public_get_instruments is 'Retrieves available trading instruments. This method can be used to see which instruments are available for trading, or which instruments have recently expired. Note - This endpoint has distinct API rate limiting requirements: 1 request per 10 seconds, with a burst of 5. To avoid rate limits, we recommend using either the REST requests for server-cached data or the WebSocket subscription to instrument_state.{kind}.{currency} for real-time updates. For more information, see Rate Limits.';

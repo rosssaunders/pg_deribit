@@ -11,33 +11,16 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_verify_block_trade_request_trade_direction as enum (
-    'buy',
-    'sell'
-);
-
 create type deribit.private_verify_block_trade_request_role as enum (
     'maker',
     'taker'
 );
 
-create type deribit.private_verify_block_trade_request_trade as (
-    "instrument_name" text,
-    "price" double precision,
-    "amount" double precision,
-    "direction" deribit.private_verify_block_trade_request_trade_direction
-);
-
-comment on column deribit.private_verify_block_trade_request_trade."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_verify_block_trade_request_trade."price" is '(Required) Price for trade';
-comment on column deribit.private_verify_block_trade_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_verify_block_trade_request_trade."direction" is '(Required) Direction of trade from the maker perspective';
-
 create type deribit.private_verify_block_trade_request as (
     "timestamp" bigint,
     "nonce" text,
     "role" deribit.private_verify_block_trade_request_role,
-    "trades" deribit.private_verify_block_trade_request_trade[]
+    "trades" jsonb
 );
 
 comment on column deribit.private_verify_block_trade_request."timestamp" is '(Required) Timestamp, shared with other party (milliseconds since the UNIX epoch)';
@@ -64,7 +47,7 @@ create function deribit.private_verify_block_trade(
     "timestamp" bigint,
     "nonce" text,
     "role" deribit.private_verify_block_trade_request_role,
-    "trades" deribit.private_verify_block_trade_request_trade[]
+    "trades" jsonb
 )
 returns deribit.private_verify_block_trade_response_result
 language sql
@@ -97,4 +80,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signatureNote: In the API, the direction field is always expressed from the maker''s perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker''s perspective), and you will be verifying and accepting a "sell put" block trade.📖 Related Support Article: Block Trading';
+comment on function deribit.private_verify_block_trade is 'Verifies and creates block trade signature Note: In the API, the direction field is always expressed from the maker''s perspective. This means that when you accept a block trade as a taker, the direction shown in the API represents the opposite side of your trade. For example, if you are buying puts as a taker, the API will show the operation as a "sell put" (maker''s perspective), and you will be verifying and accepting a "sell put" block trade. 📖 Related Support Article: Block Trading';

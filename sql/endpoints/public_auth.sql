@@ -54,7 +54,7 @@ create type deribit.public_auth_response_result as (
     "token_type" text
 );
 
-comment on column deribit.public_auth_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
+comment on column deribit.public_auth_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 comment on column deribit.public_auth_response_result."expires_in" is 'Token lifetime in seconds';
 comment on column deribit.public_auth_response_result."google_login" is 'The access token was acquired by logging in through Google.';
 comment on column deribit.public_auth_response_result."mandatory_tfa_status" is '2FA is required for privileged methods';
@@ -121,4 +121,4 @@ as $$
 
 $$;
 
-comment on function deribit.public_auth is 'Retrieve an Oauth access token, to be used for authentication of ''private'' requests.';
+comment on function deribit.public_auth is 'Retrieve an Oauth access token, to be used for authentication of ''private'' requests. Three methods of authentication are supported: - client_credentials - using the client id and client secret that can be found on the API page on the website - client_signature - using the client id that can be found on the API page on the website and user generated signature. The signature is calculated using some fields provided in the request, using formula described here Deribit signature credentials - refresh_token - using a refresh token that was received from an earlier invocation The response will contain an access token, expiration period (number of seconds that the token is valid) and a refresh token that can be used to get a new set of tokens. 📖 Related Support Article: API Authentication Guide';

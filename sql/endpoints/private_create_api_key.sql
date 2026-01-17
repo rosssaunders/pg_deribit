@@ -11,17 +11,22 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_create_api_key_request_enabled_features as enum (
+    'block_trade_approval',
+    'restricted_block_trades'
+);
+
 create type deribit.private_create_api_key_request as (
     "max_scope" text,
     "name" text,
     "public_key" text,
-    "enabled_features" text[]
+    "enabled_features" deribit.private_create_api_key_request_enabled_features[]
 );
 
 comment on column deribit.private_create_api_key_request."max_scope" is '(Required) Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, its value is set as none. Please check details described in Access scope';
 comment on column deribit.private_create_api_key_request."name" is 'Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)';
-comment on column deribit.private_create_api_key_request."public_key" is 'ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user''s private key.  📖 Related Support Article: Asymmetric API keys';
-comment on column deribit.private_create_api_key_request."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
+comment on column deribit.private_create_api_key_request."public_key" is 'ED25519 or RSA PEM Encoded public key that should be used to create asymmetric API Key for signing requests/authentication requests with user''s private key. 📖 Related Support Article: Asymmetric API keys';
+comment on column deribit.private_create_api_key_request."enabled_features" is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 
 create type deribit.private_create_api_key_response_result as (
     "client_id" text,
@@ -41,7 +46,7 @@ comment on column deribit.private_create_api_key_response_result."client_id" is 
 comment on column deribit.private_create_api_key_response_result."client_secret" is 'Client secret or MD5 fingerprint of public key used for authentication';
 comment on column deribit.private_create_api_key_response_result."default" is 'Informs whether this api key is default (field is deprecated and will be removed in the future)';
 comment on column deribit.private_create_api_key_response_result."enabled" is 'Informs whether api key is enabled and can be used for authentication';
-comment on column deribit.private_create_api_key_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
+comment on column deribit.private_create_api_key_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 comment on column deribit.private_create_api_key_response_result."id" is 'key identifier';
 comment on column deribit.private_create_api_key_response_result."ip_whitelist" is 'List of IP addresses whitelisted for a selected key';
 comment on column deribit.private_create_api_key_response_result."max_scope" is 'Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none], block_rfq:[read, read_write, none]. If scope is not provided, its value is set as none. Please check details described in Access scope';
@@ -62,7 +67,7 @@ create function deribit.private_create_api_key(
     "max_scope" text,
     "name" text default null,
     "public_key" text default null,
-    "enabled_features" text[] default null
+    "enabled_features" deribit.private_create_api_key_request_enabled_features[] default null
 )
 returns deribit.private_create_api_key_response_result
 language sql
@@ -95,4 +100,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_create_api_key is 'Creates a new api key with a given scope. Important notes TFA required';
+comment on function deribit.private_create_api_key is 'Creates a new api key with a given scope. Important notes TFA required Note: You can display the created API key using the private/list_api_keys method. 📖 Related Support Article: Creating new API key on Deribit';

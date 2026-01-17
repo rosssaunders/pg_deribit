@@ -113,4 +113,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_withdraw is 'Creates a new withdrawal request';
+comment on function deribit.private_withdraw is 'Creates a new withdrawal request 📖 Related Support Article: Withdrawals';

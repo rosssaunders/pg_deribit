@@ -71,4 +71,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_set_self_trading_config is 'Configure self trading behavior';
+comment on function deribit.private_set_self_trading_config is 'Configure self trading behavior 📖 Related Support Article: Account settings page';

@@ -45,12 +45,12 @@ create type deribit.private_get_deposits_response_datum as (
 
 comment on column deribit.private_get_deposits_response_datum."address" is 'Address in proper format for currency';
 comment on column deribit.private_get_deposits_response_datum."amount" is 'Amount of funds in given currency';
-comment on column deribit.private_get_deposits_response_datum."clearance_state" is 'Clearance state indicating the current status of the transaction clearance process. Allowed values: in_progress: clearance process is in progress pending_admin_decision: transaction is under manual review by Deribit admin pending_user_input: user should provide additional information regarding the transaction success: clearance process completed successfully failed: clearance process failed, transaction is rejected cancelled: transaction is cancelled (currently used only for withdrawals, meaning the withdrawal is cancelled) refund_initiated: clearance process failed, transaction refund is initiated, funds are removed from Deribit balance (valid for deposits only) refunded: clearance process failed, deposit amount is refunded back to the client (valid for deposits only)';
+comment on column deribit.private_get_deposits_response_datum."clearance_state" is 'Clearance state indicating the current status of the transaction clearance process. Allowed values: - in_progress: clearance process is in progress - pending_admin_decision: transaction is under manual review by Deribit admin - pending_user_input: user should provide additional information regarding the transaction - success: clearance process completed successfully - failed: clearance process failed, transaction is rejected - cancelled: transaction is cancelled (currently used only for withdrawals, meaning the withdrawal is cancelled) - refund_initiated: clearance process failed, transaction refund is initiated, funds are removed from Deribit balance (valid for deposits only) - refunded: clearance process failed, deposit amount is refunded back to the client (valid for deposits only)';
 comment on column deribit.private_get_deposits_response_datum."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_get_deposits_response_datum."received_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 comment on column deribit.private_get_deposits_response_datum."refund_transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_deposits_response_datum."source_address" is 'Address in proper format for currency';
-comment on column deribit.private_get_deposits_response_datum."state" is 'Deposit state. Allowed values: pending: deposit detected on blockchain/system, compliance not yet finished completed: compliance check finished successfully rejected: deposit failed compliance and must be handled manually replaced: deposit transaction was replaced on the blockchain and should have a new transaction hash';
+comment on column deribit.private_get_deposits_response_datum."state" is 'Deposit state. Allowed values: - pending: deposit detected on blockchain/system, compliance not yet finished - completed: compliance check finished successfully - rejected: deposit failed compliance and must be handled manually - replaced: deposit transaction was replaced on the blockchain and should have a new transaction hash';
 comment on column deribit.private_get_deposits_response_datum."transaction_id" is 'Transaction id in proper format for currency, null if id is not available';
 comment on column deribit.private_get_deposits_response_datum."updated_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
@@ -105,4 +105,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_get_deposits is 'Retrieve the latest users deposits';
+comment on function deribit.private_get_deposits is 'Retrieve the latest users deposits 📖 Related Support Article: Deposits';

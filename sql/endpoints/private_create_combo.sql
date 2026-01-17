@@ -11,23 +11,8 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_create_combo_request_trade_direction as enum (
-    'buy',
-    'sell'
-);
-
-create type deribit.private_create_combo_request_trade as (
-    "instrument_name" text,
-    "amount" double precision,
-    "direction" deribit.private_create_combo_request_trade_direction
-);
-
-comment on column deribit.private_create_combo_request_trade."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_create_combo_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_create_combo_request_trade."direction" is '(Required) Direction of trade from the maker perspective';
-
 create type deribit.private_create_combo_request as (
-    "trades" deribit.private_create_combo_request_trade[]
+    "trades" jsonb
 );
 
 comment on column deribit.private_create_combo_request."trades" is '(Required) List of trades used to create a combo';
@@ -65,7 +50,7 @@ comment on column deribit.private_create_combo_response."id" is 'The id that was
 comment on column deribit.private_create_combo_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
 create function deribit.private_create_combo(
-    "trades" deribit.private_create_combo_request_trade[]
+    "trades" jsonb
 )
 returns deribit.private_create_combo_response_result
 language sql

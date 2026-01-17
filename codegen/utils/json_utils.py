@@ -1,11 +1,13 @@
-import numpy as np
 import json
+
+try:
+    import numpy as np
+except ModuleNotFoundError:
+    np = None
 
 
 class CustomJSONizer(json.JSONEncoder):
     def default(self, obj):
-        return (
-            super().encode(bool(obj))
-            if isinstance(obj, np.bool_)
-            else super().default(obj)
-        )
+        if np is not None and isinstance(obj, np.bool_):
+            return super().encode(bool(obj))
+        return super().default(obj)

@@ -86,4 +86,4 @@ as $$
 
 $$;
 
-comment on function deribit.public_get_apr_history is 'Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD).';
+comment on function deribit.public_get_apr_history is 'Retrieves historical APR data for specified currency. Only applicable to yield-generating tokens (USDE, STETH, USDC, BUILD). 📖 Related Support Article: Yield reward-bearing coins';

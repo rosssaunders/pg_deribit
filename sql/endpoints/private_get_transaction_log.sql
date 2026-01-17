@@ -47,76 +47,74 @@ comment on column deribit.private_get_transaction_log_request."subaccount_id" is
 comment on column deribit.private_get_transaction_log_request."continuation" is 'Continuation token for pagination';
 
 create type deribit.private_get_transaction_log_response_log as (
-    "change" double precision,
+    "amount" double precision,
+    "balance" double precision,
+    "block_rfq_id" bigint,
     "cashflow" double precision,
-    "user_id" bigint,
-    "trade_id" text,
-    "type" text,
-    "order_id" text,
-    "position" double precision,
-    "side" text,
+    "change" double precision,
+    "commission" double precision,
     "contracts" double precision,
-    "interest_pl" double precision,
-    "user_role" text,
+    "currency" text,
+    "equity" double precision,
     "fee_role" text,
     "id" bigint,
     "index_price" double precision,
     "info" jsonb,
-    "currency" text,
-    "price" double precision,
-    "user_seq" bigint,
-    "settlement_price" double precision,
-    "price_currency" text,
-    "equity" double precision,
-    "total_interest_pl" double precision,
-    "balance" double precision,
-    "session_upl" double precision,
-    "timestamp" bigint,
-    "profit_as_cashflow" boolean,
-    "commission" double precision,
-    "session_rpl" double precision,
-    "mark_price" double precision,
-    "block_rfq_id" bigint,
+    "instrument_name" text,
+    "interest_pl" double precision,
     "ip" text,
-    "amount" double precision,
-    "username" text,
-    "instrument_name" text
+    "mark_price" double precision,
+    "order_id" text,
+    "position" double precision,
+    "price" double precision,
+    "price_currency" text,
+    "profit_as_cashflow" boolean,
+    "session_rpl" double precision,
+    "session_upl" double precision,
+    "settlement_price" double precision,
+    "side" text,
+    "timestamp" bigint,
+    "total_interest_pl" double precision,
+    "trade_id" text,
+    "user_id" bigint,
+    "user_role" text,
+    "user_seq" bigint,
+    "username" text
 );
 
-comment on column deribit.private_get_transaction_log_response_log."change" is 'Change in cash balance. For trades: fees and options premium paid/received. For settlement: Futures session PNL and perpetual session funding.';
+comment on column deribit.private_get_transaction_log_response_log."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
+comment on column deribit.private_get_transaction_log_response_log."balance" is 'Cash balance after the transaction';
+comment on column deribit.private_get_transaction_log_response_log."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
 comment on column deribit.private_get_transaction_log_response_log."cashflow" is 'For futures and perpetual contracts: Realized session PNL (since last settlement). For options: the amount paid or received for the options traded.';
-comment on column deribit.private_get_transaction_log_response_log."user_id" is 'Unique user identifier';
-comment on column deribit.private_get_transaction_log_response_log."trade_id" is 'Unique (per currency) trade identifier';
-comment on column deribit.private_get_transaction_log_response_log."type" is 'Transaction category/type. The most common are: trade, deposit, withdrawal, settlement, delivery, transfer, swap, correction. New types can be added any time in the future';
-comment on column deribit.private_get_transaction_log_response_log."order_id" is 'Unique order identifier';
-comment on column deribit.private_get_transaction_log_response_log."position" is 'Updated position size after the transaction';
-comment on column deribit.private_get_transaction_log_response_log."side" is 'One of: short or long in case of settlements, close sell or close buy in case of deliveries, open sell, open buy, close sell, close buy in case of trades';
+comment on column deribit.private_get_transaction_log_response_log."change" is 'Change in cash balance. For trades: fees and options premium paid/received. For settlement: Futures session PNL and perpetual session funding.';
+comment on column deribit.private_get_transaction_log_response_log."commission" is 'Commission paid so far (in base currency)';
 comment on column deribit.private_get_transaction_log_response_log."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
-comment on column deribit.private_get_transaction_log_response_log."interest_pl" is 'Actual funding rate of trades and settlements on perpetual instruments';
-comment on column deribit.private_get_transaction_log_response_log."user_role" is 'Trade role of the user: maker or taker';
+comment on column deribit.private_get_transaction_log_response_log."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
+comment on column deribit.private_get_transaction_log_response_log."equity" is 'Updated equity value after the transaction';
 comment on column deribit.private_get_transaction_log_response_log."fee_role" is 'Fee role of the user: maker or taker. Can be different from trade role of the user when iceberg order was involved in matching.';
 comment on column deribit.private_get_transaction_log_response_log."id" is 'Unique identifier';
 comment on column deribit.private_get_transaction_log_response_log."index_price" is 'The index price for the instrument during the delivery';
 comment on column deribit.private_get_transaction_log_response_log."info" is 'Additional information regarding transaction. Strongly dependent on the log entry type';
-comment on column deribit.private_get_transaction_log_response_log."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
-comment on column deribit.private_get_transaction_log_response_log."price" is 'Settlement/delivery price or the price level of the traded contracts';
-comment on column deribit.private_get_transaction_log_response_log."user_seq" is 'Sequential identifier of user transaction';
-comment on column deribit.private_get_transaction_log_response_log."settlement_price" is 'The settlement price for the instrument during the delivery';
-comment on column deribit.private_get_transaction_log_response_log."price_currency" is 'Currency symbol associated with the price field value';
-comment on column deribit.private_get_transaction_log_response_log."equity" is 'Updated equity value after the transaction';
-comment on column deribit.private_get_transaction_log_response_log."total_interest_pl" is 'Total session funding rate';
-comment on column deribit.private_get_transaction_log_response_log."balance" is 'Cash balance after the transaction';
-comment on column deribit.private_get_transaction_log_response_log."session_upl" is 'Session unrealized profit and loss';
-comment on column deribit.private_get_transaction_log_response_log."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
-comment on column deribit.private_get_transaction_log_response_log."profit_as_cashflow" is 'Indicator informing whether the cashflow is waiting for settlement or not';
-comment on column deribit.private_get_transaction_log_response_log."commission" is 'Commission paid so far (in base currency)';
-comment on column deribit.private_get_transaction_log_response_log."session_rpl" is 'Session realized profit and loss';
-comment on column deribit.private_get_transaction_log_response_log."mark_price" is 'Market price during the trade';
-comment on column deribit.private_get_transaction_log_response_log."block_rfq_id" is 'ID of the Block RFQ - when trade was part of the Block RFQ';
-comment on column deribit.private_get_transaction_log_response_log."ip" is 'The IP address from which the trade was initiated';
-comment on column deribit.private_get_transaction_log_response_log."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_get_transaction_log_response_log."username" is 'System name or user defined subaccount alias';
 comment on column deribit.private_get_transaction_log_response_log."instrument_name" is 'Unique instrument identifier';
+comment on column deribit.private_get_transaction_log_response_log."interest_pl" is 'Actual funding rate of trades and settlements on perpetual instruments';
+comment on column deribit.private_get_transaction_log_response_log."ip" is 'The IP address from which the trade was initiated';
+comment on column deribit.private_get_transaction_log_response_log."mark_price" is 'Market price during the trade';
+comment on column deribit.private_get_transaction_log_response_log."order_id" is 'Unique order identifier';
+comment on column deribit.private_get_transaction_log_response_log."position" is 'Updated position size after the transaction';
+comment on column deribit.private_get_transaction_log_response_log."price" is 'Settlement/delivery price or the price level of the traded contracts';
+comment on column deribit.private_get_transaction_log_response_log."price_currency" is 'Currency symbol associated with the price field value';
+comment on column deribit.private_get_transaction_log_response_log."profit_as_cashflow" is 'Indicator informing whether the cashflow is waiting for settlement or not';
+comment on column deribit.private_get_transaction_log_response_log."session_rpl" is 'Session realized profit and loss';
+comment on column deribit.private_get_transaction_log_response_log."session_upl" is 'Session unrealized profit and loss';
+comment on column deribit.private_get_transaction_log_response_log."settlement_price" is 'The settlement price for the instrument during the delivery';
+comment on column deribit.private_get_transaction_log_response_log."side" is 'One of: short or long in case of settlements, close sell or close buy in case of deliveries, open sell, open buy, close sell, close buy in case of trades';
+comment on column deribit.private_get_transaction_log_response_log."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_transaction_log_response_log."total_interest_pl" is 'Total session funding rate';
+comment on column deribit.private_get_transaction_log_response_log."trade_id" is 'Unique (per currency) trade identifier';
+comment on column deribit.private_get_transaction_log_response_log."user_id" is 'Unique user identifier';
+comment on column deribit.private_get_transaction_log_response_log."user_role" is 'Trade role of the user: maker or taker';
+comment on column deribit.private_get_transaction_log_response_log."user_seq" is 'Sequential identifier of user transaction';
+comment on column deribit.private_get_transaction_log_response_log."username" is 'System name or user defined subaccount alias';
 
 create type deribit.private_get_transaction_log_response_result as (
     "continuation" bigint,
@@ -177,4 +175,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_get_transaction_log is 'Retrieve the latest user trades that have occurred for a specific instrument and within a given time range.';
+comment on function deribit.private_get_transaction_log is 'Retrieve the latest user trades that have occurred for a specific instrument and within a given time range. 📖 Related Support Article: Transaction log';

@@ -40,26 +40,30 @@ create type deribit.private_list_custody_accounts_response_result as (
 );
 
 comment on column deribit.private_list_custody_accounts_response_result."auto_deposit" is 'When set to ''true'' all new funds added to custody balance will be automatically transferred to trading balance';
-comment on column deribit.private_list_custody_accounts_response_result."balance" is 'Amount of funds in given currency';
+comment on column deribit.private_list_custody_accounts_response_result."balance" is 'Balance available on custody account';
 comment on column deribit.private_list_custody_accounts_response_result."client_id" is 'API key ''client id'' used to reserve/release funds in custody platform, requires scope ''custody:read_write''';
 comment on column deribit.private_list_custody_accounts_response_result."currency" is 'Currency, i.e "BTC", "ETH", "USDC"';
 comment on column deribit.private_list_custody_accounts_response_result."deposit_address" is 'Address that can be used for deposits';
 comment on column deribit.private_list_custody_accounts_response_result."external_id" is 'User ID in external systems';
 comment on column deribit.private_list_custody_accounts_response_result."name" is 'Custody name';
 comment on column deribit.private_list_custody_accounts_response_result."pending_withdrawal_addres" is 'New withdrawal address that will be used after ''withdrawal_address_change''';
-comment on column deribit.private_list_custody_accounts_response_result."pending_withdrawal_balance" is 'Amount of funds in given currency';
+comment on column deribit.private_list_custody_accounts_response_result."pending_withdrawal_balance" is 'Pending balance transferred from trading account to custody account';
 comment on column deribit.private_list_custody_accounts_response_result."withdrawal_address" is 'Address that is used for withdrawals';
 comment on column deribit.private_list_custody_accounts_response_result."withdrawal_address_change" is 'UNIX timestamp after when new withdrawal address will be used for withdrawals';
 
+create type deribit.private_list_custody_accounts_response_error as (
+    "code" bigint,
+    "message" text
+);
+
+comment on column deribit.private_list_custody_accounts_response_error."code" is 'Error code';
+comment on column deribit.private_list_custody_accounts_response_error."message" is 'Error message';
+
 create type deribit.private_list_custody_accounts_response as (
-    "id" bigint,
+    "error" deribit.private_list_custody_accounts_response_error,
     "jsonrpc" text,
     "result" deribit.private_list_custody_accounts_response_result[]
 );
-
-comment on column deribit.private_list_custody_accounts_response."id" is 'The id that was sent in the request';
-comment on column deribit.private_list_custody_accounts_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.private_list_custody_accounts_response."result" is 'Custody account';
 
 create function deribit.private_list_custody_accounts(
     "currency" deribit.private_list_custody_accounts_request_currency
@@ -108,4 +112,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_list_custody_accounts is 'Retrieves user custody accounts list.';
+comment on function deribit.private_list_custody_accounts is 'Retrieves user custody accounts list. 📖 Related Support Article: Custody Options';

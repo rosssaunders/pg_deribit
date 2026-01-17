@@ -102,7 +102,6 @@ create type deribit.public_get_expirations_response as (
 
 comment on column deribit.public_get_expirations_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_expirations_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.public_get_expirations_response."result" is 'A map where each key is valid currency (e.g. btc, eth, usdc), and the value is a list of expirations or a map where each key is a valid kind (future or options) and value is a list of expirations from every instrument';
 
 create function deribit.public_get_expirations(
     "currency" deribit.public_get_expirations_request_currency,

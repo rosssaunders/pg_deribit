@@ -40,7 +40,6 @@ create type deribit.public_get_combo_ids_response as (
 
 comment on column deribit.public_get_combo_ids_response."id" is 'The id that was sent in the request';
 comment on column deribit.public_get_combo_ids_response."jsonrpc" is 'The JSON-RPC version (2.0)';
-comment on column deribit.public_get_combo_ids_response."result" is 'Unique combo identifier';
 
 create function deribit.public_get_combo_ids(
     "currency" deribit.public_get_combo_ids_request_currency,

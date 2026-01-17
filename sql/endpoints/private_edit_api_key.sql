@@ -11,12 +11,17 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_edit_api_key_request_enabled_features as enum (
+    'block_trade_approval',
+    'restricted_block_trades'
+);
+
 create type deribit.private_edit_api_key_request as (
     "id" bigint,
     "max_scope" text,
     "name" text,
     "enabled" boolean,
-    "enabled_features" text[],
+    "enabled_features" deribit.private_edit_api_key_request_enabled_features[],
     "ip_whitelist" text[]
 );
 
@@ -24,7 +29,7 @@ comment on column deribit.private_edit_api_key_request."id" is '(Required) Id of
 comment on column deribit.private_edit_api_key_request."max_scope" is '(Required) Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none]. If scope is not provided, its value is set as none. Please check details described in Access scope';
 comment on column deribit.private_edit_api_key_request."name" is 'Name of key (only letters, numbers and underscores allowed; maximum length - 16 characters)';
 comment on column deribit.private_edit_api_key_request."enabled" is 'Enables/disables the API key. true to enable, false to disable';
-comment on column deribit.private_edit_api_key_request."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
+comment on column deribit.private_edit_api_key_request."enabled_features" is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 comment on column deribit.private_edit_api_key_request."ip_whitelist" is 'Whitelist provided IP address on a selected key';
 
 create type deribit.private_edit_api_key_response_result as (
@@ -45,7 +50,7 @@ comment on column deribit.private_edit_api_key_response_result."client_id" is 'C
 comment on column deribit.private_edit_api_key_response_result."client_secret" is 'Client secret or MD5 fingerprint of public key used for authentication';
 comment on column deribit.private_edit_api_key_response_result."default" is 'Informs whether this api key is default (field is deprecated and will be removed in the future)';
 comment on column deribit.private_edit_api_key_response_result."enabled" is 'Informs whether api key is enabled and can be used for authentication';
-comment on column deribit.private_edit_api_key_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options:  - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key  - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
+comment on column deribit.private_edit_api_key_response_result."enabled_features" is 'List of enabled advanced on-key features. Available options: - restricted_block_trades: Limit the block_trade read the scope of the API key to block trades that have been made using this specific API key - block_trade_approval: Block trades created using this API key require additional user approval. Methods that use block_rfq scope are not affected by Block Trade approval feature';
 comment on column deribit.private_edit_api_key_response_result."id" is 'key identifier';
 comment on column deribit.private_edit_api_key_response_result."ip_whitelist" is 'List of IP addresses whitelisted for a selected key';
 comment on column deribit.private_edit_api_key_response_result."max_scope" is 'Describes maximal access for tokens generated with given key, possible values: trade:[read, read_write, none], wallet:[read, read_write, none], account:[read, read_write, none], block_trade:[read, read_write, none], block_rfq:[read, read_write, none]. If scope is not provided, its value is set as none. Please check details described in Access scope';
@@ -67,7 +72,7 @@ create function deribit.private_edit_api_key(
     "max_scope" text,
     "name" text default null,
     "enabled" boolean default null,
-    "enabled_features" text[] default null,
+    "enabled_features" deribit.private_edit_api_key_request_enabled_features[] default null,
     "ip_whitelist" text[] default null
 )
 returns deribit.private_edit_api_key_response_result

@@ -61,4 +61,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_get_affiliate_program_info is 'Retrieves user`s affiliates count, payouts and link.';
+comment on function deribit.private_get_affiliate_program_info is 'Retrieves users affiliates count, payouts and link.';

@@ -43,32 +43,29 @@ comment on column deribit.private_create_subaccount_response_btc."additional_res
 
 create type deribit.private_create_subaccount_response_portfolio as (
     "btc" deribit.private_create_subaccount_response_btc,
-    "eth" deribit.private_create_subaccount_response_eth,
-    "receive_notifications" boolean,
-    "security_keys_enabled" boolean,
-    "system_name" text,
-    "type" text,
-    "username" text
+    "eth" deribit.private_create_subaccount_response_eth
 );
-
-comment on column deribit.private_create_subaccount_response_portfolio."receive_notifications" is 'When true - receive all notification emails on the main email';
-comment on column deribit.private_create_subaccount_response_portfolio."security_keys_enabled" is 'Whether the Security Keys authentication is enabled';
-comment on column deribit.private_create_subaccount_response_portfolio."system_name" is 'System generated user nickname';
-comment on column deribit.private_create_subaccount_response_portfolio."type" is 'Account type';
-comment on column deribit.private_create_subaccount_response_portfolio."username" is 'Account name (given by user)';
 
 create type deribit.private_create_subaccount_response_result as (
     "email" text,
     "id" bigint,
     "is_password" boolean,
     "login_enabled" boolean,
-    "portfolio" deribit.private_create_subaccount_response_portfolio
+    "portfolio" deribit.private_create_subaccount_response_portfolio,
+    "receive_notifications" boolean,
+    "security_keys_enabled" boolean,
+    "system_name" text,
+    "username" text
 );
 
 comment on column deribit.private_create_subaccount_response_result."email" is 'User email';
 comment on column deribit.private_create_subaccount_response_result."id" is 'Subaccount identifier';
 comment on column deribit.private_create_subaccount_response_result."is_password" is 'true when password for the subaccount has been configured';
 comment on column deribit.private_create_subaccount_response_result."login_enabled" is 'Informs whether login to the subaccount is enabled';
+comment on column deribit.private_create_subaccount_response_result."receive_notifications" is 'When true - receive all notification emails on the main email';
+comment on column deribit.private_create_subaccount_response_result."security_keys_enabled" is 'Whether the Security Keys authentication is enabled';
+comment on column deribit.private_create_subaccount_response_result."system_name" is 'System generated user nickname';
+comment on column deribit.private_create_subaccount_response_result."username" is 'Account name (given by user)';
 
 create type deribit.private_create_subaccount_response as (
     "id" bigint,
@@ -101,4 +98,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_create_subaccount is 'Create a new subaccount';
+comment on function deribit.private_create_subaccount is 'Create a new subaccount 📖 Related Support Article: Subaccounts';

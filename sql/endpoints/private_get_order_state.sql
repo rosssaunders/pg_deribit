@@ -18,112 +18,111 @@ create type deribit.private_get_order_state_request as (
 comment on column deribit.private_get_order_state_request."order_id" is '(Required) The order id';
 
 create type deribit.private_get_order_state_response_result as (
-    "quote" boolean,
-    "triggered" boolean,
-    "mobile" boolean,
-    "app_name" text,
-    "implv" double precision,
-    "refresh_amount" double precision,
-    "usd" double precision,
-    "oto_order_ids" text[],
-    "api" boolean,
-    "average_price" double precision,
     "advanced" text,
-    "order_id" text,
-    "post_only" boolean,
-    "filled_amount" double precision,
-    "trigger" text,
-    "trigger_order_id" text,
-    "direction" text,
-    "contracts" double precision,
-    "is_secondary_oto" boolean,
-    "replaced" boolean,
-    "mmp_group" text,
-    "mmp" boolean,
-    "last_update_timestamp" bigint,
-    "creation_timestamp" bigint,
-    "cancel_reason" text,
-    "mmp_cancelled" boolean,
-    "quote_id" text,
-    "order_state" text,
-    "is_rebalance" boolean,
-    "reject_post_only" boolean,
-    "label" text,
-    "is_liquidation" boolean,
-    "price" text,
-    "web" boolean,
-    "time_in_force" text,
-    "trigger_reference_price" double precision,
-    "display_amount" double precision,
-    "order_type" text,
-    "is_primary_otoco" boolean,
-    "original_order_type" text,
-    "block_trade" boolean,
-    "trigger_price" double precision,
-    "oco_ref" text,
-    "trigger_offset" double precision,
-    "quote_set_id" text,
-    "auto_replaced" boolean,
-    "reduce_only" boolean,
     "amount" double precision,
-    "risk_reducing" boolean,
+    "api" boolean,
+    "app_name" text,
+    "auto_replaced" boolean,
+    "average_price" double precision,
+    "block_trade" boolean,
+    "cancel_reason" text,
+    "contracts" double precision,
+    "creation_timestamp" bigint,
+    "direction" text,
+    "display_amount" double precision,
+    "filled_amount" double precision,
+    "implv" double precision,
     "instrument_name" text,
+    "is_liquidation" boolean,
+    "is_primary_otoco" boolean,
+    "is_rebalance" boolean,
+    "is_secondary_oto" boolean,
+    "label" text,
+    "last_update_timestamp" bigint,
+    "mmp" boolean,
+    "mmp_cancelled" boolean,
+    "mmp_group" text,
+    "mobile" boolean,
+    "oco_ref" text,
+    "order_id" text,
+    "order_state" text,
+    "order_type" text,
+    "original_order_type" text,
+    "oto_order_ids" text[],
+    "post_only" boolean,
+    "price" text,
+    "primary_order_id" text,
+    "quote" boolean,
+    "quote_id" text,
+    "quote_set_id" text,
+    "reduce_only" boolean,
+    "refresh_amount" double precision,
+    "reject_post_only" boolean,
+    "replaced" boolean,
+    "risk_reducing" boolean,
+    "time_in_force" text,
+    "trigger" text,
     "trigger_fill_condition" text,
-    "primary_order_id" text
+    "trigger_offset" double precision,
+    "trigger_order_id" text,
+    "trigger_price" double precision,
+    "trigger_reference_price" double precision,
+    "triggered" boolean,
+    "usd" double precision,
+    "web" boolean
 );
 
-comment on column deribit.private_get_order_state_response_result."quote" is 'If order is a quote. Present only if true.';
-comment on column deribit.private_get_order_state_response_result."triggered" is 'Whether the trigger order has been triggered';
-comment on column deribit.private_get_order_state_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
-comment on column deribit.private_get_order_state_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
-comment on column deribit.private_get_order_state_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
-comment on column deribit.private_get_order_state_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
-comment on column deribit.private_get_order_state_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
-comment on column deribit.private_get_order_state_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
-comment on column deribit.private_get_order_state_response_result."api" is 'true if created with API';
-comment on column deribit.private_get_order_state_response_result."average_price" is 'Average fill price of the order';
 comment on column deribit.private_get_order_state_response_result."advanced" is 'advanced type: "usd" or "implv" (Only for options; field is omitted if not applicable).';
-comment on column deribit.private_get_order_state_response_result."order_id" is 'Unique order identifier';
-comment on column deribit.private_get_order_state_response_result."post_only" is 'true for post-only orders only';
-comment on column deribit.private_get_order_state_response_result."filled_amount" is 'Filled amount of the order. For perpetual and futures the filled_amount is in USD units, for options - in units or corresponding cryptocurrency contracts, e.g., BTC or ETH.';
-comment on column deribit.private_get_order_state_response_result."trigger" is 'Trigger type (only for trigger orders). Allowed values: "index_price", "mark_price", "last_price".';
-comment on column deribit.private_get_order_state_response_result."trigger_order_id" is 'Id of the trigger order that created the order (Only for orders that were created by triggered orders).';
-comment on column deribit.private_get_order_state_response_result."direction" is 'Direction: buy, or sell';
-comment on column deribit.private_get_order_state_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
-comment on column deribit.private_get_order_state_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
-comment on column deribit.private_get_order_state_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
-comment on column deribit.private_get_order_state_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
-comment on column deribit.private_get_order_state_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
-comment on column deribit.private_get_order_state_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
-comment on column deribit.private_get_order_state_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
-comment on column deribit.private_get_order_state_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
-comment on column deribit.private_get_order_state_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
-comment on column deribit.private_get_order_state_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
-comment on column deribit.private_get_order_state_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
-comment on column deribit.private_get_order_state_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
-comment on column deribit.private_get_order_state_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
-comment on column deribit.private_get_order_state_response_result."label" is 'User defined label (up to 64 characters)';
-comment on column deribit.private_get_order_state_response_result."is_liquidation" is 'Optional (not added for spot). true if order was automatically created during liquidation';
-comment on column deribit.private_get_order_state_response_result."price" is 'Price in base currency or "market_price" in case of open trigger market orders';
-comment on column deribit.private_get_order_state_response_result."web" is 'true if created via Deribit frontend (optional)';
-comment on column deribit.private_get_order_state_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
-comment on column deribit.private_get_order_state_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_state_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
-comment on column deribit.private_get_order_state_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
-comment on column deribit.private_get_order_state_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
-comment on column deribit.private_get_order_state_response_result."original_order_type" is 'Original order type. Optional field';
-comment on column deribit.private_get_order_state_response_result."block_trade" is 'true if order made from block_trade trade, added only in that case.';
-comment on column deribit.private_get_order_state_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
-comment on column deribit.private_get_order_state_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
-comment on column deribit.private_get_order_state_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
-comment on column deribit.private_get_order_state_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
-comment on column deribit.private_get_order_state_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
-comment on column deribit.private_get_order_state_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
 comment on column deribit.private_get_order_state_response_result."amount" is 'It represents the requested order size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_get_order_state_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
+comment on column deribit.private_get_order_state_response_result."api" is 'true if created with API';
+comment on column deribit.private_get_order_state_response_result."app_name" is 'The name of the application that placed the order on behalf of the user (optional).';
+comment on column deribit.private_get_order_state_response_result."auto_replaced" is 'Options, advanced orders only - true if last modification of the order was performed by the pricing engine, otherwise false.';
+comment on column deribit.private_get_order_state_response_result."average_price" is 'Average fill price of the order';
+comment on column deribit.private_get_order_state_response_result."block_trade" is 'true if order made from block_trade trade, added only in that case.';
+comment on column deribit.private_get_order_state_response_result."cancel_reason" is 'Enumerated reason behind cancel "user_request", "autoliquidation", "cancel_on_disconnect", "risk_mitigation", "pme_risk_reduction" (portfolio margining risk reduction), "pme_account_locked" (portfolio margining account locked per currency), "position_locked", "mmp_trigger" (market maker protection), "mmp_config_curtailment" (market maker configured quantity decreased), "edit_post_only_reject" (cancelled on edit because of reject_post_only setting), "oco_other_closed" (the oco order linked to this order was closed), "oto_primary_closed" (the oto primary order that was going to trigger this order was cancelled), "settlement" (closed because of a settlement)';
+comment on column deribit.private_get_order_state_response_result."contracts" is 'It represents the order size in contract units. (Optional, may be absent in historical data).';
+comment on column deribit.private_get_order_state_response_result."creation_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_order_state_response_result."direction" is 'Direction: buy, or sell';
+comment on column deribit.private_get_order_state_response_result."display_amount" is 'The actual display amount of iceberg order. Absent for other types of orders.';
+comment on column deribit.private_get_order_state_response_result."filled_amount" is 'Filled amount of the order. For perpetual and futures the filled_amount is in USD units, for options - in units or corresponding cryptocurrency contracts, e.g., BTC or ETH.';
+comment on column deribit.private_get_order_state_response_result."implv" is 'Implied volatility in percent. (Only if advanced="implv")';
 comment on column deribit.private_get_order_state_response_result."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.private_get_order_state_response_result."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';
-comment on column deribit.private_get_order_state_response_result."primary_order_id" is 'Unique order identifier';
+comment on column deribit.private_get_order_state_response_result."is_liquidation" is 'Optional (not added for spot). true if order was automatically created during liquidation';
+comment on column deribit.private_get_order_state_response_result."is_primary_otoco" is 'true if the order is an order that can trigger an OCO pair, otherwise not present.';
+comment on column deribit.private_get_order_state_response_result."is_rebalance" is 'Optional (only for spot). true if order was automatically created during cross-collateral balance restoration';
+comment on column deribit.private_get_order_state_response_result."is_secondary_oto" is 'true if the order is an order that can be triggered by another order, otherwise not present.';
+comment on column deribit.private_get_order_state_response_result."label" is 'User defined label (up to 64 characters)';
+comment on column deribit.private_get_order_state_response_result."last_update_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
+comment on column deribit.private_get_order_state_response_result."mmp" is 'true if the order is a MMP order, otherwise false.';
+comment on column deribit.private_get_order_state_response_result."mmp_cancelled" is 'true if order was cancelled by mmp trigger (optional)';
+comment on column deribit.private_get_order_state_response_result."mmp_group" is 'Name of the MMP group supplied in the private/mass_quote request. Only present for quote orders.';
+comment on column deribit.private_get_order_state_response_result."mobile" is 'optional field with value true added only when created with Mobile Application';
+comment on column deribit.private_get_order_state_response_result."oco_ref" is 'Unique reference that identifies a one_cancels_others (OCO) pair.';
+comment on column deribit.private_get_order_state_response_result."order_id" is 'Unique order identifier';
+comment on column deribit.private_get_order_state_response_result."order_state" is 'Order state: "open", "filled", "rejected", "cancelled", "untriggered"';
+comment on column deribit.private_get_order_state_response_result."order_type" is 'Order type: "limit", "market", "stop_limit", "stop_market"';
+comment on column deribit.private_get_order_state_response_result."original_order_type" is 'Original order type. Optional field';
+comment on column deribit.private_get_order_state_response_result."oto_order_ids" is 'The Ids of the orders that will be triggered if the order is filled';
+comment on column deribit.private_get_order_state_response_result."post_only" is 'true for post-only orders only';
+comment on column deribit.private_get_order_state_response_result."primary_order_id" is 'ID of the order that triggered this order.';
+comment on column deribit.private_get_order_state_response_result."quote" is 'If order is a quote. Present only if true.';
+comment on column deribit.private_get_order_state_response_result."quote_id" is 'The same QuoteID as supplied in the private/mass_quote request. Only present for quote orders.';
+comment on column deribit.private_get_order_state_response_result."quote_set_id" is 'Identifier of the QuoteSet supplied in the private/mass_quote request. Only present for quote orders.';
+comment on column deribit.private_get_order_state_response_result."reduce_only" is 'Optional (not added for spot). ''true for reduce-only orders only''';
+comment on column deribit.private_get_order_state_response_result."refresh_amount" is 'The initial display amount of iceberg order. Iceberg order display amount will be refreshed to that value after match consuming actual display amount. Absent for other types of orders';
+comment on column deribit.private_get_order_state_response_result."reject_post_only" is 'true if order has reject_post_only flag (field is present only when post_only is true)';
+comment on column deribit.private_get_order_state_response_result."replaced" is 'true if the order was edited (by user or - in case of advanced options orders - by pricing engine), otherwise false.';
+comment on column deribit.private_get_order_state_response_result."risk_reducing" is 'true if the order is marked by the platform as a risk reducing order (can apply only to orders placed by PM users), otherwise false.';
+comment on column deribit.private_get_order_state_response_result."time_in_force" is 'Order time in force: "good_til_cancelled", "good_til_day", "fill_or_kill" or "immediate_or_cancel"';
+comment on column deribit.private_get_order_state_response_result."trigger" is 'Trigger type (only for trigger orders). Allowed values: "index_price", "mark_price", "last_price".';
+comment on column deribit.private_get_order_state_response_result."trigger_fill_condition" is 'The fill condition of the linked order (Only for linked order types), default: first_hit. - "first_hit" - any execution of the primary order will fully cancel/place all secondary orders. - "complete_fill" - a complete execution (meaning the primary order no longer exists) will cancel/place the secondary orders. - "incremental" - any fill of the primary order will cause proportional partial cancellation/placement of the secondary order. The amount that will be subtracted/added to the secondary order will be rounded down to the contract size.';
+comment on column deribit.private_get_order_state_response_result."trigger_offset" is 'The maximum deviation from the price peak beyond which the order will be triggered (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_state_response_result."trigger_order_id" is 'Id of the trigger order that created the order (Only for orders that were created by triggered orders).';
+comment on column deribit.private_get_order_state_response_result."trigger_price" is 'Trigger price (Only for future trigger orders)';
+comment on column deribit.private_get_order_state_response_result."trigger_reference_price" is 'The price of the given trigger at the time when the order was placed (Only for trailing trigger orders)';
+comment on column deribit.private_get_order_state_response_result."triggered" is 'Whether the trigger order has been triggered';
+comment on column deribit.private_get_order_state_response_result."usd" is 'Option price in USD (Only if advanced="usd")';
+comment on column deribit.private_get_order_state_response_result."web" is 'true if created via Deribit frontend (optional)';
 
 create type deribit.private_get_order_state_response as (
     "id" bigint,
@@ -165,4 +164,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_get_order_state is 'Retrieve the current state of an order.';
+comment on function deribit.private_get_order_state is 'Retrieve the current state of an order. Important Note for Mass Quotes: Quote orders are order-like structures that don''t fully translate to normal orders. When checking order state for quotes, the amount field represents the remaining amount, not the original order amount.';

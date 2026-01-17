@@ -11,18 +11,6 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_get_pending_block_trades_response_trade as (
-    "amount" double precision,
-    "direction" text,
-    "instrument_name" text,
-    "price" double precision
-);
-
-comment on column deribit.private_get_pending_block_trades_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_get_pending_block_trades_response_trade."direction" is 'Direction: buy, or sell';
-comment on column deribit.private_get_pending_block_trades_response_trade."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.private_get_pending_block_trades_response_trade."price" is 'Price in base currency';
-
 create type deribit.private_get_pending_block_trades_response_state as (
     "timestamp" bigint,
     "value" text
@@ -49,7 +37,7 @@ create type deribit.private_get_pending_block_trades_response_result as (
     "role" text,
     "state" deribit.private_get_pending_block_trades_response_state,
     "timestamp" bigint,
-    "trades" deribit.private_get_pending_block_trades_response_trade[],
+    "trades" jsonb[],
     "user_id" bigint,
     "username" text
 );
@@ -104,7 +92,7 @@ as $$
         (b)."role"::text,
         (b)."state"::deribit.private_get_pending_block_trades_response_state,
         (b)."timestamp"::bigint,
-        (b)."trades"::deribit.private_get_pending_block_trades_response_trade[],
+        (b)."trades"::jsonb[],
         (b)."user_id"::bigint,
         (b)."username"::text
     from (
@@ -114,4 +102,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_get_pending_block_trades is 'DEPRECATED: This method is deprecated. Please use private/get_block_trade_requests instead.Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';
+comment on function deribit.private_get_pending_block_trades is 'DEPRECATED: This method is deprecated. Please use private/get_block_trade_requests instead. Provides a list of pending block trade approvals. timestamp and nonce received in response can be used to approve or reject the pending block trade. To use a block trade approval feature the additional API key setting feature called: enabled_features: block_trade_approval is required. This key has to be given to broker/registered partner who performs the trades on behalf of the user for the feature to be active. If the user wants to approve the trade, he has to approve it from different API key with doesn''t have this feature enabled.';

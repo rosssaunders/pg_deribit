@@ -19,21 +19,11 @@ create type deribit.private_move_positions_request_currency as enum (
     'USDT'
 );
 
-create type deribit.private_move_positions_request_trade as (
-    "instrument_name" text,
-    "price" double precision,
-    "amount" double precision
-);
-
-comment on column deribit.private_move_positions_request_trade."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_move_positions_request_trade."price" is 'Price for trade - if not provided average price of the position is used';
-comment on column deribit.private_move_positions_request_trade."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin. Amount can''t exceed position size.';
-
 create type deribit.private_move_positions_request as (
     "currency" deribit.private_move_positions_request_currency,
     "source_uid" bigint,
     "target_uid" bigint,
-    "trades" deribit.private_move_positions_request_trade[]
+    "trades" jsonb
 );
 
 comment on column deribit.private_move_positions_request."currency" is 'The currency symbol';
@@ -51,9 +41,9 @@ create type deribit.private_move_positions_response_trade as (
 );
 
 comment on column deribit.private_move_positions_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_move_positions_response_trade."direction" is 'Direction: buy, or sell';
+comment on column deribit.private_move_positions_response_trade."direction" is 'Trade direction from source perspective';
 comment on column deribit.private_move_positions_response_trade."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.private_move_positions_response_trade."price" is 'Price in base currency';
+comment on column deribit.private_move_positions_response_trade."price" is 'The price of the trade';
 comment on column deribit.private_move_positions_response_trade."source_uid" is 'Trade source uid';
 comment on column deribit.private_move_positions_response_trade."target_uid" is 'Trade target uid';
 
@@ -73,7 +63,7 @@ comment on column deribit.private_move_positions_response."jsonrpc" is 'The JSON
 create function deribit.private_move_positions(
     "source_uid" bigint,
     "target_uid" bigint,
-    "trades" deribit.private_move_positions_request_trade[],
+    "trades" jsonb,
     "currency" deribit.private_move_positions_request_currency default null
 )
 returns deribit.private_move_positions_response_result
@@ -107,4 +97,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount Note:In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.';
+comment on function deribit.private_move_positions is 'Moves positions from source subaccount to target subaccount Note: In rare cases, the request may return an internal_server_error. This does not necessarily mean the operation failed entirely. Part or all of the position transfer might have still been processed successfully.';

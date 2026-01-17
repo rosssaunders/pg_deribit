@@ -52,8 +52,7 @@ create type deribit.private_get_settlement_history_by_currency_response_settleme
     "session_tax" double precision,
     "session_tax_rate" double precision,
     "socialized" double precision,
-    "timestamp" bigint,
-    "type" text
+    "timestamp" bigint
 );
 
 comment on column deribit.private_get_settlement_history_by_currency_response_settlement."funded" is 'funded amount (bankruptcy only)';
@@ -69,7 +68,6 @@ comment on column deribit.private_get_settlement_history_by_currency_response_se
 comment on column deribit.private_get_settlement_history_by_currency_response_settlement."session_tax_rate" is 'rate of paid taxes/fees (in base currency; bankruptcy only)';
 comment on column deribit.private_get_settlement_history_by_currency_response_settlement."socialized" is 'the amount of the socialized losses (in base currency; bankruptcy only)';
 comment on column deribit.private_get_settlement_history_by_currency_response_settlement."timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
-comment on column deribit.private_get_settlement_history_by_currency_response_settlement."type" is 'The type of settlement. settlement, delivery or bankruptcy.';
 
 create type deribit.private_get_settlement_history_by_currency_response_result as (
     "continuation" text,

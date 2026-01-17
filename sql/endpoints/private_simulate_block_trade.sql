@@ -11,31 +11,14 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_simulate_block_trade_request_trade_direction as enum (
-    'buy',
-    'sell'
-);
-
 create type deribit.private_simulate_block_trade_request_role as enum (
     'maker',
     'taker'
 );
 
-create type deribit.private_simulate_block_trade_request_trade as (
-    "instrument_name" text,
-    "price" double precision,
-    "amount" double precision,
-    "direction" deribit.private_simulate_block_trade_request_trade_direction
-);
-
-comment on column deribit.private_simulate_block_trade_request_trade."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_simulate_block_trade_request_trade."price" is '(Required) Price for trade';
-comment on column deribit.private_simulate_block_trade_request_trade."amount" is 'It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_simulate_block_trade_request_trade."direction" is '(Required) Direction of trade from the maker perspective';
-
 create type deribit.private_simulate_block_trade_request as (
     "role" deribit.private_simulate_block_trade_request_role,
-    "trades" deribit.private_simulate_block_trade_request_trade[]
+    "trades" jsonb
 );
 
 comment on column deribit.private_simulate_block_trade_request."role" is 'Describes if user wants to be maker or taker of trades';
@@ -52,7 +35,7 @@ comment on column deribit.private_simulate_block_trade_response."jsonrpc" is 'Th
 comment on column deribit.private_simulate_block_trade_response."result" is 'true if block trade can be executed, false otherwise';
 
 create function deribit.private_simulate_block_trade(
-    "trades" deribit.private_simulate_block_trade_request_trade[],
+    "trades" jsonb,
     "role" deribit.private_simulate_block_trade_request_role default null
 )
 returns boolean

@@ -34,7 +34,6 @@ create type deribit.private_get_positions_request as (
     "subaccount_id" bigint
 );
 
-comment on column deribit.private_get_positions_request."currency" is 'nan';
 comment on column deribit.private_get_positions_request."kind" is 'Kind filter on positions';
 comment on column deribit.private_get_positions_request."subaccount_id" is 'The user id for the subaccount';
 

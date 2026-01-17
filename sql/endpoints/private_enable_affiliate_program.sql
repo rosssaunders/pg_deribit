@@ -43,4 +43,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_enable_affiliate_program is 'Enables affiliate program for user';
+comment on function deribit.private_enable_affiliate_program is 'Enables affiliate program for user 📖 Related Support Article: Affiliate Program';

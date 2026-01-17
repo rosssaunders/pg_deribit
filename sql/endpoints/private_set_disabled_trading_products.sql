@@ -11,9 +11,18 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
+create type deribit.private_set_disabled_trading_products_request_trading_products as enum (
+    'future_combos',
+    'futures',
+    'option_combos',
+    'options',
+    'perpetual',
+    'spots'
+);
+
 create type deribit.private_set_disabled_trading_products_request as (
     "user_id" bigint,
-    "trading_products" text[]
+    "trading_products" deribit.private_set_disabled_trading_products_request_trading_products[]
 );
 
 comment on column deribit.private_set_disabled_trading_products_request."user_id" is '(Required) Id of a (sub)account';
@@ -31,7 +40,7 @@ comment on column deribit.private_set_disabled_trading_products_response."result
 
 create function deribit.private_set_disabled_trading_products(
     "user_id" bigint,
-    "trading_products" text[]
+    "trading_products" deribit.private_set_disabled_trading_products_request_trading_products[]
 )
 returns text
 language sql

@@ -17,7 +17,7 @@ create type deribit.private_get_reward_eligibility_response_result as (
 );
 
 comment on column deribit.private_get_reward_eligibility_response_result."apr_sma7" is 'Simple Moving Average (SMA) of the last 7 days of rewards for the currency';
-comment on column deribit.private_get_reward_eligibility_response_result."eligibility_status" is 'eligible: User can get reward for specific currency for all its equity partially_eligible: User can get reward for specific currency, but custody balance is excluded non_eligible: User can not get reward for specific currency';
+comment on column deribit.private_get_reward_eligibility_response_result."eligibility_status" is '- eligible: User can get reward for specific currency for all its equity - partially_eligible: User can get reward for specific currency, but custody balance is excluded - non_eligible: User can not get reward for specific currency';
 
 create type deribit.private_get_reward_eligibility_response as (
     "id" bigint,
@@ -50,4 +50,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_get_reward_eligibility is 'Returns reward eligibility status and APR data for all supported currencies.';
+comment on function deribit.private_get_reward_eligibility is 'Returns reward eligibility status and APR data for all supported currencies. 📖 Related Support Article: Yield reward-bearing coins';

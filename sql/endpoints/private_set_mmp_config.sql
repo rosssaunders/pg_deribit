@@ -51,6 +51,7 @@ create type deribit.private_set_mmp_config_request as (
     "quantity_limit" double precision,
     "delta_limit" double precision,
     "vega_limit" double precision,
+    "max_quote_quantity" double precision,
     "block_rfq" boolean,
     "trade_count_limit" bigint
 );
@@ -59,9 +60,10 @@ comment on column deribit.private_set_mmp_config_request."index_name" is '(Requi
 comment on column deribit.private_set_mmp_config_request."interval" is '(Required) MMP Interval in seconds, if set to 0 MMP is removed';
 comment on column deribit.private_set_mmp_config_request."frozen_time" is '(Required) MMP frozen time in seconds, if set to 0 manual reset is required';
 comment on column deribit.private_set_mmp_config_request."mmp_group" is 'Designates the MMP group for which the configuration is being set. If the specified group is already associated with a different index_name, an error is returned. This parameter enables distinct configurations for each MMP group, linked to particular index_name. Maximum 64 characters. Case sensitive. Cannot be empty string. 📖 Related Support Article: Mass Quotes Specifications';
-comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit, positive value';
-comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit, positive value';
-comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit, positive value';
+comment on column deribit.private_set_mmp_config_request."quantity_limit" is 'Quantity limit used as MMP trigger threshold. When the total size (measured in base currency) per underlying within the exposure time interval meets or exceeds this value, MMP is triggered and quotes are automatically removed. Positive value with maximum 4 decimal places.';
+comment on column deribit.private_set_mmp_config_request."delta_limit" is 'Delta limit used as MMP trigger threshold. When the delta value per underlying within the exposure time interval meets or exceeds this value, MMP is triggered and quotes are automatically removed. Positive value with maximum 4 decimal places.';
+comment on column deribit.private_set_mmp_config_request."vega_limit" is 'Vega limit used as MMP trigger threshold. When the vega value per underlying within the exposure time interval meets or exceeds this value, MMP is triggered and quotes are automatically removed. Positive value with maximum 4 decimal places.';
+comment on column deribit.private_set_mmp_config_request."max_quote_quantity" is 'Maximum Quote Quantity (MQQ) determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded. Key Points: - MQQ is specified in base currency and limits cumulative order size, not the number of orders - Example: With MQQ of 3 BTC, you can place three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC, etc. - For inverse futures: size is calculated as Amount / Price - For inverse future spreads: size is calculated as Amount / IndexPrice - Individual MMP orders and quotes above Max Quote Quantity are rejected - Positive value with maximum 4 decimal places Note: Starting December 2025 release: 1. MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin) 2. For inverse future spreads, size calculation will switch from IndexPrice to minimum mark price of legs';
 comment on column deribit.private_set_mmp_config_request."block_rfq" is 'If true, configures MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
 comment on column deribit.private_set_mmp_config_request."trade_count_limit" is 'For Block RFQ only (block_rfq = true). Sets the maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs. When using this parameter, index_name must be set to "all". Maximum - 1000.';
 
@@ -71,6 +73,7 @@ create type deribit.private_set_mmp_config_response_result as (
     "frozen_time" bigint,
     "index_name" text,
     "interval" bigint,
+    "max_quote_quantity" double precision,
     "mmp_group" text,
     "quantity_limit" double precision,
     "trade_count_limit" bigint,
@@ -78,14 +81,15 @@ create type deribit.private_set_mmp_config_response_result as (
 );
 
 comment on column deribit.private_set_mmp_config_response_result."block_rfq" is 'If true, indicates MMP configuration for Block RFQ. Block RFQ MMP settings are completely separate from normal order/quote MMP settings.';
-comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit';
+comment on column deribit.private_set_mmp_config_response_result."delta_limit" is 'Delta limit used as MMP trigger threshold. When the delta value per underlying within the exposure time interval meets or exceeds this value, MMP is triggered. Maximum 4 decimal places.';
 comment on column deribit.private_set_mmp_config_response_result."frozen_time" is 'MMP frozen time in seconds, if set to 0 manual reset is required';
 comment on column deribit.private_set_mmp_config_response_result."index_name" is 'Index identifier, matches (base) cryptocurrency with quote currency';
 comment on column deribit.private_set_mmp_config_response_result."interval" is 'MMP Interval in seconds, if set to 0 MMP is disabled';
+comment on column deribit.private_set_mmp_config_response_result."max_quote_quantity" is 'Maximum Quote Quantity (MQQ). The total combined size of open MMP orders per side, per order book, cannot exceed MQQ (specified in base currency). MQQ limits cumulative order size, not the number of orders. For inverse futures, size is calculated as Amount / Price. For inverse future spreads, size is calculated as Amount / IndexPrice. Individual MMP orders and quotes above Max Quote Quantity are rejected. Maximum 4 decimal places. Starting December 2025 release - (1) MQQ will also be used for Initial Margin calculation (3% of MQQ will be taken as Initial Margin for MMP orders and quotes; currently quantity_limit is used for margin), and (2) for inverse future spreads, size calculation will switch from IndexPrice to minimum mark price of legs.';
 comment on column deribit.private_set_mmp_config_response_result."mmp_group" is 'Specified MMP Group';
-comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit';
+comment on column deribit.private_set_mmp_config_response_result."quantity_limit" is 'Quantity limit used as MMP trigger threshold. When the total size (measured in base currency) per underlying within the exposure time interval meets or exceeds this value, MMP is triggered. Maximum 4 decimal places.';
 comment on column deribit.private_set_mmp_config_response_result."trade_count_limit" is 'For Block RFQ only. The maximum number of Block RFQ trades allowed in the lookback window. Each RFQ trade counts as +1 towards the limit (not individual legs). Works across all currency pairs.';
-comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit';
+comment on column deribit.private_set_mmp_config_response_result."vega_limit" is 'Vega limit used as MMP trigger threshold. When the vega value per underlying within the exposure time interval meets or exceeds this value, MMP is triggered. Maximum 4 decimal places.';
 
 create type deribit.private_set_mmp_config_response as (
     "id" bigint,
@@ -104,6 +108,7 @@ create function deribit.private_set_mmp_config(
     "quantity_limit" double precision default null,
     "delta_limit" double precision default null,
     "vega_limit" double precision default null,
+    "max_quote_quantity" double precision default null,
     "block_rfq" boolean default null,
     "trade_count_limit" bigint default null
 )
@@ -120,6 +125,7 @@ as $$
             "quantity_limit",
             "delta_limit",
             "vega_limit",
+            "max_quote_quantity",
             "block_rfq",
             "trade_count_limit"
         )::deribit.private_set_mmp_config_request as payload
@@ -146,6 +152,7 @@ as $$
         (b)."frozen_time"::bigint,
         (b)."index_name"::text,
         (b)."interval"::bigint,
+        (b)."max_quote_quantity"::double precision,
         (b)."mmp_group"::text,
         (b)."quantity_limit"::double precision,
         (b)."trade_count_limit"::bigint,
@@ -157,4 +164,4 @@ as $$
     
 $$;
 
-comment on function deribit.private_set_mmp_config is 'Set config for MMP - triggers MMP reset';
+comment on function deribit.private_set_mmp_config is 'Set config for MMP - triggers MMP reset Max Quote Quantity (MQQ): The max_quote_quantity parameter determines the total combined size of open MMP orders per side, per order book, that cannot be exceeded (measured in base currency). Important Notes: - MQQ limits cumulative size, not order count: For example, with MQQ of 3 BTC, you can place multiple orders (three orders of 1 BTC each, or one order of 2.5 BTC plus one of 0.5 BTC) as long as the total size per side per instrument does not exceed 3 BTC - Base currency: MQQ is specified and enforced in base currency - Inverse futures: Size is calculated as Amount / Price to convert to base currency - Inverse future spreads: Size is calculated as Amount / IndexPrice - SM accounts: MMP orders and quotes on options and option_combos are not supported for SM accounts - Rejections: Individual quotes and MMP orders above max_quote_quantity are rejected - Precision: All MMP configuration values support maximum 4 decimal places - Current margin calculation: Currently, quantity_limit is used for margin calculation (will switch to max_quote_quantity in December 2025) Coming in December 2025 Release: - Margin calculation: Will switch completely from quantity_limit to max_quote_quantity (3% of MQQ) - Inverse future spreads: Size calculation will switch from IndexPrice to minimum mark price of legs - Quote rejection: If one side of a quote is rejected, the other side will also be rejected 📖 Related Support Article: Market Maker Protection API Configuration';

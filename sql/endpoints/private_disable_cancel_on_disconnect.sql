@@ -20,7 +20,7 @@ create type deribit.private_disable_cancel_on_disconnect_request as (
     "scope" deribit.private_disable_cancel_on_disconnect_request_scope
 );
 
-comment on column deribit.private_disable_cancel_on_disconnect_request."scope" is 'Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - connection)  NOTICE: Scope connection can be used only when working via Websocket.';
+comment on column deribit.private_disable_cancel_on_disconnect_request."scope" is 'Specifies if Cancel On Disconnect change should be applied/checked for the current connection or the account (default - connection) NOTICE: Scope connection can be used only when working via Websocket.';
 
 create type deribit.private_disable_cancel_on_disconnect_response as (
     "id" bigint,

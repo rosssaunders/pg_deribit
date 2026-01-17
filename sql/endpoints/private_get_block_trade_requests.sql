@@ -17,18 +17,6 @@ create type deribit.private_get_block_trade_requests_request as (
 
 comment on column deribit.private_get_block_trade_requests_request."broker_code" is 'Broker code to filter block trade requests. Only broker clients can use broker_code to query for their executed broker block trades.';
 
-create type deribit.private_get_block_trade_requests_response_trade as (
-    "amount" double precision,
-    "direction" text,
-    "instrument_name" text,
-    "price" double precision
-);
-
-comment on column deribit.private_get_block_trade_requests_response_trade."amount" is 'Trade amount. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_get_block_trade_requests_response_trade."direction" is 'Direction: buy, or sell';
-comment on column deribit.private_get_block_trade_requests_response_trade."instrument_name" is 'Unique instrument identifier';
-comment on column deribit.private_get_block_trade_requests_response_trade."price" is 'Price in base currency';
-
 create type deribit.private_get_block_trade_requests_response_state as (
     "timestamp" bigint,
     "value" text
@@ -55,7 +43,7 @@ create type deribit.private_get_block_trade_requests_response_result as (
     "role" text,
     "state" deribit.private_get_block_trade_requests_response_state,
     "timestamp" bigint,
-    "trades" deribit.private_get_block_trade_requests_response_trade[],
+    "trades" jsonb[],
     "user_id" bigint,
     "username" text
 );
@@ -119,7 +107,7 @@ as $$
         (b)."role"::text,
         (b)."state"::deribit.private_get_block_trade_requests_response_state,
         (b)."timestamp"::bigint,
-        (b)."trades"::deribit.private_get_block_trade_requests_response_trade[],
+        (b)."trades"::jsonb[],
         (b)."user_id"::bigint,
         (b)."username"::text
     from (

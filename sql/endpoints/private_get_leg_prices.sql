@@ -11,23 +11,8 @@
 * WARNING: MODIFYING THIS FILE DIRECTLY CAN LEAD TO UNEXPECTED BEHAVIOR
 * AND IS STRONGLY DISCOURAGED.
 */
-create type deribit.private_get_leg_prices_request_leg_direction as enum (
-    'buy',
-    'sell'
-);
-
-create type deribit.private_get_leg_prices_request_leg as (
-    "instrument_name" text,
-    "amount" double precision,
-    "direction" deribit.private_get_leg_prices_request_leg_direction
-);
-
-comment on column deribit.private_get_leg_prices_request_leg."instrument_name" is '(Required) Instrument name';
-comment on column deribit.private_get_leg_prices_request_leg."amount" is '(Required) It represents the requested trade size. For perpetual and inverse futures the amount is in USD units. For options and linear futures and it is the underlying base currency coin.';
-comment on column deribit.private_get_leg_prices_request_leg."direction" is '(Required) Direction of selected leg';
-
 create type deribit.private_get_leg_prices_request as (
-    "legs" deribit.private_get_leg_prices_request_leg[],
+    "legs" jsonb,
     "price" double precision
 );
 
@@ -63,7 +48,7 @@ comment on column deribit.private_get_leg_prices_response."id" is 'The id that w
 comment on column deribit.private_get_leg_prices_response."jsonrpc" is 'The JSON-RPC version (2.0)';
 
 create function deribit.private_get_leg_prices(
-    "legs" deribit.private_get_leg_prices_request_leg[],
+    "legs" jsonb,
     "price" double precision
 )
 returns deribit.private_get_leg_prices_response_result

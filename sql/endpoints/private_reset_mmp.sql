@@ -17,7 +17,7 @@ create type deribit.private_reset_mmp_request as (
     "block_rfq" boolean
 );
 
-comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Currency pair for which to reset MMP limits.  For regular MMP (block_rfq = false): Must be a specific currency pair (e.g., "btc_usd", "eth_usd"). The value "all" is not allowed.  For Block RFQ MMP (block_rfq = true): Can be either a specific currency pair or "all" to reset MMP limits across all currency pairs.';
+comment on column deribit.private_reset_mmp_request."index_name" is '(Required) Currency pair for which to reset MMP limits. For regular MMP (block_rfq = false): Must be a specific currency pair (e.g., "btc_usd", "eth_usd"). The value "all" is not allowed. For Block RFQ MMP (block_rfq = true): Can be either a specific currency pair or "all" to reset MMP limits across all currency pairs.';
 comment on column deribit.private_reset_mmp_request."mmp_group" is 'Specifies the MMP group for which limits are being reset. If this parameter is omitted, the method resets the traditional (no group) MMP limits. 📖 Related Support Article: Mass Quotes Specifications';
 comment on column deribit.private_reset_mmp_request."block_rfq" is 'If true, resets MMP for Block RFQ. When set, requires block_rfq scope instead of trade scope. Block RFQ MMP settings are completely separate from normal order/quote MMP settings. When block_rfq = true, the index_name parameter can be set to "all" to reset limits across all currency pairs.';
 
@@ -66,6 +66,4 @@ as $$
 
 $$;
 
-comment on function deribit.private_reset_mmp is 'Reset Market Maker Protection (MMP) limits for the specified currency pair or group.
-
-📖 Related Support Article: Market Maker Protection API Configuration';
+comment on function deribit.private_reset_mmp is 'Reset Market Maker Protection (MMP) limits for the specified currency pair or group. 📖 Related Support Article: Market Maker Protection API Configuration';

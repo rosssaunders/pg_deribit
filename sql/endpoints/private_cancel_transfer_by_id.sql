@@ -35,7 +35,6 @@ create type deribit.private_cancel_transfer_by_id_response_result as (
     "id" bigint,
     "other_side" text,
     "state" text,
-    "type" text,
     "updated_timestamp" bigint
 );
 
@@ -46,7 +45,6 @@ comment on column deribit.private_cancel_transfer_by_id_response_result."directi
 comment on column deribit.private_cancel_transfer_by_id_response_result."id" is 'Id of transfer';
 comment on column deribit.private_cancel_transfer_by_id_response_result."other_side" is 'For transfer from/to subaccount returns this subaccount name, for transfer to other account returns address, for transfer from other account returns that accounts username.';
 comment on column deribit.private_cancel_transfer_by_id_response_result."state" is 'Transfer state, allowed values : prepared, confirmed, cancelled, waiting_for_admin, insufficient_funds, withdrawal_limit otherwise rejection reason';
-comment on column deribit.private_cancel_transfer_by_id_response_result."type" is 'Type of transfer: user - sent to user, subaccount - sent to subaccount';
 comment on column deribit.private_cancel_transfer_by_id_response_result."updated_timestamp" is 'The timestamp (milliseconds since the Unix epoch)';
 
 create type deribit.private_cancel_transfer_by_id_response as (
