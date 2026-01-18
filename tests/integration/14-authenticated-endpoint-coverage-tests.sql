@@ -47,7 +47,7 @@ select
     'BTC-PERPETUAL'::text as instrument_name,
     null::bigint as instrument_id,
     (select name
-     from deribit.public_get_index_price_names(true)
+     from deribit.public_get_index_price_names()
      where name ilike 'btc_%'
      order by name
      limit 1) as index_name,

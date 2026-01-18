@@ -17,7 +17,7 @@ select
     'BTC-PERPETUAL'::text as instrument_name,
     null::bigint as instrument_id,
     (select name
-     from deribit.public_get_index_price_names(true)
+     from deribit.public_get_index_price_names()
      where name ilike 'btc_%'
      order by name
      limit 1) as index_name,
@@ -40,7 +40,7 @@ select lives_ok(
 );
 
 select lives_ok(
-    $$select deribit.public_get_index_price_names(true)$$,
+    $$select deribit.public_get_index_price_names()$$,
     'public_get_index_price_names should return index names'
 );
 
