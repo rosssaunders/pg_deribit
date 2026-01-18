@@ -9,8 +9,8 @@ This directory contains both SQL (pgTAP) and Python (pytest) tests for the pg_de
 pgTAP tests for the PostgreSQL extension - verifying endpoint functions exist and work correctly.
 
 - **Total**: See file list below (counts vary as endpoints evolve)
-- **Unit tests**: Extension, auth, helpers, schema
-- **Integration tests**: Public + authenticated endpoint verification
+- **Unit tests**: Extension, auth, helpers, schema + endpoint existence checks
+- **Integration tests**: Public + authenticated endpoint behavior/flows
 - **Authenticated tests**: TestNet with real API calls (trading flow + endpoint coverage)
 - **Coverage**: 100% of endpoint functions verified
 
@@ -29,23 +29,23 @@ Located in `../codegen/tests/` - pytest tests for the Python code generator.
   - `00-setup.sql` - Extension loading (1 test)
   - `01-auth-tests.sql` - Authentication (6 tests)
   - `02-helper-tests.sql` - Helper functions (3 tests)
+  - `02-new-endpoints-tests.sql` - New endpoint existence (8 tests)
+  - `03-removed-endpoints-tests.sql` - Deprecated endpoints removed (2 tests)
   - `03-schema-tests.sql` - Schema verification (5 tests)
+  - `04-order-endpoints-tests.sql` - Order endpoint existence (15 tests)
+  - `05-account-endpoints-tests.sql` - Account endpoint existence (12 tests)
+  - `06-api-key-endpoints-tests.sql` - API key endpoint existence (6 tests)
+  - `07-block-trade-endpoints-tests.sql` - Block trade endpoint existence (4 tests)
+  - `08-public-endpoints-tests.sql` - Public endpoint existence (10 tests)
+  - `11-new-endpoints-existence-tests.sql` - New endpoint existence (8 tests)
 
 - **integration/**: Tests that verify endpoint functions and API connectivity
   - `00-setup.sql` - Integration setup (1 test)
   - `01-public-api-tests.sql` - Public API (5 tests)
-  - `02-new-endpoints-tests.sql` - New endpoints (8 tests)
-  - `03-removed-endpoints-tests.sql` - Removed endpoints (2 tests)
-  - `04-order-endpoints-tests.sql` - Order management (15 tests)
-  - `05-account-endpoints-tests.sql` - Account management (12 tests)
-  - `06-api-key-endpoints-tests.sql` - API key management (6 tests)
-  - `07-block-trade-endpoints-tests.sql` - Block trades (4 tests)
-  - `08-public-endpoints-tests.sql` - Public endpoints (10 tests)
   - `09-authenticated-tests.sql` - **Authenticated TestNet tests (15 tests)** 🆕
   - `13-public-endpoint-flow-tests.sql` - **Public endpoint flow coverage** 🆕
   - `13-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
   - `14-authenticated-endpoint-coverage-tests.sql` - **Authenticated endpoint coverage** 🆕
-  - `13-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
 
 ## Running Tests
 
