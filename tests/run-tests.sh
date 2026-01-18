@@ -16,6 +16,7 @@ PGUSER="${POSTGRES_USER:-deribit}"
 PGDB="${POSTGRES_DB:-deribit}"
 PGHOST="${POSTGRES_HOST:-localhost}"
 PGPORT="${POSTGRES_PORT:-5432}"
+TEST_OUTPUT_DIR="${TEST_OUTPUT_DIR:-}"
 
 # Colors for output
 GREEN='\033[0;32m'
@@ -44,6 +45,7 @@ echo ""
 run_tests() {
     local test_dir=$1
     local test_name=$2
+    local output_dir=""
 
     if [ ! -d "$test_dir" ]; then
         echo -e "${YELLOW}⊘ Skipping $test_name tests (directory not found)${NC}"
@@ -57,6 +59,11 @@ run_tests() {
         return 0
     fi
 
+    if [ -n "$TEST_OUTPUT_DIR" ]; then
+        output_dir="$TEST_OUTPUT_DIR/$test_dir"
+        mkdir -p "$output_dir"
+    fi
+
     echo -e "${GREEN}Running $test_name tests...${NC}"
     echo ""
 
@@ -65,7 +72,23 @@ run_tests() {
         local test_basename=$(basename "$test_file")
         echo -n "  → $test_basename ... "
 
-        if psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDB" -f "$test_file" -v ON_ERROR_STOP=1 -q > /dev/null 2>&1; then
+        local tap_file=""
+        if [ -n "$output_dir" ]; then
+            tap_file="$output_dir/${test_basename%.sql}.tap"
+        fi
+
+        if [ -n "$tap_file" ]; then
+            if psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDB" -f "$test_file" -v ON_ERROR_STOP=1 > "$tap_file" 2>&1; then
+                echo -e "${GREEN}✓ PASSED${NC}"
+            else
+                echo -e "${RED}✗ FAILED${NC}"
+                failed=1
+                echo ""
+                echo "Output:"
+                cat "$tap_file"
+                echo ""
+            fi
+        elif psql -h "$PGHOST" -p "$PGPORT" -U "$PGUSER" -d "$PGDB" -f "$test_file" -v ON_ERROR_STOP=1 -q > /dev/null 2>&1; then
             echo -e "${GREEN}✓ PASSED${NC}"
         else
             echo -e "${RED}✗ FAILED${NC}"

@@ -8,10 +8,10 @@ This directory contains both SQL (pgTAP) and Python (pytest) tests for the pg_de
 
 pgTAP tests for the PostgreSQL extension - verifying endpoint functions exist and work correctly.
 
-- **Total**: 112 tests across 14 files
-- **Unit tests**: 20 tests (extension, auth, helpers, schema)
-- **Integration tests**: 77 tests (endpoint verification, function existence)
-- **Authenticated tests**: TestNet with real API calls (includes trading flow)
+- **Total**: See file list below (counts vary as endpoints evolve)
+- **Unit tests**: Extension, auth, helpers, schema
+- **Integration tests**: Public + authenticated endpoint verification
+- **Authenticated tests**: TestNet with real API calls (trading flow + endpoint coverage)
 - **Coverage**: 100% of endpoint functions verified
 
 ### Python Tests (Code Generator)
@@ -42,6 +42,9 @@ Located in `../codegen/tests/` - pytest tests for the Python code generator.
   - `07-block-trade-endpoints-tests.sql` - Block trades (4 tests)
   - `08-public-endpoints-tests.sql` - Public endpoints (10 tests)
   - `09-authenticated-tests.sql` - **Authenticated TestNet tests (15 tests)** 🆕
+  - `13-public-endpoint-flow-tests.sql` - **Public endpoint flow coverage** 🆕
+  - `13-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
+  - `14-authenticated-endpoint-coverage-tests.sql` - **Authenticated endpoint coverage** 🆕
   - `13-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
 
 ## Running Tests
@@ -184,10 +187,11 @@ See `.github/workflows/test.yml` for the CI configuration.
 - No side effects (read-only operations)
 - Requires DERIBIT_CLIENT_ID and DERIBIT_CLIENT_SECRET environment variables
 
-**Level 4: Full E2E** (Trading flow)
+**Level 4: Full E2E** (Trading flow + endpoint coverage)
 
 - Executes a buy -> position -> sell flow on TestNet
-- Uses `13-authenticated-trading-flow-tests.sql` with a dedicated account
+- Uses `13-authenticated-trading-flow-tests.sql` and `14-authenticated-endpoint-coverage-tests.sql`
+- Some endpoints are expected to return known errors on TestNet (withdrawals, deposits, feature-gated APIs)
 
 ## Manual Testing Examples
 

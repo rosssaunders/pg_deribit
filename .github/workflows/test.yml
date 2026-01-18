@@ -46,12 +46,12 @@ jobs:
       - name: Run Unit Tests
         run: |
           docker exec pg_deribit_test bash -c \
-            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
+            "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
 
       - name: Run Integration Tests (Public endpoints)
         run: |
           docker exec pg_deribit_test bash -c \
-            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
+            "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
 
       - name: Run Authenticated Integration Tests (TestNet)
         continue-on-error: true
@@ -76,16 +76,20 @@ jobs:
 
             echo 'Running authenticated tests...'
             cd /tmp/tests/integration
-            psql -U deribit -d deribit -f 09-authenticated-tests.sql
+            mkdir -p /tmp/test-results/authenticated
+            psql -U deribit -d deribit -f 09-authenticated-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/09-authenticated-tests.tap 2>&1 || true
 
             echo 'Running order operation tests...'
-            psql -U deribit -d deribit -f 10-order-tests.sql
+            psql -U deribit -d deribit -f 10-order-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/10-order-tests.tap 2>&1 || true
 
             echo 'Running new features tests...'
-            psql -U deribit -d deribit -f 12-new-features-tests.sql
+            psql -U deribit -d deribit -f 12-new-features-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/12-new-features-tests.tap 2>&1 || true
 
             echo 'Running trading flow tests...'
-            psql -U deribit -d deribit -f 13-authenticated-trading-flow-tests.sql
+            psql -U deribit -d deribit -f 13-authenticated-trading-flow-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/13-authenticated-trading-flow-tests.tap 2>&1 || true
+
+            echo 'Running authenticated endpoint coverage tests...'
+            psql -U deribit -d deribit -f 14-authenticated-endpoint-coverage-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/14-authenticated-endpoint-coverage-tests.tap 2>&1 || true
           "
 
       - name: Test Summary
@@ -98,6 +102,58 @@ jobs:
           else
             echo "⚠️  Authenticated Tests: Skipped (no TestNet credentials)"
           fi
+
+      - name: Collect test results
+        if: always()
+        run: |
+          mkdir -p artifacts
+          docker cp pg_deribit_test:/tmp/test-results ./artifacts/test-results
+
+      - name: Generate HTML test report
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import html
+          from pathlib import Path
+
+          root = Path("artifacts/test-results")
+          out = Path("artifacts/test-results-html")
+          out.mkdir(parents=True, exist_ok=True)
+
+          def write_report(src: Path, dst: Path) -> None:
+              body = html.escape(src.read_text(errors="replace"))
+              dst.write_text(
+                  "<!doctype html>\n"
+                  "<html><head><meta charset=\"utf-8\">"
+                  "<title>{}</title>"
+                  "<style>body{{font-family:ui-monospace,monospace;white-space:pre-wrap;}}</style>"
+                  "</head><body><pre>{}</pre></body></html>".format(src.name, body)
+              )
+
+          links = []
+          for tap in sorted(root.rglob("*.tap")):
+              rel = tap.relative_to(root)
+              dst = out / rel.with_suffix(".html")
+              dst.parent.mkdir(parents=True, exist_ok=True)
+              write_report(tap, dst)
+              links.append(rel.with_suffix(".html").as_posix())
+
+          index = out / "index.html"
+          index.write_text(
+              "<!doctype html>\n"
+              "<html><head><meta charset=\"utf-8\"><title>pgTAP Results</title></head>"
+              "<body><h1>pgTAP Results</h1><ul>{}</ul></body></html>".format(
+                  "".join(f'<li><a href="{html.escape(link)}">{html.escape(link)}</a></li>' for link in links)
+              )
+          )
+          PY
+
+      - name: Upload HTML test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pgtap-test-report
+          path: artifacts/test-results-html
 
       - name: Cleanup
         if: always()
