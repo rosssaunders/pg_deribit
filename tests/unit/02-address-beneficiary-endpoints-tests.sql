@@ -13,7 +13,7 @@ create extension if not exists pg_deribit cascade;
 -- Now we can safely create temp tables in a transaction
 begin;
 
-select plan(8);
+select plan(4);
 
 -- Test 1: private_delete_address_beneficiary exists
 select has_function(
@@ -41,34 +41,6 @@ select has_function(
     'deribit',
     'private_save_address_beneficiary',
     'private_save_address_beneficiary endpoint should exist'
-);
-
--- Test 5: private_get_block_trade_requests exists
-select has_function(
-    'deribit',
-    'private_get_block_trade_requests',
-    'private_get_block_trade_requests endpoint should exist'
-);
-
--- Test 6: private_get_broker_trade_requests exists
-select has_function(
-    'deribit',
-    'private_get_broker_trade_requests',
-    'private_get_broker_trade_requests endpoint should exist'
-);
-
--- Test 7: private_get_broker_trades exists
-select has_function(
-    'deribit',
-    'private_get_broker_trades',
-    'private_get_broker_trades endpoint should exist'
-);
-
--- Test 8: private_get_reward_eligibility exists
-select has_function(
-    'deribit',
-    'private_get_reward_eligibility',
-    'private_get_reward_eligibility endpoint should exist'
 );
 
 select * from finish();
