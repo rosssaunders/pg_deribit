@@ -78,4 +78,6 @@ Refer to the docs folder for examples and the sql/endpoints folder for the full 
 
 ## Contributing
 
+CI runs unit and integration tests; authenticated integration coverage requires TestNet secrets in the repo settings.
+
 Contributions are welcome! Please read our contributing guidelines in CONTRIBUTING.md before submitting pull requests.
