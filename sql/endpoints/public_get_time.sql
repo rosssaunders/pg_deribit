@@ -42,4 +42,4 @@ as $$
 
 $$;
 
-comment on function deribit.public_get_time is 'Retrieves the current time (in milliseconds). This API endpoint can be used to check the clock skew between your software and Deribit''s systems.';
+comment on function deribit.public_get_time is 'TEMP: workflow override test. Retrieves the current time (in milliseconds). This API endpoint can be used to check the clock skew between your software and Deribit''s systems.';
