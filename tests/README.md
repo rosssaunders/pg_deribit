@@ -29,23 +29,25 @@ Located in `../codegen/tests/` - pytest tests for the Python code generator.
   - `00-setup.sql` - Extension loading (1 test)
   - `01-auth-tests.sql` - Authentication (6 tests)
   - `02-helper-tests.sql` - Helper functions (3 tests)
-  - `02-address-beneficiary-endpoints-tests.sql` - Address beneficiary endpoint existence (4 tests)
-  - `03-deprecated-endpoints-tests.sql` - Deprecated endpoints removed (2 tests)
   - `03-schema-tests.sql` - Schema verification (5 tests)
-  - `04-order-endpoints-tests.sql` - Order endpoint existence (15 tests)
-  - `05-account-endpoints-tests.sql` - Account endpoint existence (12 tests)
-  - `06-api-key-endpoints-tests.sql` - API key endpoint existence (6 tests)
-  - `07-block-trade-endpoints-tests.sql` - Block trade endpoint existence (4 tests)
-  - `08-public-endpoints-tests.sql` - Public endpoint existence (10 tests)
+  - `04-address-beneficiary-endpoints-tests.sql` - Address beneficiary endpoint existence (4 tests)
+  - `05-deprecated-endpoints-tests.sql` - Deprecated endpoints removed (2 tests)
+  - `06-order-endpoints-tests.sql` - Order endpoint existence (15 tests)
+  - `07-account-endpoints-tests.sql` - Account endpoint existence (12 tests)
+  - `08-api-key-endpoints-tests.sql` - API key endpoint existence (6 tests)
+  - `09-block-trade-endpoints-tests.sql` - Block trade endpoint existence (4 tests)
+  - `10-public-endpoints-tests.sql` - Public endpoint existence (10 tests)
   - `11-broker-reward-endpoints-tests.sql` - Broker/reward endpoint existence (4 tests)
 
 - **integration/**: Tests that verify endpoint functions and API connectivity
   - `00-setup.sql` - Integration setup (1 test)
   - `01-public-api-tests.sql` - Public API (5 tests)
-  - `09-authenticated-tests.sql` - **Authenticated TestNet tests (15 tests)** 🆕
-  - `13-public-endpoint-flow-tests.sql` - **Public endpoint flow coverage** 🆕
-  - `13-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
-  - `14-authenticated-endpoint-coverage-tests.sql` - **Authenticated endpoint coverage** 🆕
+  - `02-public-endpoint-flow-tests.sql` - **Public endpoint flow coverage** 🆕
+  - `03-authenticated-tests.sql` - **Authenticated TestNet tests (15 tests)** 🆕
+  - `04-authenticated-order-tests.sql` - **Authenticated order operations** 🆕
+  - `05-authenticated-feature-endpoints-tests.sql` - **Authenticated feature endpoints** 🆕
+  - `06-authenticated-trading-flow-tests.sql` - **Authenticated trading flow (real buy/sell)** 🆕
+  - `07-authenticated-endpoint-coverage-tests.sql` - **Authenticated endpoint coverage** 🆕
 
 ## Running Tests
 
@@ -190,7 +192,7 @@ See `.github/workflows/test.yml` for the CI configuration.
 **Level 4: Full E2E** (Trading flow + endpoint coverage)
 
 - Executes a buy -> position -> sell flow on TestNet
-- Uses `13-authenticated-trading-flow-tests.sql` and `14-authenticated-endpoint-coverage-tests.sql`
+- Uses `06-authenticated-trading-flow-tests.sql` and `07-authenticated-endpoint-coverage-tests.sql`
 - Some endpoints are expected to return known errors on TestNet (withdrawals, deposits, feature-gated APIs)
 
 ## Manual Testing Examples
@@ -235,7 +237,7 @@ EOF
 
 # Reconnect to pick up new settings, then run authenticated tests
 PGPASSWORD=deribitpwd psql -h localhost -p 5433 -U deribit -d deribit \
-  -f integration/09-authenticated-tests.sql
+  -f integration/03-authenticated-tests.sql
 ```
 
 The `../doc/examples/` directory contains comprehensive manual testing scripts that demonstrate real-world usage patterns.

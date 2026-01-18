@@ -52,7 +52,12 @@ run_tests() {
         return 0
     fi
 
-    local test_files=$(find "$test_dir" -name "*.sql" ! -name "*authenticated*" ! -name "*order*" ! -name "*new-features*" | sort)
+    local test_files=""
+    if [ "$test_dir" = "integration" ]; then
+        test_files=$(find "$test_dir" -name "*.sql" ! -name "*authenticated*" ! -name "*order*" | sort)
+    else
+        test_files=$(find "$test_dir" -name "*.sql" | sort)
+    fi
 
     if [ -z "$test_files" ]; then
         echo -e "${YELLOW}⊘ No tests found in $test_dir${NC}"

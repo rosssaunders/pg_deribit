@@ -77,19 +77,19 @@ jobs:
             echo 'Running authenticated tests...'
             cd /tmp/tests/integration
             mkdir -p /tmp/test-results/authenticated
-            psql -U deribit -d deribit -f 09-authenticated-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/09-authenticated-tests.tap 2>&1 || true
+            psql -U deribit -d deribit -f 03-authenticated-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/03-authenticated-tests.tap 2>&1 || true
 
             echo 'Running order operation tests...'
-            psql -U deribit -d deribit -f 10-order-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/10-order-tests.tap 2>&1 || true
+            psql -U deribit -d deribit -f 04-authenticated-order-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/04-authenticated-order-tests.tap 2>&1 || true
 
             echo 'Running new features tests...'
-            psql -U deribit -d deribit -f 12-new-features-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/12-new-features-tests.tap 2>&1 || true
+            psql -U deribit -d deribit -f 05-authenticated-feature-endpoints-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/05-authenticated-feature-endpoints-tests.tap 2>&1 || true
 
             echo 'Running trading flow tests...'
-            psql -U deribit -d deribit -f 13-authenticated-trading-flow-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/13-authenticated-trading-flow-tests.tap 2>&1 || true
+            psql -U deribit -d deribit -f 06-authenticated-trading-flow-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/06-authenticated-trading-flow-tests.tap 2>&1 || true
 
             echo 'Running authenticated endpoint coverage tests...'
-            psql -U deribit -d deribit -f 14-authenticated-endpoint-coverage-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/14-authenticated-endpoint-coverage-tests.tap 2>&1 || true
+            psql -U deribit -d deribit -f 07-authenticated-endpoint-coverage-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/07-authenticated-endpoint-coverage-tests.tap 2>&1 || true
           "
 
       - name: Test Summary
