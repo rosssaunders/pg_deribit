@@ -4197,7 +4197,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "number"
+                                "name": "decimal"
                             }
                         }
                     ],
@@ -4223,7 +4223,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "number"
+                        "name": "decimal"
                     }
                 }
             ],
@@ -6963,7 +6963,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "number"
+                                "name": "decimal"
                             }
                         },
                         {
@@ -7362,7 +7362,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "number"
+                        "name": "decimal"
                     }
                 },
                 {
@@ -7896,7 +7896,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "number"
+                                "name": "decimal"
                             }
                         },
                         {
@@ -8295,7 +8295,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "number"
+                        "name": "decimal"
                     }
                 },
                 {

@@ -5338,7 +5338,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "integer"
+                                "name": "decimal"
                             }
                         }
                     ],
@@ -5364,7 +5364,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "integer"
+                        "name": "decimal"
                     }
                 }
             ],
@@ -6812,7 +6812,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "integer"
+                                "name": "decimal"
                             }
                         },
                         {
@@ -7095,7 +7095,7 @@
                             "type": {
                                 "enums": [],
                                 "fields": [],
-                                "is_array": false,
+                                "is_array": true,
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "public_get_instruments_response_tick_size_steps"
@@ -7211,7 +7211,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "integer"
+                        "name": "decimal"
                     }
                 },
                 {
@@ -7494,7 +7494,7 @@
                     "type": {
                         "enums": [],
                         "fields": [],
-                        "is_array": false,
+                        "is_array": true,
                         "is_nested_array": false,
                         "is_primitive": false,
                         "name": "public_get_instruments_response_tick_size_steps"
@@ -7697,7 +7697,7 @@
                                 "is_array": false,
                                 "is_nested_array": false,
                                 "is_primitive": false,
-                                "name": "integer"
+                                "name": "decimal"
                             }
                         },
                         {
@@ -7980,7 +7980,7 @@
                             "type": {
                                 "enums": [],
                                 "fields": [],
-                                "is_array": false,
+                                "is_array": true,
                                 "is_nested_array": false,
                                 "is_primitive": false,
                                 "name": "public_get_instrument_response_tick_size_steps"
@@ -8096,7 +8096,7 @@
                         "is_array": false,
                         "is_nested_array": false,
                         "is_primitive": false,
-                        "name": "integer"
+                        "name": "decimal"
                     }
                 },
                 {
@@ -8379,7 +8379,7 @@
                     "type": {
                         "enums": [],
                         "fields": [],
-                        "is_array": false,
+                        "is_array": true,
                         "is_nested_array": false,
                         "is_primitive": false,
                         "name": "public_get_instrument_response_tick_size_steps"

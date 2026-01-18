@@ -48,60 +48,18 @@ jobs:
           docker exec pg_deribit_test bash -c \
             "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
 
-      - name: Run Integration Tests (Public endpoints)
+      - name: Run Integration Tests (Public + Authenticated)
         run: |
-          docker exec pg_deribit_test bash -c \
+          docker exec -e DERIBIT_CLIENT_ID="${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" \
+            -e DERIBIT_CLIENT_SECRET="${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}" \
+            pg_deribit_test bash -c \
             "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
-
-      - name: Run Authenticated Integration Tests (TestNet)
-        continue-on-error: true
-        env:
-          DERIBIT_CLIENT_ID: ${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}
-          DERIBIT_CLIENT_SECRET: ${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}
-        run: |
-          docker exec pg_deribit_test bash -c "
-            export PGPASSWORD=deribitpwd
-            export DERIBIT_CLIENT_ID='${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}'
-            export DERIBIT_CLIENT_SECRET='${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}'
-
-            echo 'Setting database configuration...'
-            echo \"Client ID length: \${#DERIBIT_CLIENT_ID}\"
-            echo \"Client Secret length: \${#DERIBIT_CLIENT_SECRET}\"
-
-            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_id = '\${DERIBIT_CLIENT_ID}'\"
-            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_secret = '\${DERIBIT_CLIENT_SECRET}'\"
-
-            echo 'Verifying settings were stored...'
-            psql -U deribit -d deribit -c \"SELECT current_setting('deribit.test_client_id', true) as client_id_set\"
-
-            echo 'Running authenticated tests...'
-            cd /tmp/tests/integration
-            mkdir -p /tmp/test-results/authenticated
-            psql -U deribit -d deribit -f 03-authenticated-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/03-authenticated-tests.tap 2>&1 || true
-
-            echo 'Running order operation tests...'
-            psql -U deribit -d deribit -f 04-authenticated-order-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/04-authenticated-order-tests.tap 2>&1 || true
-
-            echo 'Running new features tests...'
-            psql -U deribit -d deribit -f 05-authenticated-feature-endpoints-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/05-authenticated-feature-endpoints-tests.tap 2>&1 || true
-
-            echo 'Running trading flow tests...'
-            psql -U deribit -d deribit -f 06-authenticated-trading-flow-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/06-authenticated-trading-flow-tests.tap 2>&1 || true
-
-            echo 'Running authenticated endpoint coverage tests...'
-            psql -U deribit -d deribit -f 07-authenticated-endpoint-coverage-tests.sql -v ON_ERROR_STOP=1 > /tmp/test-results/authenticated/07-authenticated-endpoint-coverage-tests.tap 2>&1 || true
-          "
 
       - name: Test Summary
         if: always()
         run: |
           echo "✅ Unit Tests: Passed"
-          echo "✅ Integration Tests (Public): Passed"
-          if [ -n "${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" ]; then
-            echo "✅ Authenticated Tests (TestNet): Passed"
-          else
-            echo "⚠️  Authenticated Tests: Skipped (no TestNet credentials)"
-          fi
+          echo "✅ Integration Tests (Public + Authenticated): Passed"
 
       - name: Collect test results
         if: always()

@@ -16064,7 +16064,7 @@ create type deribit.public_get_contract_size_request as (
 comment on column deribit.public_get_contract_size_request."instrument_name" is '(Required) Instrument name';
 
 create type deribit.public_get_contract_size_response_result as (
-    "contract_size" bigint
+    "contract_size" numeric
 );
 
 comment on column deribit.public_get_contract_size_response_result."contract_size" is 'Contract size, for futures in USD, for options in base currency of the instrument (BTC, ETH, ...)';
@@ -17036,7 +17036,7 @@ create type deribit.public_get_instrument_response_result as (
     "block_trade_commission" double precision,
     "block_trade_min_trade_amount" double precision,
     "block_trade_tick_size" double precision,
-    "contract_size" bigint,
+    "contract_size" numeric,
     "counter_currency" text,
     "creation_timestamp" bigint,
     "expiration_timestamp" bigint,
@@ -17058,7 +17058,7 @@ create type deribit.public_get_instrument_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instrument_response_tick_size_steps
+    "tick_size_steps" deribit.public_get_instrument_response_tick_size_steps[]
 );
 
 comment on column deribit.public_get_instrument_response_result."base_currency" is 'The underlying currency being traded.';
@@ -17181,7 +17181,7 @@ create type deribit.public_get_instruments_response_result as (
     "block_trade_commission" double precision,
     "block_trade_min_trade_amount" double precision,
     "block_trade_tick_size" double precision,
-    "contract_size" bigint,
+    "contract_size" numeric,
     "counter_currency" text,
     "creation_timestamp" bigint,
     "expiration_timestamp" bigint,
@@ -17203,7 +17203,7 @@ create type deribit.public_get_instruments_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps
+    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps[]
 );
 
 comment on column deribit.public_get_instruments_response_result."base_currency" is 'The underlying currency being traded.';
@@ -17278,7 +17278,7 @@ as $$
         (b)."block_trade_commission"::double precision,
         (b)."block_trade_min_trade_amount"::double precision,
         (b)."block_trade_tick_size"::double precision,
-        (b)."contract_size"::bigint,
+        (b)."contract_size"::numeric,
         (b)."counter_currency"::text,
         (b)."creation_timestamp"::bigint,
         (b)."expiration_timestamp"::bigint,
@@ -17300,7 +17300,7 @@ as $$
         (b)."strike"::double precision,
         (b)."taker_commission"::double precision,
         (b)."tick_size"::double precision,
-        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps
+        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps[]
     from (
         select (unnest(r.data)) b
         from result r(data)

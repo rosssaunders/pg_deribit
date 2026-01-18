@@ -76,6 +76,15 @@ cd tests
 ./run-tests.sh integration  # Integration only
 ```
 
+`run-tests.sh` will spin up a local Dockerized PostgreSQL instance by default if no database is reachable,
+and it rebuilds the Docker image each run to keep the test environment fresh. Set `USE_EXISTING_DB=1`
+or `AUTO_DOCKER=0` to use your own running database. You can also override `TEST_DOCKER_IMAGE`
+(default `pg_deribit:test`) and `TEST_DOCKER_PORT` (default random).
+
+When running `integration` (or `all`), credentials are required. Set `DERIBIT_CLIENT_ID` and
+`DERIBIT_CLIENT_SECRET` (or `DERIBIT_TESTNET_CLIENT_ID`/`DERIBIT_TESTNET_CLIENT_SECRET`); the runner
+will store them in `deribit.test_client_id` and `deribit.test_client_secret` automatically.
+
 ### Docker Testing
 
 ```bash
