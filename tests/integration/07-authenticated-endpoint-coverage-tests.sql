@@ -46,11 +46,7 @@ select
     'btc_usdc'::text as currency_pair,
     'BTC-PERPETUAL'::text as instrument_name,
     null::bigint as instrument_id,
-    (select name
-     from deribit.public_get_index_price_names()
-     where name ilike 'btc_%'
-     order by name
-     limit 1) as index_name,
+    (select unnest(enum_range(null::deribit.public_get_index_price_request_index_name)) limit 1) as index_name,
     (extract(epoch from clock_timestamp()) * 1000)::bigint as now_ms,
     (extract(epoch from clock_timestamp()) * 1000 - 3600 * 1000)::bigint as start_ms,
     (extract(epoch from clock_timestamp()) * 1000 - 86400 * 1000)::bigint as day_ms,
