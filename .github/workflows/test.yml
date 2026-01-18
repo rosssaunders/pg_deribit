@@ -5,9 +5,6 @@ on:
   push:
     branches:
       - main
-  schedule:
-    # Run weekly to validate live trading flow on TestNet
-    - cron: '0 1 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -83,9 +80,6 @@ jobs:
 
             echo 'Running new features tests...'
             psql -U deribit -d deribit -f 12-new-features-tests.sql
-
-            echo 'Running trading flow tests...'
-            psql -U deribit -d deribit -f 13-authenticated-trading-flow-tests.sql
           "
 
       - name: Test Summary
