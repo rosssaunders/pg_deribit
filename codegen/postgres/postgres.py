@@ -74,7 +74,6 @@ def default_to_null(field: Field) -> str:
 def sort_fields_by_required(fields: List[Field]) -> List[Field]:
     return sorted(fields, key=lambda e: e.required, reverse=True)
 
-
 def invoke_endpoint(schema: str, function: Function) -> str:
     public_private = ""
     res = ""
@@ -175,7 +174,30 @@ as $$"""
             select null::void as result
         """
     elif function.response_type.is_array:
-        res += f""",
+        if function.endpoint.name == "public_get_index_price_names":
+            res += f""",
+    result as (
+        select convert_from((http_response.http_response).body, 'utf-8')::jsonb as body
+        from http_response
+    )
+    select
+        case
+            when jsonb_typeof(elem) = 'string' then null
+            else (elem->>'future_combo_creation_enabled')::boolean
+        end as future_combo_creation_enabled,
+        case
+            when jsonb_typeof(elem) = 'string' then elem #>> '{{}}'
+            else elem->>'name'
+        end as name,
+        case
+            when jsonb_typeof(elem) = 'string' then null
+            else (elem->>'option_combo_creation_enabled')::boolean
+        end as option_combo_creation_enabled
+    from result r
+    cross join lateral jsonb_array_elements(r.body->'result') elem
+"""
+        else:
+            res += f""",
     result as (
         select (jsonb_populate_record(
             null::{schema}.{function.endpoint.response_type.name},
@@ -184,33 +206,33 @@ as $$"""
         from http_response
     )"""
 
-        if function.response_type.is_nested_array:
-            res += f"""
+            if function.response_type.is_nested_array:
+                res += f"""
     , unnested as (
         select {schema}.unnest_2d_1d(x.x)
         from result x(x)
     )
     select
 """
-            res += ",\n".join(
-                f'        (b.x)[{i+1}]::{convert_type_postgres(schema, "", e.type)} as {escape_postgres_keyword(e.name)}'
-                for i, e in enumerate(function.response_type.fields)
-            )
-            res += """
+                res += ",\n".join(
+                    f'        (b.x)[{i+1}]::{convert_type_postgres(schema, "", e.type)} as {escape_postgres_keyword(e.name)}'
+                    for i, e in enumerate(function.response_type.fields)
+                )
+                res += """
     from unnested b(x)"""
 
-        else:
-            res += """
+            else:
+                res += """
     select
 """
-            if len(function.response_type.fields) == 0:
-                res += """        a.b"""
-            else:
-                res += ",\n".join(
-                    f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres(schema, "", e.type)}'
-                    for e in function.response_type.fields
-                )
-            res += f"""
+                if len(function.response_type.fields) == 0:
+                    res += """        a.b"""
+                else:
+                    res += ",\n".join(
+                        f'        (b).{escape_postgres_keyword(e.name)}::{convert_type_postgres(schema, "", e.type)}'
+                        for e in function.response_type.fields
+                    )
+                res += f"""
     from (
         select (unnest(r.data)) b
         from result r(data)

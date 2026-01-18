@@ -36,19 +36,7 @@ select lives_ok(
 );
 
 select lives_ok(
-    $$
-    DO $func$
-    BEGIN
-        BEGIN
-            PERFORM deribit.public_get_index_price_names(true);
-        EXCEPTION WHEN OTHERS THEN
-            -- Allow known record-shape mismatches.
-            IF SQLERRM NOT LIKE '%malformed record literal%' THEN
-                RAISE;
-            END IF;
-        END;
-    END $func$
-    $$,
+    $$select deribit.public_get_index_price_names()$$,
     'public_get_index_price_names should return index names'
 );
 

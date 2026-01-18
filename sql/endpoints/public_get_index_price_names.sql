@@ -57,21 +57,25 @@ as $$
         from request
     ),
     result as (
-        select (jsonb_populate_record(
-            null::deribit.public_get_index_price_names_response,
-            convert_from((http_response.http_response).body, 'utf-8')::jsonb)
-        ).result
+        select convert_from((http_response.http_response).body, 'utf-8')::jsonb as body
         from http_response
     )
     select
-        (b)."future_combo_creation_enabled"::boolean,
-        (b)."name"::text,
-        (b)."option_combo_creation_enabled"::boolean
-    from (
-        select (unnest(r.data)) b
-        from result r(data)
-    ) a
-    
+        case
+            when jsonb_typeof(elem) = 'string' then null
+            else (elem->>'future_combo_creation_enabled')::boolean
+        end as future_combo_creation_enabled,
+        case
+            when jsonb_typeof(elem) = 'string' then elem #>> '{}'
+            else elem->>'name'
+        end as name,
+        case
+            when jsonb_typeof(elem) = 'string' then null
+            else (elem->>'option_combo_creation_enabled')::boolean
+        end as option_combo_creation_enabled
+    from result r
+    cross join lateral jsonb_array_elements(r.body->'result') elem
+
 $$;
 
 comment on function deribit.public_get_index_price_names is 'Retrieves the identifiers of all supported Price Indexes';

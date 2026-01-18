@@ -148,9 +148,9 @@ def test_tick_size_steps_structure(current_output):
 @pytest.mark.golden
 def test_public_get_index_price_names_structure(current_output):
     """
-    Regression test for public_get_index_price_names extended parameter.
+    Regression test for public_get_index_price_names response shape.
 
-    This verifies the fix where we always use extended=true internally.
+    This verifies that we model the result as an array type.
     """
     endpoints_by_name = {ep["name"]: ep for ep in current_output}
 
