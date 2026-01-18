@@ -3,7 +3,7 @@
 -- Requires DERIBIT_CLIENT_ID and DERIBIT_CLIENT_SECRET to be set as psql variables
 --
 -- Usage:
---   psql -v client_id="your_id" -v client_secret="your_secret" -f 09-authenticated-tests.sql
+--   psql -v client_id="your_id" -v client_secret="your_secret" -f 03-authenticated-tests.sql
 --
 -- Or set in the database:
 --   ALTER DATABASE deribit SET deribit.test_client_id = 'your_id';

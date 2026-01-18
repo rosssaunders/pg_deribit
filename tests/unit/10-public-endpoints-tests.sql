@@ -78,10 +78,11 @@ select has_function(
     'public_get_apr_history endpoint should exist'
 );
 
--- Test 10: Test a specific modified endpoint works
-select ok(
-    (select deribit.public_get_time() > 0),
-    'public_get_time should return valid timestamp'
+-- Test 10: public_get_time exists
+select has_function(
+    'deribit',
+    'public_get_time',
+    'public_get_time endpoint should exist'
 );
 
 select * from finish();

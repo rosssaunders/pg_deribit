@@ -1,6 +1,5 @@
--- New Features Tests
--- Tests for new functionality added in PR #16
--- Includes beneficiary management, broker trades, block trades, and rewards
+-- Authenticated feature endpoint tests
+-- Covers beneficiary management, broker trades, block trades, rewards, and related enums
 -- Requires DERIBIT_CLIENT_ID and DERIBIT_CLIENT_SECRET to be set
 
 create extension if not exists pgtap;

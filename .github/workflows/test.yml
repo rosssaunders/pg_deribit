@@ -5,6 +5,9 @@ on:
   push:
     branches:
       - main
+  schedule:
+    # Run weekly to validate live trading flow on TestNet
+    - cron: '0 1 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -43,55 +46,72 @@ jobs:
       - name: Run Unit Tests
         run: |
           docker exec pg_deribit_test bash -c \
-            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
+            "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh unit"
 
-      - name: Run Integration Tests (Public endpoints)
+      - name: Run Integration Tests (Public + Authenticated)
         run: |
-          docker exec pg_deribit_test bash -c \
-            "cd /tmp/tests && POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
-
-      - name: Run Authenticated Integration Tests (TestNet)
-        continue-on-error: true
-        env:
-          DERIBIT_CLIENT_ID: ${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}
-          DERIBIT_CLIENT_SECRET: ${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}
-        run: |
-          docker exec pg_deribit_test bash -c "
-            export PGPASSWORD=deribitpwd
-            export DERIBIT_CLIENT_ID='${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}'
-            export DERIBIT_CLIENT_SECRET='${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}'
-
-            echo 'Setting database configuration...'
-            echo \"Client ID length: \${#DERIBIT_CLIENT_ID}\"
-            echo \"Client Secret length: \${#DERIBIT_CLIENT_SECRET}\"
-
-            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_id = '\${DERIBIT_CLIENT_ID}'\"
-            psql -U deribit -d deribit -c \"ALTER DATABASE deribit SET deribit.test_client_secret = '\${DERIBIT_CLIENT_SECRET}'\"
-
-            echo 'Verifying settings were stored...'
-            psql -U deribit -d deribit -c \"SELECT current_setting('deribit.test_client_id', true) as client_id_set\"
-
-            echo 'Running authenticated tests...'
-            cd /tmp/tests/integration
-            psql -U deribit -d deribit -f 09-authenticated-tests.sql
-
-            echo 'Running order operation tests...'
-            psql -U deribit -d deribit -f 10-order-tests.sql
-
-            echo 'Running new features tests...'
-            psql -U deribit -d deribit -f 12-new-features-tests.sql
-          "
+          docker exec -e DERIBIT_CLIENT_ID="${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" \
+            -e DERIBIT_CLIENT_SECRET="${{ secrets.DERIBIT_TESTNET_CLIENT_SECRET }}" \
+            pg_deribit_test bash -c \
+            "cd /tmp/tests && mkdir -p /tmp/test-results && TEST_OUTPUT_DIR=/tmp/test-results POSTGRES_PASSWORD=deribitpwd POSTGRES_USER=deribit POSTGRES_DB=deribit POSTGRES_HOST=localhost ./run-tests.sh integration"
 
       - name: Test Summary
         if: always()
         run: |
           echo "✅ Unit Tests: Passed"
-          echo "✅ Integration Tests (Public): Passed"
-          if [ -n "${{ secrets.DERIBIT_TESTNET_CLIENT_ID }}" ]; then
-            echo "✅ Authenticated Tests (TestNet): Passed"
-          else
-            echo "⚠️  Authenticated Tests: Skipped (no TestNet credentials)"
-          fi
+          echo "✅ Integration Tests (Public + Authenticated): Passed"
+
+      - name: Collect test results
+        if: always()
+        run: |
+          mkdir -p artifacts
+          docker cp pg_deribit_test:/tmp/test-results ./artifacts/test-results
+
+      - name: Generate HTML test report
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import html
+          from pathlib import Path
+
+          root = Path("artifacts/test-results")
+          out = Path("artifacts/test-results-html")
+          out.mkdir(parents=True, exist_ok=True)
+
+          def write_report(src: Path, dst: Path) -> None:
+              body = html.escape(src.read_text(errors="replace"))
+              dst.write_text(
+                  "<!doctype html>\n"
+                  "<html><head><meta charset=\"utf-8\">"
+                  "<title>{}</title>"
+                  "<style>body{{font-family:ui-monospace,monospace;white-space:pre-wrap;}}</style>"
+                  "</head><body><pre>{}</pre></body></html>".format(src.name, body)
+              )
+
+          links = []
+          for tap in sorted(root.rglob("*.tap")):
+              rel = tap.relative_to(root)
+              dst = out / rel.with_suffix(".html")
+              dst.parent.mkdir(parents=True, exist_ok=True)
+              write_report(tap, dst)
+              links.append(rel.with_suffix(".html").as_posix())
+
+          index = out / "index.html"
+          index.write_text(
+              "<!doctype html>\n"
+              "<html><head><meta charset=\"utf-8\"><title>pgTAP Results</title></head>"
+              "<body><h1>pgTAP Results</h1><ul>{}</ul></body></html>".format(
+                  "".join(f'<li><a href="{html.escape(link)}">{html.escape(link)}</a></li>' for link in links)
+              )
+          )
+          PY
+
+      - name: Upload HTML test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: pgtap-test-report
+          path: artifacts/test-results-html
 
       - name: Cleanup
         if: always()
