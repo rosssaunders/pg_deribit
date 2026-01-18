@@ -12,14 +12,9 @@ Golden master tests ensure that generated code remains consistent across changes
 
 **Markers**: `@pytest.mark.golden`
 
-### Integration Tests (`test_integration.py`)
-End-to-end tests that verify the full code generation pipeline:
-- HTML parsing → JSON IR → SQL generation
-- Structural validation of generated endpoints
-- Enum consistency checks
-- SQL file generation validation
-
-**Markers**: `@pytest.mark.integration`
+### Integration Tests
+End-to-end tests are not currently included; golden master tests cover the
+code generation pipeline from OpenAPI → JSON IR → SQL.
 
 ### Unit Tests (`test_*.py`)
 Tests for individual utility functions:
@@ -38,7 +33,6 @@ make test
 # Run specific test categories
 make test-unit
 make test-golden
-make test-integration
 
 # Generate coverage report
 make coverage
@@ -55,7 +49,6 @@ pytest tests/ -v
 # Specific markers
 pytest tests/ -v -m "unit"
 pytest tests/ -v -m "golden"
-pytest tests/ -v -m "integration"
 
 # With coverage
 pytest tests/ --cov=. --cov-report=html
@@ -66,7 +59,7 @@ pytest tests/ --cov=. --cov-report=html
 Current coverage (as of Phase 1 completion):
 - **Unit tests**: 100% coverage of `name_utils.py` and `json_utils.py`
 - **Golden master tests**: Baseline established for 149 endpoints
-- **Integration tests**: Full pipeline validation
+- Pipeline validation is covered by golden master tests
 
 Target coverage after Phase 3: **95%+**
 
@@ -97,15 +90,14 @@ If golden master tests fail:
 
 ## Fixtures
 
-- `fixtures/golden_master.json`: Baseline snapshot of deribit.json (149 endpoints)
-- Future: Add sample HTML fragments for parser testing
+- `fixtures/golden_master.json`: Baseline snapshot of deribit.json
 
 ## CI/CD Integration
 
 Tests run automatically on GitHub Actions:
 - **Triggers**: Push to `main` or `update-deribit-api`, PRs to `main`
 - **Python versions**: 3.11, 3.12, 3.13
-- **Checks**: Unit tests, golden master, integration, linting, type checking
+- **Checks**: Unit tests, golden master, linting, type checking
 - **Artifacts**: Coverage reports uploaded to Codecov
 
 ## Development Workflow
@@ -147,19 +139,11 @@ def test_my_endpoint_structure(current_output):
     # ... assertions
 ```
 
-### Adding an Integration Test
-```python
-@pytest.mark.integration
-def test_my_pipeline_feature(codegen_root):
-    # ... test full pipeline behavior
-```
-
 ## Known Issues / Future Improvements
 
 From Phase 1 completion:
 - ✅ Golden master baseline established
 - ✅ Unit tests for utilities
-- ✅ Integration tests for pipeline
 - ⏳ Phase 2: Improve code quality (PEP 8, type hints, logging)
 - ⏳ Phase 3: Refactor architecture (type registry, strategy pattern)
 - ⏳ Phase 4: Advanced improvements (JSON schema, better errors)

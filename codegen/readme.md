@@ -1,18 +1,16 @@
 # Codegen
 
-This is a tool to generate the sql/endpoints folder from the Deribit API.
+This is a tool to generate the sql/endpoints folder from the Deribit OpenAPI specs.
 
 ## Description
 
-The python script downloads the Deribit API documentation (if not already downloaded) and then parses it to generate the sql/endpoints folder.
-
-It first parses the HTML docs and converts them into an intermediate JSON format which is saved as deribit.json.
-
-Then it parses the JSON and generates the sql/endpoints folder.
+The Python script downloads the OpenAPI specs and converts them into an
+intermediate JSON format (`deribit.json`), then generates the sql/endpoints
+folder.
 
 Each endpoint is saved as a separate sql file in the sql/endpoints folder.
 
-## How to generate the SQL code wrappers from the Deribit HTML documentation
+## How to generate the SQL code wrappers from the OpenAPI specs
 
 From the root of the repo, run the following commands:
 
@@ -34,10 +32,8 @@ cd codegen
 python main.py
 ```
 
-## Deribit Documentation Errors
+## OpenAPI Notes
 
-The Deribit documentation has a few errors that need to be worked around.
-
-The `fix_broken_docs.py` script contains the code to work around these errors.
-
-Once this errors have been fixed in the Deribit documentation, the `fix_broken_docs.py` script can be modified and removed.
+Some request parameters are documented as JSON strings rather than structured
+schemas. The generator preserves these as `jsonb` in Postgres to keep payloads
+round-trippable.

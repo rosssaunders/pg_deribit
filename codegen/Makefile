@@ -1,4 +1,4 @@
-.PHONY: help install test test-unit test-golden test-integration coverage lint format clean
+.PHONY: help install test test-unit test-golden coverage lint format clean
 
 help:  ## Show this help message
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[36m%-20s\033[0m %s\n", $$1, $$2}'
@@ -14,9 +14,6 @@ test-unit:  ## Run only unit tests
 
 test-golden:  ## Run only golden master tests
 	pytest tests/ -v -m "golden"
-
-test-integration:  ## Run only integration tests
-	pytest tests/ -v -m "integration"
 
 coverage:  ## Run tests with coverage report
 	pytest tests/ --cov=. --cov-report=html --cov-report=term-missing

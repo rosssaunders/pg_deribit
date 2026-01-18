@@ -38,8 +38,8 @@ sql/
 └── extensions/      - Required extension declarations
 
 codegen/            - Python code generator
-├── main.py         - Entry point: downloads Deribit docs, generates SQL
-├── deribit/        - HTML parsing and extraction
+├── main.py         - Entry point: downloads OpenAPI specs, generates SQL
+├── deribit/        - OpenAPI parsing and extraction
 ├── postgres/       - SQL generation logic
 ├── models/         - Data models for API endpoints
 └── utils/          - Helper utilities
@@ -69,10 +69,9 @@ python main.py
 ```
 
 The generator:
-1. Downloads Deribit API docs (HTML)
-2. Parses documentation to JSON intermediate format (deribit.json)
+1. Downloads Deribit OpenAPI specs
+2. Normalizes them into a JSON snapshot (deribit.json)
 3. Generates SQL wrapper functions for each endpoint
-4. Includes workarounds for documentation errors (see `fix_broken_response_docs.py`)
 
 ## Common Commands
 
