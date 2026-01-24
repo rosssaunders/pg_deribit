@@ -18,7 +18,7 @@ create type deribit.public_get_contract_size_request as (
 comment on column deribit.public_get_contract_size_request."instrument_name" is '(Required) Instrument name';
 
 create type deribit.public_get_contract_size_response_result as (
-    "contract_size" numeric
+    "contract_size" bigint
 );
 
 comment on column deribit.public_get_contract_size_response_result."contract_size" is 'Contract size, for futures in USD, for options in base currency of the instrument (BTC, ETH, ...)';

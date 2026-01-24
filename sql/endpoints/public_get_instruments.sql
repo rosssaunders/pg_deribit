@@ -51,7 +51,7 @@ create type deribit.public_get_instruments_response_result as (
     "block_trade_commission" double precision,
     "block_trade_min_trade_amount" double precision,
     "block_trade_tick_size" double precision,
-    "contract_size" numeric,
+    "contract_size" bigint,
     "counter_currency" text,
     "creation_timestamp" bigint,
     "expiration_timestamp" bigint,
@@ -73,7 +73,7 @@ create type deribit.public_get_instruments_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps[]
+    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps
 );
 
 comment on column deribit.public_get_instruments_response_result."base_currency" is 'The underlying currency being traded.';
@@ -148,7 +148,7 @@ as $$
         (b)."block_trade_commission"::double precision,
         (b)."block_trade_min_trade_amount"::double precision,
         (b)."block_trade_tick_size"::double precision,
-        (b)."contract_size"::numeric,
+        (b)."contract_size"::bigint,
         (b)."counter_currency"::text,
         (b)."creation_timestamp"::bigint,
         (b)."expiration_timestamp"::bigint,
@@ -170,7 +170,7 @@ as $$
         (b)."strike"::double precision,
         (b)."taker_commission"::double precision,
         (b)."tick_size"::double precision,
-        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps[]
+        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps
     from (
         select (unnest(r.data)) b
         from result r(data)
