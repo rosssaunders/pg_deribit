@@ -246,8 +246,25 @@ class OpenAPIResponseParser:
 
             return field_type
 
+    # Financial fields that must always be decimal, even if the OpenAPI spec
+    # says "integer" (the API may return whole numbers today but fractional
+    # values tomorrow — e.g. contract_size could be 0.001 for micro contracts).
+    _FORCE_DECIMAL_FIELDS = frozenset({
+        "contract_size", "tick_size", "min_trade_amount", "max_trade_amount",
+        "maker_commission", "taker_commission", "block_trade_commission",
+        "block_trade_tick_size", "block_trade_min_trade_amount",
+        "strike", "price", "mark_price", "index_price", "last_price",
+        "best_bid_price", "best_ask_price", "best_bid_amount", "best_ask_amount",
+        "open_interest", "volume", "volume_usd", "estimated_delivery_price",
+        "settlement_price", "min_price", "max_price", "mark_iv", "bid_iv", "ask_iv",
+        "underlying_price", "underlying_index", "delta", "gamma", "vega", "theta", "rho",
+        "funding_8h", "current_funding", "interest_rate",
+    })
+
     def _handle_primitive(self, field_name: str, schema: Dict[str, Any]) -> TypeDefinition:
         primitive_name = self._primitive_name(schema)
+        if primitive_name == "integer" and field_name in self._FORCE_DECIMAL_FIELDS:
+            primitive_name = "decimal"
         field_type = TypeDefinition(name=primitive_name)
 
         if field_name == "result":
