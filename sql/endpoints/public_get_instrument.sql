@@ -52,7 +52,7 @@ create type deribit.public_get_instrument_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instrument_response_tick_size_steps[]
+    "tick_size_steps" deribit.public_get_instrument_response_tick_size_steps
 );
 
 comment on column deribit.public_get_instrument_response_result."base_currency" is 'The underlying currency being traded.';
