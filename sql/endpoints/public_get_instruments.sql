@@ -73,7 +73,7 @@ create type deribit.public_get_instruments_response_result as (
     "strike" double precision,
     "taker_commission" double precision,
     "tick_size" double precision,
-    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps[]
+    "tick_size_steps" deribit.public_get_instruments_response_tick_size_steps
 );
 
 comment on column deribit.public_get_instruments_response_result."base_currency" is 'The underlying currency being traded.';
@@ -170,7 +170,7 @@ as $$
         (b)."strike"::double precision,
         (b)."taker_commission"::double precision,
         (b)."tick_size"::double precision,
-        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps[]
+        (b)."tick_size_steps"::deribit.public_get_instruments_response_tick_size_steps
     from (
         select (unnest(r.data)) b
         from result r(data)
