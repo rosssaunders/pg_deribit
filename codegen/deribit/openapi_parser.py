@@ -572,6 +572,7 @@ def load_endpoints_from_openapi(sections: List[str]) -> List[Function]:
             response_schema = _select_response_schema(operation.get("responses", {}), components)
             root_type, response_type, all_types = parser.parse(path, response_schema)
             _apply_snapshot_class_flags(request_type, all_types, response_type)
+            _apply_spec_overrides(all_types, response_type)
 
             rate_limiter = (
                 "matching_engine_request_log_call"
@@ -642,6 +643,7 @@ def load_endpoints_from_snapshot(snapshot_path: str) -> List[Function]:
         )
 
         _apply_snapshot_class_flags(request_type, response_types, function.response_type)
+        _apply_spec_overrides(response_types, function.response_type)
 
         functions.append(function)
 
@@ -684,6 +686,38 @@ def _normalize_required(value: Any) -> bool:
     if isinstance(value, str):
         return value.strip().lower() == "true"
     return bool(value)
+
+
+# ---------------------------------------------------------------------------
+# HACK: Upstream Deribit docs incorrectly declare tick_size_steps as a scalar
+# object, but the live API returns an array.  Force is_array=True on any field
+# named "tick_size_steps" so the generated SQL uses the correct array type.
+# Remove this override once Deribit fixes their OpenAPI spec.
+# ---------------------------------------------------------------------------
+_FORCE_ARRAY_FIELDS = frozenset({"tick_size_steps"})
+
+
+def _apply_array_overrides(type_def: TypeDefinition) -> None:
+    """Recursively fix fields that must be arrays despite what the spec says."""
+    for field in type_def.fields:
+        if field.name in _FORCE_ARRAY_FIELDS and not field.type.is_array:
+            logger.warning(
+                "HACK: forcing is_array=True on field %r (upstream spec is wrong)",
+                field.name,
+            )
+            field.type.is_array = True
+        _apply_array_overrides(field.type)
+
+
+def _apply_spec_overrides(
+    response_types: List[TypeDefinition],
+    result_type: Optional[TypeDefinition],
+) -> None:
+    """Apply all upstream-spec workarounds."""
+    for type_def in response_types:
+        _apply_array_overrides(type_def)
+    if result_type is not None:
+        _apply_array_overrides(result_type)
 
 
 def _apply_snapshot_class_flags(
